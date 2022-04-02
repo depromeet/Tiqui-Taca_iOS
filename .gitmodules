@@ -1,0 +1,6 @@
+[submodule "TiquiTaca_NetworkModule"]
+	path = TiquiTaca_NetworkModule
+	url = https://github.com/depromeet/Tiqui-Taca_iOS_NetworkModule
+[submodule "TiquiTaca_DesignSystem"]
+	path = TiquiTaca_DesignSystem
+	url = https://github.com/depromeet/Tiqui-Taca_iOS_DesignSystemModule

@@ -14,6 +14,10 @@
 		F2C02C7E27F8824C004C4235 /* TiquiTaca_iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C02C7D27F8824C004C4235 /* TiquiTaca_iOSTests.swift */; };
 		F2C02C8827F8824C004C4235 /* TiquiTaca_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C02C8727F8824C004C4235 /* TiquiTaca_iOSUITests.swift */; };
 		F2C02C8A27F8824C004C4235 /* TiquiTaca_iOSUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C02C8927F8824C004C4235 /* TiquiTaca_iOSUITestsLaunchTests.swift */; };
+		F2C02CAA27F89A86004C4235 /* TTDesignSystemModule.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2C02CA827F89A86004C4235 /* TTDesignSystemModule.framework */; };
+		F2C02CAB27F89A86004C4235 /* TTDesignSystemModule.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F2C02CA827F89A86004C4235 /* TTDesignSystemModule.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F2C02CAC27F89A86004C4235 /* TTNetworkModule.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2C02CA927F89A86004C4235 /* TTNetworkModule.framework */; };
+		F2C02CAD27F89A86004C4235 /* TTNetworkModule.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F2C02CA927F89A86004C4235 /* TTNetworkModule.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -33,6 +37,21 @@
 		};
 /* End PBXContainerItemProxy section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		F2C02CAE27F89A86004C4235 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				F2C02CAB27F89A86004C4235 /* TTDesignSystemModule.framework in Embed Frameworks */,
+				F2C02CAD27F89A86004C4235 /* TTNetworkModule.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		F2C02C6927F8824A004C4235 /* TiquiTaca_iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TiquiTaca_iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2C02C6C27F8824A004C4235 /* TiquiTaca_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TiquiTaca_iOSApp.swift; sourceTree = "<group>"; };
@@ -44,6 +63,8 @@
 		F2C02C8327F8824C004C4235 /* TiquiTaca_iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TiquiTaca_iOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2C02C8727F8824C004C4235 /* TiquiTaca_iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TiquiTaca_iOSUITests.swift; sourceTree = "<group>"; };
 		F2C02C8927F8824C004C4235 /* TiquiTaca_iOSUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TiquiTaca_iOSUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		F2C02CA827F89A86004C4235 /* TTDesignSystemModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TTDesignSystemModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F2C02CA927F89A86004C4235 /* TTNetworkModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TTNetworkModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +72,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2C02CAA27F89A86004C4235 /* TTDesignSystemModule.framework in Frameworks */,
+				F2C02CAC27F89A86004C4235 /* TTNetworkModule.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +101,7 @@
 				F2C02C7C27F8824C004C4235 /* TiquiTaca_iOSTests */,
 				F2C02C8627F8824C004C4235 /* TiquiTaca_iOSUITests */,
 				F2C02C6A27F8824A004C4235 /* Products */,
+				F2C02CA727F89A86004C4235 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -127,6 +151,15 @@
 			path = TiquiTaca_iOSUITests;
 			sourceTree = "<group>";
 		};
+		F2C02CA727F89A86004C4235 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				F2C02CA827F89A86004C4235 /* TTDesignSystemModule.framework */,
+				F2C02CA927F89A86004C4235 /* TTNetworkModule.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -137,6 +170,7 @@
 				F2C02C6527F8824A004C4235 /* Sources */,
 				F2C02C6627F8824A004C4235 /* Frameworks */,
 				F2C02C6727F8824A004C4235 /* Resources */,
+				F2C02CAE27F89A86004C4235 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -425,6 +459,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -454,6 +489,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
