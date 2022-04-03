@@ -1,0 +1,21 @@
+name: PR_build
+
+on:
+  pull_request:
+    branches:
+      - master
+      - release
+      - develop
+
+jobs:
+  build:
+
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout repository
+    - uses: actions/checkout@v3
+    
+    - name: Build start 🔨
+      run: |
+        xcodebuild clean test -workspace TiquiTaca_iOS/TiquiTaca_iOS.xcworkspace -scheme TiquiTaca_iOS -destination 'platform=iOS Simulator,name=iPhone 13 Pro,OS=15.0'
