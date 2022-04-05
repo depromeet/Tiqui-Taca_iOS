@@ -53,7 +53,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		F2C02C6927F8824A004C4235 /* TiquiTaca_iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TiquiTaca_iOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		F2C02C6927F8824A004C4235 /* TiquiTaca.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TiquiTaca.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2C02C6C27F8824A004C4235 /* TiquiTaca_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TiquiTaca_iOSApp.swift; sourceTree = "<group>"; };
 		F2C02C6E27F8824A004C4235 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		F2C02C7027F8824C004C4235 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -108,7 +108,7 @@
 		F2C02C6A27F8824A004C4235 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				F2C02C6927F8824A004C4235 /* TiquiTaca_iOS.app */,
+				F2C02C6927F8824A004C4235 /* TiquiTaca.app */,
 				F2C02C7927F8824C004C4235 /* TiquiTaca_iOSTests.xctest */,
 				F2C02C8327F8824C004C4235 /* TiquiTaca_iOSUITests.xctest */,
 			);
@@ -178,7 +178,7 @@
 			);
 			name = TiquiTaca_iOS;
 			productName = TiquiTaca_iOS;
-			productReference = F2C02C6927F8824A004C4235 /* TiquiTaca_iOS.app */;
+			productReference = F2C02C6927F8824A004C4235 /* TiquiTaca.app */;
 			productType = "com.apple.product-type.application";
 		};
 		F2C02C7827F8824C004C4235 /* TiquiTaca_iOSTests */ = {
@@ -448,10 +448,11 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"TiquiTaca_iOS/Preview Content\"";
-				DEVELOPMENT_TEAM = 75FNRKTJ9S;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -466,7 +467,8 @@
 				);
 				MARKETING_VERSION = 0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tiquitaca.TiquiTaca-iOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = TiquiTaca;
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -478,7 +480,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_STYLE = Automatic;
+				CODE_SIGN_IDENTITY = "iPhone Distribution: Minseok Kang (75FNRKTJ9S)";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"TiquiTaca_iOS/Preview Content\"";
 				DEVELOPMENT_TEAM = 75FNRKTJ9S;
@@ -496,7 +499,8 @@
 				);
 				MARKETING_VERSION = 0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tiquitaca.TiquiTaca-iOS";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = TiquiTaca;
+				PROVISIONING_PROFILE_SPECIFIER = appStore_tiquiTaca;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
