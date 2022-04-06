@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+//test
 @main
 struct TiquiTaca_iOSApp: App {
     var body: some Scene {
