@@ -6,7 +6,7 @@
 //
 
 import XCTest
-@testable import TiquiTaca_iOS
+@testable import TiquiTaca
 
 class TiquiTaca_iOSTests: XCTestCase {
 
