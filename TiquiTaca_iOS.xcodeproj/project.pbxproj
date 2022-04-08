@@ -12,8 +12,6 @@
 		F2C02C7127F8824C004C4235 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F2C02C7027F8824C004C4235 /* Assets.xcassets */; };
 		F2C02C7427F8824C004C4235 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F2C02C7327F8824C004C4235 /* Preview Assets.xcassets */; };
 		F2C02C7E27F8824C004C4235 /* TiquiTaca_iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C02C7D27F8824C004C4235 /* TiquiTaca_iOSTests.swift */; };
-		F2C02C8827F8824C004C4235 /* TiquiTaca_iOSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C02C8727F8824C004C4235 /* TiquiTaca_iOSUITests.swift */; };
-		F2C02C8A27F8824C004C4235 /* TiquiTaca_iOSUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C02C8927F8824C004C4235 /* TiquiTaca_iOSUITestsLaunchTests.swift */; };
 		F2C02CAA27F89A86004C4235 /* TTDesignSystemModule.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2C02CA827F89A86004C4235 /* TTDesignSystemModule.framework */; };
 		F2C02CAB27F89A86004C4235 /* TTDesignSystemModule.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F2C02CA827F89A86004C4235 /* TTDesignSystemModule.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F2C02CAC27F89A86004C4235 /* TTNetworkModule.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2C02CA927F89A86004C4235 /* TTNetworkModule.framework */; };
@@ -22,13 +20,6 @@
 
 /* Begin PBXContainerItemProxy section */
 		F2C02C7A27F8824C004C4235 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = F2C02C6127F8824A004C4235 /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = F2C02C6827F8824A004C4235;
-			remoteInfo = TiquiTaca_iOS;
-		};
-		F2C02C8427F8824C004C4235 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = F2C02C6127F8824A004C4235 /* Project object */;
 			proxyType = 1;
@@ -60,9 +51,6 @@
 		F2C02C7327F8824C004C4235 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		F2C02C7927F8824C004C4235 /* TiquiTaca_iOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TiquiTaca_iOSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2C02C7D27F8824C004C4235 /* TiquiTaca_iOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TiquiTaca_iOSTests.swift; sourceTree = "<group>"; };
-		F2C02C8327F8824C004C4235 /* TiquiTaca_iOSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TiquiTaca_iOSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		F2C02C8727F8824C004C4235 /* TiquiTaca_iOSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TiquiTaca_iOSUITests.swift; sourceTree = "<group>"; };
-		F2C02C8927F8824C004C4235 /* TiquiTaca_iOSUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TiquiTaca_iOSUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		F2C02CA827F89A86004C4235 /* TTDesignSystemModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TTDesignSystemModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2C02CA927F89A86004C4235 /* TTNetworkModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TTNetworkModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -84,13 +72,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F2C02C8027F8824C004C4235 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -99,7 +80,6 @@
 			children = (
 				F2C02C6B27F8824A004C4235 /* TiquiTaca_iOS */,
 				F2C02C7C27F8824C004C4235 /* TiquiTaca_iOSTests */,
-				F2C02C8627F8824C004C4235 /* TiquiTaca_iOSUITests */,
 				F2C02C6A27F8824A004C4235 /* Products */,
 				F2C02CA727F89A86004C4235 /* Frameworks */,
 			);
@@ -110,7 +90,6 @@
 			children = (
 				F2C02C6927F8824A004C4235 /* TiquiTaca.app */,
 				F2C02C7927F8824C004C4235 /* TiquiTaca_iOSTests.xctest */,
-				F2C02C8327F8824C004C4235 /* TiquiTaca_iOSUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -140,15 +119,6 @@
 				F2C02C7D27F8824C004C4235 /* TiquiTaca_iOSTests.swift */,
 			);
 			path = TiquiTaca_iOSTests;
-			sourceTree = "<group>";
-		};
-		F2C02C8627F8824C004C4235 /* TiquiTaca_iOSUITests */ = {
-			isa = PBXGroup;
-			children = (
-				F2C02C8727F8824C004C4235 /* TiquiTaca_iOSUITests.swift */,
-				F2C02C8927F8824C004C4235 /* TiquiTaca_iOSUITestsLaunchTests.swift */,
-			);
-			path = TiquiTaca_iOSUITests;
 			sourceTree = "<group>";
 		};
 		F2C02CA727F89A86004C4235 /* Frameworks */ = {
@@ -199,24 +169,6 @@
 			productReference = F2C02C7927F8824C004C4235 /* TiquiTaca_iOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		F2C02C8227F8824C004C4235 /* TiquiTaca_iOSUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = F2C02C9327F8824C004C4235 /* Build configuration list for PBXNativeTarget "TiquiTaca_iOSUITests" */;
-			buildPhases = (
-				F2C02C7F27F8824C004C4235 /* Sources */,
-				F2C02C8027F8824C004C4235 /* Frameworks */,
-				F2C02C8127F8824C004C4235 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				F2C02C8527F8824C004C4235 /* PBXTargetDependency */,
-			);
-			name = TiquiTaca_iOSUITests;
-			productName = TiquiTaca_iOSUITests;
-			productReference = F2C02C8327F8824C004C4235 /* TiquiTaca_iOSUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -231,10 +183,6 @@
 						CreatedOnToolsVersion = 13.3;
 					};
 					F2C02C7827F8824C004C4235 = {
-						CreatedOnToolsVersion = 13.3;
-						TestTargetID = F2C02C6827F8824A004C4235;
-					};
-					F2C02C8227F8824C004C4235 = {
 						CreatedOnToolsVersion = 13.3;
 						TestTargetID = F2C02C6827F8824A004C4235;
 					};
@@ -255,7 +203,6 @@
 			targets = (
 				F2C02C6827F8824A004C4235 /* TiquiTaca_iOS */,
 				F2C02C7827F8824C004C4235 /* TiquiTaca_iOSTests */,
-				F2C02C8227F8824C004C4235 /* TiquiTaca_iOSUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -271,13 +218,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F2C02C7727F8824C004C4235 /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		F2C02C8127F8824C004C4235 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -304,15 +244,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		F2C02C7F27F8824C004C4235 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				F2C02C8A27F8824C004C4235 /* TiquiTaca_iOSUITestsLaunchTests.swift in Sources */,
-				F2C02C8827F8824C004C4235 /* TiquiTaca_iOSUITests.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -320,11 +251,6 @@
 			isa = PBXTargetDependency;
 			target = F2C02C6827F8824A004C4235 /* TiquiTaca_iOS */;
 			targetProxy = F2C02C7A27F8824C004C4235 /* PBXContainerItemProxy */;
-		};
-		F2C02C8527F8824C004C4235 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = F2C02C6827F8824A004C4235 /* TiquiTaca_iOS */;
-			targetProxy = F2C02C8427F8824C004C4235 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -547,42 +473,6 @@
 			};
 			name = Release;
 		};
-		F2C02C9427F8824C004C4235 /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 75FNRKTJ9S;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.tiquitaca.TiquiTaca-iOSUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = TiquiTaca_iOS;
-			};
-			name = Debug;
-		};
-		F2C02C9527F8824C004C4235 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 75FNRKTJ9S;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.tiquitaca.TiquiTaca-iOSUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = TiquiTaca_iOS;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -609,15 +499,6 @@
 			buildConfigurations = (
 				F2C02C9127F8824C004C4235 /* Debug */,
 				F2C02C9227F8824C004C4235 /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		F2C02C9327F8824C004C4235 /* Build configuration list for PBXNativeTarget "TiquiTaca_iOSUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				F2C02C9427F8824C004C4235 /* Debug */,
-				F2C02C9527F8824C004C4235 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
