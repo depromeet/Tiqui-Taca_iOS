@@ -8,6 +8,4 @@
 import XCTest
 @testable import TiquiTaca
 
-class TiquiTaca_iOSTests: XCTestCase {
-
-}
+class TiquiTacaTests: XCTestCase {}
