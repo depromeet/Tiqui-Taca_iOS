@@ -16,6 +16,7 @@
 		F2C02CAB27F89A86004C4235 /* TTDesignSystemModule.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F2C02CA827F89A86004C4235 /* TTDesignSystemModule.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F2C02CAC27F89A86004C4235 /* TTNetworkModule.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2C02CA927F89A86004C4235 /* TTNetworkModule.framework */; };
 		F2C02CAD27F89A86004C4235 /* TTNetworkModule.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F2C02CA927F89A86004C4235 /* TTNetworkModule.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F2F1FFC12804A4E500F3A8E4 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = F2F1FFC02804A4E500F3A8E4 /* .swiftlint.yml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,8 @@
 		F2C02C7D27F8824C004C4235 /* TiquiTaca_iOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TiquiTaca_iOSTests.swift; sourceTree = "<group>"; };
 		F2C02CA827F89A86004C4235 /* TTDesignSystemModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TTDesignSystemModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2C02CA927F89A86004C4235 /* TTNetworkModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TTNetworkModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F2F1FFBE28049D7E00F3A8E4 /* TiquiTaca-iOS-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "TiquiTaca-iOS-Info.plist"; sourceTree = SOURCE_ROOT; };
+		F2F1FFC02804A4E500F3A8E4 /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -97,6 +100,8 @@
 		F2C02C6B27F8824A004C4235 /* TiquiTaca_iOS */ = {
 			isa = PBXGroup;
 			children = (
+				F2F1FFC02804A4E500F3A8E4 /* .swiftlint.yml */,
+				F2F1FFBE28049D7E00F3A8E4 /* TiquiTaca-iOS-Info.plist */,
 				F2C02C6C27F8824A004C4235 /* TiquiTaca_iOSApp.swift */,
 				F2C02C6E27F8824A004C4235 /* ContentView.swift */,
 				F2C02C7027F8824C004C4235 /* Assets.xcassets */,
@@ -137,6 +142,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F2C02C8D27F8824C004C4235 /* Build configuration list for PBXNativeTarget "TiquiTaca_iOS" */;
 			buildPhases = (
+				F2F1FFBF2804A2AA00F3A8E4 /* Run Swiftlint */,
 				F2C02C6527F8824A004C4235 /* Sources */,
 				F2C02C6627F8824A004C4235 /* Frameworks */,
 				F2C02C6727F8824A004C4235 /* Resources */,
@@ -147,6 +153,8 @@
 			dependencies = (
 			);
 			name = TiquiTaca_iOS;
+			packageProductDependencies = (
+			);
 			productName = TiquiTaca_iOS;
 			productReference = F2C02C6927F8824A004C4235 /* TiquiTaca.app */;
 			productType = "com.apple.product-type.application";
@@ -197,6 +205,8 @@
 				Base,
 			);
 			mainGroup = F2C02C6027F8824A004C4235;
+			packageReferences = (
+			);
 			productRefGroup = F2C02C6A27F8824A004C4235 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -212,6 +222,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2F1FFC12804A4E500F3A8E4 /* .swiftlint.yml in Resources */,
 				F2C02C7427F8824C004C4235 /* Preview Assets.xcassets in Resources */,
 				F2C02C7127F8824C004C4235 /* Assets.xcassets in Resources */,
 			);
@@ -225,6 +236,27 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		F2F1FFBF2804A2AA00F3A8E4 /* Run Swiftlint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Run Swiftlint";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		F2C02C6527F8824A004C4235 /* Sources */ = {
@@ -381,6 +413,7 @@
 				DEVELOPMENT_TEAM = 75FNRKTJ9S;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "TiquiTaca-iOS-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -413,6 +446,7 @@
 				DEVELOPMENT_TEAM = 75FNRKTJ9S;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "TiquiTaca-iOS-Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

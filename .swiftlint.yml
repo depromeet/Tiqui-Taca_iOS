@@ -1,0 +1,8 @@
+opt_in_rules:
+  - closure_spacing
+  - fatal_error_message
+  - force_unwrapping
+  - implicitly_unwrapped_optional
+  - legacy_multiple
+  - legacy_random
+  - operator_usage_whitespace
