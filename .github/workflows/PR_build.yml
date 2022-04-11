@@ -1,4 +1,4 @@
-name: PR_build
+name: PR Build
 
 on:
   pull_request:
@@ -15,6 +15,10 @@ jobs:
     steps:
     - name: Checkout ⬇️
       uses: actions/checkout@v3
+      with:
+        token: ${{ secrets.ACCESS_TOKEN }}
+        submodules: true
+      
     - name: Build start 🔨
       run: |
         xcodebuild clean test -workspace TiquiTaca_iOS.xcworkspace -scheme TiquiTaca_iOS -destination 'platform=iOS Simulator,name=iPhone 13 Pro,OS=15.2'

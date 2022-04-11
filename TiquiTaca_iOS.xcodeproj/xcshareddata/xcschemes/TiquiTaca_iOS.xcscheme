@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "F2C02C6827F8824A004C4235"
-               BuildableName = "TiquiTaca_iOS.app"
+               BuildableName = "TiquiTaca.app"
                BlueprintName = "TiquiTaca_iOS"
                ReferencedContainer = "container:TiquiTaca_iOS.xcodeproj">
             </BuildableReference>
@@ -65,7 +65,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F2C02C6827F8824A004C4235"
-            BuildableName = "TiquiTaca_iOS.app"
+            BuildableName = "TiquiTaca.app"
             BlueprintName = "TiquiTaca_iOS"
             ReferencedContainer = "container:TiquiTaca_iOS.xcodeproj">
          </BuildableReference>
@@ -82,7 +82,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "F2C02C6827F8824A004C4235"
-            BuildableName = "TiquiTaca_iOS.app"
+            BuildableName = "TiquiTaca.app"
             BlueprintName = "TiquiTaca_iOS"
             ReferencedContainer = "container:TiquiTaca_iOS.xcodeproj">
          </BuildableReference>
