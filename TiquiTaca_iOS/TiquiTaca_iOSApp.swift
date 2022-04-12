@@ -8,10 +8,10 @@
 import SwiftUI
 
 @main
-struct TiquiTaca_iOSApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
+struct TiquiTaca: App {
+  var body: some Scene {
+    WindowGroup {
+      ContentView()
     }
+  }
 }
