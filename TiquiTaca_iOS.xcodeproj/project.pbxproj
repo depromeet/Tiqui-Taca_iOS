@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F20992A72805C8ED002C170C /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = F20992A62805C8ED002C170C /* ComposableArchitecture */; };
 		F2C02C6D27F8824A004C4235 /* TiquiTaca_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C02C6C27F8824A004C4235 /* TiquiTaca_iOSApp.swift */; };
 		F2C02C6F27F8824A004C4235 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C02C6E27F8824A004C4235 /* ContentView.swift */; };
 		F2C02C7127F8824C004C4235 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F2C02C7027F8824C004C4235 /* Assets.xcassets */; };
@@ -65,6 +66,7 @@
 			files = (
 				F2C02CAA27F89A86004C4235 /* TTDesignSystemModule.framework in Frameworks */,
 				F2C02CAC27F89A86004C4235 /* TTNetworkModule.framework in Frameworks */,
+				F20992A72805C8ED002C170C /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -154,6 +156,7 @@
 			);
 			name = TiquiTaca_iOS;
 			packageProductDependencies = (
+				F20992A62805C8ED002C170C /* ComposableArchitecture */,
 			);
 			productName = TiquiTaca_iOS;
 			productReference = F2C02C6927F8824A004C4235 /* TiquiTaca.app */;
@@ -206,6 +209,7 @@
 			);
 			mainGroup = F2C02C6027F8824A004C4235;
 			packageReferences = (
+				F20992A52805C8ED002C170C /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
 			);
 			productRefGroup = F2C02C6A27F8824A004C4235 /* Products */;
 			projectDirPath = "";
@@ -538,6 +542,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		F20992A52805C8ED002C170C /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = exactVersion;
+				version = 0.34.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		F20992A62805C8ED002C170C /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = F20992A52805C8ED002C170C /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = F2C02C6127F8824A004C4235 /* Project object */;
 }
