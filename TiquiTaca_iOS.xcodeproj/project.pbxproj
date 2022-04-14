@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F20992A72805C8ED002C170C /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = F20992A62805C8ED002C170C /* ComposableArchitecture */; };
+		F24B1EEF28086CA0003D4E1D /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = F24B1EEE28086CA0003D4E1D /* .swiftlint.yml */; };
 		F2C02C6D27F8824A004C4235 /* TiquiTaca_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C02C6C27F8824A004C4235 /* TiquiTaca_iOSApp.swift */; };
 		F2C02C6F27F8824A004C4235 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C02C6E27F8824A004C4235 /* ContentView.swift */; };
 		F2C02C7127F8824C004C4235 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F2C02C7027F8824C004C4235 /* Assets.xcassets */; };
@@ -17,7 +18,6 @@
 		F2C02CAB27F89A86004C4235 /* TTDesignSystemModule.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F2C02CA827F89A86004C4235 /* TTDesignSystemModule.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F2C02CAC27F89A86004C4235 /* TTNetworkModule.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2C02CA927F89A86004C4235 /* TTNetworkModule.framework */; };
 		F2C02CAD27F89A86004C4235 /* TTNetworkModule.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F2C02CA927F89A86004C4235 /* TTNetworkModule.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		F2F1FFC12804A4E500F3A8E4 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = F2F1FFC02804A4E500F3A8E4 /* .swiftlint.yml */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +46,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F24B1EEE28086CA0003D4E1D /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
 		F2C02C6927F8824A004C4235 /* TiquiTaca.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TiquiTaca.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2C02C6C27F8824A004C4235 /* TiquiTaca_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TiquiTaca_iOSApp.swift; sourceTree = "<group>"; };
 		F2C02C6E27F8824A004C4235 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -55,8 +56,7 @@
 		F2C02C7D27F8824C004C4235 /* TiquiTaca_iOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TiquiTaca_iOSTests.swift; sourceTree = "<group>"; };
 		F2C02CA827F89A86004C4235 /* TTDesignSystemModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TTDesignSystemModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2C02CA927F89A86004C4235 /* TTNetworkModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TTNetworkModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F2F1FFBE28049D7E00F3A8E4 /* TiquiTaca-iOS-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "TiquiTaca-iOS-Info.plist"; sourceTree = SOURCE_ROOT; };
-		F2F1FFC02804A4E500F3A8E4 /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
+		F2F1FFBE28049D7E00F3A8E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = TiquiTaca_iOS/SupportingFile/Info.plist; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,6 +80,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F20992A82805CCD1002C170C /* SupportingFile */ = {
+			isa = PBXGroup;
+			children = (
+				F2F1FFBE28049D7E00F3A8E4 /* Info.plist */,
+				F24B1EEE28086CA0003D4E1D /* .swiftlint.yml */,
+			);
+			path = SupportingFile;
+			sourceTree = "<group>";
+		};
+		F20992A92805CD18002C170C /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				F2C02C6E27F8824A004C4235 /* ContentView.swift */,
+				F2C02C6C27F8824A004C4235 /* TiquiTaca_iOSApp.swift */,
+			);
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		F24B1EF028086DC2003D4E1D /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				F2C02C7027F8824C004C4235 /* Assets.xcassets */,
+				F2C02C7327F8824C004C4235 /* Preview Assets.xcassets */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
 		F2C02C6027F8824A004C4235 = {
 			isa = PBXGroup;
 			children = (
@@ -102,22 +129,11 @@
 		F2C02C6B27F8824A004C4235 /* TiquiTaca_iOS */ = {
 			isa = PBXGroup;
 			children = (
-				F2F1FFC02804A4E500F3A8E4 /* .swiftlint.yml */,
-				F2F1FFBE28049D7E00F3A8E4 /* TiquiTaca-iOS-Info.plist */,
-				F2C02C6C27F8824A004C4235 /* TiquiTaca_iOSApp.swift */,
-				F2C02C6E27F8824A004C4235 /* ContentView.swift */,
-				F2C02C7027F8824C004C4235 /* Assets.xcassets */,
-				F2C02C7227F8824C004C4235 /* Preview Content */,
+				F20992A92805CD18002C170C /* Sources */,
+				F24B1EF028086DC2003D4E1D /* Resource */,
+				F20992A82805CCD1002C170C /* SupportingFile */,
 			);
 			path = TiquiTaca_iOS;
-			sourceTree = "<group>";
-		};
-		F2C02C7227F8824C004C4235 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				F2C02C7327F8824C004C4235 /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 		F2C02C7C27F8824C004C4235 /* TiquiTaca_iOSTests */ = {
@@ -226,7 +242,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F2F1FFC12804A4E500F3A8E4 /* .swiftlint.yml in Resources */,
+				F24B1EEF28086CA0003D4E1D /* .swiftlint.yml in Resources */,
 				F2C02C7427F8824C004C4235 /* Preview Assets.xcassets in Resources */,
 				F2C02C7127F8824C004C4235 /* Assets.xcassets in Resources */,
 			);
@@ -416,8 +432,8 @@
 				DEVELOPMENT_ASSET_PATHS = "\"TiquiTaca_iOS/Preview Content\"";
 				DEVELOPMENT_TEAM = 75FNRKTJ9S;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "TiquiTaca-iOS-Info.plist";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = TiquiTaca_iOS/SupportingFile/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -449,8 +465,8 @@
 				DEVELOPMENT_ASSET_PATHS = "\"TiquiTaca_iOS/Preview Content\"";
 				DEVELOPMENT_TEAM = 75FNRKTJ9S;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "TiquiTaca-iOS-Info.plist";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = TiquiTaca_iOS/SupportingFile/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
