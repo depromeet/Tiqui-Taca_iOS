@@ -1,4 +1,4 @@
-source 'https://github.com/CocoaPods/Specs.git'
+source 'https://cdn.cocoapods.org/'
 source 'https://github.com/depromeet/Tiqui-Taca_iOS_Podspec.git'
 
 platform :ios, '15.0'
