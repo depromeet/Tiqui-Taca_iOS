@@ -9,8 +9,7 @@ on:
 
 jobs:
   build:
-
-    runs-on: macos-12
+    runs-on: macos-latest
 
     steps:
     - name: Checkout ⬇️
@@ -18,10 +17,8 @@ jobs:
       with:
         token: ${{ secrets.ACCESS_TOKEN }}
         submodules: true
-        
-    - name: Select Xcode
-      run: sudo xcode-select -switch /Applications/Xcode_13.3.1.app && /usr/bin/xcodebuild -version
       
     - name: Build start 🔨
       run: |
+        pod install --repo-update --clean-install
         xcodebuild clean test -workspace TiquiTaca_iOS.xcworkspace -scheme TiquiTaca_iOS -destination 'platform=iOS Simulator,name=iPhone 13 Pro,OS=15.2'
