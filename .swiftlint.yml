@@ -2,8 +2,8 @@ excluded:
 - TiquiTaca_NetworkModule
 - TiquiTaca_DesignSystem
 - ${PWD}/DerivedData
-- BuildTools
 - R.generated.swift
+- Pods
 
 disabled_rules:
   - discarded_notification_center_observer
