@@ -1,7 +1,9 @@
 excluded:
-- ${PWD}/DerivedData
 - TiquiTaca_NetworkModule
 - TiquiTaca_DesignSystem
+- ${PWD}/DerivedData
+- R.generated.swift
+- Pods
 
 disabled_rules:
   - discarded_notification_center_observer
@@ -99,7 +101,7 @@ private_over_fileprivate:
   validate_extensions: true
 
 trailing_whitespace:
-  ignores_empty_lines: false
+  ignores_empty_lines: true
   ignores_comments: true
 
 vertical_whitespace:

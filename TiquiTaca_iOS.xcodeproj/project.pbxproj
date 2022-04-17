@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F0B780950BED104CA13722B /* Pods_TiquiTaca_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BE9660275CF15262D33E074 /* Pods_TiquiTaca_iOS.framework */; };
+		732798BD47A40FA84BC24EEF /* Pods_TiquiTaca_iOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90ED3E866555D3D7D6ABC769 /* Pods_TiquiTaca_iOSTests.framework */; };
+		F24B1EEF28086CA0003D4E1D /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = F24B1EEE28086CA0003D4E1D /* .swiftlint.yml */; };
 		F2C02C6D27F8824A004C4235 /* TiquiTaca_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C02C6C27F8824A004C4235 /* TiquiTaca_iOSApp.swift */; };
 		F2C02C6F27F8824A004C4235 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C02C6E27F8824A004C4235 /* ContentView.swift */; };
 		F2C02C7127F8824C004C4235 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F2C02C7027F8824C004C4235 /* Assets.xcassets */; };
@@ -16,7 +19,9 @@
 		F2C02CAB27F89A86004C4235 /* TTDesignSystemModule.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F2C02CA827F89A86004C4235 /* TTDesignSystemModule.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F2C02CAC27F89A86004C4235 /* TTNetworkModule.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2C02CA927F89A86004C4235 /* TTNetworkModule.framework */; };
 		F2C02CAD27F89A86004C4235 /* TTNetworkModule.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F2C02CA927F89A86004C4235 /* TTNetworkModule.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		F2F1FFC12804A4E500F3A8E4 /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = F2F1FFC02804A4E500F3A8E4 /* .swiftlint.yml */; };
+		F2FA365C2808897C00A24789 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FA365B2808897C00A24789 /* R.generated.swift */; };
+		F2FDA216280BBDAC00B2ED75 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F2FDA215280BBDAC00B2ED75 /* LaunchScreen.storyboard */; };
+		F2FDA21A280BBF8300B2ED75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FDA219280BBF8300B2ED75 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,6 +50,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		05987FBDD23F2EC17BC9A0EF /* Pods-TiquiTaca_iOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TiquiTaca_iOSTests.debug.xcconfig"; path = "Target Support Files/Pods-TiquiTaca_iOSTests/Pods-TiquiTaca_iOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		6BE9660275CF15262D33E074 /* Pods_TiquiTaca_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TiquiTaca_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		90ED3E866555D3D7D6ABC769 /* Pods_TiquiTaca_iOSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TiquiTaca_iOSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CCF68E71B934ECA70FBAFF46 /* Pods-TiquiTaca_iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TiquiTaca_iOS.release.xcconfig"; path = "Target Support Files/Pods-TiquiTaca_iOS/Pods-TiquiTaca_iOS.release.xcconfig"; sourceTree = "<group>"; };
+		E28161D6F39CEC9BDD482E74 /* Pods-TiquiTaca_iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TiquiTaca_iOS.debug.xcconfig"; path = "Target Support Files/Pods-TiquiTaca_iOS/Pods-TiquiTaca_iOS.debug.xcconfig"; sourceTree = "<group>"; };
+		F24B1EEE28086CA0003D4E1D /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
 		F2C02C6927F8824A004C4235 /* TiquiTaca.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TiquiTaca.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2C02C6C27F8824A004C4235 /* TiquiTaca_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TiquiTaca_iOSApp.swift; sourceTree = "<group>"; };
 		F2C02C6E27F8824A004C4235 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -54,8 +65,11 @@
 		F2C02C7D27F8824C004C4235 /* TiquiTaca_iOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TiquiTaca_iOSTests.swift; sourceTree = "<group>"; };
 		F2C02CA827F89A86004C4235 /* TTDesignSystemModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TTDesignSystemModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2C02CA927F89A86004C4235 /* TTNetworkModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TTNetworkModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F2F1FFBE28049D7E00F3A8E4 /* TiquiTaca-iOS-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "TiquiTaca-iOS-Info.plist"; sourceTree = SOURCE_ROOT; };
-		F2F1FFC02804A4E500F3A8E4 /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
+		F2F1FFBE28049D7E00F3A8E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = TiquiTaca_iOS/SupportingFile/Info.plist; sourceTree = SOURCE_ROOT; };
+		F2FA365B2808897C00A24789 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
+		F2FDA215280BBDAC00B2ED75 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
+		F2FDA219280BBF8300B2ED75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		F5D04B5F76393475F2238F76 /* Pods-TiquiTaca_iOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TiquiTaca_iOSTests.release.xcconfig"; path = "Target Support Files/Pods-TiquiTaca_iOSTests/Pods-TiquiTaca_iOSTests.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,6 +79,7 @@
 			files = (
 				F2C02CAA27F89A86004C4235 /* TTDesignSystemModule.framework in Frameworks */,
 				F2C02CAC27F89A86004C4235 /* TTNetworkModule.framework in Frameworks */,
+				3F0B780950BED104CA13722B /* Pods_TiquiTaca_iOS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -72,12 +87,52 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				732798BD47A40FA84BC24EEF /* Pods_TiquiTaca_iOSTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		C588B14F79D2DB0B0D8975BC /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				E28161D6F39CEC9BDD482E74 /* Pods-TiquiTaca_iOS.debug.xcconfig */,
+				CCF68E71B934ECA70FBAFF46 /* Pods-TiquiTaca_iOS.release.xcconfig */,
+				05987FBDD23F2EC17BC9A0EF /* Pods-TiquiTaca_iOSTests.debug.xcconfig */,
+				F5D04B5F76393475F2238F76 /* Pods-TiquiTaca_iOSTests.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		F20992A82805CCD1002C170C /* SupportingFile */ = {
+			isa = PBXGroup;
+			children = (
+				F2F1FFBE28049D7E00F3A8E4 /* Info.plist */,
+				F24B1EEE28086CA0003D4E1D /* .swiftlint.yml */,
+				F2FA365B2808897C00A24789 /* R.generated.swift */,
+			);
+			path = SupportingFile;
+			sourceTree = "<group>";
+		};
+		F24B1EF028086DC2003D4E1D /* Resource */ = {
+			isa = PBXGroup;
+			children = (
+				F2C02C7027F8824C004C4235 /* Assets.xcassets */,
+				F24B1EF22808741B003D4E1D /* Preview Content */,
+				F2FDA215280BBDAC00B2ED75 /* LaunchScreen.storyboard */,
+			);
+			path = Resource;
+			sourceTree = "<group>";
+		};
+		F24B1EF22808741B003D4E1D /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				F2C02C7327F8824C004C4235 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
 		F2C02C6027F8824A004C4235 = {
 			isa = PBXGroup;
 			children = (
@@ -85,6 +140,7 @@
 				F2C02C7C27F8824C004C4235 /* TiquiTaca_iOSTests */,
 				F2C02C6A27F8824A004C4235 /* Products */,
 				F2C02CA727F89A86004C4235 /* Frameworks */,
+				C588B14F79D2DB0B0D8975BC /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -100,22 +156,16 @@
 		F2C02C6B27F8824A004C4235 /* TiquiTaca_iOS */ = {
 			isa = PBXGroup;
 			children = (
-				F2F1FFC02804A4E500F3A8E4 /* .swiftlint.yml */,
-				F2F1FFBE28049D7E00F3A8E4 /* TiquiTaca-iOS-Info.plist */,
+				F2FDA219280BBF8300B2ED75 /* AppDelegate.swift */,
 				F2C02C6C27F8824A004C4235 /* TiquiTaca_iOSApp.swift */,
-				F2C02C6E27F8824A004C4235 /* ContentView.swift */,
-				F2C02C7027F8824C004C4235 /* Assets.xcassets */,
-				F2C02C7227F8824C004C4235 /* Preview Content */,
+				F2FDA211280BAF2200B2ED75 /* Components */,
+				F2FDA212280BAF2B00B2ED75 /* Services */,
+				F2FDA213280BAF3100B2ED75 /* Views */,
+				F2FDA214280BAF3500B2ED75 /* Extensions */,
+				F24B1EF028086DC2003D4E1D /* Resource */,
+				F20992A82805CCD1002C170C /* SupportingFile */,
 			);
 			path = TiquiTaca_iOS;
-			sourceTree = "<group>";
-		};
-		F2C02C7227F8824C004C4235 /* Preview Content */ = {
-			isa = PBXGroup;
-			children = (
-				F2C02C7327F8824C004C4235 /* Preview Assets.xcassets */,
-			);
-			path = "Preview Content";
 			sourceTree = "<group>";
 		};
 		F2C02C7C27F8824C004C4235 /* TiquiTaca_iOSTests */ = {
@@ -131,8 +181,39 @@
 			children = (
 				F2C02CA827F89A86004C4235 /* TTDesignSystemModule.framework */,
 				F2C02CA927F89A86004C4235 /* TTNetworkModule.framework */,
+				6BE9660275CF15262D33E074 /* Pods_TiquiTaca_iOS.framework */,
+				90ED3E866555D3D7D6ABC769 /* Pods_TiquiTaca_iOSTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F2FDA211280BAF2200B2ED75 /* Components */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Components;
+			sourceTree = "<group>";
+		};
+		F2FDA212280BAF2B00B2ED75 /* Services */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Services;
+			sourceTree = "<group>";
+		};
+		F2FDA213280BAF3100B2ED75 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				F2C02C6E27F8824A004C4235 /* ContentView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		F2FDA214280BAF3500B2ED75 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Extensions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -142,19 +223,20 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F2C02C8D27F8824C004C4235 /* Build configuration list for PBXNativeTarget "TiquiTaca_iOS" */;
 			buildPhases = (
+				BD3CF7E3E7E022E0969F7A18 /* [CP] Check Pods Manifest.lock */,
 				F2F1FFBF2804A2AA00F3A8E4 /* Run Swiftlint */,
+				F24B1EF12808728F003D4E1D /* R.swift */,
 				F2C02C6527F8824A004C4235 /* Sources */,
 				F2C02C6627F8824A004C4235 /* Frameworks */,
 				F2C02C6727F8824A004C4235 /* Resources */,
 				F2C02CAE27F89A86004C4235 /* Embed Frameworks */,
+				CF32979773B2B9262F48FBB4 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = TiquiTaca_iOS;
-			packageProductDependencies = (
-			);
 			productName = TiquiTaca_iOS;
 			productReference = F2C02C6927F8824A004C4235 /* TiquiTaca.app */;
 			productType = "com.apple.product-type.application";
@@ -163,6 +245,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F2C02C9027F8824C004C4235 /* Build configuration list for PBXNativeTarget "TiquiTaca_iOSTests" */;
 			buildPhases = (
+				C8EF9C14223E3EC9F994B50D /* [CP] Check Pods Manifest.lock */,
 				F2C02C7527F8824C004C4235 /* Sources */,
 				F2C02C7627F8824C004C4235 /* Frameworks */,
 				F2C02C7727F8824C004C4235 /* Resources */,
@@ -205,8 +288,6 @@
 				Base,
 			);
 			mainGroup = F2C02C6027F8824A004C4235;
-			packageReferences = (
-			);
 			productRefGroup = F2C02C6A27F8824A004C4235 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -222,8 +303,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F2F1FFC12804A4E500F3A8E4 /* .swiftlint.yml in Resources */,
+				F24B1EEF28086CA0003D4E1D /* .swiftlint.yml in Resources */,
 				F2C02C7427F8824C004C4235 /* Preview Assets.xcassets in Resources */,
+				F2FDA216280BBDAC00B2ED75 /* LaunchScreen.storyboard in Resources */,
 				F2C02C7127F8824C004C4235 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -238,6 +320,87 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		BD3CF7E3E7E022E0969F7A18 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TiquiTaca_iOS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C8EF9C14223E3EC9F994B50D /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-TiquiTaca_iOSTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		CF32979773B2B9262F48FBB4 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TiquiTaca_iOS/Pods-TiquiTaca_iOS-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-TiquiTaca_iOS/Pods-TiquiTaca_iOS-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-TiquiTaca_iOS/Pods-TiquiTaca_iOS-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F24B1EF12808728F003D4E1D /* R.swift */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = R.swift;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				$SRCROOT/R.generated.swift,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT/R.generated.swift\"\n";
+		};
 		F2F1FFBF2804A2AA00F3A8E4 /* Run Swiftlint */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -254,7 +417,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if which swiftlint >/dev/null; then\n  swiftlint\nelse\n  echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+			shellScript = "\"${PODS_ROOT}/SwiftLint/swiftlint\"\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -263,8 +426,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F2FDA21A280BBF8300B2ED75 /* AppDelegate.swift in Sources */,
 				F2C02C6F27F8824A004C4235 /* ContentView.swift in Sources */,
 				F2C02C6D27F8824A004C4235 /* TiquiTaca_iOSApp.swift in Sources */,
+				F2FA365C2808897C00A24789 /* R.generated.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -403,17 +568,18 @@
 		};
 		F2C02C8E27F8824C004C4235 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = E28161D6F39CEC9BDD482E74 /* Pods-TiquiTaca_iOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"TiquiTaca_iOS/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"TiquiTaca_iOS/Resource/Preview Content\"";
 				DEVELOPMENT_TEAM = 75FNRKTJ9S;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "TiquiTaca-iOS-Info.plist";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = TiquiTaca_iOS/SupportingFile/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -436,17 +602,18 @@
 		};
 		F2C02C8F27F8824C004C4235 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = CCF68E71B934ECA70FBAFF46 /* Pods-TiquiTaca_iOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Minseok Kang (75FNRKTJ9S)";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_ASSET_PATHS = "\"TiquiTaca_iOS/Preview Content\"";
+				DEVELOPMENT_ASSET_PATHS = "\"TiquiTaca_iOS/Resource/Preview Content\"";
 				DEVELOPMENT_TEAM = 75FNRKTJ9S;
 				ENABLE_PREVIEWS = YES;
-				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "TiquiTaca-iOS-Info.plist";
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = TiquiTaca_iOS/SupportingFile/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -469,6 +636,7 @@
 		};
 		F2C02C9127F8824C004C4235 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 05987FBDD23F2EC17BC9A0EF /* Pods-TiquiTaca_iOSTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -489,6 +657,7 @@
 		};
 		F2C02C9227F8824C004C4235 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = F5D04B5F76393475F2238F76 /* Pods-TiquiTaca_iOSTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
