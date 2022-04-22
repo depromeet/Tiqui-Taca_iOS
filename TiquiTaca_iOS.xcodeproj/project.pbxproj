@@ -10,6 +10,7 @@
 		3F0B780950BED104CA13722B /* Pods_TiquiTaca_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BE9660275CF15262D33E074 /* Pods_TiquiTaca_iOS.framework */; };
 		732798BD47A40FA84BC24EEF /* Pods_TiquiTaca_iOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90ED3E866555D3D7D6ABC769 /* Pods_TiquiTaca_iOSTests.framework */; };
 		F2127640280FE07500FB568D /* TermsOfServiceCheckField.swift in Sources */ = {isa = PBXBuildFile; fileRef = F212763F280FE07500FB568D /* TermsOfServiceCheckField.swift */; };
+		F2127644281191A800FB568D /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2127643281191A800FB568D /* WebView.swift */; };
 		F24B1EEF28086CA0003D4E1D /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = F24B1EEE28086CA0003D4E1D /* .swiftlint.yml */; };
 		F2C02C6D27F8824A004C4235 /* TiquiTaca_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C02C6C27F8824A004C4235 /* TiquiTaca_iOSApp.swift */; };
 		F2C02C6F27F8824A004C4235 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C02C6E27F8824A004C4235 /* ContentView.swift */; };
@@ -58,6 +59,7 @@
 		CCF68E71B934ECA70FBAFF46 /* Pods-TiquiTaca_iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TiquiTaca_iOS.release.xcconfig"; path = "Target Support Files/Pods-TiquiTaca_iOS/Pods-TiquiTaca_iOS.release.xcconfig"; sourceTree = "<group>"; };
 		E28161D6F39CEC9BDD482E74 /* Pods-TiquiTaca_iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TiquiTaca_iOS.debug.xcconfig"; path = "Target Support Files/Pods-TiquiTaca_iOS/Pods-TiquiTaca_iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		F212763F280FE07500FB568D /* TermsOfServiceCheckField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceCheckField.swift; sourceTree = "<group>"; };
+		F2127643281191A800FB568D /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		F24B1EEE28086CA0003D4E1D /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
 		F2C02C6927F8824A004C4235 /* TiquiTaca.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TiquiTaca.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2C02C6C27F8824A004C4235 /* TiquiTaca_iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TiquiTaca_iOSApp.swift; sourceTree = "<group>"; };
@@ -208,6 +210,7 @@
 		F2FDA213280BAF3100B2ED75 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F2127643281191A800FB568D /* WebView.swift */,
 				F2C02C6E27F8824A004C4235 /* ContentView.swift */,
 				F2FDA226280C0ECC00B2ED75 /* TermsOfService */,
 			);
@@ -441,6 +444,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F2FDA228280C0EE300B2ED75 /* TermsOfServiceView.swift in Sources */,
+				F2127644281191A800FB568D /* WebView.swift in Sources */,
 				F2FDA21A280BBF8300B2ED75 /* AppDelegate.swift in Sources */,
 				F2127640280FE07500FB568D /* TermsOfServiceCheckField.swift in Sources */,
 				F2C02C6F27F8824A004C4235 /* ContentView.swift in Sources */,
