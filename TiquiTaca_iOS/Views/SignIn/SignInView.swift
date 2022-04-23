@@ -72,12 +72,12 @@ struct SignInView: View {
           NavigationLink("화면 넘어가기") {
             PhoneCertificateView(
               store: Store(
-                initialState: CertificateState(
+                initialState: PhoneCertificateState(
                   phoneNumber: viewStore.phoneNumber,
-                  verificationCode: viewStore.verificationCode
+                  certificationCode: viewStore.verificationCode
                 ),
                 reducer: certificateReducer,
-                environment: CertificateEnvironment(
+                environment: PhoneCertificateEnvironment(
                   authService: authService,
                   mainQueue: .main
                 )
