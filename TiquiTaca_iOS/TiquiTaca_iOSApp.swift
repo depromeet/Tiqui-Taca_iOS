@@ -13,7 +13,7 @@ struct TiquiTaca: App {
 
   var body: some Scene {
     WindowGroup {
-      ContentView()
+      OnboardingView()
     }
   }
 }
