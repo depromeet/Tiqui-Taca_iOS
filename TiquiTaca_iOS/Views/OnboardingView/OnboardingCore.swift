@@ -16,11 +16,13 @@ enum OnboardingAction: Equatable {
 	case swipeOnboarding(Int)
 }
 
-struct OnboardingEnvironment {
-	
-}
+struct OnboardingEnvironment { }
 
-let onBoardingReducer = Reducer<OnboardingState, OnboardingAction, OnboardingEnvironment> { state, action, environment in
+let onBoardingReducer = Reducer<
+	OnboardingState,
+	OnboardingAction,
+	OnboardingEnvironment
+> { _, action, _ in
 	switch action {
 	case .swipeOnboarding(let page):
 		return .none

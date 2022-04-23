@@ -8,31 +8,31 @@
 import SwiftUI
 
 struct MainTabView: View {
-    var body: some View {
-			TabView {
-				MapTabView()
-				ChatTabView()
-				NotiTabView()
-				MyPageTabView()
-			}
-    }
+	var body: some View {
+		TabView {
+			MapTabView()
+			ChatTabView()
+			NotiTabView()
+			MyPageTabView()
+		}
+	}
 }
 
 struct TabView_Previews: PreviewProvider {
-    static var previews: some View {
-			MainTabView()
-    }
+	static var previews: some View {
+		MainTabView()
+	}
 }
 
 
 private struct MapTabView: View {
 	var body: some View {
 		Text("Map")
-		.tabItem {
-			Image(systemName: "square.fill")
-				.font(.title)
-			Text("지도")
-		}
+			.tabItem {
+				Image(systemName: "square.fill")
+					.font(.title)
+				Text("지도")
+			}
 	}
 }
 
@@ -40,32 +40,32 @@ private struct MapTabView: View {
 private struct ChatTabView: View {
 	var body: some View {
 		Text("Chat")
-		.tabItem {
-			Image(systemName: "square.fill")
-				.font(.title)
-			Text("채팅")
-		}
+			.tabItem {
+				Image(systemName: "square.fill")
+					.font(.title)
+				Text("채팅")
+			}
 	}
 }
 
 private struct NotiTabView: View {
 	var body: some View {
 		Text("Noti")
-		.tabItem {
-			Image(systemName: "square.fill")
-				.font(.title)
-			Text("쪽지 알림")
-		}
+			.tabItem {
+				Image(systemName: "square.fill")
+					.font(.title)
+				Text("쪽지 알림")
+			}
 	}
 }
 
 private struct MyPageTabView: View {
 	var body: some View {
 		Text("마이페이지")
-		.tabItem {
-			Image(systemName: "square.fill")
-				.font(.title)
-			Text("마이페이지")
-		}
+			.tabItem {
+				Image(systemName: "square.fill")
+					.font(.title)
+				Text("마이페이지")
+			}
 	}
 }

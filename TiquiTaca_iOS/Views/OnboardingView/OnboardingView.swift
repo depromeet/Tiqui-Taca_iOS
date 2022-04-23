@@ -28,7 +28,9 @@ struct OnboardingView: View {
 			}.vCenter()
 			
 			VStack(spacing: 24) {
-				Button(action: { }) {
+				Button {
+					// Move to login view
+				} label: {
 					Text("이미 계정이 있다면? ") + Text("로그인").fontWeight(.heavy)
 				}
 				.foregroundColor(.gray)
@@ -43,7 +45,6 @@ struct OnboardingView: View {
 		.vBottom()
 		.padding(.bottom, 24)
 		.padding(.horizontal, 16)
-		
 	}
 }
 
