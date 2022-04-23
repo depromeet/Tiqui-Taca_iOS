@@ -23,11 +23,11 @@ struct SplashView: View {
 			.navigationBarHidden(true)
 			
 			// 로그인 확인, accessToken, refreshToken 리로드
-			NavigationLink(
-				destination: OnboardingView(),
-				isActive: self.$canMove
-			) { EmptyView() }
-			.isDetailLink(false)
+//			NavigationLink(
+//				destination: OnboardingView(),
+//				isActive: self.$canMove
+//			) { EmptyView() }
+//			.isDetailLink(false)
 		}
 	}
 }

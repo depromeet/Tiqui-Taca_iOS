@@ -13,7 +13,8 @@ struct OnboardingState: Equatable {
 }
 
 enum OnboardingAction: Equatable {
-	case swipeOnboarding(Int)
+	case pageControlTapped(Int)
+	case onboardingPageSwipe(Int)
 }
 
 struct OnboardingEnvironment { }
@@ -22,9 +23,15 @@ let onBoardingReducer = Reducer<
 	OnboardingState,
 	OnboardingAction,
 	OnboardingEnvironment
-> { _, action, _ in
+> { state, action, _ in
 	switch action {
-	case .swipeOnboarding(let page):
+	case .onboardingPageSwipe(let page):
+		print("page값", page)
+		state.currentPage = page
+		return .none
+	case .pageControlTapped(let page):
+		print("값page", page)
+		state.currentPage = page
 		return .none
 	}
 }

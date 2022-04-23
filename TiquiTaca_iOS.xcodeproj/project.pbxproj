@@ -12,7 +12,7 @@
 		8601F659281308CB0085F692 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8601F658281308CB0085F692 /* View+Extensions.swift */; };
 		8601F65C281309B10085F692 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8601F65B281309B10085F692 /* SplashView.swift */; };
 		8601F65F281393550085F692 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8601F65E281393550085F692 /* OnboardingView.swift */; };
-		8601F661281393640085F692 /* PageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8601F660281393640085F692 /* PageControl.swift */; };
+		8601F661281393640085F692 /* OnboardingPageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8601F660281393640085F692 /* OnboardingPageControl.swift */; };
 		8601F6642813AD400085F692 /* TabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8601F6632813AD400085F692 /* TabView.swift */; };
 		8601F666281404D40085F692 /* OnboardingCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8601F665281404D40085F692 /* OnboardingCore.swift */; };
 		F24B1EEF28086CA0003D4E1D /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = F24B1EEE28086CA0003D4E1D /* .swiftlint.yml */; };
@@ -61,7 +61,7 @@
 		8601F658281308CB0085F692 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		8601F65B281309B10085F692 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		8601F65E281393550085F692 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
-		8601F660281393640085F692 /* PageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageControl.swift; sourceTree = "<group>"; };
+		8601F660281393640085F692 /* OnboardingPageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPageControl.swift; sourceTree = "<group>"; };
 		8601F6632813AD400085F692 /* TabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabView.swift; sourceTree = "<group>"; };
 		8601F665281404D40085F692 /* OnboardingCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCore.swift; sourceTree = "<group>"; };
 		90ED3E866555D3D7D6ABC769 /* Pods_TiquiTaca_iOSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TiquiTaca_iOSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -119,7 +119,7 @@
 			children = (
 				8601F65E281393550085F692 /* OnboardingView.swift */,
 				8601F665281404D40085F692 /* OnboardingCore.swift */,
-				8601F660281393640085F692 /* PageControl.swift */,
+				8601F660281393640085F692 /* OnboardingPageControl.swift */,
 			);
 			path = OnboardingView;
 			sourceTree = "<group>";
@@ -471,7 +471,7 @@
 			files = (
 				F2FDA21A280BBF8300B2ED75 /* AppDelegate.swift in Sources */,
 				F2C02C6F27F8824A004C4235 /* ContentView.swift in Sources */,
-				8601F661281393640085F692 /* PageControl.swift in Sources */,
+				8601F661281393640085F692 /* OnboardingPageControl.swift in Sources */,
 				F2C02C6D27F8824A004C4235 /* TiquiTaca_iOSApp.swift in Sources */,
 				8601F659281308CB0085F692 /* View+Extensions.swift in Sources */,
 				F2FA365C2808897C00A24789 /* R.generated.swift in Sources */,

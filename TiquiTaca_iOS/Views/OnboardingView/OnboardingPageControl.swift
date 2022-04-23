@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-
+import UIKit
 
 struct PageControl: UIViewRepresentable {
 	var numberOfPages: Int
@@ -17,6 +17,8 @@ struct PageControl: UIViewRepresentable {
 		control.numberOfPages = numberOfPages
 		control.currentPageIndicatorTintColor = .darkGray
 		control.pageIndicatorTintColor = .lightGray
+		control.isUserInteractionEnabled = false
+		control.currentPage = currentPage
 
 		return control
 	}

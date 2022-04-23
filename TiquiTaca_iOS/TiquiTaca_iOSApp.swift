@@ -13,7 +13,13 @@ struct TiquiTaca: App {
 
   var body: some Scene {
     WindowGroup {
-      MainTabView()
+			OnboardingView(store: .init(
+				initialState: OnboardingState(currentPage: 0),
+				reducer: onBoardingReducer,
+				environment: OnboardingEnvironment()
+			))
+				
+      // MainTabView()
     }
   }
 }
