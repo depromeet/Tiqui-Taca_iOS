@@ -9,8 +9,8 @@ import ComposableArchitecture
 
 struct TOSFieldListViewState: Equatable {
   var termsOfServiceModels: [TermsOfService]
-//  var selectedURL: URL? = nil
   var isDetailPresented = false
+  var isAllRequiredCheckDone = false
   var isAllCheckDone = false
 }
 
@@ -19,7 +19,6 @@ enum TOSFieldListViewAction: Equatable {
   case dismissTOSDetail
   case check(UUID)
   case allCheck
-//  case checkAllDone
 }
 
 struct TOSFieldListViewEnvironment { }
@@ -44,22 +43,27 @@ let tosFieldListViewReducer = Reducer<
       }
       return model
     }
-    
-    let requiredCount = state.termsOfServiceModels.filter { $0.isRequired }
-    let checkCount = state.termsOfServiceModels.filter { $0.isRequired && $0.isChecked }
-    state.isAllCheckDone = requiredCount == checkCount
-    return .none
+    return checkAllDone(&state)
   case .allCheck:
     state.termsOfServiceModels = state.termsOfServiceModels.map {
       var model = $0
-      if !$0.isChecked {
+      if !$0.isChecked || state.isAllCheckDone {
         model.isChecked.toggle()
       }
       return model
     }
-    let requiredCount = state.termsOfServiceModels.filter { $0.isRequired }
-    let checkCount = state.termsOfServiceModels.filter { $0.isRequired && $0.isChecked }
-    state.isAllCheckDone = requiredCount == checkCount
-    return .none
+    return checkAllDone(&state)
   }
+}
+
+private func checkAllDone(_ state: inout TOSFieldListViewState) -> Effect<TOSFieldListViewAction, Never> {
+  let models = state.termsOfServiceModels
+  let totalCount = models.count
+  let checkCount = models.filter { $0.isChecked }.count
+  state.isAllCheckDone = totalCount == checkCount
+  
+  let requiredCount = models.filter { $0.isRequired }.count
+  let checkRequiredCount = models.filter { $0.isRequired && $0.isChecked }.count
+  state.isAllRequiredCheckDone = requiredCount == checkRequiredCount
+  return .none
 }

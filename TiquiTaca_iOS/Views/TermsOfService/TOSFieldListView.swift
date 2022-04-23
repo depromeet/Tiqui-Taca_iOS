@@ -13,7 +13,7 @@ struct TermsOfService: Equatable, Identifiable {
   let description: String
   let isRequired: Bool
   let url: URL?
-  var isChecked: Bool = false
+  var isChecked = false
 }
 
 struct TOSFieldListView: View {

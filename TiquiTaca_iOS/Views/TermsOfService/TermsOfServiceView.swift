@@ -62,7 +62,7 @@ struct TermsOfServiceView: View {
             .font(.system(size: 16, weight: .bold, design: .default))
             .cornerRadius(16)
         }
-        .disabled(!viewStore.tosFieldListView.isAllCheckDone)
+        .disabled(!viewStore.tosFieldListView.isAllRequiredCheckDone)
       }
       .padding(.leading, 23)
       .padding(.trailing, 23)
