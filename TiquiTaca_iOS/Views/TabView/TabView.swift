@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct TabMainView: View {
+struct MainTabView: View {
     var body: some View {
 			TabView {
 				MapTabView()
@@ -20,7 +20,7 @@ struct TabMainView: View {
 
 struct TabView_Previews: PreviewProvider {
     static var previews: some View {
-        TabMainView()
+			MainTabView()
     }
 }
 
