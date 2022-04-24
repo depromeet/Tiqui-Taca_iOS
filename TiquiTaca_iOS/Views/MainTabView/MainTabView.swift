@@ -15,10 +15,11 @@ struct MainTabView: View {
 			NotiTabView()
 			MyPageTabView()
 		}
+		.navigationBarBackButtonHidden(true)
 	}
 }
 
-struct TabView_Previews: PreviewProvider {
+struct MainTabView_Previews: PreviewProvider {
 	static var previews: some View {
 		MainTabView()
 	}
