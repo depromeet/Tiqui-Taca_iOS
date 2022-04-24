@@ -12,7 +12,7 @@ struct MyPageView: View {
 	let store: Store<MyPageState, MyPageAction>
 	
 	var body: some View {
-		WithViewStore(self.store) { viewStore in
+		WithViewStore(self.store) { _ in
 			Text("MyPageTab")
 		}
 	}

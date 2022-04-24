@@ -12,7 +12,7 @@ struct MsgAndNotiView: View {
 	let store: Store<MsgAndNotiState, MsgAndNotiAction>
 	
 	var body: some View {
-		WithViewStore(self.store) { viewStore in
+		WithViewStore(self.store) { _ in
 			Text("MsgAndNotiTab")
 		}
 	}

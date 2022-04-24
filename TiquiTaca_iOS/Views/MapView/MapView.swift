@@ -12,7 +12,7 @@ struct MapView: View {
 	let store: Store<MapState, MapAction>
 	
 	var body: some View {
-		WithViewStore(self.store) { viewStore in
+		WithViewStore(self.store) { _ in
 			Text("MapTab")
 		}
 	}
