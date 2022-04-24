@@ -26,12 +26,9 @@ let onBoardingReducer = Reducer<
 > { state, action, _ in
 	switch action {
 	case .onboardingPageSwipe(let page):
-		print("page값", page)
 		state.currentPage = page
 		return .none
 	case .pageControlTapped(let page):
-		print("값page", page)
-		state.currentPage = page
 		return .none
 	}
 }

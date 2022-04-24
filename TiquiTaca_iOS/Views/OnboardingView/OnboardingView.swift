@@ -19,7 +19,8 @@ struct OnboardingView: View {
 						PageControl(
 							numberOfPages: 3,
 							currentPage: viewStore.binding(
-								get: \.currentPage, send: OnboardingAction.pageControlTapped
+								get: \.currentPage,
+								send: OnboardingAction.pageControlTapped
 							)
 						)
 						OnboardingTitleView()
@@ -95,9 +96,17 @@ private struct OnboardingSignView: View {
 			.foregroundColor(.gray)
 				
 			NavigationLink(destination: {
-				MainTabView()
+				MainTabView(store: .init(
+					initialState: MainTabState(
+						mapFeature: MapState(),
+						chatFeature: ChatState(),
+						msgAndNotiFeature: MsgAndNotiState(),
+						myPageFeature: MyPageState()
+					),
+					reducer: mainTabReducer,
+					environment: MainTabEnvironment()))
 			}, label: {
-				Button("시작하기") { }
+				Text("시작하기")
 					.frame(maxWidth: .infinity, minHeight: 56, maxHeight: 56)
 					.foregroundColor(.white)
 					.background(.black)

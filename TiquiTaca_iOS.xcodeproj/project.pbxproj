@@ -16,6 +16,14 @@
 		8601F6642813AD400085F692 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8601F6632813AD400085F692 /* MainTabView.swift */; };
 		8601F666281404D40085F692 /* OnboardingCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8601F665281404D40085F692 /* OnboardingCore.swift */; };
 		86E494832814F05D00551CCD /* MainTabCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E494822814F05D00551CCD /* MainTabCore.swift */; };
+		86E494892814FDAE00551CCD /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E494882814FDAE00551CCD /* MapView.swift */; };
+		86E4948B2814FDBC00551CCD /* MapCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E4948A2814FDBC00551CCD /* MapCore.swift */; };
+		86E4948D2814FDC700551CCD /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E4948C2814FDC700551CCD /* ChatView.swift */; };
+		86E4948F2814FDD000551CCD /* ChatCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E4948E2814FDD000551CCD /* ChatCore.swift */; };
+		86E494912814FDE100551CCD /* MsgAndNotiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E494902814FDE100551CCD /* MsgAndNotiView.swift */; };
+		86E494932814FDE900551CCD /* MsgAndNotiCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E494922814FDE900551CCD /* MsgAndNotiCore.swift */; };
+		86E494952814FDF300551CCD /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E494942814FDF300551CCD /* MyPageView.swift */; };
+		86E494972814FE0300551CCD /* MyPageCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E494962814FE0300551CCD /* MyPageCore.swift */; };
 		F24B1EEF28086CA0003D4E1D /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = F24B1EEE28086CA0003D4E1D /* .swiftlint.yml */; };
 		F2C02C6D27F8824A004C4235 /* TiquiTaca_iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C02C6C27F8824A004C4235 /* TiquiTaca_iOSApp.swift */; };
 		F2C02C6F27F8824A004C4235 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C02C6E27F8824A004C4235 /* ContentView.swift */; };
@@ -66,6 +74,14 @@
 		8601F6632813AD400085F692 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		8601F665281404D40085F692 /* OnboardingCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCore.swift; sourceTree = "<group>"; };
 		86E494822814F05D00551CCD /* MainTabCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabCore.swift; sourceTree = "<group>"; };
+		86E494882814FDAE00551CCD /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
+		86E4948A2814FDBC00551CCD /* MapCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCore.swift; sourceTree = "<group>"; };
+		86E4948C2814FDC700551CCD /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
+		86E4948E2814FDD000551CCD /* ChatCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCore.swift; sourceTree = "<group>"; };
+		86E494902814FDE100551CCD /* MsgAndNotiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MsgAndNotiView.swift; sourceTree = "<group>"; };
+		86E494922814FDE900551CCD /* MsgAndNotiCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MsgAndNotiCore.swift; sourceTree = "<group>"; };
+		86E494942814FDF300551CCD /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
+		86E494962814FE0300551CCD /* MyPageCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageCore.swift; sourceTree = "<group>"; };
 		90ED3E866555D3D7D6ABC769 /* Pods_TiquiTaca_iOSTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TiquiTaca_iOSTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CCF68E71B934ECA70FBAFF46 /* Pods-TiquiTaca_iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TiquiTaca_iOS.release.xcconfig"; path = "Target Support Files/Pods-TiquiTaca_iOS/Pods-TiquiTaca_iOS.release.xcconfig"; sourceTree = "<group>"; };
 		E28161D6F39CEC9BDD482E74 /* Pods-TiquiTaca_iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TiquiTaca_iOS.debug.xcconfig"; path = "Target Support Files/Pods-TiquiTaca_iOS/Pods-TiquiTaca_iOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -138,8 +154,37 @@
 		86E494842814F18600551CCD /* MapView */ = {
 			isa = PBXGroup;
 			children = (
+				86E494882814FDAE00551CCD /* MapView.swift */,
+				86E4948A2814FDBC00551CCD /* MapCore.swift */,
 			);
 			path = MapView;
+			sourceTree = "<group>";
+		};
+		86E494852814FD6300551CCD /* ChatView */ = {
+			isa = PBXGroup;
+			children = (
+				86E4948C2814FDC700551CCD /* ChatView.swift */,
+				86E4948E2814FDD000551CCD /* ChatCore.swift */,
+			);
+			path = ChatView;
+			sourceTree = "<group>";
+		};
+		86E494862814FD6C00551CCD /* MsgAndNotiView */ = {
+			isa = PBXGroup;
+			children = (
+				86E494902814FDE100551CCD /* MsgAndNotiView.swift */,
+				86E494922814FDE900551CCD /* MsgAndNotiCore.swift */,
+			);
+			path = MsgAndNotiView;
+			sourceTree = "<group>";
+		};
+		86E494872814FD7900551CCD /* MyPageView */ = {
+			isa = PBXGroup;
+			children = (
+				86E494942814FDF300551CCD /* MyPageView.swift */,
+				86E494962814FE0300551CCD /* MyPageCore.swift */,
+			);
+			path = MyPageView;
 			sourceTree = "<group>";
 		};
 		C588B14F79D2DB0B0D8975BC /* Pods */ = {
@@ -253,6 +298,9 @@
 		F2FDA213280BAF3100B2ED75 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				86E494872814FD7900551CCD /* MyPageView */,
+				86E494862814FD6C00551CCD /* MsgAndNotiView */,
+				86E494852814FD6300551CCD /* ChatView */,
 				86E494842814F18600551CCD /* MapView */,
 				8601F66228139D7D0085F692 /* MainTabView */,
 				8601F65D281309EC0085F692 /* OnboardingView */,
@@ -481,15 +529,23 @@
 			buildActionMask = 2147483647;
 			files = (
 				F2FDA21A280BBF8300B2ED75 /* AppDelegate.swift in Sources */,
+				86E494892814FDAE00551CCD /* MapView.swift in Sources */,
+				86E4948B2814FDBC00551CCD /* MapCore.swift in Sources */,
 				F2C02C6F27F8824A004C4235 /* ContentView.swift in Sources */,
+				86E4948D2814FDC700551CCD /* ChatView.swift in Sources */,
+				86E494952814FDF300551CCD /* MyPageView.swift in Sources */,
 				8601F661281393640085F692 /* OnboardingPageControl.swift in Sources */,
 				F2C02C6D27F8824A004C4235 /* TiquiTaca_iOSApp.swift in Sources */,
 				8601F659281308CB0085F692 /* View+Extensions.swift in Sources */,
 				F2FA365C2808897C00A24789 /* R.generated.swift in Sources */,
 				8601F65C281309B10085F692 /* SplashView.swift in Sources */,
 				86E494832814F05D00551CCD /* MainTabCore.swift in Sources */,
+				86E494932814FDE900551CCD /* MsgAndNotiCore.swift in Sources */,
+				86E494972814FE0300551CCD /* MyPageCore.swift in Sources */,
+				86E4948F2814FDD000551CCD /* ChatCore.swift in Sources */,
 				8601F666281404D40085F692 /* OnboardingCore.swift in Sources */,
 				8601F6642813AD400085F692 /* MainTabView.swift in Sources */,
+				86E494912814FDE100551CCD /* MsgAndNotiView.swift in Sources */,
 				8601F65F281393550085F692 /* OnboardingView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

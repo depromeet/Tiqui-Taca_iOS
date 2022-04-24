@@ -6,29 +6,40 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
 struct MainTabView: View {
+	private let store: Store<MainTabState, MainTabAction>
+	
+	init(store: Store<MainTabState, MainTabAction>) {
+		self.store = store
+		UITabBar.appearance().scrollEdgeAppearance = .init()
+	}
+	
 	var body: some View {
 		TabView {
-			MapTabView()
-			ChatTabView()
-			NotiTabView()
-			MyPageTabView()
+			MapTab(store: store)
+			ChatTab(store: store)
+			MsgAndNotiTab(store: store)
+			MyPageTab(store: store)
 		}
 		.navigationBarBackButtonHidden(true)
 	}
 }
 
-struct MainTabView_Previews: PreviewProvider {
-	static var previews: some View {
-		MainTabView()
+// MARK: MapTab
+private struct MapTab: View {
+	private let store: Store<MainTabState, MainTabAction>
+	
+	init(store: Store<MainTabState, MainTabAction>) {
+		self.store = store
 	}
-}
-
-
-private struct MapTabView: View {
+	
 	var body: some View {
-		Text("Map")
+		MapView(store: store.scope(
+			state: \.mapFeature,
+			action: MainTabAction.mapFeature
+		))
 			.tabItem {
 				Image(systemName: "square.fill")
 					.font(.title)
@@ -37,10 +48,19 @@ private struct MapTabView: View {
 	}
 }
 
-
-private struct ChatTabView: View {
+// MARK: ChatTab
+private struct ChatTab: View {
+	private let store: Store<MainTabState, MainTabAction>
+	
+	init(store: Store<MainTabState, MainTabAction>) {
+		self.store = store
+	}
+	
 	var body: some View {
-		Text("Chat")
+		ChatView(store: store.scope(
+			state: \.chatFeature,
+			action: MainTabAction.chatFeature
+		))
 			.tabItem {
 				Image(systemName: "square.fill")
 					.font(.title)
@@ -49,9 +69,19 @@ private struct ChatTabView: View {
 	}
 }
 
-private struct NotiTabView: View {
+// MARK: NotiTab
+private struct MsgAndNotiTab: View {
+	private let store: Store<MainTabState, MainTabAction>
+	
+	init(store: Store<MainTabState, MainTabAction>) {
+		self.store = store
+	}
+	
 	var body: some View {
-		Text("Noti")
+		MsgAndNotiView(store: store.scope(
+			state: \.msgAndNotiFeature,
+			action: MainTabAction.msgAndNotiFeature
+		))
 			.tabItem {
 				Image(systemName: "square.fill")
 					.font(.title)
@@ -60,13 +90,38 @@ private struct NotiTabView: View {
 	}
 }
 
-private struct MyPageTabView: View {
+// MARK: MyPageTab
+private struct MyPageTab: View {
+	private let store: Store<MainTabState, MainTabAction>
+	
+	init(store: Store<MainTabState, MainTabAction>) {
+		self.store = store
+	}
+	
 	var body: some View {
-		Text("마이페이지")
+		MyPageView(store: store.scope(
+			state: \.myPageFeature,
+			action: MainTabAction.myPageFeature
+		))
 			.tabItem {
 				Image(systemName: "square.fill")
 					.font(.title)
 				Text("마이페이지")
 			}
+	}
+}
+
+// MARK: Preview
+struct MainTabView_Previews: PreviewProvider {
+	static var previews: some View {
+		MainTabView(store: .init(
+			initialState: MainTabState(
+				mapFeature: MapState(),
+				chatFeature: ChatState(),
+				msgAndNotiFeature: MsgAndNotiState(),
+				myPageFeature: MyPageState()
+			),
+			reducer: mainTabReducer,
+			environment: MainTabEnvironment()))
 	}
 }
