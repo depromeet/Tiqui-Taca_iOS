@@ -12,6 +12,14 @@ struct PhoneCertificateState: Equatable {
   var phoneNumber: String
   var certificationCode: String
   var certificationCodeFields: [String] = Array(repeating: "", count: 6)
+//  var certificateCodeListView: CertificateCodeState = .init(
+//    certificateCodeModels: [
+//      .init(index: 0, inputNumber: ""),
+//      .init(index: 1, inputNumber: ""),
+//      .init(index: 2, inputNumber: ""),
+//      .init(index: 3, inputNumber: "")
+//    ]
+//  )
 }
 
 enum PhoneCertificateAction: Equatable {
@@ -21,6 +29,8 @@ enum PhoneCertificateAction: Equatable {
   static func == (lhs: PhoneCertificateAction, rhs: PhoneCertificateAction) -> Bool {
     return true
   }
+  
+//  case certificateCodeListView(CertificateCodeAction)
 }
 
 struct PhoneCertificateEnvironment {
@@ -28,7 +38,11 @@ struct PhoneCertificateEnvironment {
   var mainQueue: AnySchedulerOf<DispatchQueue>
 }
 
-let certificateReducer = Reducer<PhoneCertificateState, PhoneCertificateAction, PhoneCertificateEnvironment> { state, action, environment in
+let phoneCertificateReducer = Reducer<
+  PhoneCertificateState,
+  PhoneCertificateAction,
+  PhoneCertificateEnvironment
+> { state, action, environment in
   switch action {
   case let .certificationCodeChanged(certificationCode, index):
     state.certificationCode = certificationCode
@@ -46,3 +60,32 @@ let certificateReducer = Reducer<PhoneCertificateState, PhoneCertificateAction, 
     return .none
   }
 }
+
+//let phoneCertificateReducer = Reducer<
+//  PhoneCertificateState,
+//  PhoneCertificateAction,
+//  PhoneCertificateEnvironment
+//>.combine([
+//  certificateCodeReducer
+//    .pullback(
+//      state: \.certificateCodeListView,
+//      action: /PhoneCertificateAction.certificateCodeListView,
+//      environment: { _ in
+//        CertificateCodeEnvironment()
+//      }
+//    ),
+//  phoneCertificateReducerCore
+//])
+
+//let phoneCertificateReducerCore = Reducer<
+//  PhoneCertificateState,
+//  PhoneCertificateAction,
+//  PhoneCertificateEnvironment
+//> { state, action, environment in
+//  switch action {
+//  default:
+//    return .none
+//  }
+//}
+
+

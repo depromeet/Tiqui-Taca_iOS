@@ -23,10 +23,17 @@ struct PhoneCertificateView: View {
             Text("인증번호를 입력해주세요.")
             Text("\(viewStore.phoneNumber)로 전송된 인증번호 6자리를 입력하세요.\(viewStore.certificationCode)")
               .font(.caption2)
+            
             OTPField()
               .padding(.top, 30)
+//            CertificateCodeFieldView(
+//              store: store.scope(
+//                state: \.certificateCodeListView,
+//                action: PhoneCertificateAction.certificateCodeListView
+//              )
+//            )
           }
-          .onChange(of: /*verificationCodeFields*/otpModel.otpFields) { newValue in
+          .onChange(of: otpModel.otpFields) { newValue in
             OTPCondition(value: newValue)
           }
           
@@ -55,7 +62,6 @@ struct PhoneCertificateView: View {
   func checkStates() -> Bool {
     for index in 0..<4 {
       if otpModel.otpFields[index].isEmpty { return true }
-      //      if viewStore.verificationCodeFields[index].isEmpty { return true }
     }
     
     return false
@@ -78,26 +84,24 @@ struct PhoneCertificateView: View {
     // 글자 수 제한
     for index in 0..<4 {
       if value[index].count > 1 {
-        otpModel.otpFields[index] = String(value[index].last!)
-        //        verificationCodeFields[index] = String(value[index].last!)
+        let lastValue = value[index].last!
+        otpModel.otpFields[index] = String(lastValue)
       }
     }
     
     otpModel.otpText = value.reduce("") { $0 + $1 }
-    //    verificationCode = verificationCodeFields.reduce("") { $0 + $1 }
   }
   
   func OTPField() -> some View {
     HStack(spacing: 10) {
       ForEach(0..<4, id: \.self) { index in
-        //        TextField("", text: viewStore.binding(get: \.verificationCodeFields[index], send: CertificateAction.verificationCodeChanged(value: verificationCodeFields[index],index: index)))
         TextField("", text: $otpModel.otpFields[index])
           .keyboardType(.numberPad)
           .textContentType(.oneTimeCode)
           .frame(height: 50)
           .focused($activeField, equals: activeStateForIndex(index: index))
           .overlay(RoundedRectangle(cornerRadius: 10)
-            .stroke(activeField == activeStateForIndex(index: index) ? .blue : .gray.opacity(0.3), lineWidth: 2))
+            .stroke(!otpModel.otpFields[index].isEmpty ? .green : .gray.opacity(0.3), lineWidth: 2))
           .frame(width: 40)
       }
     }
@@ -140,7 +144,7 @@ struct PhoneCertificateView_Previews: PreviewProvider {
     
     let store = Store(
       initialState: PhoneCertificateState(phoneNumber: "01012345678", certificationCode: "1111"),
-      reducer: certificateReducer,
+      reducer: phoneCertificateReducer,
       environment: .init(
         authService: authService,
         mainQueue: .main
@@ -149,16 +153,4 @@ struct PhoneCertificateView_Previews: PreviewProvider {
     
     PhoneCertificateView(store: store)
   }
-}
-
-class OTPViewModel: ObservableObject {
-  @Published var otpFields: [String] = Array(repeating: "", count: 4)
-  var otpText: String = ""
-}
-
-enum OTPField {
-  case field1
-  case field2
-  case field3
-  case field4
 }

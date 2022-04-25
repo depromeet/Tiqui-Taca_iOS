@@ -76,7 +76,7 @@ struct SignInView: View {
                   phoneNumber: viewStore.phoneNumber,
                   certificationCode: viewStore.verificationCode
                 ),
-                reducer: certificateReducer,
+                reducer: phoneCertificateReducer,
                 environment: PhoneCertificateEnvironment(
                   authService: authService,
                   mainQueue: .main

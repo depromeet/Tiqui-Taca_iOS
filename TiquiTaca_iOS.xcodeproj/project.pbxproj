@@ -22,6 +22,7 @@
 		F2FA365C2808897C00A24789 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FA365B2808897C00A24789 /* R.generated.swift */; };
 		F2FDA216280BBDAC00B2ED75 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F2FDA215280BBDAC00B2ED75 /* LaunchScreen.storyboard */; };
 		F2FDA21A280BBF8300B2ED75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FDA219280BBF8300B2ED75 /* AppDelegate.swift */; };
+		F993ADC92816C79C00718E9F /* OTPViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F993ADC82816C79C00718E9F /* OTPViewModel.swift */; };
 		F99EA7662810353700E31935 /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99EA7652810353700E31935 /* SignInView.swift */; };
 		F99EA7682810355F00E31935 /* PhoneCertificateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F99EA7672810355E00E31935 /* PhoneCertificateView.swift */; };
 		F9A90B542813BDB0002F38BE /* SignInViewCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A90B532813BDB0002F38BE /* SignInViewCore.swift */; };
@@ -77,6 +78,7 @@
 		F2FDA215280BBDAC00B2ED75 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F2FDA219280BBF8300B2ED75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F5D04B5F76393475F2238F76 /* Pods-TiquiTaca_iOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TiquiTaca_iOSTests.release.xcconfig"; path = "Target Support Files/Pods-TiquiTaca_iOSTests/Pods-TiquiTaca_iOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		F993ADC82816C79C00718E9F /* OTPViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPViewModel.swift; sourceTree = "<group>"; };
 		F99EA7652810353700E31935 /* SignInView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
 		F99EA7672810355E00E31935 /* PhoneCertificateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PhoneCertificateView.swift; sourceTree = "<group>"; };
 		F9A90B532813BDB0002F38BE /* SignInViewCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInViewCore.swift; sourceTree = "<group>"; };
@@ -237,9 +239,10 @@
 			isa = PBXGroup;
 			children = (
 				F99EA7652810353700E31935 /* SignInView.swift */,
-				F99EA7672810355E00E31935 /* PhoneCertificateView.swift */,
 				F9A90B532813BDB0002F38BE /* SignInViewCore.swift */,
+				F99EA7672810355E00E31935 /* PhoneCertificateView.swift */,
 				F9A90B552813BE03002F38BE /* PhoneCertificateCore.swift */,
+				F993ADC82816C79C00718E9F /* OTPViewModel.swift */,
 			);
 			path = SignIn;
 			sourceTree = "<group>";
@@ -471,6 +474,7 @@
 				F99EA7682810355F00E31935 /* PhoneCertificateView.swift in Sources */,
 				F2FA365C2808897C00A24789 /* R.generated.swift in Sources */,
 				F9A90B562813BE03002F38BE /* PhoneCertificateCore.swift in Sources */,
+				F993ADC92816C79C00718E9F /* OTPViewModel.swift in Sources */,
 				F99EA7662810353700E31935 /* SignInView.swift in Sources */,
 				F9A90B5B2813E691002F38BE /* CertificateCodeFieldView.swift in Sources */,
 				F9B90C9C28117DDF003FFEEB /* AuthService.swift in Sources */,
