@@ -10,9 +10,15 @@ import TTNetworkModule
 
 struct PhoneCertificateView: View {
   let store: Store<PhoneCertificateState, PhoneCertificateAction>
-  
+  @ObservedObject var viewStore: ViewStore<PhoneCertificateState, PhoneCertificateAction>
+
   @StateObject var otpModel: OTPViewModel = .init()
   @FocusState var activeField: OTPField?
+  
+  init(store: Store<PhoneCertificateState, PhoneCertificateAction>) {
+    self.store = store
+    viewStore = ViewStore(self.store)
+  }
   
   var body: some View {
     WithViewStore(store) { viewStore in
@@ -26,36 +32,24 @@ struct PhoneCertificateView: View {
             
             OTPField()
               .padding(.top, 30)
-//            CertificateCodeFieldView(
-//              store: store.scope(
-//                state: \.certificateCodeListView,
-//                action: PhoneCertificateAction.certificateCodeListView
-//              )
-//            )
           }
           .onChange(of: otpModel.otpFields) { newValue in
             OTPCondition(value: newValue)
           }
           
           Spacer()
-          
-          Button {
-            viewStore.send(.certificationButtonTapped)
-          }label: {
-            Text("인증하기")
-          }
-          
-          .disabled(checkStates())
-          .opacity(checkStates() ? 0.4 : 1)
-          .buttonStyle(NormalButtonStyle())
-          .padding(20)
+//          Button {
+//            viewStore.send(.certificationButtonTapped)
+//          }label: {
+//            Text("인증하기")
+//          }
+//          .disabled(checkStates())
+//          .opacity(checkStates() ? 0.4 : 1)
+//          .buttonStyle(NormalButtonStyle())
+//          .padding(20)
         }
       }
-      .onTapGesture {
-        self.endTextEditing()
-      }
       .navigationBarHidden(true)
-      .navigationBarBackButtonHidden(true)
     }
   }
   
@@ -90,6 +84,17 @@ struct PhoneCertificateView: View {
     }
     
     otpModel.otpText = value.reduce("") { $0 + $1 }
+    
+    if otpModel.otpText.count == 4 {
+      viewStore.send(.certificationButtonTapped)
+    }
+    
+    if viewStore.successFlag != nil {
+      viewStore.send(.certificationCodeRemoved)
+      otpModel.otpFields = Array(repeating: "", count: 4)
+      otpModel.otpText.removeAll()
+      activeField = .field1
+    }
   }
   
   func OTPField() -> some View {
@@ -101,10 +106,19 @@ struct PhoneCertificateView: View {
           .frame(height: 50)
           .focused($activeField, equals: activeStateForIndex(index: index))
           .overlay(RoundedRectangle(cornerRadius: 10)
-            .stroke(!otpModel.otpFields[index].isEmpty ? .green : .gray.opacity(0.3), lineWidth: 2))
+            .stroke(
+              OTPFieldStatusColor(otpModel.otpFields[index].isEmpty), lineWidth: 2))
           .frame(width: 40)
       }
     }
+  }
+  
+  func OTPFieldStatusColor(_ emptyFlag: Bool) -> Color {
+    if viewStore.successFlag == nil {
+      return emptyFlag ? .gray.opacity(0.3) : .green
+    }
+    
+    return .red
   }
   
   func activeStateForIndex(index: Int) -> OTPField {

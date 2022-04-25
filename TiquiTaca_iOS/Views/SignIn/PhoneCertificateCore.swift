@@ -12,25 +12,18 @@ struct PhoneCertificateState: Equatable {
   var phoneNumber: String
   var certificationCode: String
   var certificationCodeFields: [String] = Array(repeating: "", count: 6)
-//  var certificateCodeListView: CertificateCodeState = .init(
-//    certificateCodeModels: [
-//      .init(index: 0, inputNumber: ""),
-//      .init(index: 1, inputNumber: ""),
-//      .init(index: 2, inputNumber: ""),
-//      .init(index: 3, inputNumber: "")
-//    ]
-//  )
+  var successFlag: Bool?
 }
 
 enum PhoneCertificateAction: Equatable {
-  case certificationButtonTapped
   case certificationCodeChanged(value: String, index: Int)
+  case certificationButtonTapped
   case certificationResponse(Result<TTDataResponse<VerificationResponse>, TTApi.HTTPError>)
+  case certificationCodeError
+  case certificationCodeRemoved
   static func == (lhs: PhoneCertificateAction, rhs: PhoneCertificateAction) -> Bool {
     return true
   }
-  
-//  case certificateCodeListView(CertificateCodeAction)
 }
 
 struct PhoneCertificateEnvironment {
@@ -54,38 +47,17 @@ let phoneCertificateReducer = Reducer<
       .receive(on: environment.mainQueue)
       .catchToEffect(PhoneCertificateAction.certificationResponse)
   case let .certificationResponse(.success(certificationResponse)):
+    state.successFlag = true
     print(certificationResponse.data.tempToken.token)
     return .none
-  default:
+  case .certificationResponse(.failure):
+    return Effect(value: PhoneCertificateAction.certificationCodeError)
+  case .certificationCodeError:
+    state.successFlag = false
+//    state.certificationCodeFields.removeAll()
+    return .none
+  case .certificationCodeRemoved:
+    state.successFlag = nil
     return .none
   }
 }
-
-//let phoneCertificateReducer = Reducer<
-//  PhoneCertificateState,
-//  PhoneCertificateAction,
-//  PhoneCertificateEnvironment
-//>.combine([
-//  certificateCodeReducer
-//    .pullback(
-//      state: \.certificateCodeListView,
-//      action: /PhoneCertificateAction.certificateCodeListView,
-//      environment: { _ in
-//        CertificateCodeEnvironment()
-//      }
-//    ),
-//  phoneCertificateReducerCore
-//])
-
-//let phoneCertificateReducerCore = Reducer<
-//  PhoneCertificateState,
-//  PhoneCertificateAction,
-//  PhoneCertificateEnvironment
-//> { state, action, environment in
-//  switch action {
-//  default:
-//    return .none
-//  }
-//}
-
-
