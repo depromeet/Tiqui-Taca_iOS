@@ -6,6 +6,10 @@ inhibit_all_warnings!
 
 target 'TiquiTaca_iOS' do
   use_frameworks!
+  
+  # Firebase
+  pod 'Firebase/Analytics'
+  pod 'Firebase/Messaging'
 
   # DB
   pod 'RealmSwift', '= 10.25.1'
