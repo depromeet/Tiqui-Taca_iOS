@@ -8,12 +8,13 @@
 import ComposableArchitecture
 
 struct ProfileCharacterState: Equatable {
-  var backgroundColor: String
   var characterImage: String
+  var isSheetPresented = false
 }
 
 enum ProfileCharacterAction: Equatable {
-  
+  case editButtonTapped
+  case dismissProfileDetail
 }
 
 struct ProfileCharacterEnvironment {
@@ -34,6 +35,11 @@ let profileCharacterReducer = Reducer<
   ProfileCharacterEnvironment
 > { state, action, environment in
   switch action {
-    
+  case .editButtonTapped:
+    state.isSheetPresented = true
+    return .none
+  case .dismissProfileDetail:
+    state.isSheetPresented = false
+    return .none
   }
 }

@@ -9,10 +9,14 @@ import ComposableArchitecture
 
 struct CreateProfileState: Equatable {
   var nickname: String
+  var profileImage: ProfileCharacterState = .init(
+    characterImage: "defaultProfile")
 }
 
 enum CreateProfileAction: Equatable {
   case doneButtonTapped
+  case nicknameChanged(String)
+  case profileCharacterView(ProfileCharacterAction)
 }
 
 struct CreateProfileEnvironment {
@@ -23,6 +27,14 @@ let createProfileReducer = Reducer<
   CreateProfileAction,
   CreateProfileEnvironment
 >.combine([
+  profileCharacterReducer
+    .pullback(
+      state: \.profileImage,
+      action: /CreateProfileAction.profileCharacterView,
+      environment: { _ in
+        ProfileCharacterEnvironment()
+      }
+    ),
   createProfileReducerCore
 ])
 
@@ -33,6 +45,11 @@ let createProfileReducerCore = Reducer<
 > { state, action, environment in
   switch action {
   case .doneButtonTapped:
+    return .none
+  case let .nicknameChanged(nickname):
+    state.nickname = nickname
+    return .none
+  case .profileCharacterView(_):
     return .none
   }
 }
