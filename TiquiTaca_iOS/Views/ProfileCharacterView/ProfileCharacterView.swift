@@ -56,7 +56,7 @@ struct ProfileCharacterView: View {
                         .frame(width: 84, height: 84)
                         .opacity(String(num) == viewStore.characterImage ? 1 : 0)
                         .overlay(
-                          Image("defaultProfile") /// Image(String(num))
+                          Image("defaultProfile")
                             .resizable()
                             .frame(width: 72, height: 72)
                         )
