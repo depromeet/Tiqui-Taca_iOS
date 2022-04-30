@@ -8,15 +8,18 @@
 import ComposableArchitecture
 
 struct CreateProfileState: Equatable {
-  var nickname: String
-  var profileImage: ProfileCharacterState = .init(
-    characterImage: "defaultProfile")
+  var nickname = ""
+  var profileImage = "defaultProfile"
+  var isSheetPresented = false
+  var nicknameFocused = false
 }
 
 enum CreateProfileAction: Equatable {
   case doneButtonTapped
   case nicknameChanged(String)
-  case profileCharacterView(ProfileCharacterAction)
+  case profileImageChanged(String)
+  case profileEditButtonTapped
+  case dismissProfileDetail
 }
 
 struct CreateProfileEnvironment {
@@ -26,31 +29,24 @@ let createProfileReducer = Reducer<
   CreateProfileState,
   CreateProfileAction,
   CreateProfileEnvironment
->.combine([
-  profileCharacterReducer
-    .pullback(
-      state: \.profileImage,
-      action: /CreateProfileAction.profileCharacterView,
-      environment: { _ in
-        ProfileCharacterEnvironment()
-      }
-    ),
-  createProfileReducerCore
-])
-
-let createProfileReducerCore = Reducer<
-  CreateProfileState,
-  CreateProfileAction,
-  CreateProfileEnvironment
-> { state, action, _ in
+> { state, action, environment in
   switch action {
   case .doneButtonTapped:
     return .none
   case let .nicknameChanged(nickname):
     state.nickname = nickname
-    _ = Effect<ProfileCharacterAction, Never>(value: ProfileCharacterAction.nicknameChanged)
+    state.nicknameFocused = true
+    state.isSheetPresented = false
     return .none
-  case .profileCharacterView(_):
+  case let .profileImageChanged(imageString):
+    state.profileImage = imageString
+    return .none
+  case .profileEditButtonTapped:
+    state.nicknameFocused = false
+    state.isSheetPresented = true
+    return .none
+  case .dismissProfileDetail:
+    state.isSheetPresented = true
     return .none
   }
 }
