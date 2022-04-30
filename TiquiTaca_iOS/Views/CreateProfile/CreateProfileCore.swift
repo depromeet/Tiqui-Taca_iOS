@@ -42,12 +42,13 @@ let createProfileReducerCore = Reducer<
   CreateProfileState,
   CreateProfileAction,
   CreateProfileEnvironment
-> { state, action, environment in
+> { state, action, _ in
   switch action {
   case .doneButtonTapped:
     return .none
   case let .nicknameChanged(nickname):
     state.nickname = nickname
+    _ = Effect<ProfileCharacterAction, Never>(value: ProfileCharacterAction.nicknameChanged)
     return .none
   case .profileCharacterView(_):
     return .none

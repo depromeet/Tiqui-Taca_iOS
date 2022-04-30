@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import TTDesignSystemModule
 
 struct CreateProfileView: View {
   let store: Store<CreateProfileState, CreateProfileAction>
@@ -14,7 +15,7 @@ struct CreateProfileView: View {
   var body: some View {
     WithViewStore(store) { viewStore in
       NavigationView {
-        VStack {
+        ZStack {
           ProfileCharacterView(
             store: Store(
               initialState: .init(characterImage: "defaultProfile"),
@@ -22,18 +23,28 @@ struct CreateProfileView: View {
               environment: .init()
             )
           )
+          .padding([.top], 120)
           
-          
-          TextField("닉네임을 입력해주세요.", text: viewStore.binding(
-            get: \.nickname, send: CreateProfileAction.nicknameChanged
-          ))
-          .padding(40)
-          
-          Text("티키타카에서 사용할 닉네님과 프로필을 선택해주세요.\n닉네임은 최대 20자까지 입력이 가능해요!")
-            .font(.caption)
-            .multilineTextAlignment(.center)
-            .padding(40)
+          VStack {
+            TextField(
+              "닉네임을 입력해주세요.",
+              text: viewStore.binding(
+                get: \.nickname,
+                send: CreateProfileAction.nicknameChanged
+              )
+            )
+            .foregroundColor(.white)
+            .disableAutocorrection(true)
+            .padding([.leading, .trailing], 40)
+            
+            Text("티키타카에서 사용할 닉네님과 프로필을 선택해주세요.\n닉네임은 최대 20자까지 입력이 가능해요!")
+              .foregroundColor(.white)
+              .font(.caption)
+              .multilineTextAlignment(.center)
+          }
         }
+        .background(Color.TTColor.black800)
+        .ignoresSafeArea(.keyboard)
         .navigationTitle("프로필 만들기")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
@@ -45,6 +56,10 @@ struct CreateProfileView: View {
             }
           }
         }
+      }
+      .tint(Color.TTColor.greenTextColor)
+      .onTapGesture {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
       }
     }
   }

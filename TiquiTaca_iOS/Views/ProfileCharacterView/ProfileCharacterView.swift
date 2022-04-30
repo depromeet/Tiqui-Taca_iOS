@@ -14,32 +14,25 @@ struct ProfileCharacterView: View {
   
   var body: some View {
     WithViewStore(store) { viewStore in
-      ZStack {
+      VStack {
         Image(viewStore.characterImage)
           .overlay(
-            Button(action: {
+            Button {
               viewStore.send(.editButtonTapped)
-            })
-            {
+            } label: {
               Image("edit")
                 .font(.title)
             }
-              .sheet(
-                isPresented:
-                  viewStore.binding(
-                    get: \.isSheetPresented,
-                    send: ProfileCharacterAction.dismissProfileDetail
-                  )
-              ) {
-                
-              }
               .padding()
               .alignmentGuide(.bottom) { $0[.bottom] }
               .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
           )
         
-        TTBottomSheetView (
-          isOpen: .constant(viewStore.isSheetPresented),
+        TTBottomSheetView(
+          isOpen: viewStore.binding(
+            get: \.isSheetPresented,
+            send: ProfileCharacterAction.dismissProfileDetail
+          ),
           maxHeight: 294,
           content: {
             let gridItemLayout = [
@@ -49,17 +42,32 @@ struct ProfileCharacterView: View {
               GridItem()
             ]
             ScrollView {
-              LazyVGrid(columns: gridItemLayout, spacing: 20) {
-                ForEach(0..<30, id: \.self) { _ in
-                  Image("defaultProfile")
-                    .resizable()
-                    .frame(width: 72, height: 72)
+              VStack(alignment: .leading) {
+                Text("프로필 캐릭터")
+                  .foregroundColor(Color.TTColor.white)
+                  .padding(EdgeInsets(top: 0, leading: 32, bottom: 9, trailing: 0))
+                
+                LazyVGrid(columns: gridItemLayout, spacing: 20) {
+                  ForEach(0..<30, id: \.self) { num in
+                    Button {
+                      viewStore.send(.characterImageChanged(String(num)))
+                    } label: {
+                      Image("profileFocusRectangle")
+                        .frame(width: 84, height: 84)
+                        .opacity(String(num) == viewStore.characterImage ? 1 : 0)
+                        .overlay(
+                          Image("defaultProfile") /// Image(String(num))
+                            .resizable()
+                            .frame(width: 72, height: 72)
+                        )
+                    }
+                  }
                 }
+                .padding([.leading, .trailing], 25)
               }
             }
             .background(Color.TTColor.black700)
           })
-        .ignoresSafeArea()
       }
     }
   }
