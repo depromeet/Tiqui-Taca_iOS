@@ -14,14 +14,14 @@ struct SignInState: Equatable {
   var isPhoneCertificateViewPresent = false
   var expireMinute: Int = 0
   
-  var phoneCertificateState: PhoneCertificateState = .init()
+  var phoneCertificateState: VerificationNumberCheckState = .init()
   var phoneVerficationState: PhoneVerificationState = .init()
 }
 
 enum SignInAction: Equatable {
   case setIsPhoneCertificateViewPresent(Bool)
   
-  case phoneCertificateAction(PhoneCertificateAction)
+  case phoneCertificateAction(VerificationNumberCheckAction)
   case phoneVerficationAction(PhoneVerificationAction)
 }
 
@@ -40,7 +40,7 @@ let signInReducer = Reducer<
       state: \.phoneCertificateState,
       action: /SignInAction.phoneCertificateAction,
       environment: {
-        PhoneCertificateEnvironment(
+        VerificationNumberCheckEnvironment(
           authService: $0.authService,
           mainQueue: .main
         )

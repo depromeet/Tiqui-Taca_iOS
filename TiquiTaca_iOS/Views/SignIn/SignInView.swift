@@ -37,7 +37,7 @@ struct SignInView: View {
               send: SignInAction.setIsPhoneCertificateViewPresent
             ),
             destination: {
-              PhoneCertificateView(
+              VerificationNumberCheckView(
                 store: store.scope(
                   state: \.phoneCertificateState,
                   action: SignInAction.phoneCertificateAction

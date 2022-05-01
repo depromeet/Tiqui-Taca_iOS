@@ -37,7 +37,7 @@ struct SignUpView: View {
               send: { SignUpAction.setIsNextViewPresent($0) }
             ),
             destination: {
-              PhoneCertificateView(
+              VerificationNumberCheckView(
                 store: store.scope(
                   state: \.phoneCertificateState,
                   action: SignUpAction.phoneCertificateAction
