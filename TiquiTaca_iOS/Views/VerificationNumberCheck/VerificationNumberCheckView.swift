@@ -13,35 +13,32 @@ struct VerificationNumberCheckView: View {
   
   var body: some View {
     WithViewStore(store) { viewStore in
-      NavigationView {
-        VStack {
-          Spacer()
-          VStack(alignment: .leading, spacing: 10) {
-            Text("인증번호를 입력해주세요.")
-            Text("\(viewStore.phoneNumber)로 전송된 인증번호 6자리를 입력하세요.\(viewStore.certificationCode)")
-              .font(.caption2)
-            
-            OTPFieldView(
-              store: store.scope(
-                state: \.otpFieldState,
-                action: VerificationNumberCheckAction.otpFieldAction
-              )
-            )
-          }
+      VStack {
+        Spacer()
+        VStack(alignment: .leading, spacing: 10) {
+          Text("인증번호를 입력해주세요.")
+          Text("\(viewStore.phoneNumber)로 전송된 인증번호 6자리를 입력하세요.\(viewStore.certificationCode)")
+            .font(.caption2)
           
-          Spacer()
-          //          Button {
-          //            viewStore.send(.certificationButtonTapped)
-          //          }label: {
-          //            Text("인증하기")
-          //          }
-          //          .disabled(checkStates())
-          //          .opacity(checkStates() ? 0.4 : 1)
-          //          .buttonStyle(NormalButtonStyle())
-          //          .padding(20)
+          OTPFieldView(
+            store: store.scope(
+              state: \.otpFieldState,
+              action: VerificationNumberCheckAction.otpFieldAction
+            )
+          )
         }
+        
+        Spacer()
+        //          Button {
+        //            viewStore.send(.certificationButtonTapped)
+        //          }label: {
+        //            Text("인증하기")
+        //          }
+        //          .disabled(checkStates())
+        //          .opacity(checkStates() ? 0.4 : 1)
+        //          .buttonStyle(NormalButtonStyle())
+        //          .padding(20)
       }
-      .navigationBarHidden(true)
     }
   }
 }

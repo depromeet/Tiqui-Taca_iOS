@@ -14,41 +14,39 @@ struct SignInView: View {
   
   var body: some View {
     WithViewStore(store) { viewStore in
-      NavigationView {
-        VStack {
-          Spacer()
-          VStack(alignment: .leading, spacing: 10) {
-            Text("로그인을 위해\n휴대폰 번호를 인증해주세요!")
-            Text("휴대폰 번호로 간편하게 로그인해보세요.")
-            PhoneVerificationView(
-              store: store.scope(
-                state: \.phoneVerficationState,
-                action: SignInAction.phoneVerficationAction
-              )
+      VStack {
+        Spacer()
+        VStack(alignment: .leading, spacing: 10) {
+          Text("로그인을 위해\n휴대폰 번호를 인증해주세요!")
+          Text("휴대폰 번호로 간편하게 로그인해보세요.")
+          PhoneVerificationView(
+            store: store.scope(
+              state: \.phoneVerficationState,
+              action: SignInAction.phoneVerficationAction
             )
-          }
-          .padding(20)
-          
-          Spacer()
-          
-          NavigationLink(
-            isActive: viewStore.binding(
-              get: \.isPhoneCertificateViewPresent,
-              send: SignInAction.setIsPhoneCertificateViewPresent
-            ),
-            destination: {
-              VerificationNumberCheckView(
-                store: store.scope(
-                  state: \.phoneCertificateState,
-                  action: SignInAction.phoneCertificateAction
-                )
-              )
-            },
-            label: {
-              EmptyView()
-            }
           )
         }
+        .padding(20)
+        
+        Spacer()
+        
+        NavigationLink(
+          isActive: viewStore.binding(
+            get: \.isPhoneCertificateViewPresent,
+            send: SignInAction.setIsPhoneCertificateViewPresent
+          ),
+          destination: {
+            VerificationNumberCheckView(
+              store: store.scope(
+                state: \.phoneCertificateState,
+                action: SignInAction.phoneCertificateAction
+              )
+            )
+          },
+          label: {
+            EmptyView()
+          }
+        )
       }
     }
   }
