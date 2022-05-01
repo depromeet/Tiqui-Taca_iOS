@@ -23,8 +23,19 @@ struct OnboardingView: View {
                 send: OnboardingAction.pageControlTapped
               )
             )
-            OnboardingTitleView()
-            OnboardingPageView(
+            
+            VStack(spacing: 8) {
+              Text("Welcome Tiki Taka")
+                .font(.system(size: 24))
+                .fontWeight(.semibold)
+              Text("Hello, Welcome!\nEnjoy Enjoy Enjoy")
+                .font(.system(size: 14))
+                .multilineTextAlignment(.center)
+                .frame(alignment: .center)
+                .padding(.vertical, 8)
+            }
+            
+            PageView(
               currentPage: viewStore.binding(
                 get: \.currentPage,
                 send: OnboardingAction.onboardingPageSwipe
@@ -72,52 +83,10 @@ struct OnboardingView: View {
           }
           .padding(.horizontal, 16)
         }
-        .navigationBarHidden(true)
+        .navigationBarTitleDisplayMode(.inline)
         .padding(.bottom, 24)
       }
     }
-  }
-}
-
-// MARK: TitleView
-private struct OnboardingTitleView: View {
-  var body: some View {
-    VStack(spacing: 8) {
-      Text("Welcome Tiki Taka")
-        .font(.system(size: 24))
-        .fontWeight(.semibold)
-      Text("Hello, Welcome!\nEnjoy Enjoy Enjoy")
-        .font(.system(size: 14))
-        .multilineTextAlignment(.center)
-        .frame(alignment: .center)
-        .padding(.vertical, 8)
-    }
-  }
-}
-
-// MARK: PageView
-private struct OnboardingPageView: View {
-  @Binding var currentPage: Int
-  
-  var body: some View {
-    TabView(selection: $currentPage) {
-      Image(systemName: "d.square.fill")
-        .resizable()
-        .frame(width: 100, height: 100)
-        .tag(0)
-      Image(systemName: "p.square.fill")
-        .resizable()
-        .frame(width: 100, height: 100)
-        .tag(1)
-      Image(systemName: "m.square.fill")
-        .resizable()
-        .frame(width: 100, height: 100)
-        .tag(2)
-    }
-    .tabViewStyle(.page(indexDisplayMode: .never))
-    .frame(maxWidth: .infinity, maxHeight: 300, alignment: .center)
-    .background(.white)
-    .cornerRadius(16)
   }
 }
 
