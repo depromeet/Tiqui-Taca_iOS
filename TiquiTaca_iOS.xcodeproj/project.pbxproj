@@ -51,8 +51,6 @@
 		F2FDA216280BBDAC00B2ED75 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F2FDA215280BBDAC00B2ED75 /* LaunchScreen.storyboard */; };
 		F2FDA21A280BBF8300B2ED75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FDA219280BBF8300B2ED75 /* AppDelegate.swift */; };
 		F993ADC92816C79C00718E9F /* OTPFieldCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F993ADC82816C79C00718E9F /* OTPFieldCore.swift */; };
-		F9A90B592813E682002F38BE /* CertificateCodeFieldCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A90B582813E682002F38BE /* CertificateCodeFieldCore.swift */; };
-		F9A90B5B2813E691002F38BE /* CertificateCodeFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9A90B5A2813E691002F38BE /* CertificateCodeFieldView.swift */; };
 		F9B90C9C28117DDF003FFEEB /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B90C9B28117DDF003FFEEB /* AuthService.swift */; };
 /* End PBXBuildFile section */
 
@@ -132,8 +130,6 @@
 		F2FDA219280BBF8300B2ED75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F5D04B5F76393475F2238F76 /* Pods-TiquiTaca_iOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TiquiTaca_iOSTests.release.xcconfig"; path = "Target Support Files/Pods-TiquiTaca_iOSTests/Pods-TiquiTaca_iOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		F993ADC82816C79C00718E9F /* OTPFieldCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPFieldCore.swift; sourceTree = "<group>"; };
-		F9A90B582813E682002F38BE /* CertificateCodeFieldCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateCodeFieldCore.swift; sourceTree = "<group>"; };
-		F9A90B5A2813E691002F38BE /* CertificateCodeFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CertificateCodeFieldView.swift; sourceTree = "<group>"; };
 		F9B90C9B28117DDF003FFEEB /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -367,7 +363,6 @@
 		F2FDA211280BAF2200B2ED75 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				F9A90B572813E665002F38BE /* CertificateCodeFieldView */,
 				F2F1ED8A281E62A900AC4FDD /* PhoneVerification */,
 				F2F1ED84281C6B3700AC4FDD /* OTPView */,
 				8601F660281393640085F692 /* PageControl.swift */,
@@ -416,15 +411,6 @@
 				F2F1ED92281E636B00AC4FDD /* SignInCore.swift */,
 			);
 			path = SignIn;
-			sourceTree = "<group>";
-		};
-		F9A90B572813E665002F38BE /* CertificateCodeFieldView */ = {
-			isa = PBXGroup;
-			children = (
-				F9A90B582813E682002F38BE /* CertificateCodeFieldCore.swift */,
-				F9A90B5A2813E691002F38BE /* CertificateCodeFieldView.swift */,
-			);
-			path = CertificateCodeFieldView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -639,7 +625,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				F2F1ED7228182D1400AC4FDD /* SceneDelegate.swift in Sources */,
-				F9A90B592813E682002F38BE /* CertificateCodeFieldCore.swift in Sources */,
 				F2F1ED8C281E632500AC4FDD /* PhoneVerificationView.swift in Sources */,
 				F2FDA21A280BBF8300B2ED75 /* AppDelegate.swift in Sources */,
 				F2F1ED7D281C3D6900AC4FDD /* VerificationEntity.swift in Sources */,
@@ -670,7 +655,6 @@
 				F2F1ED83281C6B2F00AC4FDD /* OTPFieldView.swift in Sources */,
 				F2F1ED96281E868300AC4FDD /* VerificationNumberCheckView.swift in Sources */,
 				F2F1ED89281E612E00AC4FDD /* SignUpView.swift in Sources */,
-				F9A90B5B2813E691002F38BE /* CertificateCodeFieldView.swift in Sources */,
 				F9B90C9C28117DDF003FFEEB /* AuthService.swift in Sources */,
 				F2F1ED87281E612700AC4FDD /* SignInView.swift in Sources */,
 			);
