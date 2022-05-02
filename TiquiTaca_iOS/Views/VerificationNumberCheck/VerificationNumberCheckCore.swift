@@ -15,16 +15,16 @@ struct VerificationNumberCheckState: Equatable {
 }
 
 enum VerificationNumberCheckAction: Equatable {
-  case certificationButtonTapped
+  case compareVerficationNumberResponse(Result<VerificationEntity.Response?, HTTPError>)
   case otpFieldAction(OTPFieldAction)
 }
 
 struct VerificationNumberCheckEnvironment {
-  var authService: AuthService
+  var authService: AuthServiceType
   var mainQueue: AnySchedulerOf<DispatchQueue>
 }
 
-let phoneCertificateReducer = Reducer<
+let verificationNumberCheckReducer = Reducer<
   VerificationNumberCheckState,
   VerificationNumberCheckAction,
   VerificationNumberCheckEnvironment
@@ -38,41 +38,35 @@ let phoneCertificateReducer = Reducer<
         OTPFieldEnvironment()
       }
     ),
-  phoneCertificateCore
+  verificationNumberCheckCore
 ])
 
-let phoneCertificateCore = Reducer<
+let verificationNumberCheckCore = Reducer<
   VerificationNumberCheckState,
   VerificationNumberCheckAction,
   VerificationNumberCheckEnvironment
 > { state, action, environment in
   switch action {
-  case let .otpFieldAction(.valueChanged):
-    //    state.otpFieldState.result
+  case let .compareVerficationNumberResponse(.success(response)):
+    guard let response = response else { return .none }
+    if let tempToken = response.tempToken {
+      // 사용자 생성을 위한 임시 토큰 저장
+      // 약관 동의 화면으로
+    }
     return .none
-    //  case let .certificationCodeChanged(certificationCode, index):
-    //    state.certificationCode = certificationCode
-    //    state.certificationCodeFields[index] = certificationCode
-    //    return .none
-    //  case .certificationButtonTapped:
-    //    return environment.authService
-    //      .checkVerification(state.phoneNumber, state.certificationCode)
-    //      .receive(on: environment.mainQueue)
-    //      .catchToEffect(PhoneCertificateAction.certificationResponse)
-    //  case let .certificationResponse(.success(certificationResponse)):
-    //    state.successFlag = true
-    //    print(certificationResponse.data.tempToken.token)
-    //    return .none
-    //  case .certificationResponse(.failure):
-    //    return Effect(value: PhoneCertificateAction.certificationCodeError)
-    //  case .certificationCodeError:
-    //    state.successFlag = false
-    //    //    state.certificationCodeFields.removeAll()
-    //    return .none
-    //  case .certificationCodeRemoved:
-    //    state.successFlag = nil
-    //    return .none
-  default:
+  case .compareVerficationNumberResponse(.failure):
     return .none
+  case .otpFieldAction:
+    return .none
+  case .otpFieldAction(.lastFieldTrigger):
+    let requestModel = VerificationEntity.Request(
+      phoneNumber: state.phoneNumber,
+      verificationCode: state.otpFieldState.otpText
+    )
+    environment.authService
+      .verification(request: requestModel)
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(VerificationNumberCheckAction.compareVerficationNumberResponse)
   }
 }
