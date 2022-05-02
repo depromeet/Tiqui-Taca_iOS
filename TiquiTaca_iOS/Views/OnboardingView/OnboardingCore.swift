@@ -61,6 +61,9 @@ let onBoardingReducer = Reducer<
     ),
   onBoardingCore
 ])
+#if DEBUG
+.debug()
+#endif
 
 let onBoardingCore = Reducer<
   OnboardingState,
