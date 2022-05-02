@@ -17,7 +17,10 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
       store: .init(
         initialState: OnboardingState(currentPage: 0),
         reducer: onBoardingReducer,
-        environment: OnboardingEnvironment()
+        environment: OnboardingEnvironment(
+          authService: .init(),
+          mainQueue: .main
+        )
       )
     )
     
