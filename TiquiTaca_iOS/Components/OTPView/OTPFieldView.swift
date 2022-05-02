@@ -9,34 +9,31 @@ import SwiftUI
 import ComposableArchitecture
 
 struct OTPFieldView: View {
+  @FocusState var focusedFieldIndex: Int?
   let store: Store<OTPFieldState, OTPFieldAction>
-  
-//  @FocusState var test: Int = 0
   
   var body: some View {
     WithViewStore(store) { viewStore in
-      HStack(spacing: 10) {
+      HStack(alignment: .center, spacing: 8) {
         ForEach(Array(viewStore.fields.enumerated()), id: \.element.index) { index, model in
           TextField(
-            "",
+            "0",
             text: viewStore.binding(
               get: \.fields[index].text,
               send: { .activeField(index: index, content: $0) }
             )
           )
+          .multilineTextAlignment(.center)
           .keyboardType(.numberPad)
-          .textContentType(.oneTimeCode)
-          .frame(height: 50)
-//          .focused(viewStore.focusedFieldIndex, equals: model.index)
-//          .focused( equals: model.index)
+          .focused($focusedFieldIndex, equals: model.index)
+          .frame(width: 44, height: 56)
           .overlay(
-            RoundedRectangle(cornerRadius: 10)
-              .stroke(
-                model.isHighlight ? Color.green : Color.red,
-                lineWidth: 2
-              )
+            RoundedRectangle(cornerRadius: 12)
+              .stroke(model.isFilled ? Color.green : Color.white, lineWidth: 2)
           )
-          .frame(width: 40)
+          .onChange(of: viewStore.focusedFieldIndex) {
+            focusedFieldIndex = $0
+          }
         }
       }
     }

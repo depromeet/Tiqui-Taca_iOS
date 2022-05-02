@@ -10,13 +10,19 @@ import ComposableArchitecture
 struct OTPField: Equatable {
   let index: Int
   var text: String
-  var isHighlight: Bool
+  
+  var isFilled: Bool {
+    return !text.isEmpty
+  }
 }
 
 struct OTPFieldState: Equatable {
-  var fields: [OTPField] = []
-  var totalFieldIndex: Int = 0
-  var otpFields: [String] = Array(repeating: "", count: 4)
+  var fields: [OTPField] = [
+    .init(index: 0, text: ""),
+    .init(index: 1, text: ""),
+    .init(index: 2, text: ""),
+    .init(index: 3, text: "")
+  ]
   var otpText: String = ""
   var focusedFieldIndex: Int = 0
   
@@ -40,7 +46,7 @@ let otpFieldReducer = Reducer<
   OTPFieldState,
   OTPFieldAction,
   OTPFieldEnvironment
-> { state, action, environment in
+> { state, action, _ in
   switch action {
   case let .activeField(index, content):
     state.fields[index].text = content
@@ -52,18 +58,17 @@ let otpFieldReducer = Reducer<
   case .valueChanged:
     return .none
   case .checkValue:
-    if state.fields[state.focusedFieldIndex].text == "" {
+    if state.fields[state.focusedFieldIndex].text.isEmpty {
       state.focusedFieldIndex -= 1
-    }
-    
-    if state.fields[state.focusedFieldIndex].text != "" {
+    } else {
       state.focusedFieldIndex += 1
     }
     
-    if state.focusedFieldIndex >= state.totalFieldIndex {
+    if state.focusedFieldIndex >= state.fields.count {
       return Effect(value: .lastFieldTrigger)
+    } else {
+      return .none
     }
-    return .none
   case .lastFieldTrigger:
     return .none
   }
