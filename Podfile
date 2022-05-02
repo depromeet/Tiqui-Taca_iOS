@@ -8,8 +8,8 @@ target 'TiquiTaca_iOS' do
   use_frameworks!
   
   # Firebase
-  pod 'Firebase/Analytics'
-  pod 'Firebase/Messaging'
+  pod 'Firebase/Analytics', '= 8.15.0'
+  pod 'Firebase/Messaging', '= 8.15.0'
 
   # DB
   pod 'RealmSwift', '= 10.25.1'
