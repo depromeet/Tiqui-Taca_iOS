@@ -11,17 +11,17 @@ import TTNetworkModule
 struct SignInState: Equatable {
   var phoneNumber: String = ""
   var verificationCode: String = ""
-  var isPhoneCertificateViewPresent = false
+  var isVerificationNumberCheckViewPresent = false
   var expireMinute: Int = 0
   
-  var phoneCertificateState: VerificationNumberCheckState = .init()
+  var verificationNumberCheckState: VerificationNumberCheckState = .init()
   var phoneVerficationState: PhoneVerificationState = .init()
 }
 
 enum SignInAction: Equatable {
-  case setIsPhoneCertificateViewPresent(Bool)
+  case setIsVerificationNumberCheckViewPresent(Bool)
   
-  case phoneCertificateAction(VerificationNumberCheckAction)
+  case verificationNumberCheckAction(VerificationNumberCheckAction)
   case phoneVerficationAction(PhoneVerificationAction)
 }
 
@@ -35,10 +35,10 @@ let signInReducer = Reducer<
   SignInAction,
   SignInEnvironment
 >.combine([
-  phoneCertificateReducer
+  verificationNumberCheckReducer
     .pullback(
-      state: \.phoneCertificateState,
-      action: /SignInAction.phoneCertificateAction,
+      state: \.verificationNumberCheckState,
+      action: /SignInAction.verificationNumberCheckAction,
       environment: {
         VerificationNumberCheckEnvironment(
           authService: $0.authService,
@@ -66,13 +66,13 @@ let signInCore = Reducer<
   SignInEnvironment
 > { state, action, environment in
   switch action {
-  case let .setIsPhoneCertificateViewPresent(isPresent):
-    state.isPhoneCertificateViewPresent = isPresent
+  case let .setIsVerificationNumberCheckViewPresent(isPresent):
+    state.isVerificationNumberCheckViewPresent = isPresent
     return .none
-  case .phoneCertificateAction:
+  case .verificationNumberCheckAction:
     return .none
   case .phoneVerficationAction(.phoneNumberRequestSuccess):
-    return Effect(value: .setIsPhoneCertificateViewPresent(true))
+    return Effect(value: .setIsVerificationNumberCheckViewPresent(true))
   case .phoneVerficationAction:
     return.none
   }

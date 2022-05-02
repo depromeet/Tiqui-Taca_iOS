@@ -32,18 +32,16 @@ struct SignInView: View {
         
         NavigationLink(
           isActive: viewStore.binding(
-            get: \.isPhoneCertificateViewPresent,
-            send: SignInAction.setIsPhoneCertificateViewPresent
-          ),
-          destination: {
+            get: \.isVerificationNumberCheckViewPresent,
+            send: SignInAction.setIsVerificationNumberCheckViewPresent
+          ), destination: {
             VerificationNumberCheckView(
               store: store.scope(
-                state: \.phoneCertificateState,
-                action: SignInAction.phoneCertificateAction
+                state: \.verificationNumberCheckState,
+                action: SignInAction.verificationNumberCheckAction
               )
             )
-          },
-          label: {
+          }, label: {
             EmptyView()
           }
         )

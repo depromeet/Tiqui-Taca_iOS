@@ -34,16 +34,14 @@ struct SignUpView: View {
           isActive: viewStore.binding(
             get: \.isNextViewPresent,
             send: { SignUpAction.setIsNextViewPresent($0) }
-          ),
-          destination: {
+          ), destination: {
             VerificationNumberCheckView(
               store: store.scope(
-                state: \.phoneCertificateState,
-                action: SignUpAction.phoneCertificateAction
+                state: \.verificationNumberCheckState,
+                action: SignUpAction.verificationNumberCheckAction
               )
             )
-          },
-          label: {
+          }, label: {
             EmptyView()
           }
         )

@@ -14,14 +14,14 @@ struct SignUpState: Equatable {
   var isNextViewPresent = false
   var expireMinute: Int = 0
   
-  var phoneCertificateState: VerificationNumberCheckState = .init()
+  var verificationNumberCheckState: VerificationNumberCheckState = .init()
   var phoneVerficationState: PhoneVerificationState = .init()
 }
 
 enum SignUpAction: Equatable {
   case setIsNextViewPresent(Bool)
   
-  case phoneCertificateAction(VerificationNumberCheckAction)
+  case verificationNumberCheckAction(VerificationNumberCheckAction)
   case phoneVerficationAction(PhoneVerificationAction)
 }
 
@@ -35,10 +35,10 @@ let signUpReducer = Reducer<
   SignUpAction,
   SignUpEnvironment
 >.combine([
-  phoneCertificateReducer
+  verificationNumberCheckReducer
     .pullback(
-      state: \.phoneCertificateState,
-      action: /SignUpAction.phoneCertificateAction,
+      state: \.verificationNumberCheckState,
+      action: /SignUpAction.verificationNumberCheckAction,
       environment: {
         VerificationNumberCheckEnvironment(
           authService: $0.authService,
@@ -69,7 +69,7 @@ let signUpCore = Reducer<
   case let .setIsNextViewPresent(isNextViewPresent):
     state.isNextViewPresent = isNextViewPresent
     return .none
-  case .phoneCertificateAction:
+  case .verificationNumberCheckAction:
     return .none
   case .phoneVerficationAction(.phoneNumberRequestSuccess):
     return Effect(value: .setIsNextViewPresent(true))
