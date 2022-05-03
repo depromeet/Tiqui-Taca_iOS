@@ -169,66 +169,66 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		8601F65A281309660085F692 /* SplashView */ = {
+		8601F65A281309660085F692 /* Splash */ = {
 			isa = PBXGroup;
 			children = (
 				8601F65B281309B10085F692 /* SplashView.swift */,
 			);
-			path = SplashView;
+			path = Splash;
 			sourceTree = "<group>";
 		};
-		8601F65D281309EC0085F692 /* OnboardingView */ = {
+		8601F65D281309EC0085F692 /* Onboarding */ = {
 			isa = PBXGroup;
 			children = (
 				8601F65E281393550085F692 /* OnboardingView.swift */,
 				8601F665281404D40085F692 /* OnboardingCore.swift */,
 			);
-			path = OnboardingView;
+			path = Onboarding;
 			sourceTree = "<group>";
 		};
-		8601F66228139D7D0085F692 /* MainTabView */ = {
+		8601F66228139D7D0085F692 /* MainTab */ = {
 			isa = PBXGroup;
 			children = (
 				8601F6632813AD400085F692 /* MainTabView.swift */,
 				86E494822814F05D00551CCD /* MainTabCore.swift */,
 			);
-			path = MainTabView;
+			path = MainTab;
 			sourceTree = "<group>";
 		};
-		86E494842814F18600551CCD /* MapView */ = {
+		86E494842814F18600551CCD /* Map */ = {
 			isa = PBXGroup;
 			children = (
 				86E494882814FDAE00551CCD /* MapView.swift */,
 				86E4948A2814FDBC00551CCD /* MapCore.swift */,
 			);
-			path = MapView;
+			path = Map;
 			sourceTree = "<group>";
 		};
-		86E494852814FD6300551CCD /* ChatView */ = {
+		86E494852814FD6300551CCD /* Chat */ = {
 			isa = PBXGroup;
 			children = (
 				86E4948C2814FDC700551CCD /* ChatView.swift */,
 				86E4948E2814FDD000551CCD /* ChatCore.swift */,
 			);
-			path = ChatView;
+			path = Chat;
 			sourceTree = "<group>";
 		};
-		86E494862814FD6C00551CCD /* MsgAndNotiView */ = {
+		86E494862814FD6C00551CCD /* MsgAndNoti */ = {
 			isa = PBXGroup;
 			children = (
 				86E494902814FDE100551CCD /* MsgAndNotiView.swift */,
 				86E494922814FDE900551CCD /* MsgAndNotiCore.swift */,
 			);
-			path = MsgAndNotiView;
+			path = MsgAndNoti;
 			sourceTree = "<group>";
 		};
-		86E494872814FD7900551CCD /* MyPageView */ = {
+		86E494872814FD7900551CCD /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
 				86E494942814FDF300551CCD /* MyPageView.swift */,
 				86E494962814FE0300551CCD /* MyPageCore.swift */,
 			);
-			path = MyPageView;
+			path = MyPage;
 			sourceTree = "<group>";
 		};
 		C588B14F79D2DB0B0D8975BC /* Pods */ = {
@@ -414,13 +414,13 @@
 		F2FDA213280BAF3100B2ED75 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				86E494872814FD7900551CCD /* MyPageView */,
-				86E494862814FD6C00551CCD /* MsgAndNotiView */,
-				86E494852814FD6300551CCD /* ChatView */,
-				86E494842814F18600551CCD /* MapView */,
-				8601F66228139D7D0085F692 /* MainTabView */,
-				8601F65D281309EC0085F692 /* OnboardingView */,
-				8601F65A281309660085F692 /* SplashView */,
+				86E494872814FD7900551CCD /* MyPage */,
+				86E494862814FD6C00551CCD /* MsgAndNoti */,
+				86E494852814FD6300551CCD /* Chat */,
+				86E494842814F18600551CCD /* Map */,
+				8601F66228139D7D0085F692 /* MainTab */,
+				8601F65D281309EC0085F692 /* Onboarding */,
+				8601F65A281309660085F692 /* Splash */,
 				F2F1ED94281E637100AC4FDD /* VerificationNumberCheck */,
 				F2F1ED8F281E634A00AC4FDD /* SignUp */,
 				F99EA7642810351300E31935 /* SignIn */,
