@@ -394,6 +394,7 @@
 		F2FDA211280BAF2200B2ED75 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				F2F1ED7828198F6B00AC4FDD /* WebView */,
 				F2F1ED8A281E62A900AC4FDD /* PhoneVerification */,
 				F2F1ED84281C6B3700AC4FDD /* OTPView */,
 				8601F660281393640085F692 /* PageControl.swift */,
@@ -413,7 +414,6 @@
 		F2FDA213280BAF3100B2ED75 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				F2F1ED7828198F6B00AC4FDD /* WebView */,
 				86E494872814FD7900551CCD /* MyPageView */,
 				86E494862814FD6C00551CCD /* MsgAndNotiView */,
 				86E494852814FD6300551CCD /* ChatView */,
