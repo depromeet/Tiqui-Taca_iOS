@@ -56,17 +56,17 @@ let verificationNumberCheckCore = Reducer<
     return .none
   case .compareVerficationNumberResponse(.failure):
     return .none
-  case .otpFieldAction:
-    return .none
   case .otpFieldAction(.lastFieldTrigger):
     let requestModel = VerificationEntity.Request(
       phoneNumber: state.phoneNumber,
       verificationCode: state.otpFieldState.otpText
     )
-    environment.authService
+    return environment.authService
       .verification(request: requestModel)
       .receive(on: environment.mainQueue)
       .catchToEffect()
       .map(VerificationNumberCheckAction.compareVerficationNumberResponse)
+  case .otpFieldAction:
+    return .none
   }
 }
