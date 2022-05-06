@@ -5,11 +5,15 @@
 //  Created by 김록원 on 2022/04/24.
 //
 
-import Combine
 import ComposableArchitecture
 
 struct MyPageState: Equatable {
-	var dummyState = 0
+  var nickName = ""
+  var profileImage = "defaultProfile"
+  var createdAt = ""
+  var createDday = ""
+  var isAppAlarmOn = false
+  var appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
 }
 
 enum MyPageAction: Equatable {

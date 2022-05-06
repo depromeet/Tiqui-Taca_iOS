@@ -57,6 +57,8 @@
 		F2FDA216280BBDAC00B2ED75 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F2FDA215280BBDAC00B2ED75 /* LaunchScreen.storyboard */; };
 		F2FDA21A280BBF8300B2ED75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FDA219280BBF8300B2ED75 /* AppDelegate.swift */; };
 		F2FDA228280C0EE300B2ED75 /* TermsOfServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FDA227280C0EE300B2ED75 /* TermsOfServiceView.swift */; };
+		F96CDE752824EF8C002DEB90 /* MyInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F96CDE742824EF8C002DEB90 /* MyInfoView.swift */; };
+		F96CDE772824EF9B002DEB90 /* MyInfoCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F96CDE762824EF9B002DEB90 /* MyInfoCore.swift */; };
 		F993ADC92816C79C00718E9F /* OTPFieldCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F993ADC82816C79C00718E9F /* OTPFieldCore.swift */; };
 		F9B90C9C28117DDF003FFEEB /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B90C9B28117DDF003FFEEB /* AuthService.swift */; };
 /* End PBXBuildFile section */
@@ -143,6 +145,8 @@
 		F2FDA219280BBF8300B2ED75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F2FDA227280C0EE300B2ED75 /* TermsOfServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceView.swift; sourceTree = "<group>"; };
 		F5D04B5F76393475F2238F76 /* Pods-TiquiTaca_iOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TiquiTaca_iOSTests.release.xcconfig"; path = "Target Support Files/Pods-TiquiTaca_iOSTests/Pods-TiquiTaca_iOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		F96CDE742824EF8C002DEB90 /* MyInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoView.swift; sourceTree = "<group>"; };
+		F96CDE762824EF9B002DEB90 /* MyInfoCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoCore.swift; sourceTree = "<group>"; };
 		F993ADC82816C79C00718E9F /* OTPFieldCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPFieldCore.swift; sourceTree = "<group>"; };
 		F9B90C9B28117DDF003FFEEB /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -225,6 +229,7 @@
 		86E494872814FD7900551CCD /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
+				F96CDE732824EF7E002DEB90 /* MyInfo */,
 				86E494942814FDF300551CCD /* MyPageView.swift */,
 				86E494962814FE0300551CCD /* MyPageCore.swift */,
 			);
@@ -447,6 +452,15 @@
 				F2127641281021C700FB568D /* TermsOfServiceCore.swift */,
 			);
 			path = TermsOfService;
+			sourceTree = "<group>";
+		};
+		F96CDE732824EF7E002DEB90 /* MyInfo */ = {
+			isa = PBXGroup;
+			children = (
+				F96CDE742824EF8C002DEB90 /* MyInfoView.swift */,
+				F96CDE762824EF9B002DEB90 /* MyInfoCore.swift */,
+			);
+			path = MyInfo;
 			sourceTree = "<group>";
 		};
 		F99EA7642810351300E31935 /* SignIn */ = {
@@ -683,6 +697,7 @@
 				F2F1ED91281E636200AC4FDD /* SignUpCore.swift in Sources */,
 				8601F661281393640085F692 /* PageControl.swift in Sources */,
 				8601F659281308CB0085F692 /* View+Extensions.swift in Sources */,
+				F96CDE752824EF8C002DEB90 /* MyInfoView.swift in Sources */,
 				F2F1ED9B281EDACE00AC4FDD /* PageView.swift in Sources */,
 				F2FDA228280C0EE300B2ED75 /* TermsOfServiceView.swift in Sources */,
 				F2127644281191A800FB568D /* WebView.swift in Sources */,
@@ -690,6 +705,7 @@
 				F248EB012813240500430C3B /* CreateProfileView.swift in Sources */,
 				F248EB032813273A00430C3B /* CreateProfileCore.swift in Sources */,
 				F2127642281021C700FB568D /* TermsOfServiceCore.swift in Sources */,
+				F96CDE772824EF9B002DEB90 /* MyInfoCore.swift in Sources */,
 				F21276462811C6D500FB568D /* TOSFieldListViewCore.swift in Sources */,
 				F2FA365C2808897C00A24789 /* R.generated.swift in Sources */,
 				F2F1ED7F281C40BB00AC4FDD /* UserEntity.swift in Sources */,
