@@ -36,12 +36,12 @@ struct CreateProfileView: View {
               send: CreateProfileAction.nicknameChanged
             )
           )
-          .foregroundColor(.white)
+          .foregroundColor(Color.white)
           .disableAutocorrection(true)
           .padding([.leading, .trailing], 40)
           
           Text("티키타카에서 사용할 닉네임과 프로필을 선택해주세요.\n닉네임은 최대 20자까지 입력이 가능해요!")
-            .foregroundColor(.white)
+            .foregroundColor(Color.white)
             .font(.caption)
             .multilineTextAlignment(.center)
           
@@ -63,9 +63,9 @@ struct CreateProfileView: View {
               ScrollView {
                 VStack(alignment: .leading) {
                   Text("프로필 캐릭터")
-                    .foregroundColor(Color.TTColor.white)
+                    .foregroundColor(Color.white)
                     .padding(EdgeInsets(top: 0, leading: 32, bottom: 9, trailing: 0))
-                  
+
                   LazyVGrid(columns: gridItemLayout, spacing: 20) {
                     ForEach(0..<30, id: \.self) { num in
                       Button {
@@ -85,11 +85,11 @@ struct CreateProfileView: View {
                   .padding([.leading, .trailing], 25)
                 }
               }
-              .background(Color.TTColor.black700)
+              .background(Color.black700)
             })
         }
         .frame(maxHeight: .infinity)
-        .background(Color.TTColor.black800)
+        .background(Color.black800)
         .ignoresSafeArea(.keyboard)
         .navigationTitle("프로필 만들기")
         .navigationBarTitleDisplayMode(.inline)
@@ -103,7 +103,7 @@ struct CreateProfileView: View {
           }
         }
       }
-      .tint(Color.TTColor.greenTextColor)
+      .tint(Color.greenTextColor)
       .onTapGesture {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
       }

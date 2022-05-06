@@ -23,7 +23,6 @@ struct OTPFieldState: Equatable {
     .init(index: 2, text: ""),
     .init(index: 3, text: "")
   ]
-  var otpText: String = ""
   var focusedFieldIndex: Int = 0
   
   var result: String {

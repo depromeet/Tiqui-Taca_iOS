@@ -59,7 +59,7 @@ let verificationNumberCheckCore = Reducer<
   case .otpFieldAction(.lastFieldTrigger):
     let requestModel = VerificationEntity.Request(
       phoneNumber: state.phoneNumber,
-      verificationCode: state.otpFieldState.otpText
+      verificationCode: state.otpFieldState.result
     )
     return environment.authService
       .verification(request: requestModel)

@@ -17,7 +17,7 @@ struct OTPFieldView: View {
       HStack(alignment: .center, spacing: 8) {
         ForEach(Array(viewStore.fields.enumerated()), id: \.element.index) { index, model in
           TextField(
-            "0",
+            "",
             text: viewStore.binding(
               get: \.fields[index].text,
               send: { .activeField(index: index, content: $0) }
