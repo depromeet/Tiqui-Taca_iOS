@@ -57,6 +57,8 @@
 		F2FDA216280BBDAC00B2ED75 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F2FDA215280BBDAC00B2ED75 /* LaunchScreen.storyboard */; };
 		F2FDA21A280BBF8300B2ED75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FDA219280BBF8300B2ED75 /* AppDelegate.swift */; };
 		F2FDA228280C0EE300B2ED75 /* TermsOfServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FDA227280C0EE300B2ED75 /* TermsOfServiceView.swift */; };
+		F9669F6428251E59004624F8 /* MyBlockHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9669F6328251E59004624F8 /* MyBlockHistoryView.swift */; };
+		F9669F6628251E6F004624F8 /* MyBlockHistoryCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9669F6528251E6F004624F8 /* MyBlockHistoryCore.swift */; };
 		F96CDE752824EF8C002DEB90 /* MyInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F96CDE742824EF8C002DEB90 /* MyInfoView.swift */; };
 		F96CDE772824EF9B002DEB90 /* MyInfoCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F96CDE762824EF9B002DEB90 /* MyInfoCore.swift */; };
 		F993ADC92816C79C00718E9F /* OTPFieldCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F993ADC82816C79C00718E9F /* OTPFieldCore.swift */; };
@@ -145,6 +147,8 @@
 		F2FDA219280BBF8300B2ED75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F2FDA227280C0EE300B2ED75 /* TermsOfServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceView.swift; sourceTree = "<group>"; };
 		F5D04B5F76393475F2238F76 /* Pods-TiquiTaca_iOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TiquiTaca_iOSTests.release.xcconfig"; path = "Target Support Files/Pods-TiquiTaca_iOSTests/Pods-TiquiTaca_iOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		F9669F6328251E59004624F8 /* MyBlockHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBlockHistoryView.swift; sourceTree = "<group>"; };
+		F9669F6528251E6F004624F8 /* MyBlockHistoryCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBlockHistoryCore.swift; sourceTree = "<group>"; };
 		F96CDE742824EF8C002DEB90 /* MyInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoView.swift; sourceTree = "<group>"; };
 		F96CDE762824EF9B002DEB90 /* MyInfoCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoCore.swift; sourceTree = "<group>"; };
 		F993ADC82816C79C00718E9F /* OTPFieldCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPFieldCore.swift; sourceTree = "<group>"; };
@@ -229,6 +233,7 @@
 		86E494872814FD7900551CCD /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
+				F9669F6228251DBC004624F8 /* MyBlockHistory */,
 				F96CDE732824EF7E002DEB90 /* MyInfo */,
 				86E494942814FDF300551CCD /* MyPageView.swift */,
 				86E494962814FE0300551CCD /* MyPageCore.swift */,
@@ -452,6 +457,15 @@
 				F2127641281021C700FB568D /* TermsOfServiceCore.swift */,
 			);
 			path = TermsOfService;
+			sourceTree = "<group>";
+		};
+		F9669F6228251DBC004624F8 /* MyBlockHistory */ = {
+			isa = PBXGroup;
+			children = (
+				F9669F6328251E59004624F8 /* MyBlockHistoryView.swift */,
+				F9669F6528251E6F004624F8 /* MyBlockHistoryCore.swift */,
+			);
+			path = MyBlockHistory;
 			sourceTree = "<group>";
 		};
 		F96CDE732824EF7E002DEB90 /* MyInfo */ = {
@@ -694,9 +708,11 @@
 				F2F1ED98281E869D00AC4FDD /* VerificationNumberCheckCore.swift in Sources */,
 				86E4948D2814FDC700551CCD /* ChatView.swift in Sources */,
 				86E494952814FDF300551CCD /* MyPageView.swift in Sources */,
+				F9669F6628251E6F004624F8 /* MyBlockHistoryCore.swift in Sources */,
 				F2F1ED91281E636200AC4FDD /* SignUpCore.swift in Sources */,
 				8601F661281393640085F692 /* PageControl.swift in Sources */,
 				8601F659281308CB0085F692 /* View+Extensions.swift in Sources */,
+				F9669F6428251E59004624F8 /* MyBlockHistoryView.swift in Sources */,
 				F96CDE752824EF8C002DEB90 /* MyInfoView.swift in Sources */,
 				F2F1ED9B281EDACE00AC4FDD /* PageView.swift in Sources */,
 				F2FDA228280C0EE300B2ED75 /* TermsOfServiceView.swift in Sources */,
