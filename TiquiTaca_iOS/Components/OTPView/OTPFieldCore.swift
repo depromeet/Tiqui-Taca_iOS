@@ -7,21 +7,39 @@
 
 import ComposableArchitecture
 
-struct OTPField: Equatable {
-  let index: Int
+//struct OTPField: Equatable, Identifiable {
+//  var id: Int
+//  var text: String
+//
+//  var isFilled: Bool {
+//    return !text.isEmpty
+//  }
+//}
+
+class OTPField: Equatable, Identifiable {
+  let id: Int
   var text: String
-  
+
   var isFilled: Bool {
     return !text.isEmpty
+  }
+
+  init(id: Int, text: String) {
+    self.id = id
+    self.text = text
+  }
+
+  static func == (lhs: OTPField, rhs: OTPField) -> Bool {
+    return lhs.id == rhs.id
   }
 }
 
 struct OTPFieldState: Equatable {
   var fields: [OTPField] = [
-    .init(index: 0, text: ""),
-    .init(index: 1, text: ""),
-    .init(index: 2, text: ""),
-    .init(index: 3, text: "")
+    .init(id: 0, text: ""),
+    .init(id: 1, text: ""),
+    .init(id: 2, text: ""),
+    .init(id: 3, text: "")
   ]
   var focusedFieldIndex: Int = 0
   
@@ -34,40 +52,39 @@ struct OTPFieldState: Equatable {
 
 enum OTPFieldAction: Equatable {
   case activeField(index: Int, content: String)
-  case valueChanged
   case checkValue
   case lastFieldTrigger
 }
 
-struct OTPFieldEnvironment { }
-
 let otpFieldReducer = Reducer<
   OTPFieldState,
   OTPFieldAction,
-  OTPFieldEnvironment
+  Void
 > { state, action, _ in
   switch action {
   case let .activeField(index, content):
     state.fields[index].text = content
     state.focusedFieldIndex = index
-    return .merge([
-      Effect(value: .checkValue),
-      Effect(value: .valueChanged)
-    ])
-  case .valueChanged:
-    return .none
-  case .checkValue:
-    if state.fields[state.focusedFieldIndex].text.isEmpty {
-      state.focusedFieldIndex -= 1
-    } else {
-      state.focusedFieldIndex += 1
+    
+    if state.fields[index].text.count == 4 {
+      return Effect(value: .lastFieldTrigger)
     }
     
-    if state.focusedFieldIndex >= state.fields.count {
-      return Effect(value: .lastFieldTrigger)
-    } else {
-      return .none
-    }
+    return .none
+//    return Effect(value: .checkValue)
+  case .checkValue:
+//    if state.fields[state.focusedFieldIndex].text.isEmpty {
+//      state.focusedFieldIndex -= 1
+//    } else {
+//      state.focusedFieldIndex += 1
+//    }
+    
+//    if state.focusedFieldIndex >= state.fields.count {
+//      return Effect(value: .lastFieldTrigger)
+//    } else {
+//      return .none
+//    }
+    return .none
   case .lastFieldTrigger:
     return .none
   }
