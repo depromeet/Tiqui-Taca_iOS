@@ -14,10 +14,12 @@ struct MyPageState: Equatable {
   var createDday = ""
   var isAppAlarmOn = false
   var appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
+  var popupPresented = false
 }
 
 enum MyPageAction: Equatable {
-	case dummyAction
+	case selectDetail
+  case dismissDetail
 }
 
 struct MyPageEnvironment { }
@@ -26,6 +28,15 @@ let myPageReducer = Reducer<
 	MyPageState,
 	MyPageAction,
 	MyPageEnvironment
-> { _, _, _ in
+> { state, action, environment in
+  switch action {
+  case .selectDetail:
+    state.popupPresented = true
+    return .none
+  case .dismissDetail:
+    state.popupPresented = false
+    return .none
+  }
+  
 	return .none
 }
