@@ -10,7 +10,8 @@ import Combine
 
 protocol AuthServiceType {
   func verification(request: VerificationEntity.Request) -> AnyPublisher<VerificationEntity.Response?, HTTPError>
-  func issuePhoneCode(request: IssueCodeEntity.Request ) -> AnyPublisher<IssueCodeEntity.Response?, HTTPError>
+  func issuePhoneCode(request: IssueCodeEntity.Request) -> AnyPublisher<IssueCodeEntity.Response?, HTTPError>
+  func tokenRefresh(request: TokenRefreshEntity.Request) -> AnyPublisher<TokenRefreshEntity.Response?, HTTPError>
 }
 
 final class AuthService: AuthServiceType {
@@ -28,5 +29,10 @@ final class AuthService: AuthServiceType {
   func issuePhoneCode(request: IssueCodeEntity.Request) -> AnyPublisher<IssueCodeEntity.Response?, HTTPError> {
     return network
       .request(.authIssueCode(request), responseType: IssueCodeEntity.Response.self)
+  }
+  
+  func tokenRefresh(request: TokenRefreshEntity.Request) -> AnyPublisher<TokenRefreshEntity.Response?, HTTPError> {
+    return network
+      .request(.authTokenRefresh(request), responseType: TokenRefreshEntity.Response.self)
   }
 }
