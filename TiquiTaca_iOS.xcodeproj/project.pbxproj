@@ -66,6 +66,8 @@
 		F981FA1A282600B50000A531 /* MyTermsOfServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F981FA19282600B50000A531 /* MyTermsOfServiceView.swift */; };
 		F981FA1C282600C40000A531 /* MyTermsOfServiceCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F981FA1B282600C40000A531 /* MyTermsOfServiceCore.swift */; };
 		F981FA1F282604AA0000A531 /* CsCenterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F981FA1E282604AA0000A531 /* CsCenterView.swift */; };
+		F981FA21282653940000A531 /* BlockListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F981FA20282653940000A531 /* BlockListView.swift */; };
+		F981FA23282653A00000A531 /* BlockListCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F981FA22282653A00000A531 /* BlockListCore.swift */; };
 		F993ADC92816C79C00718E9F /* OTPFieldCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F993ADC82816C79C00718E9F /* OTPFieldCore.swift */; };
 		F9B90C9C28117DDF003FFEEB /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B90C9B28117DDF003FFEEB /* AuthService.swift */; };
 /* End PBXBuildFile section */
@@ -161,6 +163,8 @@
 		F981FA19282600B50000A531 /* MyTermsOfServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTermsOfServiceView.swift; sourceTree = "<group>"; };
 		F981FA1B282600C40000A531 /* MyTermsOfServiceCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTermsOfServiceCore.swift; sourceTree = "<group>"; };
 		F981FA1E282604AA0000A531 /* CsCenterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CsCenterView.swift; sourceTree = "<group>"; };
+		F981FA20282653940000A531 /* BlockListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockListView.swift; sourceTree = "<group>"; };
+		F981FA22282653A00000A531 /* BlockListCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockListCore.swift; sourceTree = "<group>"; };
 		F993ADC82816C79C00718E9F /* OTPFieldCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPFieldCore.swift; sourceTree = "<group>"; };
 		F9B90C9B28117DDF003FFEEB /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -477,6 +481,8 @@
 			children = (
 				F9669F6328251E59004624F8 /* MyBlockHistoryView.swift */,
 				F9669F6528251E6F004624F8 /* MyBlockHistoryCore.swift */,
+				F981FA20282653940000A531 /* BlockListView.swift */,
+				F981FA22282653A00000A531 /* BlockListCore.swift */,
 			);
 			path = MyBlockHistory;
 			sourceTree = "<group>";
@@ -739,6 +745,7 @@
 				F2F1ED7228182D1400AC4FDD /* SceneDelegate.swift in Sources */,
 				F2F1ED8C281E632500AC4FDD /* PhoneVerificationView.swift in Sources */,
 				F2FDA21A280BBF8300B2ED75 /* AppDelegate.swift in Sources */,
+				F981FA23282653A00000A531 /* BlockListCore.swift in Sources */,
 				F2F1ED7D281C3D6900AC4FDD /* VerificationEntity.swift in Sources */,
 				86E494892814FDAE00551CCD /* MapView.swift in Sources */,
 				86E4948B2814FDBC00551CCD /* MapCore.swift in Sources */,
@@ -748,6 +755,7 @@
 				86E4948D2814FDC700551CCD /* ChatView.swift in Sources */,
 				86E494952814FDF300551CCD /* MyPageView.swift in Sources */,
 				F9669F6628251E6F004624F8 /* MyBlockHistoryCore.swift in Sources */,
+				F981FA21282653940000A531 /* BlockListView.swift in Sources */,
 				F2F1ED91281E636200AC4FDD /* SignUpCore.swift in Sources */,
 				8601F661281393640085F692 /* PageControl.swift in Sources */,
 				8601F659281308CB0085F692 /* View+Extensions.swift in Sources */,

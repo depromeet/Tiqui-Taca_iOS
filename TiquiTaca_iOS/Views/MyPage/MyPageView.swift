@@ -7,56 +7,109 @@
 
 import SwiftUI
 import ComposableArchitecture
+import TTDesignSystemModule
 
 struct MyPageView: View {
   let store: Store<MyPageState, MyPageAction>
-  
+  @State var sheetState: MyPageSheetChoice?
   
   var body: some View {
     WithViewStore(self.store) { viewStore in
-      VStack {
-        Text("마이페이지")
-          .frame(maxWidth: .infinity, alignment: .leading)
-          .padding(.leading, .spacing24)
-        
+      NavigationView {
         VStack {
-          Image(viewStore.profileImage)
-            .overlay(
-              Button {
-                viewStore.send(.selectDetail)
-              } label: {
-                Image("edit")
-              }
-                .fullScreenCover(
-                  isPresented: viewStore.binding(
-                    get: \.popupPresented,
-                    send: .dismissDetail
-                  )
-                ){
-                  MyBlockHistoryView(store: .init(
-                    initialState: MyBlockHistoryState(),
-                    reducer: myBlockHistoryReducer,
-                    environment: MyBlockHistoryEnvironment())
-                  )
+          VStack {
+            Text("마이페이지")
+              .frame(maxWidth: .infinity, alignment: .leading)
+            Image(viewStore.profileImage)
+              .overlay(
+                Button {
+                  viewStore.send(.selectDetail)
+                } label: {
+                  Image("edit")
                 }
-                .alignmentGuide(.bottom) { $0[.bottom] }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
-            )
-          Text(viewStore.nickName)
-          Text("최초가입일 \(viewStore.createdAt) / 티키타카와 +\(viewStore.createDday)일 째")
-          Text("뱃지")
+                  .alignmentGuide(.bottom) { $0[.bottom] }
+                  .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+              )
+            Text(viewStore.nickName)
+              
+            Text("최초가입일 \(viewStore.createdAt) / 티키타카와 +\(viewStore.createDday)일 째")
+            Text("뱃지")
+          }
+          .padding(.spacing24)
+          .foregroundColor(.white)
+          .background(Color.black800)
+          
+          
+          List {
+            Button {
+              viewStore.send(.selectSheet(.myInfoView))
+            } label: {
+              MypageRow(imageName: "myInfo", title: "내 정보")
+            }
+            MypageRow(imageName: "alarm", title: "알림설정", toggleVisible: true, togglePressed: viewStore.isAppAlarmOn)
+            Button {
+              viewStore.send(.selectSheet(.blockHistoryView))
+            } label: {
+              MypageRow(imageName: "block", title: "차단 이력")
+            }
+            Button {
+              viewStore.send(.selectSheet(.noticeView))
+            } label: {
+              MypageRow(imageName: "info", title: "공지사항")
+            }
+            Button {
+              viewStore.send(.selectSheet(.myTermsOfServiceView))
+            } label: {
+              MypageRow(imageName: "terms", title: "이용약관")
+            }
+            Button {
+              viewStore.send(.selectSheet(.csCenterView))
+            } label: {
+              MypageRow(imageName: "center", title: "고객센터")
+            }
+            MypageRow(imageName: "version", title: "버전 정보", version: viewStore.appVersion)
+              .fullScreenCover(
+                isPresented: viewStore.binding(
+                  get: \.popupPresented,
+                  send: MyPageAction.dismissDetail
+                ),
+                content: {
+                  switch viewStore.sheetChoice {
+                  case .myInfoView:
+                    MyInfoView(store: .init(
+                      initialState: MyInfoState(),
+                      reducer: myInfoReducer,
+                      environment: MyInfoEnvironment())
+                    )
+                  case .blockHistoryView:
+                    MyBlockHistoryView(store: .init(
+                      initialState: MyBlockHistoryState(),
+                      reducer: myBlockHistoryReducer,
+                      environment: MyBlockHistoryEnvironment())
+                    )
+                  case .noticeView:
+                    NoticeView(store: .init(
+                      initialState: NoticeState(),
+                      reducer: noticeReducer,
+                      environment: NoticeEnvironment()))
+                    
+                  case .myTermsOfServiceView:
+                    MyTermsOfServiceView(store: .init(
+                      initialState: MyTermsOfServiceState(),
+                      reducer: myTermsOfServiceReducer,
+                      environment: MyTermsOfServiceEnvironment()))
+                    
+                  case .csCenterView:
+                    CsCenterView()
+                  default:
+                    CsCenterView()
+                  }
+                })
+          }
+          .listStyle(.plain)
         }
-        
-        List {
-          MypageRow(imageName: "myInfo", title: "내 정보")
-          MypageRow(imageName: "alarm", title: "알림설정", toggleVisible: true, togglePressed: viewStore.isAppAlarmOn)
-          MypageRow(imageName: "block", title: "차단 이력")
-          MypageRow(imageName: "info", title: "공지사항")
-          MypageRow(imageName: "terms", title: "이용약관")
-          MypageRow(imageName: "center", title: "고객센터")
-          MypageRow(imageName: "version", title: "버전 정보", version: viewStore.appVersion)
-        }
-        .listStyle(.plain)
+        .navigationBarTitle("", displayMode: .inline)
+        .navigationBarHidden(true)
       }
     }
   }
