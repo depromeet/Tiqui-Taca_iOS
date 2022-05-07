@@ -339,14 +339,6 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		F2F1ED7828198F6B00AC4FDD /* WebView */ = {
-			isa = PBXGroup;
-			children = (
-				F2127643281191A800FB568D /* WebView.swift */,
-			);
-			path = WebView;
-			sourceTree = "<group>";
-		};
 		F2F1ED79281C3B6000AC4FDD /* Entities */ = {
 			isa = PBXGroup;
 			children = (
@@ -357,13 +349,13 @@
 			path = Entities;
 			sourceTree = "<group>";
 		};
-		F2F1ED84281C6B3700AC4FDD /* OTPView */ = {
+		F2F1ED84281C6B3700AC4FDD /* OTPField */ = {
 			isa = PBXGroup;
 			children = (
-				F993ADC82816C79C00718E9F /* OTPFieldCore.swift */,
 				F2F1ED82281C6B2F00AC4FDD /* OTPFieldView.swift */,
+				F993ADC82816C79C00718E9F /* OTPFieldCore.swift */,
 			);
-			path = OTPView;
+			path = OTPField;
 			sourceTree = "<group>";
 		};
 		F2F1ED8A281E62A900AC4FDD /* PhoneVerification */ = {
@@ -393,12 +385,22 @@
 			path = VerificationNumberCheck;
 			sourceTree = "<group>";
 		};
+		F2F1EDA92826D51200AC4FDD /* TOSFieldList */ = {
+			isa = PBXGroup;
+			children = (
+				F212763F280FE07500FB568D /* TOSFieldListView.swift */,
+				F21276452811C6D500FB568D /* TOSFieldListViewCore.swift */,
+			);
+			path = TOSFieldList;
+			sourceTree = "<group>";
+		};
 		F2FDA211280BAF2200B2ED75 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				F2F1ED7828198F6B00AC4FDD /* WebView */,
+				F2F1EDA92826D51200AC4FDD /* TOSFieldList */,
 				F2F1ED8A281E62A900AC4FDD /* PhoneVerification */,
-				F2F1ED84281C6B3700AC4FDD /* OTPView */,
+				F2F1ED84281C6B3700AC4FDD /* OTPField */,
+				F2127643281191A800FB568D /* WebView.swift */,
 				8601F660281393640085F692 /* PageControl.swift */,
 				F2F1ED9A281EDACE00AC4FDD /* PageView.swift */,
 			);
@@ -444,8 +446,6 @@
 		F2FDA226280C0ECC00B2ED75 /* TermsOfService */ = {
 			isa = PBXGroup;
 			children = (
-				F212763F280FE07500FB568D /* TOSFieldListView.swift */,
-				F21276452811C6D500FB568D /* TOSFieldListViewCore.swift */,
 				F2FDA227280C0EE300B2ED75 /* TermsOfServiceView.swift */,
 				F2127641281021C700FB568D /* TermsOfServiceCore.swift */,
 			);

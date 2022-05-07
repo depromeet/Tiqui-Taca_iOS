@@ -12,13 +12,7 @@ struct TermsOfServiceState: Equatable {
     case createProfile
   }
   var route: Route?
-  var tosFieldListState: TOSFieldListViewState = .init(
-    termsOfServiceModels: [
-      .init(description: "서비스 이용약관 동의", isRequired: true, url: URL(string: "https://developer.apple.com/kr/")),
-      .init(description: "개인정보 수집 및 이용 동의", isRequired: true, url: nil),
-      .init(description: "마케팅 SNS 알림 동의", isRequired: false, url: nil)
-    ]
-  )
+  var tosFieldListState: TOSFieldListViewState = .init()
   var createProfileState: CreateProfileState = .init()
 }
 

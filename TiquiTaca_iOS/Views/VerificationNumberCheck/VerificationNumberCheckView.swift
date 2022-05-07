@@ -32,7 +32,7 @@ struct VerificationNumberCheckView: View {
             TermsOfServiceView(store: termsOfServiceStore)
           },
           label: {
-            EmptyView()
+            Text("Next")
           }
         )
       }
