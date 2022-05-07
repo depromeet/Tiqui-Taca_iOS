@@ -68,6 +68,9 @@
 		F981FA1F282604AA0000A531 /* CsCenterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F981FA1E282604AA0000A531 /* CsCenterView.swift */; };
 		F981FA21282653940000A531 /* BlockListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F981FA20282653940000A531 /* BlockListView.swift */; };
 		F981FA23282653A00000A531 /* BlockListCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F981FA22282653A00000A531 /* BlockListCore.swift */; };
+		F981FA2A2826A32A0000A531 /* Pretendard-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = F981FA272826A32A0000A531 /* Pretendard-Medium.otf */; };
+		F981FA2B2826A32A0000A531 /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = F981FA282826A32A0000A531 /* Pretendard-Bold.otf */; };
+		F981FA2C2826A32A0000A531 /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = F981FA292826A32A0000A531 /* Pretendard-SemiBold.otf */; };
 		F993ADC92816C79C00718E9F /* OTPFieldCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F993ADC82816C79C00718E9F /* OTPFieldCore.swift */; };
 		F9B90C9C28117DDF003FFEEB /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B90C9B28117DDF003FFEEB /* AuthService.swift */; };
 /* End PBXBuildFile section */
@@ -165,6 +168,9 @@
 		F981FA1E282604AA0000A531 /* CsCenterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CsCenterView.swift; sourceTree = "<group>"; };
 		F981FA20282653940000A531 /* BlockListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockListView.swift; sourceTree = "<group>"; };
 		F981FA22282653A00000A531 /* BlockListCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockListCore.swift; sourceTree = "<group>"; };
+		F981FA272826A32A0000A531 /* Pretendard-Medium.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Medium.otf"; sourceTree = "<group>"; };
+		F981FA282826A32A0000A531 /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
+		F981FA292826A32A0000A531 /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
 		F993ADC82816C79C00718E9F /* OTPFieldCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPFieldCore.swift; sourceTree = "<group>"; };
 		F9B90C9B28117DDF003FFEEB /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -292,6 +298,7 @@
 		F24B1EF028086DC2003D4E1D /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				F981FA262826A2EC0000A531 /* Fonts */,
 				F2C02C7027F8824C004C4235 /* Assets.xcassets */,
 				F24B1EF22808741B003D4E1D /* Preview Content */,
 				F2FDA215280BBDAC00B2ED75 /* LaunchScreen.storyboard */,
@@ -522,6 +529,16 @@
 			path = CsCenter;
 			sourceTree = "<group>";
 		};
+		F981FA262826A2EC0000A531 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				F981FA282826A32A0000A531 /* Pretendard-Bold.otf */,
+				F981FA272826A32A0000A531 /* Pretendard-Medium.otf */,
+				F981FA292826A32A0000A531 /* Pretendard-SemiBold.otf */,
+			);
+			path = Fonts;
+			sourceTree = "<group>";
+		};
 		F99EA7642810351300E31935 /* SignIn */ = {
 			isa = PBXGroup;
 			children = (
@@ -620,9 +637,12 @@
 			files = (
 				F24B1EEF28086CA0003D4E1D /* .swiftlint.yml in Resources */,
 				F2C02C7427F8824C004C4235 /* Preview Assets.xcassets in Resources */,
+				F981FA2B2826A32A0000A531 /* Pretendard-Bold.otf in Resources */,
+				F981FA2C2826A32A0000A531 /* Pretendard-SemiBold.otf in Resources */,
 				F2F1ED6F2817ABE900AC4FDD /* GoogleService-Info.plist in Resources */,
 				F2FDA216280BBDAC00B2ED75 /* LaunchScreen.storyboard in Resources */,
 				F2C02C7127F8824C004C4235 /* Assets.xcassets in Resources */,
+				F981FA2A2826A32A0000A531 /* Pretendard-Medium.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
