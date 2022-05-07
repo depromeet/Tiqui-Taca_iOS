@@ -5,24 +5,23 @@
 //  Created by 김록원 on 2022/04/23.
 //
 
-import Foundation
 import ComposableArchitecture
 
 struct OnboardingState: Equatable {
-	var currentPage: Int = 0
-  var isSignInViewPresent: Bool = false
-  var isSignUpViewPresent: Bool = false
-  
+  enum Route {
+    case signIn
+    case signUp
+  }
+  var route: Route?
+  var currentPage: Int = 0
   var signInState: SignInState = .init()
   var signUpState: SignUpState = .init()
 }
 
 enum OnboardingAction: Equatable {
-	case pageControlTapped(Int)
-	case onboardingPageSwipe(Int)
-  case setIsSignInViewPresent(Bool)
-  case setIsSignUpViewPresent(Bool)
-  
+  case setRoute(OnboardingState.Route?)
+  case pageControlTapped(Int)
+  case onboardingPageSwipe(Int)
   case signInAction(SignInAction)
   case signUpAction(SignUpAction)
 }
@@ -80,17 +79,12 @@ let onBoardingCore = Reducer<
     return .none
   case .signUpAction:
     return .none
-  case let .setIsSignInViewPresent(isPresent):
-    if !isPresent {
+  case let .setRoute(selectedRoute):
+    if selectedRoute == nil {
       state.signInState = .init()
-    }
-    state.isSignInViewPresent = isPresent
-    return .none
-  case let .setIsSignUpViewPresent(isPresent):
-    if !isPresent {
       state.signUpState = .init()
     }
-    state.isSignUpViewPresent = isPresent
+    state.route = selectedRoute
     return .none
   }
 }

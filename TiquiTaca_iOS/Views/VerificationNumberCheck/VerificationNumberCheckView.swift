@@ -20,30 +20,40 @@ struct VerificationNumberCheckView: View {
             .font(.caption2)
         }
         
-        OTPFieldView(
-          store: store.scope(
-            state: \.otpFieldState,
-            action: VerificationNumberCheckAction.otpFieldAction
-          )
-        )
+        OTPFieldView(store: otpFieldStore)
         
         NavigationLink(
-          isActive: viewStore.binding(
-            get: \.isTermsOfServiceViewPresent,
-            send: VerificationNumberCheckAction.setIsTermsOfServiceViewPresent
-          ), destination: {
-            TermsOfServiceView(
-              store: store.scope(
-                state: \.termsOfServiceState,
-                action: VerificationNumberCheckAction.termsOfServiceAction
-              )
-            )
-          }, label: {
+          tag: VerificationNumberCheckState.Route.termsOfService,
+          selection: viewStore.binding(
+            get: \.route,
+            send: VerificationNumberCheckAction.setRoute
+          ),
+          destination: {
+            TermsOfServiceView(store: termsOfServiceStore)
+          },
+          label: {
             EmptyView()
           }
         )
       }
     }
+  }
+}
+
+// MARK: - Store init
+extension VerificationNumberCheckView {
+  private var otpFieldStore: Store<OTPFieldState, OTPFieldAction> {
+    return store.scope(
+      state: \.otpFieldState,
+      action: VerificationNumberCheckAction.otpFieldAction
+    )
+  }
+  
+  private var termsOfServiceStore: Store<TermsOfServiceState, TermsOfServiceAction> {
+    return store.scope(
+      state: \.termsOfServiceState,
+      action: VerificationNumberCheckAction.termsOfServiceAction
+    )
   }
 }
 

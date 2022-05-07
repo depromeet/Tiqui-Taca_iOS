@@ -75,7 +75,7 @@ struct TOSFieldListView_Previews: PreviewProvider {
           ]
         ),
         reducer: tosFieldListViewReducer,
-        environment: TOSFieldListViewEnvironment()
+        environment: Void()
       )
     )
   }

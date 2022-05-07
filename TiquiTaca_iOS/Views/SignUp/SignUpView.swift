@@ -19,34 +19,44 @@ struct SignUpView: View {
         VStack(alignment: .leading, spacing: 10) {
           Text("회원가입을 위해\n휴대폰 번호를 인증해주세요!")
           Text("최초 인증과 티키타카의 회원이 되기 위해 필요해요.")
-          PhoneVerificationView(
-            store: store.scope(
-              state: \.phoneVerficationState,
-              action: SignUpAction.phoneVerficationAction
-            )
-          )
+          PhoneVerificationView(store: phoneVerificationStore)
         }
         .padding(20)
         
         Spacer()
         
         NavigationLink(
-          isActive: viewStore.binding(
-            get: \.isNextViewPresent,
-            send: { SignUpAction.setIsNextViewPresent($0) }
-          ), destination: {
-            VerificationNumberCheckView(
-              store: store.scope(
-                state: \.verificationNumberCheckState,
-                action: SignUpAction.verificationNumberCheckAction
-              )
-            )
-          }, label: {
+          tag: SignUpState.Route.verificationNumberCheck,
+          selection: viewStore.binding(
+            get: \.route,
+            send: SignUpAction.setRoute
+          ),
+          destination: {
+            VerificationNumberCheckView(store: verificationNumberCheckStore)
+          },
+          label: {
             EmptyView()
           }
         )
       }
     }
+  }
+}
+
+// MARK: - Store init
+extension SignUpView {
+  private var phoneVerificationStore: Store<PhoneVerificationState, PhoneVerificationAction> {
+    return store.scope(
+      state: \.phoneVerficationState,
+      action: SignUpAction.phoneVerficationAction
+    )
+  }
+  
+  private var verificationNumberCheckStore: Store<VerificationNumberCheckState, VerificationNumberCheckAction> {
+    return store.scope(
+      state: \.verificationNumberCheckState,
+      action: SignUpAction.verificationNumberCheckAction
+    )
   }
 }
 

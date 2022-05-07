@@ -8,7 +8,11 @@
 import ComposableArchitecture
 
 struct TermsOfServiceState: Equatable {
-  var tosFieldListView: TOSFieldListViewState = .init(
+  enum Route {
+    case createProfile
+  }
+  var route: Route?
+  var tosFieldListState: TOSFieldListViewState = .init(
     termsOfServiceModels: [
       .init(description: "서비스 이용약관 동의", isRequired: true, url: URL(string: "https://developer.apple.com/kr/")),
       .init(description: "개인정보 수집 및 이용 동의", isRequired: true, url: nil),
@@ -19,8 +23,8 @@ struct TermsOfServiceState: Equatable {
 }
 
 enum TermsOfServiceAction: Equatable {
-  case agreeAndGetStartedTapped
-  case tosFieldListView(TOSFieldListViewAction)
+  case setRoute(TermsOfServiceState.Route?)
+  case tosFieldListAction(TOSFieldListViewAction)
   case createProfileAction(CreateProfileAction)
 }
 
@@ -36,10 +40,19 @@ let termsOfServiceReducer = Reducer<
 >.combine([
   tosFieldListViewReducer
     .pullback(
-      state: \.tosFieldListView,
-      action: /TermsOfServiceAction.tosFieldListView,
-      environment: { _ in
-        TOSFieldListViewEnvironment()
+      state: \.tosFieldListState,
+      action: /TermsOfServiceAction.tosFieldListAction,
+      environment: { _ in Void() }
+    ),
+  createProfileReducer
+    .pullback(
+      state: \.createProfileState,
+      action: /TermsOfServiceAction.createProfileAction,
+      environment: {
+        CreateProfileEnvironment(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
+        )
       }
     ),
   termsOfServiceReducerCore
@@ -49,13 +62,17 @@ let termsOfServiceReducerCore = Reducer<
   TermsOfServiceState,
   TermsOfServiceAction,
   TermsOfServiceEnvironment
-> { state, action, environment in
+> { state, action, _ in
   switch action {
-  case .agreeAndGetStartedTapped:
-    return .none
-  case .tosFieldListView:
+  case .tosFieldListAction:
     return .none
   case .createProfileAction:
+    return .none
+  case let .setRoute(selectedRoute):
+    if selectedRoute == nil {
+      state.createProfileState = .init()
+    }
+    state.route = selectedRoute
     return .none
   }
 }

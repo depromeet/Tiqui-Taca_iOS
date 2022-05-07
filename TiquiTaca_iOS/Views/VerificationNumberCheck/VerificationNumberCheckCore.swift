@@ -9,19 +9,22 @@ import ComposableArchitecture
 import TTNetworkModule
 
 struct VerificationNumberCheckState: Equatable {
+  enum Route {
+    case termsOfService
+    case main
+  }
+  var route: Route?
   var phoneNumber: String = ""
   var expireMinute: Int = 0
   var certificationCode: String = ""
-  var isTermsOfServiceViewPresent: Bool = false
   var isLoginSuccess: Bool = false
-  
   var otpFieldState: OTPFieldState = .init()
   var termsOfServiceState: TermsOfServiceState = .init()
   var mainTabState: MainTabState = .init()
 }
 
 enum VerificationNumberCheckAction: Equatable {
-  case setIsTermsOfServiceViewPresent(Bool)
+  case setRoute(VerificationNumberCheckState.Route?)
   case compareVerficationNumberResponse(Result<VerificationEntity.Response?, HTTPError>)
   case otpFieldAction(OTPFieldAction)
   case termsOfServiceAction(TermsOfServiceAction)
@@ -79,9 +82,9 @@ let verificationNumberCheckCore = Reducer<
     guard let response = response else { return .none }
     if let tempToken = response.tempToken {
       try? TokenManager.shared.saveTempToken(tempToken)
-      return Effect(value: .setIsTermsOfServiceViewPresent(true))
+      return Effect(value: .setRoute(.termsOfService))
     }
-
+    
     return .none
   case .compareVerficationNumberResponse(.failure):
     return .none
@@ -101,8 +104,11 @@ let verificationNumberCheckCore = Reducer<
     return .none
   case .otpFieldAction:
     return .none
-  case let .setIsTermsOfServiceViewPresent(isPresent):
-    state.isTermsOfServiceViewPresent = isPresent
+  case let .setRoute(selectedRoute):
+    if selectedRoute == nil {
+      state.termsOfServiceState = .init()
+    }
+    state.route = selectedRoute
     return .none
   }
 }

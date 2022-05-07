@@ -15,7 +15,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
     let rootView = OnboardingView(
       store: .init(
-        initialState: OnboardingState(currentPage: 0),
+        initialState: OnboardingState(),
         reducer: onBoardingReducer,
         environment: OnboardingEnvironment(
           appService: appService,

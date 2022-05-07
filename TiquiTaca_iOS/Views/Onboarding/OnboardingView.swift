@@ -46,33 +46,29 @@ struct OnboardingView: View {
           
           VStack(spacing: 24) {
             NavigationLink(
-              isActive: viewStore.binding(
-                get: \.isSignInViewPresent,
-                send: OnboardingAction.setIsSignInViewPresent
-              ), destination: {
-                SignInView(
-                  store: store.scope(
-                    state: \.signInState,
-                    action: OnboardingAction.signInAction
-                  )
-                )
-              }, label: {
+              tag: OnboardingState.Route.signIn,
+              selection: viewStore.binding(
+                get: \.route,
+                send: OnboardingAction.setRoute
+              ),
+              destination: {
+                SignInView(store: signInStore)
+              },
+              label: {
                 Text("이미 계정이 있다면? ") + Text("로그인").fontWeight(.heavy)
               }
             )
             
             NavigationLink(
-              isActive: viewStore.binding(
-                get: \.isSignUpViewPresent,
-                send: OnboardingAction.setIsSignUpViewPresent
-              ), destination: {
-                SignUpView(
-                  store: store.scope(
-                    state: \.signUpState,
-                    action: OnboardingAction.signUpAction
-                  )
-                )
-              }, label: {
+              tag: OnboardingState.Route.signUp,
+              selection: viewStore.binding(
+                get: \.route,
+                send: OnboardingAction.setRoute
+              ),
+              destination: {
+                SignUpView(store: signUpStore)
+              },
+              label: {
                 Text("시작하기")
                   .frame(maxWidth: .infinity, minHeight: 56, maxHeight: 56)
                   .foregroundColor(.white)
@@ -88,6 +84,23 @@ struct OnboardingView: View {
         .padding(.bottom, 24)
       }
     }
+  }
+}
+
+// MARK: - Store init
+extension OnboardingView {
+  private var signInStore: Store<SignInState, SignInAction> {
+    return store.scope(
+      state: \.signInState,
+      action: OnboardingAction.signInAction
+    )
+  }
+  
+  private var signUpStore: Store<SignUpState, SignUpAction> {
+    return store.scope(
+      state: \.signUpState,
+      action: OnboardingAction.signUpAction
+    )
   }
 }
 

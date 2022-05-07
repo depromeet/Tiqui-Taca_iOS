@@ -18,34 +18,44 @@ struct SignInView: View {
         VStack(alignment: .leading, spacing: 10) {
           Text("로그인을 위해\n휴대폰 번호를 인증해주세요!")
           Text("휴대폰 번호로 간편하게 로그인해보세요.")
-          PhoneVerificationView(
-            store: store.scope(
-              state: \.phoneVerficationState,
-              action: SignInAction.phoneVerficationAction
-            )
-          )
+          PhoneVerificationView(store: phoneVerificationStore)
         }
         .padding(20)
         
         Spacer()
         
         NavigationLink(
-          isActive: viewStore.binding(
-            get: \.isVerificationNumberCheckViewPresent,
-            send: SignInAction.setIsVerificationNumberCheckViewPresent
-          ), destination: {
-            VerificationNumberCheckView(
-              store: store.scope(
-                state: \.verificationNumberCheckState,
-                action: SignInAction.verificationNumberCheckAction
-              )
-            )
-          }, label: {
+          tag: SignInState.Route.verificationNumberCheck,
+          selection: viewStore.binding(
+            get: \.route,
+            send: SignInAction.setRoute
+          ),
+          destination: {
+            VerificationNumberCheckView(store: verificationNumberCheckStore)
+          },
+          label: {
             EmptyView()
           }
         )
       }
     }
+  }
+}
+
+// MARK: - Store init
+extension SignInView {
+  private var phoneVerificationStore: Store<PhoneVerificationState, PhoneVerificationAction> {
+    return store.scope(
+      state: \.phoneVerficationState,
+      action: SignInAction.phoneVerficationAction
+    )
+  }
+  
+  private var verificationNumberCheckStore: Store<VerificationNumberCheckState, VerificationNumberCheckAction> {
+    return store.scope(
+      state: \.verificationNumberCheckState,
+      action: SignInAction.verificationNumberCheckAction
+    )
   }
 }
 

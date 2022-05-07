@@ -9,18 +9,19 @@ import ComposableArchitecture
 import TTNetworkModule
 
 struct SignUpState: Equatable {
+  enum Route {
+    case verificationNumberCheck
+  }
+  var route: Route?
   var phoneNumber: String = ""
   var verificationCode: String = ""
-  var isNextViewPresent = false
   var expireMinute: Int = 0
-  
   var verificationNumberCheckState: VerificationNumberCheckState = .init()
   var phoneVerficationState: PhoneVerificationState = .init()
 }
 
 enum SignUpAction: Equatable {
-  case setIsNextViewPresent(Bool)
-  
+  case setRoute(SignUpState.Route?)
   case verificationNumberCheckAction(VerificationNumberCheckAction)
   case phoneVerficationAction(PhoneVerificationAction)
 }
@@ -64,16 +65,19 @@ let signUpCore = Reducer<
   SignUpState,
   SignUpAction,
   SignUpEnvironment
-> { state, action, environment in
+> { state, action, _ in
   switch action {
-  case let .setIsNextViewPresent(isNextViewPresent):
-    state.isNextViewPresent = isNextViewPresent
-    return .none
   case .verificationNumberCheckAction:
     return .none
   case .phoneVerficationAction(.phoneNumberRequestSuccess):
-    return Effect(value: .setIsNextViewPresent(true))
+    return Effect(value: .setRoute(.verificationNumberCheck))
   case .phoneVerficationAction:
-    return.none
+    return .none
+  case let .setRoute(selectedRoute):
+    if selectedRoute == nil {
+      state.verificationNumberCheckState = .init()
+    }
+    state.route = selectedRoute
+    return .none
   }
 }

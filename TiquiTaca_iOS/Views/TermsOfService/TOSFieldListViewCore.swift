@@ -21,13 +21,11 @@ enum TOSFieldListViewAction: Equatable {
   case allCheck
 }
 
-struct TOSFieldListViewEnvironment { }
-
 let tosFieldListViewReducer = Reducer<
   TOSFieldListViewState,
   TOSFieldListViewAction,
-  TOSFieldListViewEnvironment
-> { state, action, environment in
+  Void
+> { state, action, _ in
   switch action {
   case .selectDetail:
     state.isDetailPresented = true

@@ -26,7 +26,7 @@ struct TermsOfServiceView: View {
         .frame(alignment: .leading)
         
         Button {
-          viewStore.send(.tosFieldListView(.allCheck))
+          viewStore.send(.tosFieldListAction(.allCheck))
         } label: {
           HStack {
             Image(systemName: "checkmark.circle.fill")
@@ -44,39 +44,54 @@ struct TermsOfServiceView: View {
           )
         }
         
-        TOSFieldListView(
-          store: store.scope(
-            state: \.tosFieldListView,
-            action: TermsOfServiceAction.tosFieldListView
-          )
-        )
+        TOSFieldListView(store: tosFieldListStore)
         
         Spacer()
         
-        NavigationLink {
-          CreateProfileView(
-            store: store.scope(
-              state: \.createProfileState,
-              action: TermsOfServiceAction.createProfileAction
-            )
-          )
-        } label: {
-          Button {
-            viewStore.send(.agreeAndGetStartedTapped)
-          } label: {
-            Text("동의하고 시작하기")
-              .frame(maxWidth: .infinity, maxHeight: 56)
-              .background(Color.gray)
-              .foregroundColor(Color.white)
-              .font(.system(size: 16, weight: .bold, design: .default))
-              .cornerRadius(16)
+        NavigationLink(
+          tag: TermsOfServiceState.Route.createProfile,
+          selection: viewStore.binding(
+            get: \.route,
+            send: TermsOfServiceAction.setRoute
+          ),
+          destination: {
+            CreateProfileView(store: createProfileStore)
+          },
+          label: {
+            Button {
+              viewStore.send(.setRoute(.createProfile))
+            } label: {
+              Text("동의하고 시작하기")
+                .frame(maxWidth: .infinity, maxHeight: 56)
+                .background(Color.gray)
+                .foregroundColor(Color.white)
+                .font(.system(size: 16, weight: .bold, design: .default))
+                .cornerRadius(16)
+            }
+            .disabled(viewStore.tosFieldListState.isAllRequiredCheckDone)
           }
-          .disabled(viewStore.tosFieldListView.isAllRequiredCheckDone)
-        }
+        )
       }
       .padding(.leading, 23)
       .padding(.trailing, 23)
     }
+  }
+}
+
+// MARK: - Store init
+extension TermsOfServiceView {
+  private var createProfileStore: Store<CreateProfileState, CreateProfileAction> {
+    return store.scope(
+      state: \.createProfileState,
+      action: TermsOfServiceAction.createProfileAction
+    )
+  }
+  
+  private var tosFieldListStore: Store<TOSFieldListViewState, TOSFieldListViewAction> {
+    return store.scope(
+      state: \.tosFieldListState,
+      action: TermsOfServiceAction.tosFieldListAction
+    )
   }
 }
 
