@@ -26,6 +26,22 @@ struct VerificationNumberCheckView: View {
             action: VerificationNumberCheckAction.otpFieldAction
           )
         )
+        
+        NavigationLink(
+          isActive: viewStore.binding(
+            get: \.isTermsOfServiceViewPresent,
+            send: VerificationNumberCheckAction.setIsTermsOfServiceViewPresent
+          ), destination: {
+            TermsOfServiceView(
+              store: store.scope(
+                state: \.termsOfServiceState,
+                action: VerificationNumberCheckAction.termsOfServiceAction
+              )
+            )
+          }, label: {
+            EmptyView()
+          }
+        )
       }
     }
   }
@@ -38,7 +54,7 @@ struct VerificationNumberCheckView_Previews: PreviewProvider {
         initialState: .init(),
         reducer: verificationNumberCheckReducer,
         environment: VerificationNumberCheckEnvironment(
-          authService: AuthService(),
+          appService: .init(),
           mainQueue: .main
         )
       )

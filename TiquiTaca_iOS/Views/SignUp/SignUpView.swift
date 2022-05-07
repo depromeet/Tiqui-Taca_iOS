@@ -57,7 +57,7 @@ struct SignUpView_Previews: PreviewProvider {
         initialState: SignUpState(),
         reducer: signUpReducer,
         environment: SignUpEnvironment(
-          authService: .init(),
+          appService: .init(),
           mainQueue: .main
         )
       )

@@ -6,7 +6,6 @@
 //
 
 import ComposableArchitecture
-import TTNetworkModule
 import SwiftUI
 
 struct SignInView: View {
@@ -57,7 +56,7 @@ struct SignInView_Previews: PreviewProvider {
         initialState: SignInState(),
         reducer: signInReducer,
         environment: SignInEnvironment(
-          authService: .init(),
+          appService: .init(),
           mainQueue: .main
         )
       )

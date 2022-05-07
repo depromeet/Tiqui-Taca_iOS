@@ -26,7 +26,7 @@ enum SignInAction: Equatable {
 }
 
 struct SignInEnvironment {
-  var authService: AuthService
+  var appService: AppService
   var mainQueue: AnySchedulerOf<DispatchQueue>
 }
 
@@ -41,8 +41,8 @@ let signInReducer = Reducer<
       action: /SignInAction.verificationNumberCheckAction,
       environment: {
         VerificationNumberCheckEnvironment(
-          authService: $0.authService,
-          mainQueue: .main
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
         )
       }
     ),
@@ -52,8 +52,8 @@ let signInReducer = Reducer<
       action: /SignInAction.phoneVerficationAction,
       environment: {
         PhoneVerificationEnvironment(
-          authService: $0.authService,
-          mainQueue: .main
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
         )
       }
     ),
@@ -72,6 +72,8 @@ let signInCore = Reducer<
   case .verificationNumberCheckAction:
     return .none
   case .phoneVerficationAction(.phoneNumberRequestSuccess):
+    state.verificationNumberCheckState.phoneNumber = state.phoneVerficationState.phoneNumber
+    state.verificationNumberCheckState.expireMinute = state.phoneVerficationState.expireMinute
     return Effect(value: .setIsVerificationNumberCheckViewPresent(true))
   case .phoneVerficationAction:
     return.none

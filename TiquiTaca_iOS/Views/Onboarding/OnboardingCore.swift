@@ -28,7 +28,7 @@ enum OnboardingAction: Equatable {
 }
 
 struct OnboardingEnvironment {
-  let authService: AuthService
+  let appService: AppService
   let mainQueue: AnySchedulerOf<DispatchQueue>
 }
 
@@ -43,8 +43,8 @@ let onBoardingReducer = Reducer<
       action: /OnboardingAction.signInAction,
       environment: {
         SignInEnvironment(
-          authService: $0.authService,
-          mainQueue: .main
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
         )
       }
     ),
@@ -54,8 +54,8 @@ let onBoardingReducer = Reducer<
       action: /OnboardingAction.signUpAction,
       environment: {
         SignUpEnvironment(
-          authService: $0.authService,
-          mainQueue: .main
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
         )
       }
     ),

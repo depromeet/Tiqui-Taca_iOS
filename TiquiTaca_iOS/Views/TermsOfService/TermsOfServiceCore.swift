@@ -15,14 +15,18 @@ struct TermsOfServiceState: Equatable {
       .init(description: "마케팅 SNS 알림 동의", isRequired: false, url: nil)
     ]
   )
+  var createProfileState: CreateProfileState = .init()
 }
 
 enum TermsOfServiceAction: Equatable {
   case agreeAndGetStartedTapped
   case tosFieldListView(TOSFieldListViewAction)
+  case createProfileAction(CreateProfileAction)
 }
 
 struct TermsOfServiceEnvironment {
+  let appService: AppService
+  let mainQueue: AnySchedulerOf<DispatchQueue>
 }
 
 let termsOfServiceReducer = Reducer<
@@ -50,6 +54,8 @@ let termsOfServiceReducerCore = Reducer<
   case .agreeAndGetStartedTapped:
     return .none
   case .tosFieldListView:
+    return .none
+  case .createProfileAction:
     return .none
   }
 }

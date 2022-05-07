@@ -26,7 +26,7 @@ enum SignUpAction: Equatable {
 }
 
 struct SignUpEnvironment {
-  var authService: AuthService
+  var appService: AppService
   var mainQueue: AnySchedulerOf<DispatchQueue>
 }
 
@@ -41,8 +41,8 @@ let signUpReducer = Reducer<
       action: /SignUpAction.verificationNumberCheckAction,
       environment: {
         VerificationNumberCheckEnvironment(
-          authService: $0.authService,
-          mainQueue: .main
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
         )
       }
     ),
@@ -52,8 +52,8 @@ let signUpReducer = Reducer<
       action: /SignUpAction.phoneVerficationAction,
       environment: {
         PhoneVerificationEnvironment(
-          authService: $0.authService,
-          mainQueue: .main
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
         )
       }
     ),

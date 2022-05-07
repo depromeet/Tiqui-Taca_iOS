@@ -10,15 +10,15 @@ import SwiftUI
 
 final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   var window: UIWindow?
+  private let appService = AppService()
   
   func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-    // Create the SwiftUI view that provides the window contents.
     let rootView = OnboardingView(
       store: .init(
         initialState: OnboardingState(currentPage: 0),
         reducer: onBoardingReducer,
         environment: OnboardingEnvironment(
-          authService: .init(),
+          appService: appService,
           mainQueue: .main
         )
       )

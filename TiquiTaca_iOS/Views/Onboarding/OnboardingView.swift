@@ -84,6 +84,7 @@ struct OnboardingView: View {
           .padding(.horizontal, 16)
         }
         .navigationBarTitleDisplayMode(.inline)
+        .navigationViewStyle(StackNavigationViewStyle())
         .padding(.bottom, 24)
       }
     }
@@ -97,7 +98,7 @@ struct OnboardingView_Previews: PreviewProvider {
         initialState: OnboardingState(),
         reducer: onBoardingReducer,
         environment: OnboardingEnvironment(
-          authService: .init(),
+          appService: .init(),
           mainQueue: .main
         )
       )
