@@ -21,6 +21,7 @@ struct BlockUser: Equatable, Identifiable {
 
 enum MyBlockHistoryAction: Equatable {
   case releaseBlock(String)
+  case popupPresent
 }
 
 struct MyBlockHistoryEnvironment {
@@ -33,6 +34,8 @@ let myBlockHistoryReducer = Reducer<
 > { state, action, _ in
   switch action {
   case let .releaseBlock(id):
+    return .none
+  case .popupPresent:
     return .none
   }
 }

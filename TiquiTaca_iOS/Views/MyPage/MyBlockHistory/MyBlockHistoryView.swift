@@ -10,12 +10,21 @@ import ComposableArchitecture
 
 struct MyBlockHistoryView: View {
   let store: Store<MyBlockHistoryState, MyBlockHistoryAction>
+  @Environment(\.presentationMode) var presentationMode
   
   var body: some View {
     WithViewStore(self.store) { viewStore in
       VStack(alignment: .leading) {
-        Text("차단 이력")
-          .padding(EdgeInsets(top: 28, leading: .spacing24, bottom: 22, trailing: 0))
+        HStack {
+          Text("차단 이력")
+          Spacer()
+          Button {
+            presentationMode.wrappedValue.dismiss()
+          } label: {
+            Image("idelete")
+          }
+        }
+        .padding(EdgeInsets(top: 28, leading: .spacing24, bottom: 22, trailing: .spacing24))
         
         Text("상대방을 차단하면 상대방의 활동 뿐만 아니라,\n회원님의 활동도 상대방에게 더 이상 보이지 않게 됩니다.")
           .padding([.leading, .trailing], .spacing24)

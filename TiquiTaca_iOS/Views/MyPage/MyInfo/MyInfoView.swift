@@ -10,19 +10,27 @@ import ComposableArchitecture
 
 struct MyInfoView: View {
   let store: Store<MyInfoState, MyInfoAction>
+  @Environment(\.presentationMode) var presentationMode
   
   var body: some View {
     NavigationView {
       WithViewStore(self.store) { viewStore in
-        VStack(alignment: .leading, spacing: 12) {
-          Text("내 정보")
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding(.leading, .spacing24)
+        VStack(alignment: .leading, spacing: .spacing12) {
+          HStack {
+            Text("내 정보")
+            Spacer()
+            Button {
+              presentationMode.wrappedValue.dismiss()
+            } label: {
+              Image("idelete")
+            }
+          }
+          .padding(EdgeInsets(top: 28, leading: .spacing24, bottom: 22, trailing: .spacing24))
           
           Text("회원 정보")
             .padding(.leading, .spacing24)
           
-          VStack(alignment: .leading, spacing: 12) {
+          VStack(alignment: .leading, spacing: .spacing12) {
             MyInfoRow(
               title: "닉네임",
               description: viewStore.nickName,
@@ -39,6 +47,7 @@ struct MyInfoView: View {
           }
           .background(Color.white50)
           
+          
           Text("로그인 관리")
             .padding(.leading, .spacing24)
           VStack(alignment: .leading) {
@@ -47,14 +56,14 @@ struct MyInfoView: View {
             } label: {
               Text("로그아웃")
             }
-            .padding(EdgeInsets(top: 12, leading: 24, bottom: 12, trailing: 24))
+            .padding(EdgeInsets(top: .spacing12, leading: .spacing24, bottom: .spacing12, trailing: .spacing24))
             
             Button {
               viewStore.send(.withDrawalAction)
             } label: {
               Text("탈퇴하기")
             }
-            .padding(EdgeInsets(top: 12, leading: 24, bottom: 12, trailing: 24))
+            .padding(EdgeInsets(top: .spacing12, leading: .spacing24, bottom: .spacing12, trailing: .spacing24))
           }
           .background(Color.white50)
           
@@ -74,7 +83,9 @@ struct MyInfoRow: View {
   var body: some View {
     HStack {
       Text(title)
+        .foregroundColor(.white800)
       Text(description)
+      Spacer()
       Button {
         $buttonPressed
       } label: {
