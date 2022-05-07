@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import TTDesignSystemModule
 
 struct MyTermsOfServiceView: View {
   let store: Store<MyTermsOfServiceState, MyTermsOfServiceAction>
@@ -17,7 +18,11 @@ struct MyTermsOfServiceView: View {
       VStack(alignment: .leading) {
         HStack {
           Text("이용약관")
+            .font(.H1)
+            .foregroundColor(.black800)
+          
           Spacer()
+          
           Button {
             presentationMode.wrappedValue.dismiss()
           } label: {
@@ -27,6 +32,8 @@ struct MyTermsOfServiceView: View {
         .padding(EdgeInsets(top: 28, leading: .spacing24, bottom: 22, trailing: .spacing24))
         
         Text("티키타카 서비스 이용을 위한 약관 모음")
+          .font(.B2)
+          .foregroundColor(.white800)
           .padding(.leading, .spacing24)
         
         List {
@@ -48,6 +55,8 @@ struct MyTermsRow: View {
   var body: some View {
     HStack {
       Text(title)
+        .font(.B1)
+        .foregroundColor(.black900)
       Spacer()
       Image("arrow")
     }

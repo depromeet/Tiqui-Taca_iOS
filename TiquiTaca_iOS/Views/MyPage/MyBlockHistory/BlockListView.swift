@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import TTDesignSystemModule
 
 struct BlockListView: View {
   let store: Store<BlockListState, BlockListAction>
@@ -17,13 +18,19 @@ struct BlockListView: View {
         ForEach(viewStore.blockUsers) { blockUser in
           HStack {
             Text(blockUser.nickName)
+              .font(.B1)
+              .foregroundColor(.black900)
+            
             Spacer()
+            
             Button {
               viewStore.send(
                 .selectDetail(blockUser.userId)
               )
             } label: {
               Text("차단 해제")
+                .font(.B7)
+                .foregroundColor(.white800)
             }
             .sheet(
               isPresented: viewStore.binding(

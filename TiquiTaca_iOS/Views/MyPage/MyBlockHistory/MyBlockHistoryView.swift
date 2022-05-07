@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import TTDesignSystemModule
 
 struct MyBlockHistoryView: View {
   let store: Store<MyBlockHistoryState, MyBlockHistoryAction>
@@ -17,7 +18,11 @@ struct MyBlockHistoryView: View {
       VStack(alignment: .leading) {
         HStack {
           Text("차단 이력")
+            .font(.H1)
+            .foregroundColor(.black800)
+          
           Spacer()
+          
           Button {
             presentationMode.wrappedValue.dismiss()
           } label: {
@@ -27,9 +32,13 @@ struct MyBlockHistoryView: View {
         .padding(EdgeInsets(top: 28, leading: .spacing24, bottom: 22, trailing: .spacing24))
         
         Text("상대방을 차단하면 상대방의 활동 뿐만 아니라,\n회원님의 활동도 상대방에게 더 이상 보이지 않게 됩니다.")
+          .font(.B2)
+          .foregroundColor(.white800)
           .padding([.leading, .trailing], .spacing24)
         
         Text("차단한 유저")
+          .font(.Subtitle4)
+          .foregroundColor(.black800)
           .padding(EdgeInsets(top: 28, leading: .spacing24, bottom: 0, trailing: .spacing24))
         
         BlockListView(store: store.scope(

@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import TTDesignSystemModule
 
 struct MyInfoView: View {
   let store: Store<MyInfoState, MyInfoAction>
@@ -18,7 +19,11 @@ struct MyInfoView: View {
         VStack(alignment: .leading, spacing: .spacing12) {
           HStack {
             Text("내 정보")
+              .font(.H1)
+              .foregroundColor(.black800)
+            
             Spacer()
+            
             Button {
               presentationMode.wrappedValue.dismiss()
             } label: {
@@ -28,6 +33,8 @@ struct MyInfoView: View {
           .padding(EdgeInsets(top: 28, leading: .spacing24, bottom: 22, trailing: .spacing24))
           
           Text("회원 정보")
+            .font(.Subtitle4)
+            .foregroundColor(.black800)
             .padding(.leading, .spacing24)
           
           VStack(alignment: .leading, spacing: .spacing12) {
@@ -49,12 +56,17 @@ struct MyInfoView: View {
           
           
           Text("로그인 관리")
+            .font(.Subtitle4)
+            .foregroundColor(.black800)
             .padding(.leading, .spacing24)
+          
           VStack(alignment: .leading) {
             Button {
               viewStore.send(.logoutAction)
             } label: {
               Text("로그아웃")
+                .font(.B1)
+                .foregroundColor(.black900)
             }
             .padding(EdgeInsets(top: .spacing12, leading: .spacing24, bottom: .spacing12, trailing: .spacing24))
             
@@ -62,9 +74,12 @@ struct MyInfoView: View {
               viewStore.send(.withDrawalAction)
             } label: {
               Text("탈퇴하기")
+                .font(.B1)
+                .foregroundColor(.black900)
             }
             .padding(EdgeInsets(top: .spacing12, leading: .spacing24, bottom: .spacing12, trailing: .spacing24))
           }
+          .frame(maxWidth: .infinity)
           .background(Color.white50)
           
           Spacer()
@@ -83,13 +98,20 @@ struct MyInfoRow: View {
   var body: some View {
     HStack {
       Text(title)
+        .font(.B1)
         .foregroundColor(.white800)
+      
       Text(description)
+        .font(.B1)
+        .foregroundColor(.black900)
+      
       Spacer()
       Button {
         $buttonPressed
       } label: {
         Text(buttonPressed ? "완료" : "변경")
+          .font(.Subtitle3)
+          .foregroundColor(.blue800)
       }
       .opacity(buttonVisible ? 1 : 0)
     }

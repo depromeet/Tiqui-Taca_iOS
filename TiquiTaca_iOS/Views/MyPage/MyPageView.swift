@@ -19,7 +19,9 @@ struct MyPageView: View {
         VStack {
           VStack {
             Text("마이페이지")
+              .font(.H1)
               .frame(maxWidth: .infinity, alignment: .leading)
+            
             Image(viewStore.profileImage)
               .overlay(
                 Button {
@@ -31,8 +33,12 @@ struct MyPageView: View {
                   .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
               )
             Text(viewStore.nickName)
+              .font(.H2)
               
             Text("최초가입일 \(viewStore.createdAt) / 티키타카와 +\(viewStore.createDday)일 째")
+              .font(.B7)
+              .foregroundColor(.white900)
+            
             Text("뱃지")
           }
           .padding(.spacing24)
@@ -125,11 +131,17 @@ struct MypageRow: View {
   var body: some View {
     HStack {
       Image(imageName)
+      
       Text(title)
+        .font(.Subtitle3)
+        .foregroundColor(.black900)
+      
       Toggle("", isOn: $togglePressed)
         .toggleStyle(SwitchToggleStyle(tint: .blue900))
         .opacity(toggleVisible ? 1 : 0)
+      
       Text("v. \(version)")
+        .font(.Subtitle3)
         .foregroundColor(.blue900)
         .opacity(version.isEmpty ? 0 : 1)
         .frame(width: version.isEmpty ? 0 : 80)

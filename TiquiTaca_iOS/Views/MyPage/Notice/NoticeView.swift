@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import TTDesignSystemModule
 
 struct NoticeView: View {
   let store: Store<NoticeState, NoticeAction>
@@ -17,6 +18,9 @@ struct NoticeView: View {
       VStack(alignment: .leading) {
         HStack {
           Text("공지사항")
+            .font(.H1)
+            .foregroundColor(.black800)
+          
           Spacer()
           Button {
             presentationMode.wrappedValue.dismiss()
@@ -32,9 +36,10 @@ struct NoticeView: View {
         .padding(.spacing24)
         .listStyle(.plain)
         .overlay(
-          VStack{
+          VStack {
             Image("noNotice")
             Text("곧 공지사항이 추가될 예정이에요!")
+              .font(.B2)
               .foregroundColor(.white900)
           }
             .opacity(viewStore.noticeList.isEmpty ? 1 : 0)
@@ -50,15 +55,19 @@ struct NoticeRow: View {
   var body: some View {
     VStack(alignment: .leading) {
       Text(notice.title)
+        .font(.B1)
+        .foregroundColor(.black900)
         .padding(.bottom, .spacing2)
       
       HStack {
         Text(notice.writer)
+          .font(.B7)
           .foregroundColor(.black100)
         
         Spacer()
         
         Text(notice.date)
+          .font(.B5)
           .foregroundColor(.white800)
       }
     }
