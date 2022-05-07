@@ -30,27 +30,13 @@ struct MyBlockHistoryView: View {
           .padding([.leading, .trailing], .spacing24)
         
         Text("차단한 유저")
-          .padding(EdgeInsets(top: 28, leading: .spacing24, bottom: 0, trailing: .spacing24 ))
-        List(viewStore.blockUsers) { blockUser in
-          BlockHistoryRow(blockUser: blockUser)
-        }
-        .listStyle(.plain)
-      }
-    }
-  }
-}
-
-struct BlockHistoryRow: View {
-  var blockUser: BlockUser
-  
-  var body: some View {
-    HStack {
-      Text(blockUser.nickName)
-      Spacer()
-      Button {
+          .padding(EdgeInsets(top: 28, leading: .spacing24, bottom: 0, trailing: .spacing24))
         
-      } label: {
-        Text("차단 해제")
+        BlockListView(store: store.scope(
+          state: \.blockListView,
+          action: MyBlockHistoryAction.blockListView
+        ))
+        Spacer()
       }
     }
   }
