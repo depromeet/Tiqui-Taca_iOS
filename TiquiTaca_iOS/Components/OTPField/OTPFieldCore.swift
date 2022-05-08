@@ -7,30 +7,12 @@
 
 import ComposableArchitecture
 
-//struct OTPField: Equatable, Identifiable {
-//  var id: Int
-//  var text: String
-//
-//  var isFilled: Bool {
-//    return !text.isEmpty
-//  }
-//}
-
-class OTPField: Equatable, Identifiable {
-  let id: Int
+struct OTPField: Equatable, Identifiable {
+  var id: Int
   var text: String
-
+  
   var isFilled: Bool {
     return !text.isEmpty
-  }
-
-  init(id: Int, text: String) {
-    self.id = id
-    self.text = text
-  }
-
-  static func == (lhs: OTPField, rhs: OTPField) -> Bool {
-    return lhs.id == rhs.id
   }
 }
 
@@ -65,26 +47,19 @@ let otpFieldReducer = Reducer<
   case let .activeField(index, content):
     state.fields[index].text = content
     state.focusedFieldIndex = index
-    
-    if state.fields[index].text.count == 4 {
-      return Effect(value: .lastFieldTrigger)
+    return Effect(value: .checkValue)
+  case .checkValue:
+    if state.fields[state.focusedFieldIndex].text.isEmpty {
+      state.focusedFieldIndex -= 1
+    } else {
+      state.focusedFieldIndex += 1
     }
     
-    return .none
-//    return Effect(value: .checkValue)
-  case .checkValue:
-//    if state.fields[state.focusedFieldIndex].text.isEmpty {
-//      state.focusedFieldIndex -= 1
-//    } else {
-//      state.focusedFieldIndex += 1
-//    }
-    
-//    if state.focusedFieldIndex >= state.fields.count {
-//      return Effect(value: .lastFieldTrigger)
-//    } else {
-//      return .none
-//    }
-    return .none
+    if state.focusedFieldIndex >= state.fields.count {
+      return Effect(value: .lastFieldTrigger)
+    } else {
+      return .none
+    }
   case .lastFieldTrigger:
     return .none
   }
