@@ -55,6 +55,7 @@ struct RoomListCell: View {
 	}
 }
 
+
 // MARK: Popular Mark
 private struct PopularMark: View {
 	let index: Int
@@ -65,12 +66,11 @@ private struct PopularMark: View {
 			.frame(width: 32, height: 32)
 			.overlay(
 				Text("\(index + 1)")
-					.foregroundColor(.black800)
+					.foregroundColor(index + 1 < 4 ? .black800: .black200)
 					.font(.system(size: 18, weight: .semibold, design: .default))
 			)
 	}
 }
-
 
 
 // MARK: Divider

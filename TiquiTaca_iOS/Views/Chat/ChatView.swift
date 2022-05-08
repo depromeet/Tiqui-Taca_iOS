@@ -10,6 +10,12 @@ import SwiftUI
 import ComposableArchitecture
 import TTDesignSystemModule
 
+private struct TabButtonStyle: ButtonStyle {
+	func makeBody(configuration: Configuration) -> some View {
+		configuration.label
+	}
+}
+
 struct ChatView: View {
 	var store: Store<ChatState, ChatAction>
 
@@ -19,19 +25,17 @@ struct ChatView: View {
 	}
 	
 	var body: some View {
-		WithViewStore(self.store) { _ in
+		WithViewStore(self.store) { viewStore in
 			NavigationView {
-				List {
+				VStack(spacing: 0) {
 					CurrentChatView()
-						.hCenter()
-						.background(Color.black800)
-						.listRowSeparator(.hidden)
-						.listRowInsets(EdgeInsets())
-					Section(
-						header: SectionHeader().listRowInsets(EdgeInsets())
-					) {
+					SectionHeader(currentTabIdx: viewStore.binding(
+						get: \.currentTabIdx,
+						send: ChatAction.tabChange
+					))
+					List {
 						ForEach(0..<40) { index in
-							RoomListCell(index: index, type: .popular)
+							RoomListCell(index: index, type: viewStore.state.currentTabIdx == 0 ? .like : .popular)
 								.listRowSeparator(.hidden)
 								.listRowInsets(EdgeInsets())
 						}
@@ -125,16 +129,21 @@ private struct CurrentChatView: View {
 				.padding(.top, 16)
 				.padding(.bottom, 18)
 		}
+			.background(Color.black800)
 	}
 }
 
 
 // MARK: Section Header
 private struct SectionHeader: View {
+	@Binding var currentTabIdx: Int
+	
 	var body: some View {
 		HStack(spacing: 0) {
 			Spacer().frame(width: 10)
+			
 			Button(action: {
+				currentTabIdx = 0
 			}, label: {
 				Text("즐겨찾기")
 					.font(.system(size: 15, weight: .semibold, design: .default))
@@ -149,6 +158,7 @@ private struct SectionHeader: View {
 					alignment: .bottom)
 			
 			Button(action: {
+				currentTabIdx = 1
 			}, label: {
 				Text("인기채팅방")
 					.font(.system(size: 15, weight: .semibold, design: .default))
