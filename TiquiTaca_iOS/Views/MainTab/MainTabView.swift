@@ -23,7 +23,6 @@ struct MainTabView: View {
 			MsgAndNotiTab(store: store)
 			MyPageTab(store: store)
 		}
-		.navigationBarBackButtonHidden(true)
 	}
 }
 

@@ -13,16 +13,28 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   
   func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
     // Create the SwiftUI view that provides the window contents.
-    let rootView = OnboardingView(
-      store: .init(
-        initialState: OnboardingState(currentPage: 0),
-        reducer: onBoardingReducer,
-        environment: OnboardingEnvironment(
-          authService: .init(),
-          mainQueue: .main
-        )
-      )
-    )
+//    let rootView = OnboardingView(
+//      store: .init(
+//        initialState: OnboardingState(currentPage: 0),
+//        reducer: onBoardingReducer,
+//        environment: OnboardingEnvironment(
+//          authService: .init(),
+//          mainQueue: .main
+//        )
+//      )
+//    )
+		
+		let rootView = MainTabView(
+			store: .init(
+				initialState: MainTabState(
+							mapFeature: MapState(),
+							chatFeature: ChatState(),
+							msgAndNotiFeature: MsgAndNotiState(),
+							myPageFeature: MyPageState()
+						),
+				reducer: mainTabReducer,
+				environment: MainTabEnvironment()
+			))
     
     // Use a UIHostingController as window root view controller.
     if let windowScene = scene as? UIWindowScene {
