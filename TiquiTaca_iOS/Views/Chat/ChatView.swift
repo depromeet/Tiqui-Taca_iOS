@@ -30,8 +30,8 @@ struct ChatView: View {
 					Section(
 						header: SectionHeader().listRowInsets(EdgeInsets())
 					) {
-						ForEach(1..<40) { index in
-							RoomListCell(index: index)
+						ForEach(0..<40) { index in
+							RoomListCell(index: index, type: .popular)
 								.listRowSeparator(.hidden)
 								.listRowInsets(EdgeInsets())
 						}
