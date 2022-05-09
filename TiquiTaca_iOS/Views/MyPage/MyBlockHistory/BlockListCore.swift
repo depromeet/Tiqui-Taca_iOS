@@ -9,13 +9,11 @@ import ComposableArchitecture
 
 struct BlockListState: Equatable {
   var blockUsers: [BlockUser]
-  var isPopupPresented = false
-  var unblockUserId: String = ""
 }
 
 enum BlockListAction: Equatable {
-  case selectDetail(String)
-  case dismissBlockDetail
+  case selectUnblockUser(BlockUser)
+  case dismissPopup
 }
 
 struct BlockListEnvironment: Equatable { }
@@ -25,13 +23,5 @@ let blockListReducer = Reducer<
   BlockListAction,
   BlockListEnvironment
 > { state, action, environment in
-  switch action {
-  case .selectDetail(let userId):
-    state.unblockUserId = userId
-    state.isPopupPresented = true
-    return .none
-  case .dismissBlockDetail:
-    state.isPopupPresented = false
-    return .none
-  }
+  return .none
 }

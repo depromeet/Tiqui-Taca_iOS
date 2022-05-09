@@ -14,7 +14,8 @@ struct MyBlockHistoryState: Equatable {
       .init(userId: "2", nickName: "닉네임2", profile: "2"),
     ]
   )
-  var popupPresented: Bool = false
+  var popupPresented = false
+  var unBlockUser: BlockUser = .init(userId: "", nickName: "닉네임~~~", profile: "")
 }
 
 struct BlockUser: Equatable, Identifiable {
@@ -26,8 +27,9 @@ struct BlockUser: Equatable, Identifiable {
 
 enum MyBlockHistoryAction: Equatable {
   case releaseBlock(String)
-  case popupPresent
   case blockListView(BlockListAction)
+  case presentPopup
+  case dismissPopup
 }
 
 struct MyBlockHistoryEnvironment {
@@ -57,9 +59,21 @@ let myBlockHistoryReducerCore = Reducer<
   switch action {
   case let .releaseBlock(id):
     return .none
-  case .popupPresent:
+  case .presentPopup:
+    state.popupPresented = true
     return .none
-  case .blockListView:
+  case .dismissPopup:
+    state.popupPresented = false
+    return .none
+  case let .blockListView(blockListAction):
+    switch blockListAction {
+    case let .selectUnblockUser(unblockUser):
+      state.popupPresented = true
+      state.unBlockUser = unblockUser
+      print("")
+    default:
+      print("")
+    }
     return .none
   }
 }

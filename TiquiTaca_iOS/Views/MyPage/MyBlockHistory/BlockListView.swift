@@ -14,36 +14,30 @@ struct BlockListView: View {
   
   var body: some View {
     WithViewStore(self.store) { viewStore in
-      VStack(spacing: 0) {
-        ForEach(viewStore.blockUsers) { blockUser in
-          HStack {
-            Text(blockUser.nickName)
-              .font(.B1)
-              .foregroundColor(.black900)
-            
-            Spacer()
-            
-            Button {
-              viewStore.send(
-                .selectDetail(blockUser.userId)
-              )
-            } label: {
-              Text("차단 해제")
-                .font(.B7)
-                .foregroundColor(.white800)
+      ZStack {
+        VStack(spacing: 0) {
+          ForEach(viewStore.blockUsers) { blockUser in
+            HStack {
+              Text(blockUser.nickName)
+                .font(.body1)
+                .foregroundColor(.black900)
+              
+              Spacer()
+              
+              Button {
+                viewStore.send(
+                  .selectUnblockUser(blockUser)
+                )
+              } label: {
+                Text("차단 해제")
+                  .font(.body7)
+                  .foregroundColor(.white800)
+              }
             }
-            .sheet(
-              isPresented: viewStore.binding(
-                get: \.isPopupPresented,
-                send: BlockListAction.dismissBlockDetail
-              )
-            ) {
-              WebView(url: URL(string: "https://www.naver.com"))
-            }
+            .padding(EdgeInsets(top: .spacingS, leading: .spacingXL, bottom: .spacingS, trailing: .spacingXL))
           }
-          .padding(EdgeInsets(top: .spacing12, leading: .spacing24, bottom: .spacing12, trailing: .spacing24))
+          .background(Color.white50)
         }
-        .background(Color.white50)
       }
     }
   }
