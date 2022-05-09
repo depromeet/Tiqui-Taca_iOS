@@ -157,10 +157,15 @@ struct MypageRow: View {
 
 struct MyPageView_Previews: PreviewProvider {
   static var previews: some View {
-    MyPageView(store: .init(
-      initialState: MyPageState(),
-      reducer: myPageReducer,
-      environment: MyPageEnvironment())
+    MyPageView(
+      store: .init(
+        initialState: MyPageState(),
+        reducer: myPageReducer,
+        environment: MyPageEnvironment(
+          appService: .init(),
+          mainQueue: .main
+        )
+      )
     )
   }
 }

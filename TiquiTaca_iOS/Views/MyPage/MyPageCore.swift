@@ -39,7 +39,10 @@ enum MyPageAction: Equatable {
   case dismissDetail
 }
 
-struct MyPageEnvironment { }
+struct MyPageEnvironment {
+  let appService: AppService
+  let mainQueue: AnySchedulerOf<DispatchQueue>
+}
 
 let myPageReducer = Reducer<
 	MyPageState,

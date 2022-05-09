@@ -16,7 +16,10 @@ enum MapAction: Equatable {
 	case dummyAction
 }
 
-struct MapEnvironment { }
+struct MapEnvironment {
+  let appService: AppService
+  let mainQueue: AnySchedulerOf<DispatchQueue>
+}
 
 let mapReducer = Reducer<
 	MapState,

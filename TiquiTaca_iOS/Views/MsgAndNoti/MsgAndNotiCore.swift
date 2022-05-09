@@ -16,7 +16,10 @@ enum MsgAndNotiAction: Equatable {
 	case dummyAction
 }
 
-struct MsgAndNotiEnvironment { }
+struct MsgAndNotiEnvironment {
+  let appService: AppService
+  let mainQueue: AnySchedulerOf<DispatchQueue>
+}
 
 let msgAndNotiReducer = Reducer<
 	MsgAndNotiState,
