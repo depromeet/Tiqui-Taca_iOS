@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import TTDesignSystemModule
 
 struct OnboardingView: View {
   typealias State = OnboardingState
@@ -32,7 +33,7 @@ struct OnboardingView: View {
   
   var body: some View {
     NavigationView {
-      VStack(alignment: .center, spacing: 8) {
+      VStack(alignment: .center, spacing: 79) {
         VStack {
           PageControl(
             numberOfPages: 3,
@@ -41,18 +42,6 @@ struct OnboardingView: View {
               send: Action.pageControlTapped
             )
           )
-          
-          VStack(spacing: 8) {
-            Text("Welcome Tiki Taka")
-              .font(.system(size: 24))
-              .fontWeight(.semibold)
-            Text("Hello, Welcome!\nEnjoy Enjoy Enjoy")
-              .font(.system(size: 14))
-              .multilineTextAlignment(.center)
-              .frame(alignment: .center)
-              .padding(.vertical, 8)
-          }
-          
           PageView(
             currentPage: viewStore.binding(
               get: \.currentPage,
@@ -73,10 +62,14 @@ struct OnboardingView: View {
               SignInView(store: signInStore)
             },
             label: {
-              Text("이미 계정이 있다면? ") + Text("로그인").fontWeight(.heavy)
+              HStack {
+                Text("이미 계정이 있다면? ")
+                  .foregroundColor(.white500)
+                Text("로그인")
+                  .foregroundColor(.green500)
+              }
             }
           )
-          
           NavigationLink(
             tag: State.Route.signUp,
             selection: viewStore.binding(
@@ -87,19 +80,21 @@ struct OnboardingView: View {
               SignUpView(store: signUpStore)
             },
             label: {
-              Text("시작하기")
-                .frame(maxWidth: .infinity, minHeight: 56, maxHeight: 56)
-                .foregroundColor(.white)
-                .background(.black)
-                .cornerRadius(16)
+              Button {
+                viewStore.send(.setRoute(.signUp))
+              } label: {
+                Text("시작하기")
+              }
+              .buttonStyle(TTButtonLargeGreenStyle())
             }
           )
         }
-        .padding(.horizontal, 16)
+        .padding(.horizontal, .spacingXL)
+        .padding(.bottom, .spacingS)
       }
+      .background(Color.black800)
       .navigationBarTitleDisplayMode(.inline)
       .navigationViewStyle(StackNavigationViewStyle())
-      .padding(.bottom, 24)
     }
   }
 }
