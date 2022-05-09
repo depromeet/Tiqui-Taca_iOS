@@ -85,7 +85,7 @@ let mainTabCore = Reducer<
   MainTabState,
   MainTabAction,
   MainTabEnvironment
-> { state, action, environment in
+> { state, action, _ in
   switch action {
   case .mapFeature:
     return .none

@@ -13,21 +13,20 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   private let appService = AppService()
   
   func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-    let rootView = OnboardingView(
+    let splashView = SplashView(
       store: .init(
-        initialState: OnboardingState(),
-        reducer: onBoardingReducer,
-        environment: OnboardingEnvironment(
+        initialState: .init(),
+        reducer: splashReducer,
+        environment: .init(
           appService: appService,
           mainQueue: .main
         )
       )
     )
     
-    // Use a UIHostingController as window root view controller.
     if let windowScene = scene as? UIWindowScene {
       let window = UIWindow(windowScene: windowScene)
-      window.rootViewController = UIHostingController(rootView: rootView)
+      window.rootViewController = UIHostingController(rootView: splashView)
       self.window = window
       window.makeKeyAndVisible()
     }

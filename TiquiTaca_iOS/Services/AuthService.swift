@@ -9,6 +9,7 @@ import TTNetworkModule
 import Combine
 
 protocol AuthServiceType {
+  var isLoggedIn: Bool { get }
   func verification(request: VerificationEntity.Request) -> AnyPublisher<VerificationEntity.Response?, HTTPError>
   func issuePhoneCode(request: IssueCodeEntity.Request) -> AnyPublisher<IssueCodeEntity.Response?, HTTPError>
   func tokenRefresh(request: TokenRefreshEntity.Request) -> AnyPublisher<TokenRefreshEntity.Response?, HTTPError>
@@ -16,6 +17,14 @@ protocol AuthServiceType {
 
 final class AuthService: AuthServiceType {
   private let network: Network<AuthAPI>
+  
+  var isLoggedIn: Bool {
+    if TokenManager.shared.loadRefreshToken() == nil {
+      return false
+    } else {
+      return true
+    }
+  }
   
   init() {
     network = .init()
