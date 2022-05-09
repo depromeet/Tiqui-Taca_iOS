@@ -18,7 +18,7 @@ struct NoticeView: View {
       VStack(alignment: .leading) {
         HStack {
           Text("공지사항")
-            .font(.H1)
+            .font(.heading1)
             .foregroundColor(.black800)
           
           Spacer()
@@ -28,18 +28,18 @@ struct NoticeView: View {
             Image("idelete")
           }
         }
-        .padding(EdgeInsets(top: 28, leading: .spacing24, bottom: 22, trailing: .spacing24))
+        .padding(EdgeInsets(top: 28, leading: .spacingXL, bottom: 22, trailing: .spacingXL))
         
         List(viewStore.noticeList) { notice in
           NoticeRow(notice: notice)
         }
-        .padding(.spacing24)
+        .padding(.spacingXL)
         .listStyle(.plain)
         .overlay(
           VStack {
-            Image("noNotice")
+            Image("notice_g")
             Text("곧 공지사항이 추가될 예정이에요!")
-              .font(.B2)
+              .font(.body2)
               .foregroundColor(.white900)
           }
             .opacity(viewStore.noticeList.isEmpty ? 1 : 0)
@@ -55,19 +55,19 @@ struct NoticeRow: View {
   var body: some View {
     VStack(alignment: .leading) {
       Text(notice.title)
-        .font(.B1)
+        .font(.body1)
         .foregroundColor(.black900)
-        .padding(.bottom, .spacing2)
+        .padding(.bottom, .spacingXXXS)
       
       HStack {
         Text(notice.writer)
-          .font(.B7)
+          .font(.body7)
           .foregroundColor(.black100)
         
         Spacer()
         
         Text(notice.date)
-          .font(.B5)
+          .font(.body7)
           .foregroundColor(.white800)
       }
     }

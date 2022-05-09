@@ -19,29 +19,35 @@ struct MyPageView: View {
         VStack {
           VStack {
             Text("마이페이지")
-              .font(.H1)
+              .font(.heading1)
               .frame(maxWidth: .infinity, alignment: .leading)
             
             Image(viewStore.profileImage)
               .overlay(
-                Button {
-                  viewStore.send(.selectDetail)
-                } label: {
+                NavigationLink(
+                  destination: {
+                    ChangeProfileView(store: .init(
+                      initialState: ChangeProfileState(),
+                      reducer: changeProfileReducer,
+                      environment: ChangeProfileEnvironment())
+                    )
+                  }
+                ) {
                   Image("edit")
                 }
                   .alignmentGuide(.bottom) { $0[.bottom] }
                   .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
               )
             Text(viewStore.nickName)
-              .font(.H2)
-              
+              .font(.heading2)
+            
             Text("최초가입일 \(viewStore.createdAt) / 티키타카와 +\(viewStore.createDday)일 째")
-              .font(.B7)
+              .font(.body7)
               .foregroundColor(.white900)
             
             Text("뱃지")
           }
-          .padding(.spacing24)
+          .padding(.spacingXL)
           .foregroundColor(.white)
           .background(Color.black800)
           
@@ -133,7 +139,7 @@ struct MypageRow: View {
       Image(imageName)
       
       Text(title)
-        .font(.Subtitle3)
+        .font(.subtitle3)
         .foregroundColor(.black900)
       
       Toggle("", isOn: $togglePressed)
@@ -141,7 +147,7 @@ struct MypageRow: View {
         .opacity(toggleVisible ? 1 : 0)
       
       Text("v. \(version)")
-        .font(.Subtitle3)
+        .font(.subtitle3)
         .foregroundColor(.blue900)
         .opacity(version.isEmpty ? 0 : 1)
         .frame(width: version.isEmpty ? 0 : 80)

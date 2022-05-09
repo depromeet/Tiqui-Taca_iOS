@@ -73,6 +73,8 @@
 		F981FA2C2826A32A0000A531 /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = F981FA292826A32A0000A531 /* Pretendard-SemiBold.otf */; };
 		F993ADC92816C79C00718E9F /* OTPFieldCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F993ADC82816C79C00718E9F /* OTPFieldCore.swift */; };
 		F9B90C9C28117DDF003FFEEB /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B90C9B28117DDF003FFEEB /* AuthService.swift */; };
+		F9DB0B3528294F56002F6AD8 /* ChangeProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DB0B3428294F56002F6AD8 /* ChangeProfileView.swift */; };
+		F9DB0B3728294F66002F6AD8 /* ChangeProfileCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DB0B3628294F66002F6AD8 /* ChangeProfileCore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -173,6 +175,8 @@
 		F981FA292826A32A0000A531 /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
 		F993ADC82816C79C00718E9F /* OTPFieldCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPFieldCore.swift; sourceTree = "<group>"; };
 		F9B90C9B28117DDF003FFEEB /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		F9DB0B3428294F56002F6AD8 /* ChangeProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeProfileView.swift; sourceTree = "<group>"; };
+		F9DB0B3628294F66002F6AD8 /* ChangeProfileCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeProfileCore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -253,6 +257,7 @@
 		86E494872814FD7900551CCD /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
+				F9DB0B3328294F35002F6AD8 /* ChangeProfile */,
 				F981FA1D282604660000A531 /* CsCenter */,
 				F981FA182826008F0000A531 /* MyTermsOfService */,
 				F981FA132825F9CA0000A531 /* Notice */,
@@ -548,6 +553,15 @@
 			path = SignIn;
 			sourceTree = "<group>";
 		};
+		F9DB0B3328294F35002F6AD8 /* ChangeProfile */ = {
+			isa = PBXGroup;
+			children = (
+				F9DB0B3428294F56002F6AD8 /* ChangeProfileView.swift */,
+				F9DB0B3628294F66002F6AD8 /* ChangeProfileCore.swift */,
+			);
+			path = ChangeProfile;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -804,6 +818,7 @@
 				8601F666281404D40085F692 /* OnboardingCore.swift in Sources */,
 				8601F6642813AD400085F692 /* MainTabView.swift in Sources */,
 				86E494912814FDE100551CCD /* MsgAndNotiView.swift in Sources */,
+				F9DB0B3528294F56002F6AD8 /* ChangeProfileView.swift in Sources */,
 				F2F1ED93281E636B00AC4FDD /* SignInCore.swift in Sources */,
 				8601F65F281393550085F692 /* OnboardingView.swift in Sources */,
 				F993ADC92816C79C00718E9F /* OTPFieldCore.swift in Sources */,
@@ -812,6 +827,7 @@
 				F981FA1F282604AA0000A531 /* CsCenterView.swift in Sources */,
 				F2F1ED89281E612E00AC4FDD /* SignUpView.swift in Sources */,
 				F9B90C9C28117DDF003FFEEB /* AuthService.swift in Sources */,
+				F9DB0B3728294F66002F6AD8 /* ChangeProfileCore.swift in Sources */,
 				F2F1ED87281E612700AC4FDD /* SignInView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -18,7 +18,7 @@ struct MyTermsOfServiceView: View {
       VStack(alignment: .leading) {
         HStack {
           Text("이용약관")
-            .font(.H1)
+            .font(.heading1)
             .foregroundColor(.black800)
           
           Spacer()
@@ -29,20 +29,20 @@ struct MyTermsOfServiceView: View {
             Image("idelete")
           }
         }
-        .padding(EdgeInsets(top: 28, leading: .spacing24, bottom: 22, trailing: .spacing24))
+        .padding(EdgeInsets(top: 28, leading: .spacingXL, bottom: 22, trailing: .spacingXL))
         
         Text("티키타카 서비스 이용을 위한 약관 모음")
-          .font(.B2)
+          .font(.body2)
           .foregroundColor(.white800)
-          .padding(.leading, .spacing24)
+          .padding(.leading, .spacingXL)
         
         List {
           ForEach(0..<4) {
             MyTermsRow(title: "티키타카 이용약관 \($0 + 1)")
+              .listRowSeparator(.hidden)
           }
           .listRowBackground(Color.white50)
         }
-        .padding(.spacing24)
         .listStyle(.plain)
       }
     }
@@ -55,7 +55,7 @@ struct MyTermsRow: View {
   var body: some View {
     HStack {
       Text(title)
-        .font(.B1)
+        .font(.body1)
         .foregroundColor(.black900)
       Spacer()
       Image("arrow")
