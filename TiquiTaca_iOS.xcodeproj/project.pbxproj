@@ -54,7 +54,8 @@
 		F2F1ED98281E869D00AC4FDD /* VerificationNumberCheckCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED97281E869D00AC4FDD /* VerificationNumberCheckCore.swift */; };
 		F2F1ED9B281EDACE00AC4FDD /* PageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED9A281EDACE00AC4FDD /* PageView.swift */; };
 		F2F1EDA828258E0E00AC4FDD /* AppService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1EDA728258E0E00AC4FDD /* AppService.swift */; };
-		F2F1EDAC282809DC00AC4FDD /* SplashCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1EDAB282809DC00AC4FDD /* SplashCore.swift */; };
+		F2F1EDAF2829335A00AC4FDD /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1EDAE2829335A00AC4FDD /* AppView.swift */; };
+		F2F1EDB12829336200AC4FDD /* AppCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1EDB02829336200AC4FDD /* AppCore.swift */; };
 		F2FA365C2808897C00A24789 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FA365B2808897C00A24789 /* R.generated.swift */; };
 		F2FDA216280BBDAC00B2ED75 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F2FDA215280BBDAC00B2ED75 /* LaunchScreen.storyboard */; };
 		F2FDA21A280BBF8300B2ED75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FDA219280BBF8300B2ED75 /* AppDelegate.swift */; };
@@ -140,7 +141,8 @@
 		F2F1ED97281E869D00AC4FDD /* VerificationNumberCheckCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationNumberCheckCore.swift; sourceTree = "<group>"; };
 		F2F1ED9A281EDACE00AC4FDD /* PageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageView.swift; sourceTree = "<group>"; };
 		F2F1EDA728258E0E00AC4FDD /* AppService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppService.swift; sourceTree = "<group>"; };
-		F2F1EDAB282809DC00AC4FDD /* SplashCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashCore.swift; sourceTree = "<group>"; };
+		F2F1EDAE2829335A00AC4FDD /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
+		F2F1EDB02829336200AC4FDD /* AppCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCore.swift; sourceTree = "<group>"; };
 		F2F1FFBE28049D7E00F3A8E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = TiquiTaca_iOS/SupportingFile/Info.plist; sourceTree = SOURCE_ROOT; };
 		F2FA365B2808897C00A24789 /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = SOURCE_ROOT; };
 		F2FDA215280BBDAC00B2ED75 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -177,7 +179,6 @@
 			isa = PBXGroup;
 			children = (
 				8601F65B281309B10085F692 /* SplashView.swift */,
-				F2F1EDAB282809DC00AC4FDD /* SplashCore.swift */,
 			);
 			path = Splash;
 			sourceTree = "<group>";
@@ -397,6 +398,15 @@
 			path = TOSFieldList;
 			sourceTree = "<group>";
 		};
+		F2F1EDAD2829334E00AC4FDD /* App */ = {
+			isa = PBXGroup;
+			children = (
+				F2F1EDAE2829335A00AC4FDD /* AppView.swift */,
+				F2F1EDB02829336200AC4FDD /* AppCore.swift */,
+			);
+			path = App;
+			sourceTree = "<group>";
+		};
 		F2FDA211280BAF2200B2ED75 /* Components */ = {
 			isa = PBXGroup;
 			children = (
@@ -422,6 +432,7 @@
 		F2FDA213280BAF3100B2ED75 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F2F1EDAD2829334E00AC4FDD /* App */,
 				86E494872814FD7900551CCD /* MyPage */,
 				86E494862814FD6C00551CCD /* MsgAndNoti */,
 				86E494852814FD6300551CCD /* Chat */,
@@ -693,6 +704,7 @@
 				F2F1ED9B281EDACE00AC4FDD /* PageView.swift in Sources */,
 				F2FDA228280C0EE300B2ED75 /* TermsOfServiceView.swift in Sources */,
 				F2127644281191A800FB568D /* WebView.swift in Sources */,
+				F2F1EDB12829336200AC4FDD /* AppCore.swift in Sources */,
 				F2127640280FE07500FB568D /* TOSFieldListView.swift in Sources */,
 				F248EB012813240500430C3B /* CreateProfileView.swift in Sources */,
 				F248EB032813273A00430C3B /* CreateProfileCore.swift in Sources */,
@@ -710,7 +722,7 @@
 				86E494912814FDE100551CCD /* MsgAndNotiView.swift in Sources */,
 				F2F1ED93281E636B00AC4FDD /* SignInCore.swift in Sources */,
 				8601F65F281393550085F692 /* OnboardingView.swift in Sources */,
-				F2F1EDAC282809DC00AC4FDD /* SplashCore.swift in Sources */,
+				F2F1EDAF2829335A00AC4FDD /* AppView.swift in Sources */,
 				F993ADC92816C79C00718E9F /* OTPFieldCore.swift in Sources */,
 				F2F1ED83281C6B2F00AC4FDD /* OTPFieldView.swift in Sources */,
 				F2F1ED96281E868300AC4FDD /* VerificationNumberCheckView.swift in Sources */,

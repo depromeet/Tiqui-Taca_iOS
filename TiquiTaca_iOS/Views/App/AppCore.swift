@@ -1,46 +1,47 @@
 //
-//  SplashCore.swift
+//  AppCore.swift
 //  TiquiTaca_iOS
 //
-//  Created by 강민석 on 2022/05/08.
+//  Created by 강민석 on 2022/05/09.
 //
 
 import ComposableArchitecture
 
-struct SplashState: Equatable {
-  enum Route: Identifiable {
-    var id: Self { self }
-    
-    case mainTab
+struct AppState: Equatable {
+  enum Route {
+    case splash
     case onboarding
+    case mainTab
   }
-  var route: Route?
+  var route: Route = .splash
   var onboardingState: OnboardingState?
   var mainTabState: MainTabState?
 }
 
-enum SplashAction: Equatable {
-  case setRoute(SplashState.Route?)
+enum AppAction: Equatable {
+  case setRoute(AppState.Route)
   case onAppear
+  case signIn
+  case signOut
   case onboardingAction(OnboardingAction)
   case mainTabAction(MainTabAction)
 }
 
-struct SplashEnvironment {
+struct AppEnvironment {
   let appService: AppService
   let mainQueue: AnySchedulerOf<DispatchQueue>
 }
 
-let splashReducer = Reducer<
-  SplashState,
-  SplashAction,
-  SplashEnvironment
+let appReducer = Reducer<
+  AppState,
+  AppAction,
+  AppEnvironment
 >.combine([
   onBoardingReducer
     .optional()
     .pullback(
       state: \.onboardingState,
-      action: /SplashAction.onboardingAction,
+      action: /AppAction.onboardingAction,
       environment: {
         OnboardingEnvironment(
           appService: $0.appService,
@@ -52,7 +53,7 @@ let splashReducer = Reducer<
     .optional()
     .pullback(
       state: \.mainTabState,
-      action: /SplashAction.mainTabAction,
+      action: /AppAction.mainTabAction,
       environment: {
         MainTabEnvironment(
           appService: $0.appService,
@@ -60,13 +61,13 @@ let splashReducer = Reducer<
         )
       }
     ),
-  splashCore
+  appCore
 ])
 
-let splashCore = Reducer<
-  SplashState,
-  SplashAction,
-  SplashEnvironment
+let appCore = Reducer<
+  AppState,
+  AppAction,
+  AppEnvironment
 > { state, action, environment in
   switch action {
   case let .setRoute(selectedRoute):
@@ -80,6 +81,14 @@ let splashCore = Reducer<
       state.onboardingState = .init()
       return Effect(value: .setRoute(.onboarding))
     }
+  case .signIn: // 로그인 (하위 reducer의 로그인 관련 이벤트)
+    state.mainTabState = .init()
+    state.onboardingState = nil
+    return Effect(value: .setRoute(.mainTab))
+  case .signOut: // 로그아웃 (하위 reducer의 로그아웃 관련 이벤트)
+    state.mainTabState = nil
+    state.onboardingState = .init()
+    return Effect(value: .setRoute(.onboarding))
   case .onboardingAction:
     return .none
   case .mainTabAction:

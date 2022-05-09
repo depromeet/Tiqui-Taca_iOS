@@ -13,10 +13,10 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   private let appService = AppService()
   
   func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-    let splashView = SplashView(
+    let appView = AppView(
       store: .init(
         initialState: .init(),
-        reducer: splashReducer,
+        reducer: appReducer,
         environment: .init(
           appService: appService,
           mainQueue: .main
@@ -26,7 +26,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     
     if let windowScene = scene as? UIWindowScene {
       let window = UIWindow(windowScene: windowScene)
-      window.rootViewController = UIHostingController(rootView: splashView)
+      window.rootViewController = UIHostingController(rootView: appView)
       self.window = window
       window.makeKeyAndVisible()
     }
