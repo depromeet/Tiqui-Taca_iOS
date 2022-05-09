@@ -9,21 +9,26 @@ import SwiftUI
 import ComposableArchitecture
 
 struct MapView: View {
-	let store: Store<MapState, MapAction>
-	
-	var body: some View {
-		WithViewStore(self.store) { _ in
-			Text("MapTab")
-		}
-	}
+  let store: Store<MapState, MapAction>
+  
+  var body: some View {
+    WithViewStore(self.store) { _ in
+      Text("MapTab")
+    }
+  }
 }
 
 struct MapView_Previews: PreviewProvider {
-	static var previews: some View {
-		MapView(store: .init(
-			initialState: MapState(),
-			reducer: mapReducer,
-			environment: MapEnvironment())
-		)
-	}
+  static var previews: some View {
+    MapView(
+      store: .init(
+        initialState: MapState(),
+        reducer: mapReducer,
+        environment: MapEnvironment(
+          appService: .init(),
+          mainQueue: .main
+        )
+      )
+    )
+  }
 }

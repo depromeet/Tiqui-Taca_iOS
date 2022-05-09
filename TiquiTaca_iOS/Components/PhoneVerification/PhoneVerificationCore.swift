@@ -23,7 +23,7 @@ enum PhoneVerificationAction: Equatable {
 }
 
 struct PhoneVerificationEnvironment {
-  let authService: AuthServiceType
+  let appService: AppService
   let mainQueue: AnySchedulerOf<DispatchQueue>
 }
 
@@ -39,7 +39,7 @@ let phoneVerficationReducer = Reducer<
 //    return Effect(value: .checkPhoneNumberValidation)
   case .verificationButtonTap:
     let requestModel = IssueCodeEntity.Request(phoneNumber: state.phoneNumber)
-    return environment.authService
+    return environment.appService.authService
       .issuePhoneCode(request: requestModel)
       .receive(on: environment.mainQueue)
       .catchToEffect()

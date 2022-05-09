@@ -67,15 +67,9 @@ struct TOSFieldListView_Previews: PreviewProvider {
   static var previews: some View {
     TOSFieldListView(
       store: Store(
-        initialState: TOSFieldListViewState(
-          termsOfServiceModels: [
-            .init(description: "서비스 이용약관 동의", isRequired: true, url: nil),
-            .init(description: "개인정보 수집 및 이용 동의", isRequired: true, url: nil),
-            .init(description: "마케팅 SNS 알림 동의", isRequired: false, url: nil)
-          ]
-        ),
+        initialState: TOSFieldListViewState(),
         reducer: tosFieldListViewReducer,
-        environment: TOSFieldListViewEnvironment()
+        environment: Void()
       )
     )
   }

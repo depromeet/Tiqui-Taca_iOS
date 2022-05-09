@@ -10,24 +10,23 @@ import SwiftUI
 
 final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   var window: UIWindow?
+  private let appService = AppService()
   
   func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-    // Create the SwiftUI view that provides the window contents.
-    let rootView = OnboardingView(
+    let appView = AppView(
       store: .init(
-        initialState: OnboardingState(currentPage: 0),
-        reducer: onBoardingReducer,
-        environment: OnboardingEnvironment(
-          authService: .init(),
+        initialState: .init(),
+        reducer: appReducer,
+        environment: .init(
+          appService: appService,
           mainQueue: .main
         )
       )
     )
     
-    // Use a UIHostingController as window root view controller.
     if let windowScene = scene as? UIWindowScene {
       let window = UIWindow(windowScene: windowScene)
-      window.rootViewController = UIHostingController(rootView: rootView)
+      window.rootViewController = UIHostingController(rootView: appView)
       self.window = window
       window.makeKeyAndVisible()
     }

@@ -8,25 +8,19 @@
 import SwiftUI
 
 struct SplashView: View {
-	@State var canMove = false
-	let timer = Timer.publish(every: 2, on: .main, in: .common).autoconnect()
-	
-	var body: some View {
-		NavigationView {
-			VStack {
-				Text("Tiqui\nTaca")
-					.font(.largeTitle)
-					.fontWeight(.bold)
-					.vCenter()
-			}
-			.padding([.bottom], 128)
-			.navigationBarHidden(true)
-		}
-	}
+  var body: some View {
+    VStack(alignment: .center, spacing: 24) {
+      Image("SplashLogo")
+      Image("SplashLogoText")
+    }
+    .hCenter()
+    .vCenter()
+    .background(Color.black800)
+  }
 }
 
 struct SplashView_Previews: PreviewProvider {
-	static var previews: some View {
-		SplashView()
-	}
+  static var previews: some View {
+    SplashView()
+  }
 }

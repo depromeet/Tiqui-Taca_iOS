@@ -16,7 +16,10 @@ enum ChatAction: Equatable {
 	case dummyAction
 }
 
-struct ChatEnvironment { }
+struct ChatEnvironment {
+  let appService: AppService
+  let mainQueue: AnySchedulerOf<DispatchQueue>
+}
 
 let chatReducer = Reducer<
 	ChatState,

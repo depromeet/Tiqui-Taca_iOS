@@ -9,21 +9,26 @@ import SwiftUI
 import ComposableArchitecture
 
 struct MsgAndNotiView: View {
-	let store: Store<MsgAndNotiState, MsgAndNotiAction>
-	
-	var body: some View {
-		WithViewStore(self.store) { _ in
-			Text("MsgAndNotiTab")
-		}
-	}
+  let store: Store<MsgAndNotiState, MsgAndNotiAction>
+  
+  var body: some View {
+    WithViewStore(self.store) { _ in
+      Text("MsgAndNotiTab")
+    }
+  }
 }
 
 struct MsgAndNotiView_Previews: PreviewProvider {
-	static var previews: some View {
-		MsgAndNotiView(store: .init(
-			initialState: MsgAndNotiState(),
-			reducer: msgAndNotiReducer,
-			environment: MsgAndNotiEnvironment())
-		)
-	}
+  static var previews: some View {
+    MsgAndNotiView(
+      store: .init(
+        initialState: MsgAndNotiState(),
+        reducer: msgAndNotiReducer,
+        environment: MsgAndNotiEnvironment(
+          appService: .init(),
+          mainQueue: .main
+        )
+      )
+    )
+  }
 }

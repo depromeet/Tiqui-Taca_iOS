@@ -9,24 +9,25 @@ import ComposableArchitecture
 import TTNetworkModule
 
 struct SignInState: Equatable {
+  enum Route {
+    case verificationNumberCheck
+  }
+  var route: Route?
   var phoneNumber: String = ""
   var verificationCode: String = ""
-  var isVerificationNumberCheckViewPresent = false
   var expireMinute: Int = 0
-  
   var verificationNumberCheckState: VerificationNumberCheckState = .init()
   var phoneVerficationState: PhoneVerificationState = .init()
 }
 
 enum SignInAction: Equatable {
-  case setIsVerificationNumberCheckViewPresent(Bool)
-  
+  case setRoute(SignInState.Route?)
   case verificationNumberCheckAction(VerificationNumberCheckAction)
   case phoneVerficationAction(PhoneVerificationAction)
 }
 
 struct SignInEnvironment {
-  var authService: AuthService
+  var appService: AppService
   var mainQueue: AnySchedulerOf<DispatchQueue>
 }
 
@@ -41,8 +42,8 @@ let signInReducer = Reducer<
       action: /SignInAction.verificationNumberCheckAction,
       environment: {
         VerificationNumberCheckEnvironment(
-          authService: $0.authService,
-          mainQueue: .main
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
         )
       }
     ),
@@ -52,8 +53,8 @@ let signInReducer = Reducer<
       action: /SignInAction.phoneVerficationAction,
       environment: {
         PhoneVerificationEnvironment(
-          authService: $0.authService,
-          mainQueue: .main
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
         )
       }
     ),
@@ -64,16 +65,21 @@ let signInCore = Reducer<
   SignInState,
   SignInAction,
   SignInEnvironment
-> { state, action, environment in
+> { state, action, _ in
   switch action {
-  case let .setIsVerificationNumberCheckViewPresent(isPresent):
-    state.isVerificationNumberCheckViewPresent = isPresent
-    return .none
   case .verificationNumberCheckAction:
     return .none
   case .phoneVerficationAction(.phoneNumberRequestSuccess):
-    return Effect(value: .setIsVerificationNumberCheckViewPresent(true))
+    state.verificationNumberCheckState.phoneNumber = state.phoneVerficationState.phoneNumber
+    state.verificationNumberCheckState.expireMinute = state.phoneVerficationState.expireMinute
+    return Effect(value: .setRoute(.verificationNumberCheck))
   case .phoneVerficationAction:
     return.none
+  case let .setRoute(selectedRoute):
+    if selectedRoute == nil {
+      state.verificationNumberCheckState = .init()
+    }
+    state.route = selectedRoute
+    return .none
   }
 }
