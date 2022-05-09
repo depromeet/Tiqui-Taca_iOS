@@ -10,10 +10,11 @@ import ComposableArchitecture
 
 struct ChatState: Equatable {
 	var dummyState = 0
+	var currentTabIdx = 0
 }
 
 enum ChatAction: Equatable {
-	case dummyAction
+	case tabChange(Int)
 }
 
 struct ChatEnvironment {
@@ -25,6 +26,12 @@ let chatReducer = Reducer<
 	ChatState,
 	ChatAction,
 	ChatEnvironment
-> { _, _, _ in
-	return .none
+> { state, action, _ in
+	switch action {
+	case .tabChange(let tabIdx):
+		guard state.currentTabIdx != tabIdx else { return .none }
+		state.currentTabIdx = tabIdx
+		print("change TabIdx: \(tabIdx)")
+		return .none
+	}
 }

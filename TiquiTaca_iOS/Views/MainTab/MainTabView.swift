@@ -9,22 +9,21 @@ import SwiftUI
 import ComposableArchitecture
 
 struct MainTabView: View {
-  private let store: Store<MainTabState, MainTabAction>
-  
-  init(store: Store<MainTabState, MainTabAction>) {
-    self.store = store
-    UITabBar.appearance().scrollEdgeAppearance = .init()
-  }
-  
-  var body: some View {
-    TabView {
-      MapTab(store: store)
-      ChatTab(store: store)
-      MsgAndNotiTab(store: store)
-      MyPageTab(store: store)
-    }
-    .navigationBarBackButtonHidden(true)
-  }
+	private let store: Store<MainTabState, MainTabAction>
+	
+	init(store: Store<MainTabState, MainTabAction>) {
+		self.store = store
+		UITabBar.appearance().scrollEdgeAppearance = .init()
+	}
+	
+	var body: some View {
+		TabView {
+			MapTab(store: store)
+			ChatTab(store: store)
+			MsgAndNotiTab(store: store)
+			MyPageTab(store: store)
+		}
+	}
 }
 
 // MARK: MapTab
