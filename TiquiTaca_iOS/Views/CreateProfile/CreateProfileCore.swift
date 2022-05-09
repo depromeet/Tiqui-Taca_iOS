@@ -23,6 +23,8 @@ enum CreateProfileAction: Equatable {
 }
 
 struct CreateProfileEnvironment {
+  let appService: AppService
+  let mainQueue: AnySchedulerOf<DispatchQueue>
 }
 
 let createProfileReducer = Reducer<

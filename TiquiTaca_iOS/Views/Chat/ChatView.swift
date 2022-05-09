@@ -185,11 +185,16 @@ private struct SectionHeader: View {
 }
 
 struct ChatView_Previews: PreviewProvider {
-	static var previews: some View {
-		ChatView(store: .init(
-			initialState: ChatState(),
-			reducer: chatReducer,
-			environment: ChatEnvironment())
-		)
-	}
+  static var previews: some View {
+    ChatView(
+      store: .init(
+        initialState: ChatState(),
+        reducer: chatReducer,
+        environment: ChatEnvironment(
+          appService: .init(),
+          mainQueue: .main
+        )
+      )
+    )
+  }
 }

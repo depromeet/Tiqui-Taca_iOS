@@ -7,8 +7,8 @@
 
 import ComposableArchitecture
 
-struct OTPField: Equatable {
-  let index: Int
+struct OTPField: Equatable, Identifiable {
+  var id: Int
   var text: String
   
   var isFilled: Bool {
@@ -18,10 +18,10 @@ struct OTPField: Equatable {
 
 struct OTPFieldState: Equatable {
   var fields: [OTPField] = [
-    .init(index: 0, text: ""),
-    .init(index: 1, text: ""),
-    .init(index: 2, text: ""),
-    .init(index: 3, text: "")
+    .init(id: 0, text: ""),
+    .init(id: 1, text: ""),
+    .init(id: 2, text: ""),
+    .init(id: 3, text: "")
   ]
   var focusedFieldIndex: Int = 0
   
@@ -34,28 +34,20 @@ struct OTPFieldState: Equatable {
 
 enum OTPFieldAction: Equatable {
   case activeField(index: Int, content: String)
-  case valueChanged
   case checkValue
   case lastFieldTrigger
 }
 
-struct OTPFieldEnvironment { }
-
 let otpFieldReducer = Reducer<
   OTPFieldState,
   OTPFieldAction,
-  OTPFieldEnvironment
+  Void
 > { state, action, _ in
   switch action {
   case let .activeField(index, content):
     state.fields[index].text = content
     state.focusedFieldIndex = index
-    return .merge([
-      Effect(value: .checkValue),
-      Effect(value: .valueChanged)
-    ])
-  case .valueChanged:
-    return .none
+    return Effect(value: .checkValue)
   case .checkValue:
     if state.fields[state.focusedFieldIndex].text.isEmpty {
       state.focusedFieldIndex -= 1

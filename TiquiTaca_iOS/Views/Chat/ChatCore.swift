@@ -17,7 +17,10 @@ enum ChatAction: Equatable {
 	case tabChange(Int)
 }
 
-struct ChatEnvironment { }
+struct ChatEnvironment {
+  let appService: AppService
+  let mainQueue: AnySchedulerOf<DispatchQueue>
+}
 
 let chatReducer = Reducer<
 	ChatState,

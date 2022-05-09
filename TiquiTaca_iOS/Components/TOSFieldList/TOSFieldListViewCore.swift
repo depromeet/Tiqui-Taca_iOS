@@ -8,7 +8,11 @@
 import ComposableArchitecture
 
 struct TOSFieldListViewState: Equatable {
-  var termsOfServiceModels: [TermsOfService]
+  var termsOfServiceModels: [TermsOfService] = [
+    .init(description: "서비스 이용약관 동의", isRequired: true, url: URL(string: "https://developer.apple.com/kr/")),
+    .init(description: "개인정보 수집 및 이용 동의", isRequired: true, url: nil),
+    .init(description: "마케팅 SNS 알림 동의", isRequired: false, url: nil)
+  ]
   var isDetailPresented = false
   var isAllRequiredCheckDone = false
   var isAllCheckDone = false
@@ -21,13 +25,11 @@ enum TOSFieldListViewAction: Equatable {
   case allCheck
 }
 
-struct TOSFieldListViewEnvironment { }
-
 let tosFieldListViewReducer = Reducer<
   TOSFieldListViewState,
   TOSFieldListViewAction,
-  TOSFieldListViewEnvironment
-> { state, action, environment in
+  Void
+> { state, action, _ in
   switch action {
   case .selectDetail:
     state.isDetailPresented = true
