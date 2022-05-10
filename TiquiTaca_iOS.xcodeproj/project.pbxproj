@@ -54,7 +54,7 @@
 		F2F1ED93281E636B00AC4FDD /* SignInCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED92281E636B00AC4FDD /* SignInCore.swift */; };
 		F2F1ED96281E868300AC4FDD /* VerificationNumberCheckView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED95281E868300AC4FDD /* VerificationNumberCheckView.swift */; };
 		F2F1ED98281E869D00AC4FDD /* VerificationNumberCheckCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED97281E869D00AC4FDD /* VerificationNumberCheckCore.swift */; };
-		F2F1ED9B281EDACE00AC4FDD /* PageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED9A281EDACE00AC4FDD /* PageView.swift */; };
+		F2F1ED9B281EDACE00AC4FDD /* OnboardingPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED9A281EDACE00AC4FDD /* OnboardingPageView.swift */; };
 		F2F1EDA828258E0E00AC4FDD /* AppService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1EDA728258E0E00AC4FDD /* AppService.swift */; };
 		F2F1EDAF2829335A00AC4FDD /* AppView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1EDAE2829335A00AC4FDD /* AppView.swift */; };
 		F2F1EDB12829336200AC4FDD /* AppCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1EDB02829336200AC4FDD /* AppCore.swift */; };
@@ -159,7 +159,7 @@
 		F2F1ED92281E636B00AC4FDD /* SignInCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInCore.swift; sourceTree = "<group>"; };
 		F2F1ED95281E868300AC4FDD /* VerificationNumberCheckView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationNumberCheckView.swift; sourceTree = "<group>"; };
 		F2F1ED97281E869D00AC4FDD /* VerificationNumberCheckCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationNumberCheckCore.swift; sourceTree = "<group>"; };
-		F2F1ED9A281EDACE00AC4FDD /* PageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageView.swift; sourceTree = "<group>"; };
+		F2F1ED9A281EDACE00AC4FDD /* OnboardingPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingPageView.swift; sourceTree = "<group>"; };
 		F2F1EDA728258E0E00AC4FDD /* AppService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppService.swift; sourceTree = "<group>"; };
 		F2F1EDAE2829335A00AC4FDD /* AppView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppView.swift; sourceTree = "<group>"; };
 		F2F1EDB02829336200AC4FDD /* AppCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCore.swift; sourceTree = "<group>"; };
@@ -467,7 +467,7 @@
 				F2F1ED84281C6B3700AC4FDD /* OTPField */,
 				F2127643281191A800FB568D /* WebView.swift */,
 				8601F660281393640085F692 /* PageControl.swift */,
-				F2F1ED9A281EDACE00AC4FDD /* PageView.swift */,
+				F2F1ED9A281EDACE00AC4FDD /* OnboardingPageView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -828,7 +828,7 @@
 				8601F659281308CB0085F692 /* View+Extensions.swift in Sources */,
 				F9669F6428251E59004624F8 /* MyBlockHistoryView.swift in Sources */,
 				F96CDE752824EF8C002DEB90 /* MyInfoView.swift in Sources */,
-				F2F1ED9B281EDACE00AC4FDD /* PageView.swift in Sources */,
+				F2F1ED9B281EDACE00AC4FDD /* OnboardingPageView.swift in Sources */,
 				F981FA152825FB000000A531 /* NoticeCore.swift in Sources */,
 				F2FDA228280C0EE300B2ED75 /* TermsOfServiceView.swift in Sources */,
 				F2127644281191A800FB568D /* WebView.swift in Sources */,
