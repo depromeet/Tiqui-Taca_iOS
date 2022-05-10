@@ -49,6 +49,7 @@ struct RoomListCell: View {
 					.frame(width: 32, height: 32)
 			}
 				.hLeading()
+				.contentShape(Rectangle())
 				.padding([.leading, .trailing], 24)
 				.padding([.top, .bottom], 12)
 			RoomListCellDivider()

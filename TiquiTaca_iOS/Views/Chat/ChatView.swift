@@ -27,48 +27,70 @@ struct ChatView: View {
 	var body: some View {
 		WithViewStore(self.store) { viewStore in
 			NavigationView {
-				VStack(spacing: 0) {
-					CurrentChatView()
-					
-					TabKindView(
-						currentTab: viewStore.binding(
-							get: \.currentTab,
-							send: ChatAction.tabChange
-					))
-					
-					List {
-						if viewStore.state.presentRoomList.isEmpty {
-							NoDataView(noDataType: viewStore.state.currentTab)
-								.listRowSeparator(.hidden)
-								.listRowInsets(EdgeInsets())
-								.padding(.top, .spacingXXXL * 2)
-						} else {
-							ForEach(viewStore.state.presentRoomList, id: \.id) { room in
-								RoomListCell(
-									index: 1,
-									info: room,
-									type: viewStore.state.currentTab
-								)
+				ZStack {
+					VStack(spacing: 0) {
+						CurrentChatView()
+						
+						TabKindView(
+							currentTab: viewStore.binding(
+								get: \.currentTab,
+								send: ChatAction.tabChange
+						))
+						
+						List {
+							if viewStore.state.presentRoomList.isEmpty {
+								NoDataView(noDataType: viewStore.state.currentTab)
 									.listRowSeparator(.hidden)
 									.listRowInsets(EdgeInsets())
-									.swipeActions(edge: .trailing, allowsFullSwipe: false, content: {
-										if viewStore.state.currentTab == .like {
-											Button{ } label: {
-												Text("삭제")
+									.padding(.top, .spacingXXXL * 2)
+							} else {
+								ForEach(viewStore.state.presentRoomList, id: \.id) { room in
+									RoomListCell(
+										index: 1,
+										info: room,
+										type: viewStore.state.currentTab
+									)
+										.listRowSeparator(.hidden)
+										.listRowInsets(EdgeInsets())
+										.swipeActions(edge: .trailing, allowsFullSwipe: false, content: {
+											if viewStore.state.currentTab == .like {
+												Button(
+													action: { viewStore.send(.removeFavoriteRoom(room)) },
+													label: { Text("삭제") }
+												)
+													.tint(.red)
 											}
-												.tint(.red)
-										}
-									})
+										})
+										.onTapGesture(perform: {
+											viewStore.send(.presentEnterRoomPopup(room))
+										})
+								}
 							}
 						}
+							.refreshable {
+								viewStore.send(.refresh)
+							}
 					}
-						.refreshable {
-							viewStore.send(.refresh)
+						.listStyle(.plain)
+						.navigationBarTitleDisplayMode(.large)
+						.navigationTitle("채팅방")
+					
+					TTPopupView.init(
+						popUpCase: .oneLineTwoButton,
+						topImageString: "",
+						title: "이미 참여 중인 채팅방이 있어요",
+						subtitle: "해당 채팅방을 참가할 경우 이전 채팅방에선 나가게 됩니다",
+						leftButtonName: "취소",
+						rightButtonName: "참여하기",
+						confirm: {
+							viewStore.send(.dismissPopup)
+						},
+						cancel: {
+							viewStore.send(.dismissPopup)
 						}
+					)
+						.opacity(viewStore.popupPresented ? 1 : 0)
 				}
-					.listStyle(.plain)
-					.navigationBarTitleDisplayMode(.large)
-					.navigationTitle("채팅방")
 			}
 		}
 	}

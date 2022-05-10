@@ -11,6 +11,8 @@ import ComposableArchitecture
 struct ChatState: Equatable {
 	var currentTab: RoomListType = .like
 	var isFirstLoad = true
+	var popupPresented = false
+	var willEnterRoomInfo: RoomInfoEntity.Response?
 	
 	var enteredRoom: RoomInfoEntity.Response?
 	var likeRoomList: [RoomInfoEntity.Response] = [RoomInfoEntity.Response()]
@@ -23,6 +25,9 @@ enum ChatAction: Equatable {
 	case fetchLikeRoomList
 	case fetchPopularRoomList
 	case tabChange(RoomListType)
+	case removeFavoriteRoom(RoomInfoEntity.Response)
+	case presentEnterRoomPopup(RoomInfoEntity.Response)
+	case dismissPopup
 	case refresh
 }
 
@@ -47,6 +52,16 @@ let chatReducer = Reducer<
 		guard state.currentTab != type else { return .none }
 		state.currentTab = type
 		state.presentRoomList = type == .like ? state.likeRoomList : state.popularRoomList
+		return .none
+	case .removeFavoriteRoom(let room):
+		return .none
+	case .presentEnterRoomPopup(let room):
+		state.willEnterRoomInfo = room
+		state.popupPresented = true
+		return .none
+	case .dismissPopup:
+		state.popupPresented = false
+		state.willEnterRoomInfo = nil
 		return .none
 	case .refresh:
 		return .none
