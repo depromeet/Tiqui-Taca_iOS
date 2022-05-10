@@ -51,6 +51,14 @@ struct ChatView: View {
 								)
 									.listRowSeparator(.hidden)
 									.listRowInsets(EdgeInsets())
+									.swipeActions(edge: .trailing, allowsFullSwipe: false, content: {
+										if viewStore.state.currentTab == .like {
+											Button{ } label: {
+												Text("삭제")
+											}
+												.tint(.red)
+										}
+									})
 							}
 						}
 					}

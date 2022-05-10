@@ -87,7 +87,7 @@ private struct RoomListCellDivider: View {
 struct RoomListCell_Previews: PreviewProvider {
 	static var previews: some View {
 		RoomListCell(
-			index: 1,
+			index: 0,
 			info: RoomInfoEntity.Response(),
 			type: .popular
 		)
