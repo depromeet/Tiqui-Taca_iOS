@@ -14,6 +14,7 @@ struct SignInView: View {
   
   private let store: Store<State, Action>
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
+  @Environment(\.presentationMode) var presentationMode
   
   struct ViewState: Equatable {
     let route: State.Route?
@@ -29,16 +30,20 @@ struct SignInView: View {
   }
   
   var body: some View {
-    VStack {
-      Spacer()
-      VStack(alignment: .leading, spacing: 10) {
+    VStack(spacing: .spacingXXXL) {
+      VStack(alignment: .leading, spacing: .spacingM) {
         Text("로그인을 위해\n휴대폰 번호를 인증해주세요!")
+          .foregroundColor(.white)
+          .font(.heading1)
         Text("휴대폰 번호로 간편하게 로그인해보세요.")
-        PhoneVerificationView(store: phoneVerificationStore)
+          .foregroundColor(.white600)
+          .font(.body3)
       }
-      .padding(20)
+      .padding(.horizontal, .spacingXL)
+      .hLeading()
       
-      Spacer()
+      PhoneVerificationView(store: phoneVerificationStore)
+        .padding(.horizontal, .spacingXL)
       
       NavigationLink(
         tag: State.Route.verificationNumberCheck,
@@ -51,6 +56,18 @@ struct SignInView: View {
         },
         label: EmptyView.init
       )
+    }
+    .vCenter()
+    .background(Color.black800)
+    .navigationBarBackButtonHidden(true)
+    .toolbar {
+      ToolbarItem(placement: .navigationBarLeading) {
+        Button {
+          presentationMode.wrappedValue.dismiss()
+        } label: {
+          Image("leftArrow")
+        }
+      }
     }
   }
 }
@@ -72,6 +89,7 @@ extension SignInView {
   }
 }
 
+// MARK: - Preview
 struct SignInView_Previews: PreviewProvider {
   static var previews: some View {
     SignInView(

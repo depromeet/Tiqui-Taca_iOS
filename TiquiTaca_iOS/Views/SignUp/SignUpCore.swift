@@ -70,6 +70,8 @@ let signUpCore = Reducer<
   case .verificationNumberCheckAction:
     return .none
   case .phoneVerficationAction(.phoneNumberRequestSuccess):
+    state.verificationNumberCheckState.phoneNumber = state.phoneVerficationState.phoneNumber
+    state.verificationNumberCheckState.expireMinute = state.phoneVerficationState.expireMinute
     return Effect(value: .setRoute(.verificationNumberCheck))
   case .phoneVerficationAction:
     return .none

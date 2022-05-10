@@ -14,6 +14,7 @@ struct SignUpView: View {
   
   private let store: Store<State, Action>
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
+  @Environment(\.presentationMode) var presentationMode
   
   struct ViewState: Equatable {
     let route: State.Route?
@@ -29,16 +30,20 @@ struct SignUpView: View {
   }
   
   var body: some View {
-    VStack {
-      Spacer()
-      VStack(alignment: .leading, spacing: 10) {
+    VStack(spacing: .spacingXXXL) {
+      VStack(alignment: .leading, spacing: .spacingM) {
         Text("회원가입을 위해\n휴대폰 번호를 인증해주세요!")
-        Text("최초 인증과 티키타카의 회원이 되기 위해 필요해요.")
-        PhoneVerificationView(store: phoneVerificationStore)
+          .foregroundColor(.white)
+          .font(.heading1)
+        Text("티키타카의 회원이 되기 위해 필요해요.")
+          .foregroundColor(.white600)
+          .font(.body3)
       }
-      .padding(20)
+      .padding(.horizontal, .spacingXL)
+      .hLeading()
       
-      Spacer()
+      PhoneVerificationView(store: phoneVerificationStore)
+        .padding(.horizontal, .spacingXL)
       
       NavigationLink(
         tag: State.Route.verificationNumberCheck,
@@ -51,6 +56,18 @@ struct SignUpView: View {
         },
         label: EmptyView.init
       )
+    }
+    .vCenter()
+    .background(Color.black800)
+    .navigationBarBackButtonHidden(true)
+    .toolbar {
+      ToolbarItem(placement: .navigationBarLeading) {
+        Button {
+          presentationMode.wrappedValue.dismiss()
+        } label: {
+          Image("leftArrow")
+        }
+      }
     }
   }
 }
