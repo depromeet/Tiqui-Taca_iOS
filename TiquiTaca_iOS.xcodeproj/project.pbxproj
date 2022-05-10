@@ -17,6 +17,7 @@
 		8601F666281404D40085F692 /* OnboardingCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8601F665281404D40085F692 /* OnboardingCore.swift */; };
 		86783243282651A90034EACC /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86783242282651A90034EACC /* Color+Extensions.swift */; };
 		867832462826DE890034EACC /* RoomListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 867832452826DE890034EACC /* RoomListCell.swift */; };
+		869FC8DC282A561F00B14345 /* RoomInfoEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869FC8DB282A561F00B14345 /* RoomInfoEntity.swift */; };
 		86E494832814F05D00551CCD /* MainTabCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E494822814F05D00551CCD /* MainTabCore.swift */; };
 		86E494892814FDAE00551CCD /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E494882814FDAE00551CCD /* MapView.swift */; };
 		86E4948B2814FDBC00551CCD /* MapCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E4948A2814FDBC00551CCD /* MapCore.swift */; };
@@ -118,6 +119,7 @@
 		8601F665281404D40085F692 /* OnboardingCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCore.swift; sourceTree = "<group>"; };
 		86783242282651A90034EACC /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
 		867832452826DE890034EACC /* RoomListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomListCell.swift; sourceTree = "<group>"; };
+		869FC8DB282A561F00B14345 /* RoomInfoEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomInfoEntity.swift; sourceTree = "<group>"; };
 		86E494822814F05D00551CCD /* MainTabCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabCore.swift; sourceTree = "<group>"; };
 		86E494882814FDAE00551CCD /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		86E4948A2814FDBC00551CCD /* MapCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCore.swift; sourceTree = "<group>"; };
@@ -401,6 +403,7 @@
 				F2F1ED7C281C3D6900AC4FDD /* VerificationEntity.swift */,
 				F2F1ED7E281C40BB00AC4FDD /* UserEntity.swift */,
 				F2F1ED80281C533000AC4FDD /* IssueCodeEntity.swift */,
+				869FC8DB282A561F00B14345 /* RoomInfoEntity.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -846,6 +849,7 @@
 				F981FA1A282600B50000A531 /* MyTermsOfServiceView.swift in Sources */,
 				86E494832814F05D00551CCD /* MainTabCore.swift in Sources */,
 				86E494932814FDE900551CCD /* MsgAndNotiCore.swift in Sources */,
+				869FC8DC282A561F00B14345 /* RoomInfoEntity.swift in Sources */,
 				86E494972814FE0300551CCD /* MyPageCore.swift in Sources */,
 				86E4948F2814FDD000551CCD /* ChatCore.swift in Sources */,
 				F981FA172825FB0A0000A531 /* NoticeView.swift in Sources */,

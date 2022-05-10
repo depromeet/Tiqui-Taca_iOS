@@ -29,16 +29,26 @@ struct ChatView: View {
 			NavigationView {
 				VStack(spacing: 0) {
 					CurrentChatView()
-					SectionHeader(currentTabIdx: viewStore.binding(
-						get: \.currentTabIdx,
-						send: ChatAction.tabChange
+					
+					TabKindView(
+						currentTab: viewStore.binding(
+							get: \.currentTab,
+							send: ChatAction.tabChange
 					))
-					List {
-						ForEach(0..<40) { index in
-							RoomListCell(index: index, type: viewStore.state.currentTabIdx == 0 ? .like : .popular)
+					
+					if viewStore.state.presentRoomList.isEmpty {
+						NoDataView(noDataType: viewStore.state.currentTab)
+					} else {
+						List(viewStore.state.presentRoomList, id: \.id) { room in
+							RoomListCell(
+								index: 1,
+								info: room,
+								type: viewStore.state.currentTab
+							)
 								.listRowSeparator(.hidden)
 								.listRowInsets(EdgeInsets())
 						}
+							.vTop()
 					}
 				}
 					.listStyle(.plain)
@@ -73,7 +83,7 @@ struct ChatView: View {
 }
 
 
-// MARK: Current Chat
+// MARK: Current Chat View
 private struct CurrentChatView: View {
 	var body: some View {
 		VStack {
@@ -134,45 +144,25 @@ private struct CurrentChatView: View {
 }
 
 
-// MARK: Section Header
-private struct SectionHeader: View {
-	@Binding var currentTabIdx: Int
+// MARK: Tab Kind View
+private struct TabKindView: View {
+	@Binding var currentTab: RoomListType
 	
 	var body: some View {
 		HStack(spacing: 0) {
 			Spacer().frame(width: 10)
-			
-			Button(action: {
-				currentTabIdx = 0
-			}, label: {
-				Text("즐겨찾기")
-					.font(.system(size: 15, weight: .semibold, design: .default))
-					.foregroundColor(Color.green500)
-					.padding([.leading, .trailing], 14)
-			})
-				.frame(height: 40)
-				.overlay(
-					Rectangle()
-						.frame(height: 2)
-						.foregroundColor(Color.green500),
-					alignment: .bottom)
-			
-			Button(action: {
-				currentTabIdx = 1
-			}, label: {
-				Text("인기채팅방")
-					.font(.system(size: 15, weight: .semibold, design: .default))
-					.foregroundColor(Color.black100)
-					.padding([.leading, .trailing], 14)
-			})
-				.frame(height: 40)
-				.overlay(
-					Rectangle()
-						.frame(height: 0)
-						.foregroundColor(Color.green500),
-					alignment: .bottom)
-			
-			Spacer()
+			Button(
+				action: { currentTab = .like },
+				label: { Text("즐겨찾기") }
+			)
+				.buttonStyle(TabButton())
+				.disabled(currentTab == .like)
+			Button(
+				action: { currentTab = .popular },
+				label: { Text("인기채팅방") }
+			)
+				.buttonStyle(TabButton())
+				.disabled(currentTab == .popular)
 			Text("15:30 기준")
 				.foregroundColor(.white800)
 				.font(.system(size: 13, weight: .semibold, design: .default))
@@ -181,6 +171,46 @@ private struct SectionHeader: View {
 		}
 			.frame(height: 40)
 			.background(Color.black800)
+	}
+}
+
+private struct TabButton: ButtonStyle {
+	@Environment(\.isEnabled) var isEnabled
+	
+	public init() { }
+	
+	public func makeBody(configuration: Configuration) -> some View {
+		return configuration.label
+			.frame(height: 40)
+			.font(.subtitle3)
+			.foregroundColor(isEnabled ? .black100 : .green500)
+			.padding([.leading, .trailing], 14)
+			.overlay(
+				Rectangle()
+					.frame(height: isEnabled ? 0 : 2)
+					.foregroundColor(Color.green500),
+				alignment: .bottom)
+	}
+}
+
+// MARK: NoData View
+private struct NoDataView: View {
+	let noDataType: RoomListType
+	var body: some View {
+		VStack(spacing: .spacingS) {
+			Image(noDataType == .like ? "noFavorite" : "noData")
+			Text(noDataType == .like ?
+				"즐겨찾기로 설정한 채팅방이 없어요" :
+				"아직 활발하게 티키타카하는 곳이 없어요.\n원하는 채팅방에 먼저 참여해보세요!"
+			)
+				.font(.body2)
+				.foregroundColor(.white900)
+				.multilineTextAlignment(.center)
+				.lineSpacing(.spacingXXS)
+		}
+			.padding(.bottom, 24)
+			.vCenter()
+			.hCenter()
 	}
 }
 

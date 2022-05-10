@@ -14,6 +14,7 @@ enum RoomListType {
 
 struct RoomListCell: View {
 	let index: Int
+	let info: RoomInfoEntity.Response
 	let type: RoomListType
 	
 	var body: some View {
@@ -87,6 +88,7 @@ struct RoomListCell_Previews: PreviewProvider {
 	static var previews: some View {
 		RoomListCell(
 			index: 1,
+			info: RoomInfoEntity.Response(),
 			type: .popular
 		)
 	}
