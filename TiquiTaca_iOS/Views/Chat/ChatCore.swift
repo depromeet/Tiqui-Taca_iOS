@@ -9,18 +9,17 @@ import Combine
 import ComposableArchitecture
 
 struct ChatState: Equatable {
-	var dummyState = 0
 	var currentTab: RoomListType = .like
 	
 	var enteredRoom: RoomInfoEntity.Response?
 	var likeRoomList: [RoomInfoEntity.Response] = []
 	var popularRoomList: [RoomInfoEntity.Response] = []
-	
 	var presentRoomList: [RoomInfoEntity.Response] = []
 }
 
 enum ChatAction: Equatable {
 	case tabChange(RoomListType)
+	case refresh
 }
 
 struct ChatEnvironment {
@@ -38,6 +37,9 @@ let chatReducer = Reducer<
 		guard state.currentTab != type else { return .none }
 		state.currentTab = type
 		state.presentRoomList = type == .like ? state.likeRoomList : state.popularRoomList
+		return .none
+	case .refresh:
+		
 		return .none
 	}
 }

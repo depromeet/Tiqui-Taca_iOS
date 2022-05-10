@@ -36,20 +36,27 @@ struct ChatView: View {
 							send: ChatAction.tabChange
 					))
 					
-					if viewStore.state.presentRoomList.isEmpty {
-						NoDataView(noDataType: viewStore.state.currentTab)
-					} else {
-						List(viewStore.state.presentRoomList, id: \.id) { room in
-							RoomListCell(
-								index: 1,
-								info: room,
-								type: viewStore.state.currentTab
-							)
+					List {
+						if viewStore.state.presentRoomList.isEmpty {
+							NoDataView(noDataType: viewStore.state.currentTab)
 								.listRowSeparator(.hidden)
 								.listRowInsets(EdgeInsets())
+								.padding(.top, .spacingXXXL * 2)
+						} else {
+							ForEach(viewStore.state.presentRoomList, id: \.id) { room in
+								RoomListCell(
+									index: 1,
+									info: room,
+									type: viewStore.state.currentTab
+								)
+									.listRowSeparator(.hidden)
+									.listRowInsets(EdgeInsets())
+							}
 						}
-							.vTop()
 					}
+						.refreshable {
+							viewStore.send(.refresh)
+						}
 				}
 					.listStyle(.plain)
 					.navigationBarTitleDisplayMode(.large)
@@ -208,7 +215,6 @@ private struct NoDataView: View {
 				.multilineTextAlignment(.center)
 				.lineSpacing(.spacingXXS)
 		}
-			.padding(.bottom, 24)
 			.vCenter()
 			.hCenter()
 	}
