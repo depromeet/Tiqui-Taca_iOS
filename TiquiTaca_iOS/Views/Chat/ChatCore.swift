@@ -11,6 +11,7 @@ import ComposableArchitecture
 struct ChatState: Equatable {
 	var dummyState = 0
 	var currentTabIdx = 0
+	var presentRoomList: [Int] = []
 }
 
 enum ChatAction: Equatable {

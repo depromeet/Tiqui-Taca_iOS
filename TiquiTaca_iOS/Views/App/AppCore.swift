@@ -74,7 +74,7 @@ let appCore = Reducer<
     state.route = selectedRoute
     return .none
   case .onAppear:
-    if environment.appService.authService.isLoggedIn {
+    if !environment.appService.authService.isLoggedIn {
       state.mainTabState = .init()
       return Effect(value: .setRoute(.mainTab))
     } else {
