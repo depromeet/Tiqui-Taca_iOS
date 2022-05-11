@@ -45,6 +45,9 @@ let otpFieldReducer = Reducer<
 > { state, action, _ in
   switch action {
   case let .activeField(index, content):
+    if state.fields[index].text == content {
+      return .none
+    }
     state.fields[index].text = content
     state.focusedFieldIndex = index
     return Effect(value: .checkValue)

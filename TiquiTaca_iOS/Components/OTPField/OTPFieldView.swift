@@ -14,7 +14,7 @@ struct OTPFieldView: View {
   
   var body: some View {
     WithViewStore(store) { viewStore in
-      HStack(alignment: .center, spacing: 8) {
+      HStack(alignment: .center, spacing: .spacingXS) {
         ForEach(viewStore.fields) { model in
           TextField(
             "",
@@ -23,13 +23,15 @@ struct OTPFieldView: View {
               send: { .activeField(index: model.id, content: $0) }
             )
           )
+          .foregroundColor(.green600)
+          .font(.heading2)
           .multilineTextAlignment(.center)
           .keyboardType(.numberPad)
           .focused($focusedFieldIndex, equals: model.id)
           .frame(width: 44, height: 56)
           .overlay(
             RoundedRectangle(cornerRadius: 12)
-              .stroke(model.isFilled ? Color.green : Color.white, lineWidth: 2)
+              .stroke(model.isFilled ? Color.green600 : Color.white50, lineWidth: .spacingXXXS)
           )
           .onChange(of: viewStore.focusedFieldIndex) {
             focusedFieldIndex = $0

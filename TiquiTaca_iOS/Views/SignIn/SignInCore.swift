@@ -71,7 +71,7 @@ let signInCore = Reducer<
     return .none
   case .phoneVerficationAction(.phoneNumberRequestSuccess):
     state.verificationNumberCheckState.phoneNumber = state.phoneVerficationState.phoneNumber
-    state.verificationNumberCheckState.expireMinute = state.phoneVerficationState.expireMinute
+    state.verificationNumberCheckState.expireSeconds = state.phoneVerficationState.expireMinute * 60
     return Effect(value: .setRoute(.verificationNumberCheck))
   case .phoneVerficationAction:
     return.none
