@@ -12,16 +12,13 @@ import Foundation
 struct VerificationNumberCheckState: Equatable {
   enum Route {
     case termsOfService
-    case main
   }
   var route: Route?
   var phoneNumber: String = ""
   var expireSeconds: Int = 0
   var isAvailable: Bool = true
-  var isLoginSuccess: Bool = false
   var otpFieldState: OTPFieldState = .init()
-  var termsOfServiceState: TermsOfServiceState = .init()
-  var mainTabState: MainTabState = .init()
+  var termsOfServiceState: TermsOfServiceState?
 }
 
 enum VerificationNumberCheckAction: Equatable {
@@ -31,6 +28,7 @@ enum VerificationNumberCheckAction: Equatable {
   case timerTicked
   case timerStop
   
+  case loginSuccess
   case requestAgain
   case verificationResponse(Result<VerificationEntity.Response?, HTTPError>)
   case issuePhoneCodeResponse(Result<IssueCodeEntity.Response?, HTTPError>)
@@ -50,18 +48,8 @@ let verificationNumberCheckReducer = Reducer<
   VerificationNumberCheckAction,
   VerificationNumberCheckEnvironment
 >.combine([
-  mainTabReducer
-    .pullback(
-      state: \.mainTabState,
-      action: /VerificationNumberCheckAction.mainTabAction,
-      environment: {
-        MainTabEnvironment(
-          appService: $0.appService,
-          mainQueue: $0.mainQueue
-        )
-      }
-    ),
   termsOfServiceReducer
+    .optional()
     .pullback(
       state: \.termsOfServiceState,
       action: /VerificationNumberCheckAction.termsOfServiceAction,
@@ -89,6 +77,9 @@ let verificationNumberCheckCore = Reducer<
   struct TimerId: Hashable {}
   
   switch action {
+  case .loginSuccess:
+    return.none
+    
   case .timerStart:
     return Effect.timer(id: TimerId(), every: 1, on: environment.mainQueue)
       .map { _ in .timerTicked }
@@ -118,6 +109,16 @@ let verificationNumberCheckCore = Reducer<
     if let tempToken = response.tempToken {
       try? TokenManager.shared.saveTempToken(tempToken)
       return Effect(value: .setRoute(.termsOfService))
+    }
+    
+    if let accessToken = response.accessToken,
+       let refreshToken = response.refreshToken,
+       let user = response.user {
+      try? TokenManager.shared.saveAccessToken(accessToken)
+      try? TokenManager.shared.saveRefreshToken(refreshToken)
+      // MARK: - user 정보 저장 필요
+      // userService.saveUser...
+      return Effect(value: .loginSuccess)
     }
     return .none
     
@@ -157,6 +158,8 @@ let verificationNumberCheckCore = Reducer<
     
   case let .setRoute(selectedRoute):
     if selectedRoute == nil {
+      state.termsOfServiceState = nil
+    } else if selectedRoute == .termsOfService {
       state.termsOfServiceState = .init()
     }
     state.route = selectedRoute

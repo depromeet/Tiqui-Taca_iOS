@@ -73,7 +73,10 @@ struct VerificationNumberCheckView: View {
           send: Action.setRoute
         ),
         destination: {
-          TermsOfServiceView(store: termsOfServiceStore)
+          IfLetStore(
+            termsOfServiceStore,
+            then: TermsOfServiceView.init
+          )
         },
         label: EmptyView.init
       )
@@ -105,7 +108,7 @@ extension VerificationNumberCheckView {
     )
   }
   
-  private var termsOfServiceStore: Store<TermsOfServiceState, TermsOfServiceAction> {
+  private var termsOfServiceStore: Store<TermsOfServiceState?, TermsOfServiceAction> {
     return store.scope(
       state: \.termsOfServiceState,
       action: Action.termsOfServiceAction

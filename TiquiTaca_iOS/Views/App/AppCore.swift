@@ -89,6 +89,10 @@ let appCore = Reducer<
     state.mainTabState = nil
     state.onboardingState = .init()
     return Effect(value: .setRoute(.onboarding))
+  case .onboardingAction(.signInAction(.verificationNumberCheckAction(.loginSuccess))):
+    return Effect(value: .signIn)
+  case .onboardingAction(.signUpAction(.verificationNumberCheckAction(.loginSuccess))):
+    return Effect(value: .signIn)
   case .onboardingAction:
     return .none
   case .mainTabAction:
