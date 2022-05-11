@@ -16,7 +16,7 @@ struct SignInState: Equatable {
   var phoneNumber: String = ""
   var verificationCode: String = ""
   var expireMinute: Int = 0
-  var verificationNumberCheckState: VerificationNumberCheckState = .init()
+  var verificationNumberCheckState: VerificationNumberCheckState?
   var phoneVerficationState: PhoneVerificationState = .init()
 }
 
@@ -37,6 +37,7 @@ let signInReducer = Reducer<
   SignInEnvironment
 >.combine([
   verificationNumberCheckReducer
+    .optional()
     .pullback(
       state: \.verificationNumberCheckState,
       action: /SignInAction.verificationNumberCheckAction,
@@ -70,14 +71,16 @@ let signInCore = Reducer<
   case .verificationNumberCheckAction:
     return .none
   case .phoneVerficationAction(.phoneNumberRequestSuccess):
-    state.verificationNumberCheckState.phoneNumber = state.phoneVerficationState.phoneNumber
-    state.verificationNumberCheckState.expireSeconds = state.phoneVerficationState.expireMinute * 60
     return Effect(value: .setRoute(.verificationNumberCheck))
   case .phoneVerficationAction:
     return.none
   case let .setRoute(selectedRoute):
     if selectedRoute == nil {
+      state.verificationNumberCheckState = nil
+    } else if selectedRoute == .verificationNumberCheck {
       state.verificationNumberCheckState = .init()
+      state.verificationNumberCheckState?.phoneNumber = state.phoneVerficationState.phoneNumber
+      state.verificationNumberCheckState?.expireSeconds = state.phoneVerficationState.expireMinute * 60
     }
     state.route = selectedRoute
     return .none

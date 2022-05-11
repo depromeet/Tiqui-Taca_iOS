@@ -52,7 +52,10 @@ struct SignInView: View {
           send: Action.setRoute
         ),
         destination: {
-          VerificationNumberCheckView(store: verificationNumberCheckStore)
+          IfLetStore(
+            verificationNumberCheckStore,
+            then: VerificationNumberCheckView.init
+          )
         },
         label: EmptyView.init
       )
@@ -81,7 +84,7 @@ extension SignInView {
     )
   }
   
-  private var verificationNumberCheckStore: Store<VerificationNumberCheckState, VerificationNumberCheckAction> {
+  private var verificationNumberCheckStore: Store<VerificationNumberCheckState?, VerificationNumberCheckAction> {
     return store.scope(
       state: \.verificationNumberCheckState,
       action: Action.verificationNumberCheckAction
