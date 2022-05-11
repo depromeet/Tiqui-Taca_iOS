@@ -11,6 +11,7 @@ import TTDesignSystemModule
 
 struct ChangeProfileView: View {
   let store: Store<ChangeProfileState, ChangeProfileAction>
+//  @State private var editing = false
   
   var body: some View {
     WithViewStore(store) { viewStore in
@@ -29,15 +30,25 @@ struct ChangeProfileView: View {
             )
             .padding([.top], 120)
           
-          TextField(
-            "닉네임을 입력해주세요.",
-            text: viewStore.binding(
-              get: \.nickname,
-              send: ChangeProfileAction.nicknameChanged
+          VStack {
+            TextField(
+              "닉네임을 입력해주세요.",
+              text: viewStore.binding(
+                get: \.nickname,
+                send: ChangeProfileAction.nicknameChanged
+              ), onEditingChanged: { edit in
+                if edit {
+                  viewStore.send(.nicknameFocused)
+                }
+              }
             )
-          )
-          .foregroundColor(Color.white)
-          .disableAutocorrection(true)
+            .foregroundColor(viewStore.nicknameFocused.color)
+            .disableAutocorrection(true)
+            
+            Rectangle()
+              .frame(height: 2.0, alignment: .bottom)
+              .foregroundColor(viewStore.nicknameFocused.color)
+          }
           .padding([.leading, .trailing], 40)
           
           Text("프로필 이름과 이미지를 수정해보세요.")
