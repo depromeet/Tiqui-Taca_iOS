@@ -38,14 +38,18 @@ struct MyPageView: View {
                   .alignmentGuide(.bottom) { $0[.bottom] }
                   .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
               )
-            Text(viewStore.nickName)
+            Text(viewStore.nickname)
               .font(.heading2)
             
-            Text("최초가입일 \(viewStore.createdAt) / 티키타카와 +\(viewStore.createDday)일 째")
+            Text("최초가입일 \(viewStore.createdAt.ISO8601Format()) / 티키타카와 +\(String(viewStore.createDday))일 째")
               .font(.body7)
               .foregroundColor(.white900)
             
-            Text("뱃지")
+            Button {
+              
+            } label: {
+              Image("rating\(viewStore.level)")
+            }
           }
           .padding(.spacingXL)
           .foregroundColor(.white)
