@@ -9,8 +9,10 @@ import Foundation
 
 struct AppService {
   let authService: AuthServiceType
+  let userService: UserServiceType
   
   init() {
     authService = AuthService()
+    userService = UserService()
   }
 }

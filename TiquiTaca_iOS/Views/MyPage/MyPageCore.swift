@@ -6,12 +6,14 @@
 //
 
 import ComposableArchitecture
+import TTNetworkModule
 
 struct MyPageState: Equatable {
-  var nickName = ""
+  var nickname = "닉네임"
   var profileImage = "defaultProfile"
-  var createdAt = ""
-  var createDday = ""
+  var level = 1
+  var createdAt = Date()
+  var createDday = 0
   var isAppAlarmOn = false
   var appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
   var popupPresented = false
@@ -34,7 +36,15 @@ struct MyPageItem {
 }
 
 enum MyPageAction: Equatable {
-	case selectDetail
+  case getProfileInfo
+  case getProfileInfoResponse(Result<ProfileEntity.Response?, HTTPError>)
+  case getProfileRequestSuccess
+  
+  case alarmToggle
+  case getAlarmRequestResponse(Result<AppAlarmEntity.Response?, HTTPError>)
+  case getAlarmRequestSuccess
+  
+  case selectDetail
   case selectSheet(MyPageSheetChoice)
   case dismissDetail
 }
@@ -45,11 +55,44 @@ struct MyPageEnvironment {
 }
 
 let myPageReducer = Reducer<
-	MyPageState,
-	MyPageAction,
-	MyPageEnvironment
+  MyPageState,
+  MyPageAction,
+  MyPageEnvironment
 > { state, action, environment in
   switch action {
+  case .getProfileInfo:
+    return environment.appService.userService
+      .getProfile()
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(MyPageAction.getProfileInfoResponse)
+  case let .getProfileInfoResponse(.success(response)):
+    //    state.profileImage
+    state.nickname = response?.nickname ?? ""
+    state.createdAt = response?.createdAt ?? Date()
+    state.createDday = Calendar.current.dateComponents([.day], from: state.createdAt).day ?? 0
+    state.isAppAlarmOn = response?.appAlarm ?? false
+    state.level = response?.level ?? 0
+    return Effect(value: .getProfileRequestSuccess)
+  case .getProfileInfoResponse(.failure):
+    return .none
+  case .getProfileRequestSuccess:
+    return .none
+    
+  case .alarmToggle:
+    return environment.appService.userService
+      .getAppAlarmState()
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(MyPageAction.getAlarmRequestResponse)
+  case let .getAlarmRequestResponse(.success(response)):
+    state.isAppAlarmOn = response?.appAlarm ?? false
+    return Effect(value: .getProfileRequestSuccess)
+  case .getAlarmRequestResponse(.failure):
+    return .none
+  case .getAlarmRequestSuccess:
+    return .none
+    
   case .selectDetail:
     return .none
   case let .selectSheet(presentedSheet):

@@ -77,6 +77,9 @@
 		F981FA2B2826A32A0000A531 /* Pretendard-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = F981FA282826A32A0000A531 /* Pretendard-Bold.otf */; };
 		F981FA2C2826A32A0000A531 /* Pretendard-SemiBold.otf in Resources */ = {isa = PBXBuildFile; fileRef = F981FA292826A32A0000A531 /* Pretendard-SemiBold.otf */; };
 		F993ADC92816C79C00718E9F /* OTPFieldCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F993ADC82816C79C00718E9F /* OTPFieldCore.swift */; };
+		F9B45A1B282BD7AA00948586 /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B45A1A282BD7AA00948586 /* UserService.swift */; };
+		F9B45A1D282BDA5700948586 /* ProfileEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B45A1C282BDA5700948586 /* ProfileEntity.swift */; };
+		F9B45A1F282BE9DB00948586 /* AppAlarmEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B45A1E282BE9DB00948586 /* AppAlarmEntity.swift */; };
 		F9B90C9C28117DDF003FFEEB /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B90C9B28117DDF003FFEEB /* AuthService.swift */; };
 		F9DB0B3528294F56002F6AD8 /* ChangeProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DB0B3428294F56002F6AD8 /* ChangeProfileView.swift */; };
 		F9DB0B3728294F66002F6AD8 /* ChangeProfileCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DB0B3628294F66002F6AD8 /* ChangeProfileCore.swift */; };
@@ -184,6 +187,9 @@
 		F981FA282826A32A0000A531 /* Pretendard-Bold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-Bold.otf"; sourceTree = "<group>"; };
 		F981FA292826A32A0000A531 /* Pretendard-SemiBold.otf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Pretendard-SemiBold.otf"; sourceTree = "<group>"; };
 		F993ADC82816C79C00718E9F /* OTPFieldCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPFieldCore.swift; sourceTree = "<group>"; };
+		F9B45A1A282BD7AA00948586 /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
+		F9B45A1C282BDA5700948586 /* ProfileEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEntity.swift; sourceTree = "<group>"; };
+		F9B45A1E282BE9DB00948586 /* AppAlarmEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAlarmEntity.swift; sourceTree = "<group>"; };
 		F9B90C9B28117DDF003FFEEB /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		F9DB0B3428294F56002F6AD8 /* ChangeProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeProfileView.swift; sourceTree = "<group>"; };
 		F9DB0B3628294F66002F6AD8 /* ChangeProfileCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeProfileCore.swift; sourceTree = "<group>"; };
@@ -401,6 +407,8 @@
 				F2F1ED7C281C3D6900AC4FDD /* VerificationEntity.swift */,
 				F2F1ED7E281C40BB00AC4FDD /* UserEntity.swift */,
 				F2F1ED80281C533000AC4FDD /* IssueCodeEntity.swift */,
+				F9B45A1C282BDA5700948586 /* ProfileEntity.swift */,
+				F9B45A1E282BE9DB00948586 /* AppAlarmEntity.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -477,6 +485,7 @@
 			children = (
 				F2F1EDA728258E0E00AC4FDD /* AppService.swift */,
 				F9B90C9B28117DDF003FFEEB /* AuthService.swift */,
+				F9B45A1A282BD7AA00948586 /* UserService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -827,6 +836,7 @@
 				8601F661281393640085F692 /* PageControl.swift in Sources */,
 				8601F659281308CB0085F692 /* View+Extensions.swift in Sources */,
 				F9669F6428251E59004624F8 /* MyBlockHistoryView.swift in Sources */,
+				F9B45A1D282BDA5700948586 /* ProfileEntity.swift in Sources */,
 				F96CDE752824EF8C002DEB90 /* MyInfoView.swift in Sources */,
 				F2F1ED9B281EDACE00AC4FDD /* PageView.swift in Sources */,
 				F981FA152825FB000000A531 /* NoticeCore.swift in Sources */,
@@ -836,12 +846,14 @@
 				F2127640280FE07500FB568D /* TOSFieldListView.swift in Sources */,
 				F248EB012813240500430C3B /* CreateProfileView.swift in Sources */,
 				F248EB032813273A00430C3B /* CreateProfileCore.swift in Sources */,
+				F9B45A1F282BE9DB00948586 /* AppAlarmEntity.swift in Sources */,
 				F2127642281021C700FB568D /* TermsOfServiceCore.swift in Sources */,
 				F96CDE772824EF9B002DEB90 /* MyInfoCore.swift in Sources */,
 				F21276462811C6D500FB568D /* TOSFieldListViewCore.swift in Sources */,
 				F2FA365C2808897C00A24789 /* R.generated.swift in Sources */,
 				F2F1ED7F281C40BB00AC4FDD /* UserEntity.swift in Sources */,
 				F981FA1C282600C40000A531 /* MyTermsOfServiceCore.swift in Sources */,
+				F9B45A1B282BD7AA00948586 /* UserService.swift in Sources */,
 				8601F65C281309B10085F692 /* SplashView.swift in Sources */,
 				F981FA1A282600B50000A531 /* MyTermsOfServiceView.swift in Sources */,
 				86E494832814F05D00551CCD /* MainTabCore.swift in Sources */,
