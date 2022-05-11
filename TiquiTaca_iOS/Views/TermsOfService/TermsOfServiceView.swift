@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import TTDesignSystemModule
 
 struct TermsOfServiceView: View {
   typealias State = TermsOfServiceState
@@ -14,6 +15,7 @@ struct TermsOfServiceView: View {
   
   private let store: Store<State, Action>
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
+  @Environment(\.presentationMode) var presentationMode
   
   struct ViewState: Equatable {
     let route: State.Route?
@@ -31,67 +33,76 @@ struct TermsOfServiceView: View {
   }
   
   var body: some View {
-    VStack(alignment: .center, spacing: 44) {
-      LazyVStack(alignment: .leading, spacing: 16) {
-        Image(systemName: "questionmark.app.fill")
-          .resizable()
-          .frame(width: 58, height: 58)
-        Text("티키타카가 처음이시네요\n이용약관에 동의해주세요!")
-          .font(.system(size: 24))
-        Text("원활한 서비스 이용을 위해 이용 약관 및 개인정보와 위치 정보 수집 동의가 필요해요.")
-          .font(.system(size: 11))
-      }
-      .frame(alignment: .leading)
-      
-      Button {
-        viewStore.send(.tosFieldListAction(.allCheck))
-      } label: {
-        HStack {
-          Image(systemName: "checkmark.circle.fill")
-          Text("전체 동의하기")
-            .font(.system(size: 16, weight: .bold, design: .default))
-        }
-        .padding()
-        .frame(maxWidth: .infinity, maxHeight: 56, alignment: .leading)
-        .foregroundColor(Color.white)
-        .background(Color.gray)
-        .cornerRadius(12)
-        .overlay(
-          RoundedRectangle(cornerRadius: 12)
-            .stroke(Color.blue, lineWidth: 1)
-        )
-      }
-      
-      TOSFieldListView(store: tosFieldListStore)
-      
+    VStack {
       Spacer()
-      
-      NavigationLink(
-        tag: State.Route.createProfile,
-        selection: viewStore.binding(
-          get: \.route,
-          send: Action.setRoute
-        ),
-        destination: {
-          CreateProfileView(store: createProfileStore)
-        },
-        label: {
-          Button {
-            viewStore.send(.setRoute(.createProfile))
-          } label: {
-            Text("동의하고 시작하기")
-              .frame(maxWidth: .infinity, maxHeight: 56)
-              .background(Color.gray)
-              .foregroundColor(Color.white)
-              .font(.system(size: 16, weight: .bold, design: .default))
-              .cornerRadius(16)
-          }
-          .disabled(viewStore.tosFieldListState.isAllRequiredCheckDone)
+      VStack(spacing: 50) {
+        VStack(alignment: .leading, spacing: .spacingM) {
+          Image("agreement")
+          Text("티키타카가 처음이시네요\n이용약관에 동의해주세요!")
+            .foregroundColor(.white)
+            .font(.heading1)
+          Text("원활한 서비스 이용을 위해 이용 약관 및 개인정보와 위치 정보 수집 동의가 필요해요.")
+            .foregroundColor(.white600)
+            .font(.body8)
         }
-      )
+        .hLeading()
+        
+        VStack(spacing: .spacingM) {
+          Button {
+            viewStore.send(.tosFieldListAction(.allCheck))
+          } label: {
+            HStack(spacing: .spacingXS) {
+              Image(systemName: "checkmark.circle.fill")
+              Text("전체 동의하기")
+              Spacer()
+            }
+            .padding(.horizontal, .spacingS)
+          }
+          .buttonStyle(
+            TTButtonHighlightStyle(
+              isHighlighted: viewStore.tosFieldListState.isAllCheckDone
+            )
+          )
+          
+          TOSFieldListView(store: tosFieldListStore)
+        }
+        
+        Spacer()
+        
+        NavigationLink(
+          tag: State.Route.createProfile,
+          selection: viewStore.binding(
+            get: \.route,
+            send: Action.setRoute
+          ),
+          destination: {
+            CreateProfileView(store: createProfileStore)
+          },
+          label: {
+            Button {
+              viewStore.send(.setRoute(.createProfile))
+            } label: {
+              Text("동의하고 시작하기")
+            }
+            .buttonStyle(TTButtonLargeGreenStyle())
+          }
+        )
+        .disabled(!viewStore.tosFieldListState.isAllRequiredCheckDone)
+      }
+      .padding(.horizontal, .spacingXL)
     }
-    .padding(.leading, 23)
-    .padding(.trailing, 23)
+    .vCenter()
+    .background(Color.black800)
+    .navigationBarBackButtonHidden(true)
+    .toolbar {
+      ToolbarItem(placement: .navigationBarLeading) {
+        Button {
+          presentationMode.wrappedValue.dismiss()
+        } label: {
+          Image("leftArrow")
+        }
+      }
+    }
   }
 }
 
@@ -112,6 +123,7 @@ extension TermsOfServiceView {
   }
 }
 
+// MARK: - Preview
 struct TermsOfServiceView_Previews: PreviewProvider {
   static var previews: some View {
     TermsOfServiceView(
