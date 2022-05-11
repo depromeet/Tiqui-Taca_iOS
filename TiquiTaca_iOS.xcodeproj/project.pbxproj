@@ -15,6 +15,7 @@
 		8601F661281393640085F692 /* PageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8601F660281393640085F692 /* PageControl.swift */; };
 		8601F6642813AD400085F692 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8601F6632813AD400085F692 /* MainTabView.swift */; };
 		8601F666281404D40085F692 /* OnboardingCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8601F665281404D40085F692 /* OnboardingCore.swift */; };
+		86032A26282C22A50061D3F9 /* RoomService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86032A25282C22A50061D3F9 /* RoomService.swift */; };
 		86783243282651A90034EACC /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86783242282651A90034EACC /* Color+Extensions.swift */; };
 		867832462826DE890034EACC /* RoomListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 867832452826DE890034EACC /* RoomListCell.swift */; };
 		869FC8DC282A561F00B14345 /* RoomInfoEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869FC8DB282A561F00B14345 /* RoomInfoEntity.swift */; };
@@ -117,6 +118,7 @@
 		8601F660281393640085F692 /* PageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageControl.swift; sourceTree = "<group>"; };
 		8601F6632813AD400085F692 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		8601F665281404D40085F692 /* OnboardingCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCore.swift; sourceTree = "<group>"; };
+		86032A25282C22A50061D3F9 /* RoomService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomService.swift; sourceTree = "<group>"; };
 		86783242282651A90034EACC /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
 		867832452826DE890034EACC /* RoomListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomListCell.swift; sourceTree = "<group>"; };
 		869FC8DB282A561F00B14345 /* RoomInfoEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomInfoEntity.swift; sourceTree = "<group>"; };
@@ -480,6 +482,7 @@
 			children = (
 				F2F1EDA728258E0E00AC4FDD /* AppService.swift */,
 				F9B90C9B28117DDF003FFEEB /* AuthService.swift */,
+				86032A25282C22A50061D3F9 /* RoomService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -864,6 +867,7 @@
 				F2F1ED83281C6B2F00AC4FDD /* OTPFieldView.swift in Sources */,
 				F2F1ED96281E868300AC4FDD /* VerificationNumberCheckView.swift in Sources */,
 				86783243282651A90034EACC /* Color+Extensions.swift in Sources */,
+				86032A26282C22A50061D3F9 /* RoomService.swift in Sources */,
 				F981FA1F282604AA0000A531 /* CsCenterView.swift in Sources */,
 				F2F1ED89281E612E00AC4FDD /* SignUpView.swift in Sources */,
 				F9B90C9C28117DDF003FFEEB /* AuthService.swift in Sources */,

@@ -10,12 +10,6 @@ import SwiftUI
 import ComposableArchitecture
 import TTDesignSystemModule
 
-private struct TabButtonStyle: ButtonStyle {
-	func makeBody(configuration: Configuration) -> some View {
-		configuration.label
-	}
-}
-
 struct ChatView: View {
 	var store: Store<ChatState, ChatAction>
 
@@ -74,6 +68,9 @@ struct ChatView: View {
 						.listStyle(.plain)
 						.navigationBarTitleDisplayMode(.large)
 						.navigationTitle("채팅방")
+						.onAppear(perform: {
+							viewStore.send(.fetchPopularRoomList)
+						})
 					
 					TTPopupView.init(
 						popUpCase: .oneLineTwoButton,
@@ -251,16 +248,16 @@ private struct NoDataView: View {
 }
 
 struct ChatView_Previews: PreviewProvider {
-  static var previews: some View {
-    ChatView(
-      store: .init(
-        initialState: ChatState(),
-        reducer: chatReducer,
-        environment: ChatEnvironment(
-          appService: .init(),
-          mainQueue: .main
-        )
-      )
-    )
-  }
+	static var previews: some View {
+		ChatView(
+			store: .init(
+				initialState: ChatState(),
+				reducer: chatReducer,
+				environment: ChatEnvironment(
+					appService: .init(),
+					mainQueue: .main
+				)
+			)
+		)
+	}
 }

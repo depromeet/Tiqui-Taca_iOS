@@ -7,6 +7,7 @@
 
 import Combine
 import ComposableArchitecture
+import TTNetworkModule
 
 struct ChatState: Equatable {
 	var currentTab: RoomListType = .like
@@ -24,6 +25,9 @@ enum ChatAction: Equatable {
 	case fetchEnteredRoomInfo
 	case fetchLikeRoomList
 	case fetchPopularRoomList
+	
+	case responsePopularRoomList(Result<[RoomInfoEntity.Response]?, HTTPError>)
+	
 	case tabChange(RoomListType)
 	case removeFavoriteRoom(RoomInfoEntity.Response)
 	case presentEnterRoomPopup(RoomInfoEntity.Response)
@@ -32,21 +36,31 @@ enum ChatAction: Equatable {
 }
 
 struct ChatEnvironment {
-  let appService: AppService
-  let mainQueue: AnySchedulerOf<DispatchQueue>
+	let appService: AppService
+	let mainQueue: AnySchedulerOf<DispatchQueue>
 }
 
 let chatReducer = Reducer<
 	ChatState,
 	ChatAction,
 	ChatEnvironment
-> { state, action, _ in
+> { state, action, environment in
 	switch action {
 	case .fetchEnteredRoomInfo:
 		return .none
 	case .fetchLikeRoomList:
 		return .none
 	case .fetchPopularRoomList:
+		return environment.appService.roomService
+			.getPopularRoomList()
+			.receive(on: environment.mainQueue)
+			.catchToEffect()
+			.map(ChatAction.responsePopularRoomList)
+			.cancellable(id: "getPopularRoomList")
+	case let .responsePopularRoomList(.success(res)):
+		state.popularRoomList = res ?? []
+		return .none
+	case .responsePopularRoomList(.failure):
 		return .none
 	case .tabChange(let type):
 		guard state.currentTab != type else { return .none }
@@ -64,6 +78,11 @@ let chatReducer = Reducer<
 		state.willEnterRoomInfo = nil
 		return .none
 	case .refresh:
-		return .none
+		return environment.appService.roomService
+			.getPopularRoomList()
+			.receive(on: environment.mainQueue)
+			.catchToEffect()
+			.map(ChatAction.responsePopularRoomList)
+			.cancellable(id: "getPopularRoomList")
 	}
 }
