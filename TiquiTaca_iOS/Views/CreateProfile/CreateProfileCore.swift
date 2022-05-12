@@ -8,10 +8,10 @@
 import ComposableArchitecture
 
 struct CreateProfileState: Equatable {
-  var nickname = ""
-  var profileImage = "defaultProfile"
-  var isSheetPresented = false
-  var nicknameFocused = false
+  var nickname: String = ""
+  var profileImage: String = "defaultProfile"
+  var isSheetPresented: Bool = false
+  var nicknameFocused: Bool = false
 }
 
 enum CreateProfileAction: Equatable {
@@ -19,7 +19,7 @@ enum CreateProfileAction: Equatable {
   case nicknameChanged(String)
   case profileImageChanged(String)
   case profileEditButtonTapped
-  case dismissProfileDetail
+  case setBottomSheet(isPresent: Bool)
 }
 
 struct CreateProfileEnvironment {
@@ -47,8 +47,8 @@ let createProfileReducer = Reducer<
     state.nicknameFocused = false
     state.isSheetPresented = true
     return .none
-  case .dismissProfileDetail:
-    state.isSheetPresented = true
+  case let .setBottomSheet(isPresent):
+    state.isSheetPresented = isPresent
     return .none
   }
 }

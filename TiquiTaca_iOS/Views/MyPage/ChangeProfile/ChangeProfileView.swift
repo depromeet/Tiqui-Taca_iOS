@@ -52,6 +52,7 @@ struct ChangeProfileView: View {
               get: \.isSheetPresented,
               send: ChangeProfileAction.dismissProfileDetail
             ),
+            minHeight: 0,
             maxHeight: 294,
             content: {
               let gridItemLayout = [
