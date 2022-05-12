@@ -10,9 +10,10 @@ import Combine
 
 protocol AuthServiceType {
   var isLoggedIn: Bool { get }
-  func verification(request: VerificationEntity.Request) -> AnyPublisher<VerificationEntity.Response?, HTTPError>
-  func issuePhoneCode(request: IssueCodeEntity.Request) -> AnyPublisher<IssueCodeEntity.Response?, HTTPError>
-  func tokenRefresh(request: TokenRefreshEntity.Request) -> AnyPublisher<TokenRefreshEntity.Response?, HTTPError>
+  func verification(_ request: VerificationEntity.Request) -> AnyPublisher<VerificationEntity.Response?, HTTPError>
+  func issuePhoneCode(_ request: IssueCodeEntity.Request) -> AnyPublisher<IssueCodeEntity.Response?, HTTPError>
+  func checkNickname(_ request: CheckNicknameEntity.Request) -> AnyPublisher<CheckNicknameEntity.Response?, HTTPError>
+  func tokenRefresh(_ request: TokenRefreshEntity.Request) -> AnyPublisher<TokenRefreshEntity.Response?, HTTPError>
 }
 
 final class AuthService: AuthServiceType {
@@ -30,17 +31,24 @@ final class AuthService: AuthServiceType {
     network = .init()
   }
   
-  func verification(request: VerificationEntity.Request) -> AnyPublisher<VerificationEntity.Response?, HTTPError> {
+  // token 저장 관련 메서드 추가할 것
+  
+  func verification(_ request: VerificationEntity.Request) -> AnyPublisher<VerificationEntity.Response?, HTTPError> {
     return network
       .request(.authVerification(request), responseType: VerificationEntity.Response.self)
   }
   
-  func issuePhoneCode(request: IssueCodeEntity.Request) -> AnyPublisher<IssueCodeEntity.Response?, HTTPError> {
+  func issuePhoneCode(_ request: IssueCodeEntity.Request) -> AnyPublisher<IssueCodeEntity.Response?, HTTPError> {
     return network
       .request(.authIssueCode(request), responseType: IssueCodeEntity.Response.self)
   }
   
-  func tokenRefresh(request: TokenRefreshEntity.Request) -> AnyPublisher<TokenRefreshEntity.Response?, HTTPError> {
+  func checkNickname(_ request: CheckNicknameEntity.Request) -> AnyPublisher<CheckNicknameEntity.Response?, HTTPError> {
+    return network
+      .request(.checkNickname(request), responseType: CheckNicknameEntity.Response.self)
+  }
+  
+  func tokenRefresh(_ request: TokenRefreshEntity.Request) -> AnyPublisher<TokenRefreshEntity.Response?, HTTPError> {
     return network
       .request(.authTokenRefresh(request), responseType: TokenRefreshEntity.Response.self)
   }

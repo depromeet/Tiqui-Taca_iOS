@@ -97,9 +97,9 @@ let verificationNumberCheckCore = Reducer<
     return .cancel(id: TimerId())
     
   case .requestAgain:
-    let requestModel = IssueCodeEntity.Request(phoneNumber: state.phoneNumber)
+    let request = IssueCodeEntity.Request(phoneNumber: state.phoneNumber)
     return environment.appService.authService
-      .issuePhoneCode(request: requestModel)
+      .issuePhoneCode(request)
       .receive(on: environment.mainQueue)
       .catchToEffect()
       .map(VerificationNumberCheckAction.issuePhoneCodeResponse)
@@ -137,12 +137,12 @@ let verificationNumberCheckCore = Reducer<
     return .none
     
   case .otpFieldAction(.lastFieldTrigger):
-    let requestModel = VerificationEntity.Request(
+    let request = VerificationEntity.Request(
       phoneNumber: state.phoneNumber,
       verificationCode: state.otpFieldState.result
     )
     return environment.appService.authService
-      .verification(request: requestModel)
+      .verification(request)
       .receive(on: environment.mainQueue)
       .catchToEffect()
       .map(VerificationNumberCheckAction.verificationResponse)

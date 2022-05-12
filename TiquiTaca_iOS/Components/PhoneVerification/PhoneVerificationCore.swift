@@ -37,9 +37,9 @@ let phoneVerficationReducer = Reducer<
     state.phoneNumber = text
     return Effect(value: .checkPhoneNumberValidation)
   case .verificationButtonTap:
-    let requestModel = IssueCodeEntity.Request(phoneNumber: state.phoneNumber)
+    let request = IssueCodeEntity.Request(phoneNumber: state.phoneNumber)
     return environment.appService.authService
-      .issuePhoneCode(request: requestModel)
+      .issuePhoneCode(request)
       .receive(on: environment.mainQueue)
       .catchToEffect()
       .map(PhoneVerificationAction.issuePhoneCodeResponse)
