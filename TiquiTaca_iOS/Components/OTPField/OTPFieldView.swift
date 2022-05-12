@@ -38,6 +38,11 @@ struct OTPFieldView: View {
           }
         }
       }
+      .onAppear {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+          focusedFieldIndex = 0
+        }
+      }
     }
   }
 }
