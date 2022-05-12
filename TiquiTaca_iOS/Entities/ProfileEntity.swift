@@ -11,7 +11,7 @@ enum ProfileEntity {
   struct Response: Codable, Equatable {
     let id: String
     let nickname: String
-    //    let profile: ProfileType
+    let profile: ProfileType
     //    let fcmToken: String
     let appAlarm: Bool
     let chatAlarm: Bool
@@ -23,7 +23,7 @@ enum ProfileEntity {
     enum CodingKeys: String, CodingKey {
       case id = "_id"
       case nickname
-      //      case profile
+      case profile
       //      case fcmToken = "FCMToken"
       case appAlarm
       case chatAlarm
@@ -37,6 +37,7 @@ enum ProfileEntity {
       let container = try decoder.container(keyedBy: CodingKeys.self)
       id = (try? container.decode(String.self, forKey: .id)) ?? ""
       nickname = (try? container.decode(String.self, forKey: .nickname)) ?? ""
+      profile = (try? container.decode(ProfileType.self, forKey: .profile)) ?? ProfileType(type: 0)
       appAlarm = (try? container.decode(Bool.self, forKey: .appAlarm)) ?? false
       chatAlarm = (try? container.decode(Bool.self, forKey: .chatAlarm)) ?? false
       iBlockUsers = (try? container.decode([String].self, forKey: .iBlockUsers)) ?? []
@@ -45,19 +46,8 @@ enum ProfileEntity {
       level = (try? container.decode(Int.self, forKey: .level)) ?? 0
     }
   }
+  
+  struct ProfileType: Codable, Equatable {
+    let type: Int
+  }
 }
-
-/*
- "_id": "6276018e68fbd9188ab47012",
- "nickname": "송하갱",
- "profile": {
- "type": 3
- },
- "FCMToken": "string",
- "appAlarm": true,
- "chatAlarm": true,
- "iBlockUsers": [],
- "createdAt": "2022-05-07T14:20:14+09:00",
- "lightningScore": 39,
- "level": 2
- */

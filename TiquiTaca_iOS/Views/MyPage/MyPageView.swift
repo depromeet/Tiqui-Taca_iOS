@@ -101,7 +101,10 @@ struct MyPageView: View {
                     MyBlockHistoryView(store: .init(
                       initialState: MyBlockHistoryState(),
                       reducer: myBlockHistoryReducer,
-                      environment: MyBlockHistoryEnvironment())
+                      environment: MyBlockHistoryEnvironment(
+                        appService: .init(),
+                        mainQueue: .main
+                      ))
                     )
                   case .noticeView:
                     NoticeView(store: .init(
@@ -124,6 +127,10 @@ struct MyPageView: View {
           }
           .listStyle(.plain)
         }
+        .onAppear(
+          perform: {
+            viewStore.send(.getProfileInfo)
+          })
         .navigationBarTitle("", displayMode: .inline)
         .navigationBarHidden(true)
       }
