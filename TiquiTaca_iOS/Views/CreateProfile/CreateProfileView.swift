@@ -29,7 +29,7 @@ struct CreateProfileView: View {
   
   struct ViewState: Equatable {
     let nickname: String
-    let profileImage: String
+    let profileImage: ProfileImage
     let isSheetPresented: Bool
     let nicknameError: NicknameError
     let isAvailableCompletion: Bool
@@ -52,7 +52,7 @@ struct CreateProfileView: View {
     ZStack {
       VStack(spacing: 29) {
         ZStack(alignment: .bottomTrailing) {
-          Image(viewStore.profileImage)
+          Image(viewStore.profileImage.imageName)
           Button {
             focusField = false
             viewStore.send(.setBottomSheet(true))
@@ -103,7 +103,7 @@ struct CreateProfileView: View {
           ProfileImageListView(
             selectedProfile: viewStore.binding(
               get: \.profileImage,
-              send: CreateProfileAction.profileImageChanged
+              send: CreateProfileAction.setProfileImage
             )
           ).padding(.top, .spacingXXL)
         }

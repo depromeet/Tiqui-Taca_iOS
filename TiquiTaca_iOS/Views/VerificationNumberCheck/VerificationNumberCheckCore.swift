@@ -107,17 +107,18 @@ let verificationNumberCheckCore = Reducer<
   case let .verificationResponse(.success(response)):
     guard let response = response else { return .none }
     if let tempToken = response.tempToken {
-      try? TokenManager.shared.saveTempToken(tempToken)
+      environment.appService.authService
+        .saveToken(tempToken: tempToken)
       return Effect(value: .setRoute(.termsOfService))
     }
     
     if let accessToken = response.accessToken,
-       let refreshToken = response.refreshToken,
-       let user = response.user {
-      try? TokenManager.shared.saveAccessToken(accessToken)
-      try? TokenManager.shared.saveRefreshToken(refreshToken)
-      // MARK: - user 정보 저장 필요
-      // userService.saveUser...
+       let refreshToken = response.refreshToken {
+      environment.appService.authService
+        .saveToken(
+          accessToken: accessToken,
+          refreshToken: refreshToken
+        )
       return Effect(value: .loginSuccess)
     }
     return .none
@@ -160,7 +161,9 @@ let verificationNumberCheckCore = Reducer<
     if selectedRoute == nil {
       state.termsOfServiceState = nil
     } else if selectedRoute == .termsOfService {
-      state.termsOfServiceState = .init()
+      state.termsOfServiceState = .init(
+        TermsOfServiceState(phoneNumber: state.phoneNumber)
+      )
     }
     state.route = selectedRoute
     return .none

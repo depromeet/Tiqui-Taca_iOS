@@ -73,6 +73,7 @@ let appCore = Reducer<
   case let .setRoute(selectedRoute):
     state.route = selectedRoute
     return .none
+    
   case .onAppear:
     if environment.appService.authService.isLoggedIn {
       state.mainTabState = .init()
@@ -81,20 +82,56 @@ let appCore = Reducer<
       state.onboardingState = .init()
       return Effect(value: .setRoute(.onboarding))
     }
+    
   case .signIn: // 로그인 (하위 reducer의 로그인 관련 이벤트)
     state.mainTabState = .init()
     state.onboardingState = nil
     return Effect(value: .setRoute(.mainTab))
+    
   case .signOut: // 로그아웃 (하위 reducer의 로그아웃 관련 이벤트)
     state.mainTabState = nil
     state.onboardingState = .init()
     return Effect(value: .setRoute(.onboarding))
-  case .onboardingAction(.signInAction(.verificationNumberCheckAction(.loginSuccess))):
+    
+  case .onboardingAction( // 로그인
+    .signInAction(
+      .verificationNumberCheckAction(.loginSuccess)
+    )
+  ):
     return Effect(value: .signIn)
-  case .onboardingAction(.signUpAction(.verificationNumberCheckAction(.loginSuccess))):
+    
+  case .onboardingAction( // 회원가입
+    .signUpAction(
+      .verificationNumberCheckAction(.loginSuccess)
+    )
+  ):
     return Effect(value: .signIn)
+    
+  case .onboardingAction( // 로그인 -> 유저생성
+    .signInAction(
+      .verificationNumberCheckAction(
+        .termsOfServiceAction(
+          .createProfileAction(.createUserSuccess)
+        )
+      )
+    )
+  ):
+    return Effect(value: .signIn)
+    
+  case .onboardingAction( // 회원가입 -> 유저생성
+    .signUpAction(
+      .verificationNumberCheckAction(
+        .termsOfServiceAction(
+          .createProfileAction(.createUserSuccess)
+        )
+      )
+    )
+  ):
+    return Effect(value: .signIn)
+    
   case .onboardingAction:
     return .none
+    
   case .mainTabAction:
     return .none
   }

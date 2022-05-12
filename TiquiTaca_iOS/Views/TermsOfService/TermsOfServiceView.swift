@@ -76,7 +76,10 @@ struct TermsOfServiceView: View {
             send: Action.setRoute
           ),
           destination: {
-            CreateProfileView(store: createProfileStore)
+            IfLetStore(
+              createProfileStore,
+              then: CreateProfileView.init
+            )
           },
           label: {
             Button {
@@ -108,7 +111,7 @@ struct TermsOfServiceView: View {
 
 // MARK: - Store init
 extension TermsOfServiceView {
-  private var createProfileStore: Store<CreateProfileState, CreateProfileAction> {
+  private var createProfileStore: Store<CreateProfileState?, CreateProfileAction> {
     return store.scope(
       state: \.createProfileState,
       action: Action.createProfileAction

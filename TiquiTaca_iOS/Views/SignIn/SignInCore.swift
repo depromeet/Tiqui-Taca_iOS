@@ -78,9 +78,10 @@ let signInCore = Reducer<
     if selectedRoute == nil {
       state.verificationNumberCheckState = nil
     } else if selectedRoute == .verificationNumberCheck {
-      state.verificationNumberCheckState = .init()
-      state.verificationNumberCheckState?.phoneNumber = state.phoneVerficationState.phoneNumber
-      state.verificationNumberCheckState?.expireSeconds = state.phoneVerficationState.expireMinute * 60
+      state.verificationNumberCheckState = .init(
+        phoneNumber: state.phoneVerficationState.phoneNumber,
+        expireSeconds: state.phoneVerficationState.expireMinute * 60
+      )
     }
     state.route = selectedRoute
     return .none

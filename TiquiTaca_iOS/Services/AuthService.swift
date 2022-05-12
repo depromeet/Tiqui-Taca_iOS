@@ -10,6 +10,9 @@ import Combine
 
 protocol AuthServiceType {
   var isLoggedIn: Bool { get }
+  func saveToken(tempToken: TokenEntity)
+  func saveToken(accessToken: TokenEntity, refreshToken: TokenEntity)
+  
   func verification(_ request: VerificationEntity.Request) -> AnyPublisher<VerificationEntity.Response?, HTTPError>
   func issuePhoneCode(_ request: IssueCodeEntity.Request) -> AnyPublisher<IssueCodeEntity.Response?, HTTPError>
   func checkNickname(_ request: CheckNicknameEntity.Request) -> AnyPublisher<CheckNicknameEntity.Response?, HTTPError>
@@ -31,7 +34,14 @@ final class AuthService: AuthServiceType {
     network = .init()
   }
   
-  // token 저장 관련 메서드 추가할 것
+  func saveToken(tempToken: TokenEntity) {
+    try? TokenManager.shared.saveTempToken(tempToken)
+  }
+  
+  func saveToken(accessToken: TokenEntity, refreshToken: TokenEntity) {
+    try? TokenManager.shared.saveAccessToken(accessToken)
+    try? TokenManager.shared.saveRefreshToken(refreshToken)
+  }
   
   func verification(_ request: VerificationEntity.Request) -> AnyPublisher<VerificationEntity.Response?, HTTPError> {
     return network

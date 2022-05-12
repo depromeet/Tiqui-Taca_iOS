@@ -7,8 +7,17 @@
 
 import SwiftUI
 
+struct ProfileImage: Equatable {
+  /// Type Range: 1 ~ 30
+  var type: Int = 1
+  
+  var imageName: String {
+    return "profile\(type)"
+  }
+}
+
 struct ProfileImageListView: View {
-  @Binding var selectedProfile: String
+  @Binding var selectedProfile: ProfileImage
   
   let gridItemLayout: [GridItem] = [
     .init(), .init(), .init(), .init()
@@ -24,18 +33,17 @@ struct ProfileImageListView: View {
       ScrollView {
         LazyVGrid(columns: gridItemLayout, spacing: 6) {
           ForEach(1...30, id: \.self) { index in
-            let profileImageName = "profile\(index)"
-            let isSelectedProfile = selectedProfile == profileImageName
+            let isSelectedProfile = selectedProfile.type == index
             
             Button {
-              selectedProfile = profileImageName
+              selectedProfile.type = index
             } label: {
               ZStack {
                 Image("profileFocusRectangle")
                   .resizable()
                   .frame(width: 84, height: 84)
                   .opacity(isSelectedProfile ? 1 : 0)
-                Image(profileImageName)
+                Image("profile\(index)")
                   .resizable()
                   .frame(width: 72, height: 72)
               }
@@ -50,7 +58,7 @@ struct ProfileImageListView: View {
 // MARK: - Preview
 struct ProfileImageListView_Previews: PreviewProvider {
   static var previews: some View {
-    ProfileImageListView(selectedProfile: .constant("profile1"))
+    ProfileImageListView(selectedProfile: .constant(.init()))
       .background(Color.black700)
   }
 }

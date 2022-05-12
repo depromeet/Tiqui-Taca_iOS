@@ -26,8 +26,11 @@ enum NicknameError {
 }
 
 struct CreateProfileState: Equatable {
+  var phoneNumber: String = ""
+  var isAgreed: Bool = false
+  
   var nickname: String = ""
-  var profileImage: String = "profile1"
+  var profileImage: ProfileImage = .init()
   var isSheetPresented: Bool = false
   var nicknameError: NicknameError = .none
   var isAvailableCompletion: Bool = false
@@ -36,10 +39,11 @@ struct CreateProfileState: Equatable {
 enum CreateProfileAction: Equatable {
   case doneButtonTapped
   case nicknameChanged(String)
-  case profileImageChanged(String)
+  case setProfileImage(ProfileImage)
   case setBottomSheet(Bool)
   case checkNicknameResponse(Result<CheckNicknameEntity.Response?, HTTPError>)
-  case checkNicknameValidation(String)
+  case createUserSuccess
+  case createUserResponse(Result<UserCreationEntity.Response?, HTTPError>)
 }
 
 struct CreateProfileEnvironment {
@@ -56,7 +60,18 @@ let createProfileReducer = Reducer<
   
   switch action {
   case .doneButtonTapped:
-    return .none
+    let request = UserCreationEntity.Request(
+      phoneNumber: state.phoneNumber,
+      nickname: state.nickname,
+      profileImageType: state.profileImage.type,
+      isAgreed: state.isAgreed,
+      FCMToken: environment.appService.fcmToken ?? ""
+    )
+    return environment.appService.userService
+      .createUser(request)
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(CreateProfileAction.createUserResponse)
     
   case let .nicknameChanged(nickname):
     if state.nickname == nickname {
@@ -95,16 +110,27 @@ let createProfileReducer = Reducer<
   case .checkNicknameResponse(.failure):
     return .none
     
-  case let .checkNicknameValidation(nickname):
-    
-    return .none
-    
-  case let .profileImageChanged(imageString):
-    state.profileImage = imageString
+  case let .setProfileImage(profileImage):
+    state.profileImage = profileImage
     return .none
     
   case let .setBottomSheet(isPresent):
     state.isSheetPresented = isPresent
+    return .none
+    
+  case .createUserSuccess:
+    return .none
+    
+  case let .createUserResponse(.success(response)):
+    guard let response = response else { return .none }
+    environment.appService.authService
+      .saveToken(
+        accessToken: response.accessToken,
+        refreshToken: response.refreshToken
+      )
+    return Effect(value: .createUserSuccess)
+    
+  case .createUserResponse(.failure):
     return .none
   }
 }
