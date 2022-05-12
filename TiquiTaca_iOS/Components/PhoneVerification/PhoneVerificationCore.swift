@@ -49,9 +49,7 @@ let phoneVerficationReducer = Reducer<
   case .issuePhoneCodeResponse(.failure):
     return .none
   case .checkPhoneNumberValidation:
-    let regex = "^01([0-9])([0-9]{4})([0-9]{4})$"
-    let pred = NSPredicate(format: "SELF MATCHES %@", regex)
-    let isAvailable = pred.evaluate(with: state.phoneNumber)
+    let isAvailable = state.phoneNumber.checkPhoneNumber()
     state.isAvailablePhoneNumber = isAvailable
     return .none
   case .phoneNumberRequestSuccess:
