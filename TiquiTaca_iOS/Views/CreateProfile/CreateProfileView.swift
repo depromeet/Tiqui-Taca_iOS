@@ -18,17 +18,28 @@ struct CreateProfileView: View {
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
   @Environment(\.presentationMode) var presentationMode
   
+  var validationColor: Color {
+    switch viewStore.nicknameError {
+    case .none:
+      return .white600
+    default:
+      return .errorRed
+    }
+  }
+  
   struct ViewState: Equatable {
     let nickname: String
     let profileImage: String
     let isSheetPresented: Bool
-    let nicknameFocused: Bool
+    let nicknameError: NicknameError
+    let isAvailableCompletion: Bool
     
     init(state: State) {
       nickname = state.nickname
       profileImage = state.profileImage
       isSheetPresented = state.isSheetPresented
-      nicknameFocused = state.nicknameFocused
+      nicknameError = state.nicknameError
+      isAvailableCompletion = state.isAvailableCompletion
     }
   }
   
@@ -44,7 +55,7 @@ struct CreateProfileView: View {
           Image(viewStore.profileImage)
           Button {
             focusField = false
-            viewStore.send(.profileEditButtonTapped)
+            viewStore.send(.setBottomSheet(true))
           } label: {
             Image("edit")
           }
@@ -67,11 +78,11 @@ struct CreateProfileView: View {
             
             Divider()
               .frame(height: 2)
-              .background(Color.green500)
+              .background(validationColor)
           }
           
-          Text("티키타카에서 사용할 닉네임과 프로필을 선택해주세요.\n닉네임은 최대 10자까지 입력이 가능해요!")
-            .foregroundColor(Color.white)
+          Text(viewStore.nicknameError.description)
+            .foregroundColor(validationColor)
             .font(.body4)
         }
         .multilineTextAlignment(.center)
@@ -89,8 +100,12 @@ struct CreateProfileView: View {
         minHeight: 0,
         maxHeight: 294,
         content: {
-          ProfileImageListView()
-            .padding(.top, .spacingXXL)
+          ProfileImageListView(
+            selectedProfile: viewStore.binding(
+              get: \.profileImage,
+              send: CreateProfileAction.profileImageChanged
+            )
+          ).padding(.top, .spacingXXL)
         }
       )
     }
@@ -116,11 +131,12 @@ struct CreateProfileView: View {
             .foregroundColor(.green500)
             .font(.subtitle1)
         }
+        .disabled(!viewStore.isAvailableCompletion)
       }
     }
     .onTapGesture {
       focusField = false
-      viewStore.send(.setBottomSheet(isPresent: false))
+      viewStore.send(.setBottomSheet(false))
     }
   }
 }
