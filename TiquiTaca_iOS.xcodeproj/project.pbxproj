@@ -37,6 +37,8 @@
 		F25C79B6282C1FC0009C60EE /* ProfileImageListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25C79B5282C1FC0009C60EE /* ProfileImageListView.swift */; };
 		F25C79B8282CB5F2009C60EE /* CheckNicknameEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25C79B7282CB5F2009C60EE /* CheckNicknameEntity.swift */; };
 		F25C79BA282D7524009C60EE /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25C79B9282D7524009C60EE /* String+Extension.swift */; };
+		F25C79BC282D91BC009C60EE /* UserCreationEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25C79BB282D91BC009C60EE /* UserCreationEntity.swift */; };
+		F25C79C0282D91FE009C60EE /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25C79BF282D91FE009C60EE /* UserService.swift */; };
 		F2C02C7127F8824C004C4235 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F2C02C7027F8824C004C4235 /* Assets.xcassets */; };
 		F2C02C7427F8824C004C4235 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F2C02C7327F8824C004C4235 /* Preview Assets.xcassets */; };
 		F2C02C7E27F8824C004C4235 /* TiquiTaca_iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C02C7D27F8824C004C4235 /* TiquiTaca_iOSTests.swift */; };
@@ -145,6 +147,8 @@
 		F25C79B5282C1FC0009C60EE /* ProfileImageListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageListView.swift; sourceTree = "<group>"; };
 		F25C79B7282CB5F2009C60EE /* CheckNicknameEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckNicknameEntity.swift; sourceTree = "<group>"; };
 		F25C79B9282D7524009C60EE /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		F25C79BB282D91BC009C60EE /* UserCreationEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCreationEntity.swift; sourceTree = "<group>"; };
+		F25C79BF282D91FE009C60EE /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		F2C02C6927F8824A004C4235 /* TiquiTaca.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TiquiTaca.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2C02C7027F8824C004C4235 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F2C02C7327F8824C004C4235 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -406,6 +410,7 @@
 		F2F1ED79281C3B6000AC4FDD /* Entities */ = {
 			isa = PBXGroup;
 			children = (
+				F25C79BB282D91BC009C60EE /* UserCreationEntity.swift */,
 				F2F1ED7C281C3D6900AC4FDD /* VerificationEntity.swift */,
 				F2F1ED7E281C40BB00AC4FDD /* UserEntity.swift */,
 				F2F1ED80281C533000AC4FDD /* IssueCodeEntity.swift */,
@@ -487,6 +492,7 @@
 			children = (
 				F2F1EDA728258E0E00AC4FDD /* AppService.swift */,
 				F9B90C9B28117DDF003FFEEB /* AuthService.swift */,
+				F25C79BF282D91FE009C60EE /* UserService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -847,7 +853,9 @@
 				F2F1EDB12829336200AC4FDD /* AppCore.swift in Sources */,
 				F2127640280FE07500FB568D /* TOSFieldListView.swift in Sources */,
 				F248EB012813240500430C3B /* CreateProfileView.swift in Sources */,
+				F25C79C0282D91FE009C60EE /* UserService.swift in Sources */,
 				F25C79B6282C1FC0009C60EE /* ProfileImageListView.swift in Sources */,
+				F25C79BC282D91BC009C60EE /* UserCreationEntity.swift in Sources */,
 				F248EB032813273A00430C3B /* CreateProfileCore.swift in Sources */,
 				F2127642281021C700FB568D /* TermsOfServiceCore.swift in Sources */,
 				F96CDE772824EF9B002DEB90 /* MyInfoCore.swift in Sources */,
