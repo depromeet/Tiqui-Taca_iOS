@@ -11,9 +11,9 @@ import Foundation
 
 struct MyPageState: Equatable {
   var nickname = "닉네임"
-  var profileImage = "defaultProfile"
+  var profileImage: ProfileImage = .init()
   var level = 1
-  var createdAt = Date()
+  var createdAt: String = ""
   var createDday = 0
   var isAppAlarmOn = false
   var appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
@@ -67,22 +67,29 @@ let myPageReducer = Reducer<
       .receive(on: environment.mainQueue)
       .catchToEffect()
       .map(MyPageAction.getProfileInfoResponse)
+    
   case let .getProfileInfoResponse(.success(response)):
-//    state.profileImage = response?.profile.type
+    state.profileImage.type = response?.profile.type ?? 0
     state.nickname = response?.nickname ?? ""
     state.isAppAlarmOn = response?.appAlarm ?? false
     state.level = response?.level ?? 0
     
     let createdDateString = response?.createdAt ?? ""
-    let dateFormatter = ISO8601DateFormatter()
-    let createdDate = dateFormatter.date(from: createdDateString)
-    state.createdAt = createdDate ?? Date()
+    let iso8601Formatter = ISO8601DateFormatter()
+    let createdDate = iso8601Formatter.date(from: createdDateString)
+    
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yyyy.MM.dd"
+    
+    state.createdAt = dateFormatter.string(for: createdDate) ?? ""
     state.createDday = Calendar(identifier: .gregorian)
       .dateComponents([.day], from: createdDate ?? Date(), to: Date()).day ?? 0
     
     return Effect(value: .getProfileRequestSuccess)
+    
   case .getProfileInfoResponse(.failure):
     return .none
+    
   case .getProfileRequestSuccess:
     return .none
     
@@ -92,20 +99,25 @@ let myPageReducer = Reducer<
       .receive(on: environment.mainQueue)
       .catchToEffect()
       .map(MyPageAction.getAlarmRequestResponse)
+    
   case let .getAlarmRequestResponse(.success(response)):
     state.isAppAlarmOn = response?.appAlarm ?? false
     return Effect(value: .getProfileRequestSuccess)
+    
   case .getAlarmRequestResponse(.failure):
     return .none
+    
   case .getAlarmRequestSuccess:
     return .none
     
   case .selectDetail:
     return .none
+    
   case let .selectSheet(presentedSheet):
     state.sheetChoice = presentedSheet
     state.popupPresented = true
     return .none
+    
   case .dismissDetail:
     state.popupPresented = false
     return .none

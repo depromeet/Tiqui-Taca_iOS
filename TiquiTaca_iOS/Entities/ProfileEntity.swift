@@ -46,8 +46,8 @@ enum ProfileEntity {
       level = (try? container.decode(Int.self, forKey: .level)) ?? 0
     }
   }
-  
-  struct ProfileType: Codable, Equatable {
-    let type: Int
-  }
+}
+
+struct ProfileType: Codable, Equatable {
+  let type: Int
 }

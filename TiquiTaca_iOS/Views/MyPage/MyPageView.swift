@@ -22,14 +22,20 @@ struct MyPageView: View {
               .font(.heading1)
               .frame(maxWidth: .infinity, alignment: .leading)
             
-            Image(viewStore.profileImage)
+            Image(viewStore.profileImage.imageName)
               .overlay(
                 NavigationLink(
                   destination: {
                     ChangeProfileView(store: .init(
-                      initialState: ChangeProfileState(),
+                      initialState: ChangeProfileState(
+                        nickname: viewStore.nickname,
+                        profileImage: viewStore.profileImage
+                      ),
                       reducer: changeProfileReducer,
-                      environment: ChangeProfileEnvironment())
+                      environment: ChangeProfileEnvironment(
+                        appService: AppService(),
+                        mainQueue: .main
+                      ))
                     )
                   }
                 ) {
@@ -41,7 +47,7 @@ struct MyPageView: View {
             Text(viewStore.nickname)
               .font(.heading2)
             
-            Text("최초가입일 \(viewStore.createdAt.ISO8601Format()) / 티키타카와 +\(String(viewStore.createDday))일 째")
+            Text("최초가입일 \(viewStore.createdAt) / 티키타카와 +\(String(viewStore.createDday))일 째")
               .font(.body7)
               .foregroundColor(.white900)
             
@@ -93,7 +99,11 @@ struct MyPageView: View {
                   switch viewStore.sheetChoice {
                   case .myInfoView:
                     MyInfoView(store: .init(
-                      initialState: MyInfoState(),
+                      initialState: MyInfoState(
+                        nickname: viewStore.nickname,
+                        phoneNumber: "",
+                        createdAt: viewStore.createdAt
+                      ),
                       reducer: myInfoReducer,
                       environment: MyInfoEnvironment())
                     )
