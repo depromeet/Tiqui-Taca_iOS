@@ -40,8 +40,7 @@ struct MyInfoView: View {
           VStack(alignment: .leading, spacing: .spacingS) {
             MyInfoRow(
               title: "닉네임",
-              description: viewStore.nickName,
-              buttonVisible: true
+              description: viewStore.nickName
             )
             MyInfoRow(
               title: "휴대폰 번호",
@@ -107,8 +106,6 @@ struct MyInfoView: View {
 struct MyInfoRow: View {
   var title: String
   var description: String
-  var buttonVisible: Bool = false
-  @State var buttonPressed = false
   
   var body: some View {
     HStack {
@@ -121,14 +118,6 @@ struct MyInfoRow: View {
         .foregroundColor(.black900)
       
       Spacer()
-      Button {
-        $buttonPressed
-      } label: {
-        Text(buttonPressed ? "완료" : "변경")
-          .font(.subtitle3)
-          .foregroundColor(.blue800)
-      }
-      .opacity(buttonVisible ? 1 : 0)
     }
     .padding(EdgeInsets(top: 12, leading: 24, bottom: 12, trailing: 24))
   }
