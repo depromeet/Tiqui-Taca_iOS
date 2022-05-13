@@ -29,6 +29,7 @@ target 'TiquiTaca_iOS' do
   pod 'CustomDump'
   pod 'IdentifiedCollections'
   pod 'XCTestDynamicOverlay'
+  pod 'ComposableCoreLocation'
 
   target 'TiquiTaca_iOSTests' do
     inherit! :search_paths
