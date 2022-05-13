@@ -9,21 +9,44 @@ import SwiftUI
 import ComposableArchitecture
 
 struct MainTabView: View {
-	private let store: Store<MainTabState, MainTabAction>
-	
-	init(store: Store<MainTabState, MainTabAction>) {
-		self.store = store
-		UITabBar.appearance().scrollEdgeAppearance = .init()
-	}
-	
-	var body: some View {
-		TabView {
-			MapTab(store: store)
-			ChatTab(store: store)
-			MsgAndNotiTab(store: store)
-			MyPageTab(store: store)
-		}
-	}
+  private let store: Store<MainTabState, MainTabAction>
+  @State var selection: Int = 0
+  
+  init(store: Store<MainTabState, MainTabAction>) {
+    self.store = store
+    
+    let appearance = UITabBarAppearance()
+    let tabBar = UITabBar()
+    appearance.configureWithOpaqueBackground()
+    appearance.backgroundColor = Color.white.uiColor
+    tabBar.standardAppearance = appearance
+    UITabBar.appearance().scrollEdgeAppearance = appearance
+  }
+  
+  var body: some View {
+    TabView(selection: $selection) {
+      MapTab(store: store)
+        .tabItem {
+          TabViewItem(type: .map(selection == 0))
+        }
+        .tag(0)
+      ChatTab(store: store)
+        .tabItem {
+          TabViewItem(type: .chat(selection == 1))
+        }
+        .tag(1)
+      MsgAndNotiTab(store: store)
+        .tabItem {
+          TabViewItem(type: .msgAndNoti(selection == 2))
+        }
+        .tag(2)
+      MyPageTab(store: store)
+        .tabItem {
+          TabViewItem(type: .myPage(selection == 3))
+        }
+        .tag(3)
+    }
+  }
 }
 
 // MARK: MapTab
@@ -35,15 +58,12 @@ private struct MapTab: View {
   }
   
   var body: some View {
-    MainMapView(store: store.scope(
-      state: \.mainMapFeature,
-      action: MainTabAction.mainMapFeature
-    ))
-    .tabItem {
-      Image(systemName: "square.fill")
-        .font(.title)
-      Text("지도")
-    }
+    MainMapView(
+      store: store.scope(
+        state: \.mainMapFeature,
+        action: MainTabAction.mainMapFeature
+      )
+    )
   }
 }
 
@@ -56,15 +76,12 @@ private struct ChatTab: View {
   }
   
   var body: some View {
-    ChatView(store: store.scope(
-      state: \.chatFeature,
-      action: MainTabAction.chatFeature
-    ))
-    .tabItem {
-      Image(systemName: "square.fill")
-        .font(.title)
-      Text("채팅")
-    }
+    ChatView(
+      store: store.scope(
+        state: \.chatFeature,
+        action: MainTabAction.chatFeature
+      )
+    )
   }
 }
 
@@ -77,15 +94,12 @@ private struct MsgAndNotiTab: View {
   }
   
   var body: some View {
-    MsgAndNotiView(store: store.scope(
-      state: \.msgAndNotiFeature,
-      action: MainTabAction.msgAndNotiFeature
-    ))
-    .tabItem {
-      Image(systemName: "square.fill")
-        .font(.title)
-      Text("쪽지 알림")
-    }
+    MsgAndNotiView(
+      store: store.scope(
+        state: \.msgAndNotiFeature,
+        action: MainTabAction.msgAndNotiFeature
+      )
+    )
   }
 }
 
@@ -98,15 +112,12 @@ private struct MyPageTab: View {
   }
   
   var body: some View {
-    MyPageView(store: store.scope(
-      state: \.myPageFeature,
-      action: MainTabAction.myPageFeature
-    ))
-    .tabItem {
-      Image(systemName: "square.fill")
-        .font(.title)
-      Text("마이페이지")
-    }
+    MyPageView(
+      store: store.scope(
+        state: \.myPageFeature,
+        action: MainTabAction.myPageFeature
+      )
+    )
   }
 }
 

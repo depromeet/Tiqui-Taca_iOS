@@ -16,9 +16,9 @@ struct BlockListView: View {
     WithViewStore(self.store) { viewStore in
       ZStack {
         VStack(spacing: 0) {
-          ForEach(viewStore.blockUsers) { blockUser in
+          ForEach(viewStore.blockUsers, id: \.id) { blockUser in
             HStack {
-              Text(blockUser.nickName)
+              Text(blockUser.nickname)
                 .font(.body1)
                 .foregroundColor(.black900)
               
@@ -48,8 +48,8 @@ struct BlockListView_Previews: PreviewProvider {
     BlockListView(store: .init(
       initialState: BlockListState(
         blockUsers: [
-          BlockUser(userId: "hk", nickName: "gkrod", profile: "3"),
-          BlockUser(userId: "rokwon", nickName: "rokwon", profile: "4")
+//          BlockUser(userId: "hk", nickName: "gkrod", profile: "3"),
+//          BlockUser(userId: "rokwon", nickName: "rokwon", profile: "4")
         ]
       ),
       reducer: blockListReducer,
