@@ -35,12 +35,11 @@ let phoneVerficationReducer = Reducer<
   switch action {
   case let .phoneNumberInput(text):
     state.phoneNumber = text
-    return .none
-//    return Effect(value: .checkPhoneNumberValidation)
+    return Effect(value: .checkPhoneNumberValidation)
   case .verificationButtonTap:
-    let requestModel = IssueCodeEntity.Request(phoneNumber: state.phoneNumber)
+    let request = IssueCodeEntity.Request(phoneNumber: state.phoneNumber)
     return environment.appService.authService
-      .issuePhoneCode(request: requestModel)
+      .issuePhoneCode(request)
       .receive(on: environment.mainQueue)
       .catchToEffect()
       .map(PhoneVerificationAction.issuePhoneCodeResponse)
@@ -50,9 +49,7 @@ let phoneVerficationReducer = Reducer<
   case .issuePhoneCodeResponse(.failure):
     return .none
   case .checkPhoneNumberValidation:
-    let regex = "^01[0-1, 7][0-9]{7,8}$"
-    let pred = NSPredicate(format: "SELF MATCHES %@", regex)
-    let isAvailable = pred.evaluate(with: state.phoneNumber)
+    let isAvailable = state.phoneNumber.checkPhoneNumber()
     state.isAvailablePhoneNumber = isAvailable
     return .none
   case .phoneNumberRequestSuccess:

@@ -2,7 +2,7 @@
 //  UserService.swift
 //  TiquiTaca_iOS
 //
-//  Created by 송하경 on 2022/05/11.
+//  Created by 강민석 on 2022/05/13.
 //
 
 import TTNetworkModule
@@ -13,6 +13,7 @@ protocol UserServiceType {
   func getAppAlarmState() -> AnyPublisher<AppAlarmEntity.Response?, HTTPError>
   func getBlockUserList() -> AnyPublisher<[BlockUserEntity.Response]?, HTTPError>
   func unBlockUser(userId: String) -> AnyPublisher<BlockUserEntity.Response?, HTTPError>
+  func createUser(_ request: UserCreationEntity.Request) -> AnyPublisher<UserCreationEntity.Response?, HTTPError>
 }
 
 final class UserService: UserServiceType {
@@ -36,5 +37,10 @@ final class UserService: UserServiceType {
   
   func unBlockUser(userId: String) -> AnyPublisher<BlockUserEntity.Response?, HTTPError> {
     return network.request(.unblockUser(userId: userId), responseType: BlockUserEntity.Response.self)
+  }
+  
+  func createUser(_ request: UserCreationEntity.Request) -> AnyPublisher<UserCreationEntity.Response?, HTTPError> {
+    return network
+      .request(.userCreate(request), responseType: UserCreationEntity.Response.self)
   }
 }

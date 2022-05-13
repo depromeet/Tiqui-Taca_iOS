@@ -15,11 +15,10 @@ struct PageControl: UIViewRepresentable {
 	func makeUIView(context: Context) -> UIPageControl {
 		let control = UIPageControl()
 		control.numberOfPages = numberOfPages
-		control.currentPageIndicatorTintColor = .darkGray
-		control.pageIndicatorTintColor = .lightGray
+    control.currentPageIndicatorTintColor = Color.green700.uiColor
+		control.pageIndicatorTintColor = Color.black100.uiColor
 		control.isUserInteractionEnabled = false
 		control.currentPage = currentPage
-
 		return control
 	}
 
