@@ -52,12 +52,12 @@ struct MyBlockHistoryView: View {
         }
         TTPopupView.init(
           popUpCase: .twoLineTwoButton,
-          title: "'\(viewStore.unBlockUser.nickName)' 님을 차단 해제하시겠어요?",
+          title: "'\(viewStore.unBlockUser?.nickname ?? "")' 님을 차단 해제하시겠어요?",
           subtitle: "차단 해제할 경우 상대방이 보낸\n대화를 볼 수 있고 쪽지를 전송할 수 있어요.",
           leftButtonName: "취소",
           rightButtonName: "해제하기",
           confirm: {
-            
+            viewStore.send(.unblockUser(viewStore.unBlockUser?.id ?? ""))
           },
           cancel: {
             viewStore.send(.dismissPopup)
@@ -65,16 +65,25 @@ struct MyBlockHistoryView: View {
         )
         .opacity(viewStore.popupPresented ? 1 : 0)
       }
+      .onAppear(
+        perform: {
+          viewStore.send(.getBlockUserList)
+        })
     }
   }
 }
 
 struct MyBlockHistoryView_Previews: PreviewProvider {
   static var previews: some View {
-    MyBlockHistoryView(store: .init(
-      initialState: MyBlockHistoryState(),
-      reducer: myBlockHistoryReducer,
-      environment: MyBlockHistoryEnvironment())
+    MyBlockHistoryView(
+      store: .init(
+        initialState: MyBlockHistoryState(),
+        reducer: myBlockHistoryReducer,
+        environment: MyBlockHistoryEnvironment(
+          appService: .init(),
+          mainQueue: .main
+        )
+      )
     )
   }
 }

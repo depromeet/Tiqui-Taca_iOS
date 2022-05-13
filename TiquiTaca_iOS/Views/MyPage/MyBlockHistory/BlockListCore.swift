@@ -8,11 +8,11 @@
 import ComposableArchitecture
 
 struct BlockListState: Equatable {
-  var blockUsers: [BlockUser]
+  var blockUsers: [BlockUserEntity.Response]
 }
 
 enum BlockListAction: Equatable {
-  case selectUnblockUser(BlockUser)
+  case selectUnblockUser(BlockUserEntity.Response)
   case dismissPopup
 }
 
