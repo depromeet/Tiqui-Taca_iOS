@@ -40,7 +40,7 @@ struct MyInfoView: View {
           VStack(alignment: .leading, spacing: .spacingS) {
             MyInfoRow(
               title: "닉네임",
-              description: viewStore.nickName
+              description: viewStore.nickname
             )
             MyInfoRow(
               title: "휴대폰 번호",
@@ -48,7 +48,7 @@ struct MyInfoView: View {
             
             MyInfoRow(
               title: "최초 가입일",
-              description: viewStore.createdAt
+              description: "\(viewStore.createdAt)"
             )
           }
           .background(Color.white50)
@@ -128,7 +128,8 @@ struct MyInfoView_Previews: PreviewProvider {
     MyInfoView(store: .init(
       initialState: MyInfoState(),
       reducer: myInfoReducer,
-      environment: MyInfoEnvironment())
+      environment: MyInfoEnvironment()
+      )
     )
   }
 }
