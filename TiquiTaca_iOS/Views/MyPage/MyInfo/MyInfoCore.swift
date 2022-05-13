@@ -15,6 +15,8 @@ struct MyInfoState: Equatable {
   var nicknameChanging = false
   var popupPresented = false
   var popupType: MyInfoPopupType = .logout
+  var isDismissCurrentView: Bool = false
+  var dismissType: MyInfoDismissType = .none
   
   enum MyInfoPopupType {
     case logout
@@ -22,13 +24,21 @@ struct MyInfoState: Equatable {
   }
 }
 
+enum MyInfoDismissType {
+  case logout
+  case withdrawal
+  case none
+}
 
 enum MyInfoAction: Equatable {
   case changeNickname
+  case presentLogoutPopup
+  case presentWithdrawalPopup
   case logoutAction
   case withDrawalAction
   case presentPopup
   case dismissPopup
+  case movingAction(MyInfoDismissType)
 }
 
 struct MyInfoEnvironment { }
@@ -42,11 +52,11 @@ let myInfoReducer = Reducer<
   case .changeNickname:
     state.nicknameChanging.toggle()
     return .none
-  case .logoutAction:
+  case .presentLogoutPopup:
     state.popupPresented = true
     state.popupType = .logout
     return .none
-  case .withDrawalAction:
+  case .presentWithdrawalPopup:
     state.popupPresented = true
     state.popupType = .withdrawal
     return .none
@@ -55,6 +65,16 @@ let myInfoReducer = Reducer<
     return .none
   case .dismissPopup:
     state.popupPresented = false
+    return .none
+  case .logoutAction:
+    state.isDismissCurrentView = true
+    state.dismissType = .logout
+    return Effect(value: .dismissPopup)
+  case .withDrawalAction:
+    state.isDismissCurrentView = true
+    state.dismissType = .withdrawal
+    return Effect(value: .dismissPopup)
+  case let .movingAction(dismissType):
     return .none
   }
 }

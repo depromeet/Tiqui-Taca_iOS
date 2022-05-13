@@ -10,6 +10,7 @@ import TTNetworkModule
 import Foundation
 
 struct MyPageState: Equatable {
+  var myInfoViewState: MyInfoState = .init()
   var nickname = "닉네임"
   var profileImage: ProfileImage = .init()
   var level = 1
@@ -37,6 +38,8 @@ struct MyPageItem {
 }
 
 enum MyPageAction: Equatable {
+  case myInfoView(MyInfoAction)
+  
   case getProfileInfo
   case getProfileInfoResponse(Result<ProfileEntity.Response?, HTTPError>)
   case getProfileRequestSuccess
@@ -48,6 +51,7 @@ enum MyPageAction: Equatable {
   case selectDetail
   case selectSheet(MyPageSheetChoice)
   case dismissDetail
+  case logout
 }
 
 struct MyPageEnvironment {
@@ -59,8 +63,34 @@ let myPageReducer = Reducer<
   MyPageState,
   MyPageAction,
   MyPageEnvironment
+>.combine([
+  myInfoReducer
+    .pullback(
+      state: \.myInfoViewState,
+      action: /MyPageAction.myInfoView,
+      environment: { _ in
+        MyInfoEnvironment()
+      }
+    ),
+  myPageReducerCore
+])
+
+let myPageReducerCore = Reducer<
+  MyPageState,
+  MyPageAction,
+  MyPageEnvironment
 > { state, action, environment in
   switch action {
+  case let .myInfoView(myInfoAction):
+    switch myInfoAction {
+    case let .movingAction(dismissType):
+      if dismissType == .logout {
+        return Effect(value: .logout)
+      }
+      return .none
+    default:
+      return .none
+    }
   case .getProfileInfo:
     return environment.appService.userService
       .getProfile()
@@ -85,6 +115,7 @@ let myPageReducer = Reducer<
     state.createDday = Calendar(identifier: .gregorian)
       .dateComponents([.day], from: createdDate ?? Date(), to: Date()).day ?? 0
     
+    state.myInfoViewState = .init(nickname: state.nickname, phoneNumber: "", createdAt: state.createdAt)
     return Effect(value: .getProfileRequestSuccess)
     
   case .getProfileInfoResponse(.failure):
@@ -120,6 +151,12 @@ let myPageReducer = Reducer<
     
   case .dismissDetail:
     state.popupPresented = false
+//    if state.sheetChoice == .myInfoView {
+//      return Effect(value: .logout)
+//    }
     return .none
+  case .logout:
+    return .none
+
   }
 }

@@ -104,6 +104,7 @@ let changeProfileReducer = Reducer<
     return .none
     
   case .changeProfileResponse(.failure):
+    state.nicknameError = .validation
     return .none
     
   case let .checkNicknameResponse(.success(response)):

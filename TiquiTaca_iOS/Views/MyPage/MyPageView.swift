@@ -98,15 +98,10 @@ struct MyPageView: View {
                 content: {
                   switch viewStore.sheetChoice {
                   case .myInfoView:
-                    MyInfoView(store: .init(
-                      initialState: MyInfoState(
-                        nickname: viewStore.nickname,
-                        phoneNumber: "",
-                        createdAt: viewStore.createdAt
-                      ),
-                      reducer: myInfoReducer,
-                      environment: MyInfoEnvironment())
-                    )
+                    MyInfoView(store: store.scope(
+                      state: \.myInfoViewState,
+                      action: MyPageAction.myInfoView
+                    ))
                   case .blockHistoryView:
                     MyBlockHistoryView(store: .init(
                       initialState: MyBlockHistoryState(),

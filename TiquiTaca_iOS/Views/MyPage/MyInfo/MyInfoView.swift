@@ -58,22 +58,24 @@ struct MyInfoView: View {
             .foregroundColor(.black800)
             .padding(.leading, .spacingXL)
           
-          VStack(alignment: .leading) {
+          VStack {
             Button {
-              viewStore.send(.logoutAction)
+              viewStore.send(.presentLogoutPopup)
             } label: {
               Text("로그아웃")
                 .font(.body1)
                 .foregroundColor(.black900)
+              Spacer()
             }
             .padding(EdgeInsets(top: .spacingS, leading: .spacingXL, bottom: .spacingS, trailing: .spacingXL))
             
             Button {
-              viewStore.send(.withDrawalAction)
+              viewStore.send(.presentWithdrawalPopup)
             } label: {
               Text("탈퇴하기")
                 .font(.body1)
                 .foregroundColor(.black900)
+              Spacer()
             }
             .padding(EdgeInsets(top: .spacingS, leading: .spacingXL, bottom: .spacingS, trailing: .spacingXL))
           }
@@ -91,6 +93,8 @@ struct MyInfoView: View {
           leftButtonName: "취소",
           rightButtonName: viewStore.popupType == .logout ? "로그아웃" : "탈퇴하기",
           confirm: {
+            viewStore.send(viewStore.popupType == .logout ?
+                           MyInfoAction.logoutAction : MyInfoAction.withDrawalAction)
 
           },
           cancel: {
@@ -98,6 +102,14 @@ struct MyInfoView: View {
           }
         )
         .opacity(viewStore.popupPresented ? 1 : 0)
+        .onChange(of: viewStore.isDismissCurrentView) { isDismissCurrentView in
+          if isDismissCurrentView {
+            self.presentationMode.wrappedValue.dismiss()
+          }
+        }
+        .onDisappear {
+          viewStore.send(.movingAction(viewStore.dismissType))
+        }
       }
     }
   }
