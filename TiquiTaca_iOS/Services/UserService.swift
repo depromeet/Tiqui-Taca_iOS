@@ -13,6 +13,8 @@ protocol UserServiceType {
   func getAppAlarmState() -> AnyPublisher<AppAlarmEntity.Response?, HTTPError>
   func getBlockUserList() -> AnyPublisher<[BlockUserEntity.Response]?, HTTPError>
   func unBlockUser(userId: String) -> AnyPublisher<BlockUserEntity.Response?, HTTPError>
+  func checkValidNickname(nickname: String) -> AnyPublisher<ValidNicknameEntity.Response?, HTTPError>
+  func changeProfile(_ request: ChangeProfileEntity.Request) -> AnyPublisher<ChangeProfileEntity.Response?, HTTPError>
   func createUser(_ request: UserCreationEntity.Request) -> AnyPublisher<UserCreationEntity.Response?, HTTPError>
 }
 
@@ -37,6 +39,14 @@ final class UserService: UserServiceType {
   
   func unBlockUser(userId: String) -> AnyPublisher<BlockUserEntity.Response?, HTTPError> {
     return network.request(.unblockUser(userId: userId), responseType: BlockUserEntity.Response.self)
+  }
+  
+  func checkValidNickname(nickname: String) -> AnyPublisher<ValidNicknameEntity.Response?, HTTPError> {
+    return network.request(.validNickname(nickname: nickname), responseType: ValidNicknameEntity.Response.self)
+  }
+  
+  func changeProfile(_ request: ChangeProfileEntity.Request) -> AnyPublisher<ChangeProfileEntity.Response?, HTTPError> {
+    return network.request(.profilePatch(request), responseType: ChangeProfileEntity.Response.self)
   }
   
   func createUser(_ request: UserCreationEntity.Request) -> AnyPublisher<UserCreationEntity.Response?, HTTPError> {

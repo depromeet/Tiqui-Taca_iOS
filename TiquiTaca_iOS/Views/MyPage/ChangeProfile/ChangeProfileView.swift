@@ -10,125 +10,167 @@ import ComposableArchitecture
 import TTDesignSystemModule
 
 struct ChangeProfileView: View {
-  let store: Store<ChangeProfileState, ChangeProfileAction>
-//  @State private var editing = false
+  typealias State = ChangeProfileState
+  typealias Action = ChangeProfileAction
+  
+  private let store: Store<State, Action>
+  @FocusState private var focusField: Bool
+  @ObservedObject private var viewStore: ViewStore<ViewState, Action>
+  @Environment(\.presentationMode) var presentationMode
+  
+  var validationColor: Color {
+    switch viewStore.nicknameError {
+    case .none:
+      return .white600
+    default:
+      return .errorRed
+    }
+  }
+  
+  struct ViewState: Equatable {
+    let nickname: String
+    let profileImage: ProfileImage
+    let isSheetPresented: Bool
+    let nicknameError: NicknameError
+    let isAvailableCompletion: Bool
+    let popupPresented: Bool
+    let dismissCurrentPage: Bool
+    
+    init(state: State) {
+      nickname = state.nickname
+      profileImage = state.profileImage
+      isSheetPresented = state.isSheetPresented
+      nicknameError = state.nicknameError
+      isAvailableCompletion = state.isAvailableCompletion
+      popupPresented = state.popupPresented
+      dismissCurrentPage = state.dismissCurrentPage
+    }
+  }
+  
+  init(store: Store<State, Action>) {
+    self.store = store
+    viewStore = ViewStore(store.scope(state: ViewState.init))
+  }
   
   var body: some View {
-    WithViewStore(store) { viewStore in
-      NavigationView {
-        VStack {
-          Image(viewStore.profileImage)
-            .overlay(
-              Button {
-                viewStore.send(.profileEditButtonTapped)
-              } label: {
-                Image("edit")
-                  .font(.title)
-              }
-                .alignmentGuide(.bottom) { $0[.bottom] }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
-            )
-            .padding([.top], 120)
-          
-          VStack {
+    ZStack {
+      VStack(spacing: 29) {
+        ZStack(alignment: .bottomTrailing) {
+          Image(viewStore.profileImage.imageName)
+          Button {
+            focusField = false
+            viewStore.send(.setBottomSheet(true))
+          } label: {
+            Image("edit")
+          }
+        }
+        
+        VStack(spacing: .spacingM) {
+          VStack(spacing: .spacingXS) {
             TextField(
               "닉네임을 입력해주세요.",
               text: viewStore.binding(
                 get: \.nickname,
                 send: ChangeProfileAction.nicknameChanged
-              ), onEditingChanged: { edit in
-                if edit {
-                  viewStore.send(.nicknameFocused)
-                }
-              }
+              )
             )
-            .foregroundColor(viewStore.nicknameFocused.color)
-            .disableAutocorrection(true)
-            
-            Rectangle()
-              .frame(height: 2.0, alignment: .bottom)
-              .foregroundColor(viewStore.nicknameFocused.color)
-          }
-          .padding([.leading, .trailing], 40)
-          
-          Text("프로필 이름과 이미지를 수정해보세요.")
+            .padding(.top, .spacingXS)
+            .font(.heading2)
             .foregroundColor(Color.white)
-            .font(.caption)
-            .multilineTextAlignment(.center)
-          
-          Spacer()
-          
-          TTBottomSheetView(
-            isOpen: viewStore.binding(
-              get: \.isSheetPresented,
-              send: ChangeProfileAction.dismissProfileDetail
-            ),
-            minHeight: 0,
-            maxHeight: 294,
-            content: {
-              let gridItemLayout = [
-                GridItem(),
-                GridItem(),
-                GridItem(),
-                GridItem()
-              ]
-              ScrollView {
-                VStack(alignment: .leading) {
-                  Text("프로필 캐릭터")
-                    .foregroundColor(Color.white)
-                    .padding(EdgeInsets(top: 0, leading: 32, bottom: 9, trailing: 0))
-                  
-                  LazyVGrid(columns: gridItemLayout, spacing: 20) {
-                    ForEach(0..<30, id: \.self) { num in
-                      Button {
-                        viewStore.send(.profileImageChanged(String(num)))
-                      } label: {
-                        Image("profileFocusRectangle")
-                          .frame(width: 84, height: 84)
-                          .opacity(String(num) == viewStore.profileImage ? 1 : 0)
-                          .overlay(
-                            Image("defaultProfile")
-                              .resizable()
-                              .frame(width: 72, height: 72)
-                          )
-                      }
-                    }
-                  }
-                  .padding([.leading, .trailing], 25)
-                }
-              }
-              .background(Color.black700)
-            })
-        }
-        .frame(maxHeight: .infinity)
-        .background(Color.black800)
-        .ignoresSafeArea(.keyboard)
-        .navigationTitle("프로필 만들기")
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-          ToolbarItem(placement: .navigationBarTrailing) {
-            Button {
-              viewStore.send(.doneButtonTapped)
-            } label: {
-              Text("완료")
-            }
+            .disableAutocorrection(true)
+            .focused($focusField)
+            
+            Divider()
+              .frame(height: 2)
+              .background(validationColor)
           }
+          
+          Text(viewStore.nicknameError.description)
+            .foregroundColor(validationColor)
+            .font(.body4)
+        }
+        .multilineTextAlignment(.center)
+        
+        Spacer()
+      }
+      .padding(.horizontal, .spacingXL)
+      .padding(.top, 120)
+      
+      TTBottomSheetView(
+        isOpen: viewStore.binding(
+          get: \.isSheetPresented,
+          send: ChangeProfileAction.setBottomSheet
+        ),
+        minHeight: 0,
+        maxHeight: 294,
+        content: {
+          ProfileImageListView(
+            selectedProfile: viewStore.binding(
+              get: \.profileImage,
+              send: ChangeProfileAction.setProfileImage
+            )
+          ).padding(.top, .spacingXXL)
+        }
+      )
+      
+      TTPopupView.init(
+        popUpCase: .twoLineOneButton,
+        title: "앗, 닉네임을 바꿀 수 없어요!",
+        subtitle: "현재 참여중인 채팅방을 나오면 닉네임을 바꿀 수 있어요.",
+        leftButtonName: "닫기",
+        cancel: {
+          viewStore.send(.dismissPopup)
+        }
+      )
+      .opacity(viewStore.popupPresented ? 1 : 0)
+    }
+    .vCenter()
+    .hCenter()
+    .background(Color.black800)
+    .ignoresSafeArea(.keyboard)
+    .navigationBarBackButtonHidden(true)
+    .navigationTitle("프로필 수정하기")
+    .toolbar {
+      ToolbarItem(placement: .navigationBarLeading) {
+        Button {
+          presentationMode.wrappedValue.dismiss()
+        } label: {
+          Image("leftArrow")
         }
       }
-      .tint(Color.greenTextColor)
-      .onTapGesture {
-        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+      ToolbarItem(placement: .navigationBarTrailing) {
+        Button {
+          viewStore.send(.doneButtonTapped)
+        } label: {
+          Text("완료")
+            .foregroundColor(.green500)
+            .font(.subtitle1)
+        }
+        .onChange(of: viewStore.dismissCurrentPage) { isDismissCurrentView in
+          if isDismissCurrentView { self.presentationMode.wrappedValue.dismiss() }
+        }
+        .disabled(!viewStore.isAvailableCompletion)
       }
+    }
+    .onTapGesture {
+      focusField = false
+      viewStore.send(.setBottomSheet(false))
     }
   }
 }
 
+// MARK: - Preview
 struct ChangeProfileView_Previews: PreviewProvider {
   static var previews: some View {
-    ChangeProfileView(store: .init(
-      initialState: ChangeProfileState(),
-      reducer: changeProfileReducer,
-      environment: ChangeProfileEnvironment())
+    CreateProfileView(
+      store: Store(
+        initialState: .init(isSheetPresented: true),
+        reducer: createProfileReducer,
+        environment: .init(
+          appService: .init(),
+          mainQueue: .main
+        )
+      )
     )
   }
 }

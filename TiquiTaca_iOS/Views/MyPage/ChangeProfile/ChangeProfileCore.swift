@@ -4,44 +4,37 @@
 //
 //  Created by 송하경 on 2022/05/09.
 //
-import SwiftUI
+import TTNetworkModule
 import ComposableArchitecture
 
 struct ChangeProfileState: Equatable {
-  var nickname = ""
-  var profileImage = "defaultProfile"
-  var isSheetPresented = false
-  var nicknameFocused: NicknameState = .unfocused
+  var nickname: String = ""
+  var profileImage: ProfileImage = .init()
+  var isSheetPresented: Bool = false
+  var nicknameError: NicknameError = .none
+  var isAvailableCompletion: Bool = false
   
-  enum NicknameState {
-    case focused
-    case unfocused
-    case error
-    
-    var color: Color {
-      switch self {
-      case .focused:
-        return .green500
-      case .unfocused:
-        return .white700
-      case .error:
-        return .errorRed
-      }
-    }
-  }
+  var validNicknameCheck: Bool = false
+  var popupPresented: Bool = false
+  var dismissCurrentPage: Bool = false
 }
-
 
 enum ChangeProfileAction: Equatable {
   case doneButtonTapped
   case nicknameChanged(String)
-  case nicknameFocused
-  case profileImageChanged(String)
-  case profileEditButtonTapped
-  case dismissProfileDetail
+  case setProfileImage(ProfileImage)
+  case setBottomSheet(Bool)
+  case presentPopup
+  case dismissPopup
+  case validNicknameResponse(Result<ValidNicknameEntity.Response?, HTTPError>)
+  case checkNicknameResponse(Result<CheckNicknameEntity.Response?, HTTPError>)
+  case changeProfile(String, ProfileType)
+  case changeProfileResponse(Result<ChangeProfileEntity.Response?, HTTPError>)
 }
 
 struct ChangeProfileEnvironment {
+  let appService: AppService
+  let mainQueue: AnySchedulerOf<DispatchQueue>
 }
 
 let changeProfileReducer = Reducer<
@@ -49,25 +42,95 @@ let changeProfileReducer = Reducer<
   ChangeProfileAction,
   ChangeProfileEnvironment
 > { state, action, environment in
+  struct DebounceId: Hashable {}
+  
   switch action {
   case .doneButtonTapped:
-    return .none
+    return environment.appService.userService
+      .checkValidNickname(nickname: state.nickname)
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(ChangeProfileAction.validNicknameResponse)
+    
   case let .nicknameChanged(nickname):
+    if state.nickname == nickname {
+      return .none
+    }
     state.nickname = nickname
+    
+    if state.nickname.isEmpty {
+      state.nicknameError = .none
+      state.isAvailableCompletion = false
+      return .none
+    }
+    
+    if !nickname.checkNickname() {
+      state.nicknameError = .validation
+      state.isAvailableCompletion = false
+      return .none
+    }
+    
+    let request = CheckNicknameEntity.Request(nickname: nickname)
+    return environment.appService.authService
+      .checkNickname(request)
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(ChangeProfileAction.checkNicknameResponse)
+      .debounce(id: DebounceId(), for: .milliseconds(500), scheduler: environment.mainQueue)
+    
+  case let .validNicknameResponse(.success(response)):
+    guard let response = response else { return .none }
+    state.validNicknameCheck = response.canChange
+    
+    return state.validNicknameCheck ?
+    Effect(value: .changeProfile(state.nickname, ProfileType(type: state.profileImage.type))) : .none
+    
+  case .validNicknameResponse(.failure):
     return .none
-  case .nicknameFocused:
-    state.nicknameFocused = .focused
-    state.isSheetPresented = false
+  
+  case let .changeProfile(nickname, profileType):
+    let request = ChangeProfileEntity.Request(
+      nickname: nickname,
+      profile: profileType
+    )
+    return environment.appService.userService
+      .changeProfile(request)
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(ChangeProfileAction.changeProfileResponse)
+    
+  case let .changeProfileResponse(.success(response)):
+    state.dismissCurrentPage = true
     return .none
-  case let .profileImageChanged(imageString):
-    state.profileImage = imageString
+    
+  case .changeProfileResponse(.failure):
     return .none
-  case .profileEditButtonTapped:
-    state.nicknameFocused = .unfocused
-    state.isSheetPresented = true
+    
+  case let .checkNicknameResponse(.success(response)):
+    guard let response = response,
+          !state.nickname.isEmpty
+    else { return .none }
+    state.isAvailableCompletion = !response.isExist
+    state.nicknameError = response.isExist ? .duplication : .none
     return .none
-  case .dismissProfileDetail:
-    state.isSheetPresented = true
+    
+  case .checkNicknameResponse(.failure):
+    return .none
+    
+  case let .setProfileImage(profileImage):
+    state.profileImage = profileImage
+    return .none
+    
+  case let .setBottomSheet(isPresent):
+    state.isSheetPresented = isPresent
+    return .none
+    
+  case .dismissPopup:
+    state.popupPresented = false
+    return .none
+    
+  case .presentPopup:
+    state.popupPresented = true
     return .none
   }
 }

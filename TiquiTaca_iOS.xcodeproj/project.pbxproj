@@ -70,6 +70,8 @@
 		F2FDA228280C0EE300B2ED75 /* TermsOfServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FDA227280C0EE300B2ED75 /* TermsOfServiceView.swift */; };
 		F9669F6428251E59004624F8 /* MyBlockHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9669F6328251E59004624F8 /* MyBlockHistoryView.swift */; };
 		F9669F6628251E6F004624F8 /* MyBlockHistoryCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9669F6528251E6F004624F8 /* MyBlockHistoryCore.swift */; };
+		F96C0DE6282EA83D004BF1C7 /* ValidNicknameEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F96C0DE5282EA83D004BF1C7 /* ValidNicknameEntity.swift */; };
+		F96C0DE8282EAFBE004BF1C7 /* ChangeProfileEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F96C0DE7282EAFBE004BF1C7 /* ChangeProfileEntity.swift */; };
 		F96CDE752824EF8C002DEB90 /* MyInfoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F96CDE742824EF8C002DEB90 /* MyInfoView.swift */; };
 		F96CDE772824EF9B002DEB90 /* MyInfoCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F96CDE762824EF9B002DEB90 /* MyInfoCore.swift */; };
 		F981FA152825FB000000A531 /* NoticeCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F981FA142825FB000000A531 /* NoticeCore.swift */; };
@@ -186,6 +188,8 @@
 		F5D04B5F76393475F2238F76 /* Pods-TiquiTaca_iOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TiquiTaca_iOSTests.release.xcconfig"; path = "Target Support Files/Pods-TiquiTaca_iOSTests/Pods-TiquiTaca_iOSTests.release.xcconfig"; sourceTree = "<group>"; };
 		F9669F6328251E59004624F8 /* MyBlockHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBlockHistoryView.swift; sourceTree = "<group>"; };
 		F9669F6528251E6F004624F8 /* MyBlockHistoryCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBlockHistoryCore.swift; sourceTree = "<group>"; };
+		F96C0DE5282EA83D004BF1C7 /* ValidNicknameEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidNicknameEntity.swift; sourceTree = "<group>"; };
+		F96C0DE7282EAFBE004BF1C7 /* ChangeProfileEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeProfileEntity.swift; sourceTree = "<group>"; };
 		F96CDE742824EF8C002DEB90 /* MyInfoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoView.swift; sourceTree = "<group>"; };
 		F96CDE762824EF9B002DEB90 /* MyInfoCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoCore.swift; sourceTree = "<group>"; };
 		F981FA142825FB000000A531 /* NoticeCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeCore.swift; sourceTree = "<group>"; };
@@ -424,6 +428,8 @@
 				F9B45A1E282BE9DB00948586 /* AppAlarmEntity.swift */,
 				F9C4F45E282D61D200ECBF9A /* BlockUserEntity.swift */,
 				F25C79B7282CB5F2009C60EE /* CheckNicknameEntity.swift */,
+				F96C0DE5282EA83D004BF1C7 /* ValidNicknameEntity.swift */,
+				F96C0DE7282EAFBE004BF1C7 /* ChangeProfileEntity.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -835,7 +841,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				F2F1ED7228182D1400AC4FDD /* SceneDelegate.swift in Sources */,
+				F96C0DE8282EAFBE004BF1C7 /* ChangeProfileEntity.swift in Sources */,
 				F2F1ED8C281E632500AC4FDD /* PhoneVerificationView.swift in Sources */,
+				F96C0DE6282EA83D004BF1C7 /* ValidNicknameEntity.swift in Sources */,
 				F2FDA21A280BBF8300B2ED75 /* AppDelegate.swift in Sources */,
 				F981FA23282653A00000A531 /* BlockListCore.swift in Sources */,
 				F2F1ED7D281C3D6900AC4FDD /* VerificationEntity.swift in Sources */,
