@@ -40,8 +40,7 @@ struct MyInfoView: View {
           VStack(alignment: .leading, spacing: .spacingS) {
             MyInfoRow(
               title: "닉네임",
-              description: viewStore.nickName,
-              buttonVisible: true
+              description: viewStore.nickname
             )
             MyInfoRow(
               title: "휴대폰 번호",
@@ -49,7 +48,7 @@ struct MyInfoView: View {
             
             MyInfoRow(
               title: "최초 가입일",
-              description: viewStore.createdAt
+              description: "\(viewStore.createdAt)"
             )
           }
           .background(Color.white50)
@@ -59,22 +58,24 @@ struct MyInfoView: View {
             .foregroundColor(.black800)
             .padding(.leading, .spacingXL)
           
-          VStack(alignment: .leading) {
+          VStack {
             Button {
-              viewStore.send(.logoutAction)
+              viewStore.send(.presentLogoutPopup)
             } label: {
               Text("로그아웃")
                 .font(.body1)
                 .foregroundColor(.black900)
+              Spacer()
             }
             .padding(EdgeInsets(top: .spacingS, leading: .spacingXL, bottom: .spacingS, trailing: .spacingXL))
             
             Button {
-              viewStore.send(.withDrawalAction)
+              viewStore.send(.presentWithdrawalPopup)
             } label: {
               Text("탈퇴하기")
                 .font(.body1)
                 .foregroundColor(.black900)
+              Spacer()
             }
             .padding(EdgeInsets(top: .spacingS, leading: .spacingXL, bottom: .spacingS, trailing: .spacingXL))
           }
@@ -92,6 +93,8 @@ struct MyInfoView: View {
           leftButtonName: "취소",
           rightButtonName: viewStore.popupType == .logout ? "로그아웃" : "탈퇴하기",
           confirm: {
+            viewStore.send(viewStore.popupType == .logout ?
+                           MyInfoAction.logoutAction : MyInfoAction.withDrawalAction)
 
           },
           cancel: {
@@ -99,6 +102,14 @@ struct MyInfoView: View {
           }
         )
         .opacity(viewStore.popupPresented ? 1 : 0)
+        .onChange(of: viewStore.isDismissCurrentView) { isDismissCurrentView in
+          if isDismissCurrentView {
+            self.presentationMode.wrappedValue.dismiss()
+          }
+        }
+        .onDisappear {
+          viewStore.send(.movingAction(viewStore.dismissType))
+        }
       }
     }
   }
@@ -107,8 +118,6 @@ struct MyInfoView: View {
 struct MyInfoRow: View {
   var title: String
   var description: String
-  var buttonVisible: Bool = false
-  @State var buttonPressed = false
   
   var body: some View {
     HStack {
@@ -121,14 +130,6 @@ struct MyInfoRow: View {
         .foregroundColor(.black900)
       
       Spacer()
-      Button {
-        $buttonPressed
-      } label: {
-        Text(buttonPressed ? "완료" : "변경")
-          .font(.subtitle3)
-          .foregroundColor(.blue800)
-      }
-      .opacity(buttonVisible ? 1 : 0)
     }
     .padding(EdgeInsets(top: 12, leading: 24, bottom: 12, trailing: 24))
   }
@@ -139,7 +140,8 @@ struct MyInfoView_Previews: PreviewProvider {
     MyInfoView(store: .init(
       initialState: MyInfoState(),
       reducer: myInfoReducer,
-      environment: MyInfoEnvironment())
+      environment: MyInfoEnvironment()
+      )
     )
   }
 }

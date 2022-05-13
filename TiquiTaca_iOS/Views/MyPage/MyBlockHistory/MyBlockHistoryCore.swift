@@ -6,33 +6,34 @@
 //
 
 import ComposableArchitecture
+import TTNetworkModule
 
 struct MyBlockHistoryState: Equatable {
   var blockListView: BlockListState = .init(
-    blockUsers: [
-      .init(userId: "1", nickName: "닉네임1", profile: "1"),
-      .init(userId: "2", nickName: "닉네임2", profile: "2"),
-    ]
+    blockUsers: []
   )
   var popupPresented = false
-  var unBlockUser: BlockUser = .init(userId: "", nickName: "닉네임~~~", profile: "")
-}
-
-struct BlockUser: Equatable, Identifiable {
-  var id = UUID()
-  var userId: String
-  var nickName: String
-  var profile: String
+  var unBlockUser: BlockUserEntity.Response?
 }
 
 enum MyBlockHistoryAction: Equatable {
   case releaseBlock(String)
-  case blockListView(BlockListAction)
   case presentPopup
   case dismissPopup
+  case blockListView(BlockListAction)
+  
+  case getBlockUserList
+  case getBlockUserListResponse(Result<[BlockUserEntity.Response]?, HTTPError>)
+  case getBlockUserRequestSuccess
+  
+  case unblockUser(String)
+  case unblockUserResponse(Result<BlockUserEntity.Response?, HTTPError>)
+  case unblockUserRequestSuccess
 }
 
 struct MyBlockHistoryEnvironment {
+  let appService: AppService
+  let mainQueue: AnySchedulerOf<DispatchQueue>
 }
 
 let myBlockHistoryReducer = Reducer<
@@ -55,7 +56,7 @@ let myBlockHistoryReducerCore = Reducer<
   MyBlockHistoryState,
   MyBlockHistoryAction,
   MyBlockHistoryEnvironment
-> { state, action, _ in
+> { state, action, environment in
   switch action {
   case let .releaseBlock(id):
     return .none
@@ -75,5 +76,31 @@ let myBlockHistoryReducerCore = Reducer<
       print("")
     }
     return .none
+  case .getBlockUserList:
+    return environment.appService.userService
+      .getBlockUserList()
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(MyBlockHistoryAction.getBlockUserListResponse)
+  case let .getBlockUserListResponse(.success(response)):
+    state.blockListView = .init(blockUsers: response ?? [])
+    return Effect(value: .getBlockUserRequestSuccess)
+  case .getBlockUserListResponse(.failure):
+    return .none
+  case .getBlockUserRequestSuccess:
+    return .none
+  case let .unblockUser(userId):
+    return environment.appService.userService
+      .unBlockUser(userId: userId)
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(MyBlockHistoryAction.unblockUserResponse)
+  case let .unblockUserResponse(.success(response)):
+    return Effect(value: .unblockUserRequestSuccess)
+  case .unblockUserResponse(.failure):
+    return .none
+  case .unblockUserRequestSuccess:
+    state.popupPresented = false
+    return Effect(value: .getBlockUserList)
   }
 }
