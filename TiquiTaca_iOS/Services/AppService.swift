@@ -6,11 +6,18 @@
 //
 
 import Foundation
+import FirebaseMessaging
 
 struct AppService {
+  var fcmToken: String? {
+    return Messaging.messaging().fcmToken
+  }
+  
   let authService: AuthServiceType
+  let userService: UserServiceType
   
   init() {
     authService = AuthService()
+    userService = UserService()
   }
 }
