@@ -13,7 +13,7 @@ struct MapState: Equatable {
 }
 
 enum MapAction: Equatable {
-	case dummyAction
+  case logout
 }
 
 struct MapEnvironment {
@@ -25,6 +25,9 @@ let mapReducer = Reducer<
 	MapState,
 	MapAction,
 	MapEnvironment
-> { _, _, _ in
-	return .none
+> { state, action, environment in
+  switch action {
+  case .logout:
+    return .none
+  }
 }

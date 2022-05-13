@@ -12,8 +12,16 @@ struct MapView: View {
   let store: Store<MapState, MapAction>
   
   var body: some View {
-    WithViewStore(self.store) { _ in
-      Text("MapTab")
+    WithViewStore(self.store) { viewStore in
+      VStack {
+        Text("MapTab")
+        
+        Button {
+          viewStore.send(.logout)
+        } label: {
+          Text("Logout")
+        }
+      }
     }
   }
 }
