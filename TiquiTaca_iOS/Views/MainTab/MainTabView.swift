@@ -35,9 +35,9 @@ private struct MapTab: View {
   }
   
   var body: some View {
-    MapView(store: store.scope(
-      state: \.mapFeature,
-      action: MainTabAction.mapFeature
+    MainMapView(store: store.scope(
+      state: \.mainMapFeature,
+      action: MainTabAction.mainMapFeature
     ))
     .tabItem {
       Image(systemName: "square.fill")
@@ -115,14 +115,9 @@ struct MainTabView_Previews: PreviewProvider {
   static var previews: some View {
     MainTabView(
       store: .init(
-        initialState: MainTabState(
-          mapFeature: MapState(),
-          chatFeature: ChatState(),
-          msgAndNotiFeature: MsgAndNotiState(),
-          myPageFeature: MyPageState()
-        ),
+        initialState: .init(),
         reducer: mainTabReducer,
-        environment: MainTabEnvironment(
+        environment: .init(
           appService: .init(),
           mainQueue: .main
         )

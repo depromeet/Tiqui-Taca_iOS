@@ -18,8 +18,8 @@
 		86783243282651A90034EACC /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86783242282651A90034EACC /* Color+Extensions.swift */; };
 		867832462826DE890034EACC /* RoomListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 867832452826DE890034EACC /* RoomListCell.swift */; };
 		86E494832814F05D00551CCD /* MainTabCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E494822814F05D00551CCD /* MainTabCore.swift */; };
-		86E494892814FDAE00551CCD /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E494882814FDAE00551CCD /* MapView.swift */; };
-		86E4948B2814FDBC00551CCD /* MapCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E4948A2814FDBC00551CCD /* MapCore.swift */; };
+		86E494892814FDAE00551CCD /* MainMapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E494882814FDAE00551CCD /* MainMapView.swift */; };
+		86E4948B2814FDBC00551CCD /* MainMapCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E4948A2814FDBC00551CCD /* MainMapCore.swift */; };
 		86E4948D2814FDC700551CCD /* ChatView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E4948C2814FDC700551CCD /* ChatView.swift */; };
 		86E4948F2814FDD000551CCD /* ChatCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E4948E2814FDD000551CCD /* ChatCore.swift */; };
 		86E494912814FDE100551CCD /* MsgAndNotiView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E494902814FDE100551CCD /* MsgAndNotiView.swift */; };
@@ -125,8 +125,8 @@
 		86783242282651A90034EACC /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
 		867832452826DE890034EACC /* RoomListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomListCell.swift; sourceTree = "<group>"; };
 		86E494822814F05D00551CCD /* MainTabCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabCore.swift; sourceTree = "<group>"; };
-		86E494882814FDAE00551CCD /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
-		86E4948A2814FDBC00551CCD /* MapCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCore.swift; sourceTree = "<group>"; };
+		86E494882814FDAE00551CCD /* MainMapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapView.swift; sourceTree = "<group>"; };
+		86E4948A2814FDBC00551CCD /* MainMapCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapCore.swift; sourceTree = "<group>"; };
 		86E4948C2814FDC700551CCD /* ChatView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatView.swift; sourceTree = "<group>"; };
 		86E4948E2814FDD000551CCD /* ChatCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatCore.swift; sourceTree = "<group>"; };
 		86E494902814FDE100551CCD /* MsgAndNotiView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MsgAndNotiView.swift; sourceTree = "<group>"; };
@@ -257,13 +257,13 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
-		86E494842814F18600551CCD /* Map */ = {
+		86E494842814F18600551CCD /* MainMap */ = {
 			isa = PBXGroup;
 			children = (
-				86E494882814FDAE00551CCD /* MapView.swift */,
-				86E4948A2814FDBC00551CCD /* MapCore.swift */,
+				86E494882814FDAE00551CCD /* MainMapView.swift */,
+				86E4948A2814FDBC00551CCD /* MainMapCore.swift */,
 			);
-			path = Map;
+			path = MainMap;
 			sourceTree = "<group>";
 		};
 		86E494852814FD6300551CCD /* Chat */ = {
@@ -504,7 +504,7 @@
 				86E494872814FD7900551CCD /* MyPage */,
 				86E494862814FD6C00551CCD /* MsgAndNoti */,
 				86E494852814FD6300551CCD /* Chat */,
-				86E494842814F18600551CCD /* Map */,
+				86E494842814F18600551CCD /* MainMap */,
 				8601F66228139D7D0085F692 /* MainTab */,
 				8601F65D281309EC0085F692 /* Onboarding */,
 				8601F65A281309660085F692 /* Splash */,
@@ -830,8 +830,8 @@
 				F2FDA21A280BBF8300B2ED75 /* AppDelegate.swift in Sources */,
 				F981FA23282653A00000A531 /* BlockListCore.swift in Sources */,
 				F2F1ED7D281C3D6900AC4FDD /* VerificationEntity.swift in Sources */,
-				86E494892814FDAE00551CCD /* MapView.swift in Sources */,
-				86E4948B2814FDBC00551CCD /* MapCore.swift in Sources */,
+				86E494892814FDAE00551CCD /* MainMapView.swift in Sources */,
+				86E4948B2814FDBC00551CCD /* MainMapCore.swift in Sources */,
 				F2F1ED81281C533000AC4FDD /* IssueCodeEntity.swift in Sources */,
 				F2F1ED8E281E632D00AC4FDD /* PhoneVerificationCore.swift in Sources */,
 				867832462826DE890034EACC /* RoomListCell.swift in Sources */,

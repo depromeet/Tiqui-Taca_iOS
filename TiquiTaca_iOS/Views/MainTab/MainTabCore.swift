@@ -10,7 +10,7 @@ import ComposableArchitecture
 
 struct MainTabState: Equatable {
   // Feature State
-  var mapFeature: MapState = .init()
+  var mainMapFeature: MainMapState = .init()
   var chatFeature: ChatState = .init()
   var msgAndNotiFeature: MsgAndNotiState = .init()
   var myPageFeature: MyPageState = .init()
@@ -18,7 +18,7 @@ struct MainTabState: Equatable {
 
 enum MainTabAction: Equatable {
   // Feature Action
-  case mapFeature(MapAction)
+  case mainMapFeature(MainMapAction)
   case chatFeature(ChatAction)
   case msgAndNotiFeature(MsgAndNotiAction)
   case myPageFeature(MyPageAction)
@@ -34,12 +34,12 @@ let mainTabReducer = Reducer<
   MainTabAction,
   MainTabEnvironment
 >.combine([
-  mapReducer
+  mainMapReducer
     .pullback(
-      state: \.mapFeature,
-      action: /MainTabAction.mapFeature,
+      state: \.mainMapFeature,
+      action: /MainTabAction.mainMapFeature,
       environment: {
-        MapEnvironment(
+        MainMapEnvironment(
           appService: $0.appService,
           mainQueue: $0.mainQueue
         )
@@ -87,7 +87,7 @@ let mainTabCore = Reducer<
   MainTabEnvironment
 > { _, action, _ in
   switch action {
-  case .mapFeature:
+  case .mainMapFeature:
     return .none
   case .chatFeature:
     return .none

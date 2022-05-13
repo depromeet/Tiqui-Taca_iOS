@@ -1,5 +1,5 @@
 //
-//  MapView.swift
+//  MainMapView.swift
 //  TiquiTaca_iOS
 //
 //  Created by 김록원 on 2022/04/24.
@@ -7,9 +7,10 @@
 
 import SwiftUI
 import ComposableArchitecture
+import ComposableCoreLocation
 
-struct MapView: View {
-  let store: Store<MapState, MapAction>
+struct MainMapView: View {
+  let store: Store<MainMapState, MainMapAction>
   
   var body: some View {
     WithViewStore(self.store) { viewStore in
@@ -26,13 +27,13 @@ struct MapView: View {
   }
 }
 
-struct MapView_Previews: PreviewProvider {
+struct MainMapView_Previews: PreviewProvider {
   static var previews: some View {
-    MapView(
+    MainMapView(
       store: .init(
-        initialState: MapState(),
-        reducer: mapReducer,
-        environment: MapEnvironment(
+        initialState: .init(),
+        reducer: mainMapReducer,
+        environment: .init(
           appService: .init(),
           mainQueue: .main
         )
