@@ -16,7 +16,7 @@ enum ProfileEntity {
     let appAlarm: Bool
     let chatAlarm: Bool
     let iBlockUsers: [String]
-    let createdAt: Date?
+    let createdAt: String
     let lightningScore: Int
     let level: Int
     
@@ -41,7 +41,7 @@ enum ProfileEntity {
       appAlarm = (try? container.decode(Bool.self, forKey: .appAlarm)) ?? false
       chatAlarm = (try? container.decode(Bool.self, forKey: .chatAlarm)) ?? false
       iBlockUsers = (try? container.decode([String].self, forKey: .iBlockUsers)) ?? []
-      createdAt = (try? container.decode(Date.self, forKey: .createdAt)) ?? Date()
+      createdAt = (try? container.decode(String.self, forKey: .createdAt)) ?? ""
       lightningScore = (try? container.decode(Int.self, forKey: .lightningScore)) ?? 0
       level = (try? container.decode(Int.self, forKey: .level)) ?? 0
     }

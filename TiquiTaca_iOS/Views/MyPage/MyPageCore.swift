@@ -7,6 +7,7 @@
 
 import ComposableArchitecture
 import TTNetworkModule
+import Foundation
 
 struct MyPageState: Equatable {
   var nickname = "닉네임"
@@ -67,12 +68,18 @@ let myPageReducer = Reducer<
       .catchToEffect()
       .map(MyPageAction.getProfileInfoResponse)
   case let .getProfileInfoResponse(.success(response)):
-    //    state.profileImage
+//    state.profileImage = response?.profile.type
     state.nickname = response?.nickname ?? ""
-    state.createdAt = response?.createdAt ?? Date()
-    state.createDday = Calendar.current.dateComponents([.day], from: state.createdAt).day ?? 0
     state.isAppAlarmOn = response?.appAlarm ?? false
     state.level = response?.level ?? 0
+    
+    let createdDateString = response?.createdAt ?? ""
+    let dateFormatter = ISO8601DateFormatter()
+    let createdDate = dateFormatter.date(from: createdDateString)
+    state.createdAt = createdDate ?? Date()
+    state.createDday = Calendar(identifier: .gregorian)
+      .dateComponents([.day], from: createdDate ?? Date(), to: Date()).day ?? 0
+    
     return Effect(value: .getProfileRequestSuccess)
   case .getProfileInfoResponse(.failure):
     return .none
