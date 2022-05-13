@@ -40,7 +40,7 @@ private struct MapTab: View {
       action: MainTabAction.mapFeature
     ))
     .tabItem {
-      Image(systemName: "square.fill")
+      Image("map")
         .font(.title)
       Text("지도")
     }
@@ -61,7 +61,7 @@ private struct ChatTab: View {
       action: MainTabAction.chatFeature
     ))
     .tabItem {
-      Image(systemName: "square.fill")
+      Image("chat")
         .font(.title)
       Text("채팅")
     }
@@ -82,7 +82,7 @@ private struct MsgAndNotiTab: View {
       action: MainTabAction.msgAndNotiFeature
     ))
     .tabItem {
-      Image(systemName: "square.fill")
+      Image("letter")
         .font(.title)
       Text("쪽지 알림")
     }
@@ -103,7 +103,7 @@ private struct MyPageTab: View {
       action: MainTabAction.myPageFeature
     ))
     .tabItem {
-      Image(systemName: "square.fill")
+      Image("mypage")
         .font(.title)
       Text("마이페이지")
     }
