@@ -89,6 +89,7 @@ let appCore = Reducer<
     return Effect(value: .setRoute(.mainTab))
     
   case .signOut: // 로그아웃 (하위 reducer의 로그아웃 관련 이벤트)
+    environment.appService.authService.signOut()
     state.mainTabState = nil
     state.onboardingState = .init()
     return Effect(value: .setRoute(.onboarding))
@@ -128,6 +129,9 @@ let appCore = Reducer<
     )
   ):
     return Effect(value: .signIn)
+    
+  case .mainTabAction(.mapFeature(.logout)):
+    return Effect(value: .signOut)
     
   case .onboardingAction:
     return .none
