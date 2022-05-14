@@ -130,9 +130,6 @@ let appCore = Reducer<
   ):
     return Effect(value: .signIn)
     
-  case .mainTabAction(.mainMapFeature(.logout)):
-    return Effect(value: .signOut)
-    
   case .mainTabAction(.myPageFeature(.logout)):
     return Effect(value: .signOut)
     

@@ -8,21 +8,101 @@
 import SwiftUI
 import ComposableArchitecture
 import ComposableCoreLocation
+import TTDesignSystemModule
 
 struct MainMapView: View {
-  let store: Store<MainMapState, MainMapAction>
+  typealias State = MainMapState
+  typealias Action = MainMapAction
+  
+  private let store: Store<State, Action>
+  @ObservedObject private var viewStore: ViewStore<ViewState, Action>
+  
+  struct ViewState: Equatable {
+    let isPresentBottomSheet: Bool
+    let chatRoomAnnotationInfos: [ChatRoomAnnotationInfo]
+    let selectedAnnotationId: String?
+    let region: CoordinateRegion?
+    
+    init(state: State) {
+      isPresentBottomSheet = state.isPresentBottomSheet
+      chatRoomAnnotationInfos = state.chatRoomAnnotationInfos
+      selectedAnnotationId = state.selectedAnnotationId
+      region = state.region
+    }
+  }
+  
+  init(store: Store<State, Action>) {
+    self.store = store
+    viewStore = ViewStore(store.scope(state: ViewState.init))
+  }
   
   var body: some View {
-    WithViewStore(self.store) { viewStore in
-      VStack {
-        Text("MapTab")
+    ZStack {
+      ZStack {
+        MapView(
+          annotationInfos: viewStore.chatRoomAnnotationInfos,
+          region: viewStore.binding(
+            get: \.region,
+            send: Action.updateRegion
+          ),
+          selectedAnnotationId: viewStore.binding(
+            get: \.selectedAnnotationId,
+            send: Action.setSelectedAnnotationId
+          )
+        )
+        .edgesIgnoringSafeArea([.all])
         
-        Button {
-          viewStore.send(.logout)
-        } label: {
-          Text("Logout")
+        VStack {
+          // 상단 리스트
+          
+          Spacer()
+        
+          // 하단 버튼
+          HStack(spacing: .spacingM) {
+            Button {
+              viewStore.send(.setPresentBottomSheet(true))
+            } label: {
+              HStack(spacing: .spacingM) {
+                Text("지금 인기있는 채팅방 알아보기")
+                  .font(.body2)
+                Image("popular")
+              }
+              .frame(width: 265, height: 48)
+              .background(Color.black800)
+              .cornerRadius(16)
+              .foregroundColor(.white)
+            }
+            
+            Button {
+            } label: {
+              Image("locationPolygon")
+                .frame(width: 48, height: 48)
+                .background(Color.black800)
+                .cornerRadius(24)
+            }
+          }
+          .hCenter()
+          .padding(.bottom, .spacingL)
         }
+        .padding(.horizontal, .spacingXL)
       }
+      
+      TTBottomSheetView(
+        isOpen: viewStore.binding(
+          get: \.isPresentBottomSheet,
+          send: Action.setPresentBottomSheet
+        ),
+        minHeight: 0,
+        maxHeight: 328
+      ) {
+        // types:
+        // popular chat room list
+        // chat room list // category, favorite
+        // room detail
+      }
+    }
+    .onAppear {
+      viewStore.send(.onAppear)
     }
   }
 }

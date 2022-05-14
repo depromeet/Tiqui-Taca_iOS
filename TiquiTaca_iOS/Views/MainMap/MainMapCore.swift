@@ -9,11 +9,17 @@ import Combine
 import ComposableArchitecture
 
 struct MainMapState: Equatable {
-	var dummyState = 0
+  var isPresentBottomSheet: Bool = false
+  var chatRoomAnnotationInfos: [ChatRoomAnnotationInfo] = []
+  var selectedAnnotationId: String?
+  var region: CoordinateRegion?
 }
 
 enum MainMapAction: Equatable {
-  case logout
+  case onAppear
+  case setPresentBottomSheet(Bool)
+  case setSelectedAnnotationId(String?)
+  case updateRegion(CoordinateRegion?)
 }
 
 struct MainMapEnvironment {
@@ -24,10 +30,19 @@ struct MainMapEnvironment {
 let mainMapReducer = Reducer<
   MainMapState,
   MainMapAction,
-MainMapEnvironment
+  MainMapEnvironment
 > { state, action, environment in
   switch action {
-  case .logout:
+  case .onAppear:
+    return .none
+  case let .setPresentBottomSheet(isPresent):
+    state.isPresentBottomSheet = isPresent
+    return .none
+  case let .setSelectedAnnotationId(id):
+    state.selectedAnnotationId = id
+    return .none
+  case let .updateRegion(region):
+    state.region = region
     return .none
   }
 }
