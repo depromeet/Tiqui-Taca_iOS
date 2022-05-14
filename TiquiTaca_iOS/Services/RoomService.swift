@@ -10,6 +10,9 @@ import Combine
 
 protocol RoomServiceType {
 	func getPopularRoomList() -> AnyPublisher<[RoomInfoEntity.Response]?, HTTPError>
+	func getLikeRoomList() -> AnyPublisher<[RoomInfoEntity.Response]?, HTTPError>
+	func getEnteredRoom() -> AnyPublisher<RoomInfoEntity.Response?, HTTPError>
+	func registLikeRoom(roomId: String) -> AnyPublisher<RoomLikeEntity.Response?, HTTPError>
 }
 
 final class RoomService: RoomServiceType {
@@ -23,4 +26,15 @@ final class RoomService: RoomServiceType {
 		network.request(.getPopularRoomList, responseType: [RoomInfoEntity.Response].self)
 	}
 	
+	func getLikeRoomList() -> AnyPublisher<[RoomInfoEntity.Response]?, HTTPError> {
+		network.request(.getLikeRoomList, responseType: [RoomInfoEntity.Response].self)
+	}
+	
+	func getEnteredRoom() -> AnyPublisher<RoomInfoEntity.Response?, HTTPError> {
+		network.request(.getMyRoom, responseType: RoomInfoEntity.Response.self)
+	}
+	
+	func registLikeRoom(roomId: String) -> AnyPublisher<RoomLikeEntity.Response?, HTTPError> {
+		network.request(.likeRoom(roomId: roomId), responseType: RoomLikeEntity.Response.self)
+	}
 }
