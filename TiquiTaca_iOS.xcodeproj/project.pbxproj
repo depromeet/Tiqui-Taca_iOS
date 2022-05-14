@@ -40,6 +40,7 @@
 		F25C79BC282D91BC009C60EE /* UserCreationEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25C79BB282D91BC009C60EE /* UserCreationEntity.swift */; };
 		F25C79C6282E96A2009C60EE /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25C79C5282E96A2009C60EE /* UserService.swift */; };
 		F25C79C8282F1881009C60EE /* TabViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25C79C7282F1881009C60EE /* TabViewItem.swift */; };
+		F25C79CA282F22E9009C60EE /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25C79C9282F22E9009C60EE /* MapView.swift */; };
 		F2C02C7127F8824C004C4235 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F2C02C7027F8824C004C4235 /* Assets.xcassets */; };
 		F2C02C7427F8824C004C4235 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F2C02C7327F8824C004C4235 /* Preview Assets.xcassets */; };
 		F2C02C7E27F8824C004C4235 /* TiquiTaca_iOSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2C02C7D27F8824C004C4235 /* TiquiTaca_iOSTests.swift */; };
@@ -47,6 +48,10 @@
 		F2C02CAB27F89A86004C4235 /* TTDesignSystemModule.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F2C02CA827F89A86004C4235 /* TTDesignSystemModule.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F2C02CAC27F89A86004C4235 /* TTNetworkModule.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2C02CA927F89A86004C4235 /* TTNetworkModule.framework */; };
 		F2C02CAD27F89A86004C4235 /* TTNetworkModule.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F2C02CA927F89A86004C4235 /* TTNetworkModule.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F2DEC4E0282F34510018F545 /* ChatRoomAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2DEC4DF282F34510018F545 /* ChatRoomAnnotation.swift */; };
+		F2DEC4E2282F3A2F0018F545 /* CoordicateRegion.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2DEC4E1282F3A2F0018F545 /* CoordicateRegion.swift */; };
+		F2DEC4E4282F3AF20018F545 /* ChatRoomAnnotationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2DEC4E3282F3AF20018F545 /* ChatRoomAnnotationInfo.swift */; };
+		F2DEC4E6282F46260018F545 /* MapViewCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2DEC4E5282F46260018F545 /* MapViewCoordinator.swift */; };
 		F2F1ED6F2817ABE900AC4FDD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F2F1ED6E2817ABE900AC4FDD /* GoogleService-Info.plist */; };
 		F2F1ED7228182D1400AC4FDD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED7128182D1400AC4FDD /* SceneDelegate.swift */; };
 		F2F1ED7D281C3D6900AC4FDD /* VerificationEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED7C281C3D6900AC4FDD /* VerificationEntity.swift */; };
@@ -156,6 +161,7 @@
 		F25C79BB282D91BC009C60EE /* UserCreationEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCreationEntity.swift; sourceTree = "<group>"; };
 		F25C79C5282E96A2009C60EE /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		F25C79C7282F1881009C60EE /* TabViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewItem.swift; sourceTree = "<group>"; };
+		F25C79C9282F22E9009C60EE /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		F2C02C6927F8824A004C4235 /* TiquiTaca.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TiquiTaca.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2C02C7027F8824C004C4235 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F2C02C7327F8824C004C4235 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
@@ -163,6 +169,10 @@
 		F2C02C7D27F8824C004C4235 /* TiquiTaca_iOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TiquiTaca_iOSTests.swift; sourceTree = "<group>"; };
 		F2C02CA827F89A86004C4235 /* TTDesignSystemModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TTDesignSystemModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2C02CA927F89A86004C4235 /* TTNetworkModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TTNetworkModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F2DEC4DF282F34510018F545 /* ChatRoomAnnotation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomAnnotation.swift; sourceTree = "<group>"; };
+		F2DEC4E1282F3A2F0018F545 /* CoordicateRegion.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoordicateRegion.swift; sourceTree = "<group>"; };
+		F2DEC4E3282F3AF20018F545 /* ChatRoomAnnotationInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomAnnotationInfo.swift; sourceTree = "<group>"; };
+		F2DEC4E5282F46260018F545 /* MapViewCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewCoordinator.swift; sourceTree = "<group>"; };
 		F2F1ED6E2817ABE900AC4FDD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F2F1ED702817B35B00AC4FDD /* TiquiTaca_iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TiquiTaca_iOS.entitlements; sourceTree = "<group>"; };
 		F2F1ED7128182D1400AC4FDD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -419,6 +429,18 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		F2DEC4DE282F33A30018F545 /* Map */ = {
+			isa = PBXGroup;
+			children = (
+				F25C79C9282F22E9009C60EE /* MapView.swift */,
+				F2DEC4DF282F34510018F545 /* ChatRoomAnnotation.swift */,
+				F2DEC4E3282F3AF20018F545 /* ChatRoomAnnotationInfo.swift */,
+				F2DEC4E1282F3A2F0018F545 /* CoordicateRegion.swift */,
+				F2DEC4E5282F46260018F545 /* MapViewCoordinator.swift */,
+			);
+			path = Map;
+			sourceTree = "<group>";
+		};
 		F2F1ED79281C3B6000AC4FDD /* Entities */ = {
 			isa = PBXGroup;
 			children = (
@@ -493,6 +515,7 @@
 		F2FDA211280BAF2200B2ED75 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				F2DEC4DE282F33A30018F545 /* Map */,
 				F2F1EDA92826D51200AC4FDD /* TOSFieldList */,
 				F2F1ED8A281E62A900AC4FDD /* PhoneVerification */,
 				F2F1ED84281C6B3700AC4FDD /* OTPField */,
@@ -854,6 +877,7 @@
 				86E4948B2814FDBC00551CCD /* MainMapCore.swift in Sources */,
 				F2F1ED81281C533000AC4FDD /* IssueCodeEntity.swift in Sources */,
 				F2F1ED8E281E632D00AC4FDD /* PhoneVerificationCore.swift in Sources */,
+				F2DEC4E0282F34510018F545 /* ChatRoomAnnotation.swift in Sources */,
 				867832462826DE890034EACC /* RoomListCell.swift in Sources */,
 				F2F1ED98281E869D00AC4FDD /* VerificationNumberCheckCore.swift in Sources */,
 				86E4948D2814FDC700551CCD /* ChatView.swift in Sources */,
@@ -862,9 +886,11 @@
 				F981FA21282653940000A531 /* BlockListView.swift in Sources */,
 				F2F1ED91281E636200AC4FDD /* SignUpCore.swift in Sources */,
 				F2F1EDA828258E0E00AC4FDD /* AppService.swift in Sources */,
+				F2DEC4E4282F3AF20018F545 /* ChatRoomAnnotationInfo.swift in Sources */,
 				8601F661281393640085F692 /* PageControl.swift in Sources */,
 				8601F659281308CB0085F692 /* View+Extensions.swift in Sources */,
 				F9669F6428251E59004624F8 /* MyBlockHistoryView.swift in Sources */,
+				F25C79CA282F22E9009C60EE /* MapView.swift in Sources */,
 				F9B45A1D282BDA5700948586 /* ProfileEntity.swift in Sources */,
 				F96CDE752824EF8C002DEB90 /* MyInfoView.swift in Sources */,
 				F2F1ED9B281EDACE00AC4FDD /* OnboardingPageView.swift in Sources */,
@@ -874,6 +900,7 @@
 				F2F1EDB12829336200AC4FDD /* AppCore.swift in Sources */,
 				F2127640280FE07500FB568D /* TOSFieldListView.swift in Sources */,
 				F248EB012813240500430C3B /* CreateProfileView.swift in Sources */,
+				F2DEC4E6282F46260018F545 /* MapViewCoordinator.swift in Sources */,
 				F25C79B6282C1FC0009C60EE /* ProfileImageListView.swift in Sources */,
 				F25C79BC282D91BC009C60EE /* UserCreationEntity.swift in Sources */,
 				F248EB032813273A00430C3B /* CreateProfileCore.swift in Sources */,
@@ -893,6 +920,7 @@
 				F25C79B4282AB4D7009C60EE /* Int+Extensions.swift in Sources */,
 				86E494972814FE0300551CCD /* MyPageCore.swift in Sources */,
 				86E4948F2814FDD000551CCD /* ChatCore.swift in Sources */,
+				F2DEC4E2282F3A2F0018F545 /* CoordicateRegion.swift in Sources */,
 				F981FA172825FB0A0000A531 /* NoticeView.swift in Sources */,
 				8601F666281404D40085F692 /* OnboardingCore.swift in Sources */,
 				8601F6642813AD400085F692 /* MainTabView.swift in Sources */,
