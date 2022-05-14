@@ -75,7 +75,7 @@ let appCore = Reducer<
     return .none
     
   case .onAppear:
-    if environment.appService.authService.isLoggedIn {
+    if !environment.appService.authService.isLoggedIn {
       state.mainTabState = .init()
       return Effect(value: .setRoute(.mainTab))
     } else {
@@ -84,6 +84,7 @@ let appCore = Reducer<
     }
     
   case .signIn: // 로그인 (하위 reducer의 로그인 관련 이벤트)
+    environment.appService.authService.deleteTempToken()
     state.mainTabState = .init()
     state.onboardingState = nil
     return Effect(value: .setRoute(.mainTab))

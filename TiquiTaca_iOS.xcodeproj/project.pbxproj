@@ -15,8 +15,12 @@
 		8601F661281393640085F692 /* PageControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8601F660281393640085F692 /* PageControl.swift */; };
 		8601F6642813AD400085F692 /* MainTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8601F6632813AD400085F692 /* MainTabView.swift */; };
 		8601F666281404D40085F692 /* OnboardingCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8601F665281404D40085F692 /* OnboardingCore.swift */; };
+		86032A26282C22A50061D3F9 /* RoomService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86032A25282C22A50061D3F9 /* RoomService.swift */; };
 		86783243282651A90034EACC /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86783242282651A90034EACC /* Color+Extensions.swift */; };
 		867832462826DE890034EACC /* RoomListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 867832452826DE890034EACC /* RoomListCell.swift */; };
+		869FC8DC282A561F00B14345 /* RoomInfoEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869FC8DB282A561F00B14345 /* RoomInfoEntity.swift */; };
+		86BEED80282E4BB100EA0C5B /* TTType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86BEED7F282E4BB100EA0C5B /* TTType.swift */; };
+		86BEED82282F3FD500EA0C5B /* Date+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86BEED81282F3FD500EA0C5B /* Date+Extensions.swift */; };
 		86E494832814F05D00551CCD /* MainTabCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E494822814F05D00551CCD /* MainTabCore.swift */; };
 		86E494892814FDAE00551CCD /* MapView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E494882814FDAE00551CCD /* MapView.swift */; };
 		86E4948B2814FDBC00551CCD /* MapCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86E4948A2814FDBC00551CCD /* MapCore.swift */; };
@@ -128,8 +132,12 @@
 		8601F660281393640085F692 /* PageControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageControl.swift; sourceTree = "<group>"; };
 		8601F6632813AD400085F692 /* MainTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabView.swift; sourceTree = "<group>"; };
 		8601F665281404D40085F692 /* OnboardingCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingCore.swift; sourceTree = "<group>"; };
+		86032A25282C22A50061D3F9 /* RoomService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomService.swift; sourceTree = "<group>"; };
 		86783242282651A90034EACC /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
 		867832452826DE890034EACC /* RoomListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomListCell.swift; sourceTree = "<group>"; };
+		869FC8DB282A561F00B14345 /* RoomInfoEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomInfoEntity.swift; sourceTree = "<group>"; };
+		86BEED7F282E4BB100EA0C5B /* TTType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTType.swift; sourceTree = "<group>"; };
+		86BEED81282F3FD500EA0C5B /* Date+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extensions.swift"; sourceTree = "<group>"; };
 		86E494822814F05D00551CCD /* MainTabCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainTabCore.swift; sourceTree = "<group>"; };
 		86E494882814FDAE00551CCD /* MapView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapView.swift; sourceTree = "<group>"; };
 		86E4948A2814FDBC00551CCD /* MapCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCore.swift; sourceTree = "<group>"; };
@@ -350,6 +358,7 @@
 				F2C02C7027F8824C004C4235 /* Assets.xcassets */,
 				F24B1EF22808741B003D4E1D /* Preview Content */,
 				F2FDA215280BBDAC00B2ED75 /* LaunchScreen.storyboard */,
+				86BEED7F282E4BB100EA0C5B /* TTType.swift */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
@@ -432,6 +441,7 @@
 				F25C79B7282CB5F2009C60EE /* CheckNicknameEntity.swift */,
 				F96C0DE5282EA83D004BF1C7 /* ValidNicknameEntity.swift */,
 				F96C0DE7282EAFBE004BF1C7 /* ChangeProfileEntity.swift */,
+				869FC8DB282A561F00B14345 /* RoomInfoEntity.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -511,6 +521,7 @@
 				F2F1EDA728258E0E00AC4FDD /* AppService.swift */,
 				F9B90C9B28117DDF003FFEEB /* AuthService.swift */,
 				F25C79C5282E96A2009C60EE /* UserService.swift */,
+				86032A25282C22A50061D3F9 /* RoomService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -538,10 +549,11 @@
 		F2FDA214280BAF3500B2ED75 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				86783242282651A90034EACC /* Color+Extensions.swift */,
 				8601F658281308CB0085F692 /* View+Extensions.swift */,
 				F25C79B3282AB4D7009C60EE /* Int+Extensions.swift */,
 				F25C79B9282D7524009C60EE /* String+Extension.swift */,
+				86BEED81282F3FD500EA0C5B /* Date+Extensions.swift */,
+				86783242282651A90034EACC /* Color+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -854,6 +866,7 @@
 				86E4948B2814FDBC00551CCD /* MapCore.swift in Sources */,
 				F2F1ED81281C533000AC4FDD /* IssueCodeEntity.swift in Sources */,
 				F2F1ED8E281E632D00AC4FDD /* PhoneVerificationCore.swift in Sources */,
+				86BEED82282F3FD500EA0C5B /* Date+Extensions.swift in Sources */,
 				867832462826DE890034EACC /* RoomListCell.swift in Sources */,
 				F2F1ED98281E869D00AC4FDD /* VerificationNumberCheckCore.swift in Sources */,
 				86E4948D2814FDC700551CCD /* ChatView.swift in Sources */,
@@ -891,6 +904,7 @@
 				86E494832814F05D00551CCD /* MainTabCore.swift in Sources */,
 				86E494932814FDE900551CCD /* MsgAndNotiCore.swift in Sources */,
 				F25C79B4282AB4D7009C60EE /* Int+Extensions.swift in Sources */,
+				869FC8DC282A561F00B14345 /* RoomInfoEntity.swift in Sources */,
 				86E494972814FE0300551CCD /* MyPageCore.swift in Sources */,
 				86E4948F2814FDD000551CCD /* ChatCore.swift in Sources */,
 				F981FA172825FB0A0000A531 /* NoticeView.swift in Sources */,
@@ -906,6 +920,7 @@
 				F2F1ED83281C6B2F00AC4FDD /* OTPFieldView.swift in Sources */,
 				F2F1ED96281E868300AC4FDD /* VerificationNumberCheckView.swift in Sources */,
 				86783243282651A90034EACC /* Color+Extensions.swift in Sources */,
+				86032A26282C22A50061D3F9 /* RoomService.swift in Sources */,
 				F981FA1F282604AA0000A531 /* CsCenterView.swift in Sources */,
 				F2F1ED89281E612E00AC4FDD /* SignUpView.swift in Sources */,
 				F9B90C9C28117DDF003FFEEB /* AuthService.swift in Sources */,
@@ -913,6 +928,7 @@
 				F2F1ED87281E612700AC4FDD /* SignInView.swift in Sources */,
 				F25C79C6282E96A2009C60EE /* UserService.swift in Sources */,
 				F9C4F45F282D61D200ECBF9A /* BlockUserEntity.swift in Sources */,
+				86BEED80282E4BB100EA0C5B /* TTType.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
