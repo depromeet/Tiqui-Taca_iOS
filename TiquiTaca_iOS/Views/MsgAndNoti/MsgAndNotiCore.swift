@@ -10,10 +10,16 @@ import ComposableArchitecture
 
 struct MsgAndNotiState: Equatable {
 	var dummyState = 0
+  //임시 처리
+  var letterList: [String] = []
+  var noticeList: [String] = []
+  var selectedTab = 0
 }
+
 
 enum MsgAndNotiAction: Equatable {
 	case dummyAction
+  case selectTab(Int)
 }
 
 struct MsgAndNotiEnvironment {
@@ -25,6 +31,13 @@ let msgAndNotiReducer = Reducer<
 	MsgAndNotiState,
 	MsgAndNotiAction,
 	MsgAndNotiEnvironment
-> { _, _, _ in
+> { state, action, environment in
+  switch action {
+  case .dummyAction:
+    return .none
+  case let .selectTab(tabIndex):
+    state.selectedTab = tabIndex
+    return .none
+  }
 	return .none
 }

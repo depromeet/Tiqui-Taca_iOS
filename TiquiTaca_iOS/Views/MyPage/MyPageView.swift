@@ -22,14 +22,20 @@ struct MyPageView: View {
               .font(.heading1)
               .frame(maxWidth: .infinity, alignment: .leading)
             
-            Image(viewStore.profileImage)
+            Image(viewStore.profileImage.imageName)
               .overlay(
                 NavigationLink(
                   destination: {
                     ChangeProfileView(store: .init(
-                      initialState: ChangeProfileState(),
+                      initialState: ChangeProfileState(
+                        nickname: viewStore.nickname,
+                        profileImage: viewStore.profileImage
+                      ),
                       reducer: changeProfileReducer,
-                      environment: ChangeProfileEnvironment())
+                      environment: ChangeProfileEnvironment(
+                        appService: AppService(),
+                        mainQueue: .main
+                      ))
                     )
                   }
                 ) {
@@ -38,14 +44,18 @@ struct MyPageView: View {
                   .alignmentGuide(.bottom) { $0[.bottom] }
                   .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
               )
-            Text(viewStore.nickName)
+            Text(viewStore.nickname)
               .font(.heading2)
             
-            Text("최초가입일 \(viewStore.createdAt) / 티키타카와 +\(viewStore.createDday)일 째")
+            Text("최초가입일 \(viewStore.createdAt) / 티키타카와 +\(String(viewStore.createDday))일 째")
               .font(.body7)
               .foregroundColor(.white900)
             
-            Text("뱃지")
+            Button {
+              
+            } label: {
+              Image("rating\(viewStore.level)")
+            }
           }
           .padding(.spacingXL)
           .foregroundColor(.white)
@@ -88,16 +98,18 @@ struct MyPageView: View {
                 content: {
                   switch viewStore.sheetChoice {
                   case .myInfoView:
-                    MyInfoView(store: .init(
-                      initialState: MyInfoState(),
-                      reducer: myInfoReducer,
-                      environment: MyInfoEnvironment())
-                    )
+                    MyInfoView(store: store.scope(
+                      state: \.myInfoViewState,
+                      action: MyPageAction.myInfoView
+                    ))
                   case .blockHistoryView:
                     MyBlockHistoryView(store: .init(
                       initialState: MyBlockHistoryState(),
                       reducer: myBlockHistoryReducer,
-                      environment: MyBlockHistoryEnvironment())
+                      environment: MyBlockHistoryEnvironment(
+                        appService: .init(),
+                        mainQueue: .main
+                      ))
                     )
                   case .noticeView:
                     NoticeView(store: .init(
@@ -120,6 +132,10 @@ struct MyPageView: View {
           }
           .listStyle(.plain)
         }
+        .onAppear(
+          perform: {
+            viewStore.send(.getProfileInfo)
+          })
         .navigationBarTitle("", displayMode: .inline)
         .navigationBarHidden(true)
       }

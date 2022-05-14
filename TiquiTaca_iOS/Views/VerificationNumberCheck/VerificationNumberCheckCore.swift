@@ -7,25 +7,32 @@
 
 import ComposableArchitecture
 import TTNetworkModule
+import Foundation
 
 struct VerificationNumberCheckState: Equatable {
   enum Route {
     case termsOfService
-    case main
   }
   var route: Route?
   var phoneNumber: String = ""
-  var expireMinute: Int = 0
-  var certificationCode: String = ""
-  var isLoginSuccess: Bool = false
+  var expireSeconds: Int = 0
+  var isAvailable: Bool = true
   var otpFieldState: OTPFieldState = .init()
-  var termsOfServiceState: TermsOfServiceState = .init()
-  var mainTabState: MainTabState = .init()
+  var termsOfServiceState: TermsOfServiceState?
 }
 
 enum VerificationNumberCheckAction: Equatable {
   case setRoute(VerificationNumberCheckState.Route?)
-  case compareVerficationNumberResponse(Result<VerificationEntity.Response?, HTTPError>)
+  
+  case timerStart
+  case timerTicked
+  case timerStop
+  
+  case loginSuccess
+  case requestAgain
+  case verificationResponse(Result<VerificationEntity.Response?, HTTPError>)
+  case issuePhoneCodeResponse(Result<IssueCodeEntity.Response?, HTTPError>)
+  
   case otpFieldAction(OTPFieldAction)
   case termsOfServiceAction(TermsOfServiceAction)
   case mainTabAction(MainTabAction)
@@ -41,18 +48,8 @@ let verificationNumberCheckReducer = Reducer<
   VerificationNumberCheckAction,
   VerificationNumberCheckEnvironment
 >.combine([
-  mainTabReducer
-    .pullback(
-      state: \.mainTabState,
-      action: /VerificationNumberCheckAction.mainTabAction,
-      environment: {
-        MainTabEnvironment(
-          appService: $0.appService,
-          mainQueue: $0.mainQueue
-        )
-      }
-    ),
   termsOfServiceReducer
+    .optional()
     .pullback(
       state: \.termsOfServiceState,
       action: /VerificationNumberCheckAction.termsOfServiceAction,
@@ -77,36 +74,96 @@ let verificationNumberCheckCore = Reducer<
   VerificationNumberCheckAction,
   VerificationNumberCheckEnvironment
 > { state, action, environment in
+  struct TimerId: Hashable {}
+  
   switch action {
-  case let .compareVerficationNumberResponse(.success(response)):
+  case .loginSuccess:
+    return.none
+    
+  case .timerStart:
+    return Effect.timer(id: TimerId(), every: 1, on: environment.mainQueue)
+      .map { _ in .timerTicked }
+    
+  case .timerTicked:
+    state.expireSeconds -= 1
+    if state.expireSeconds <= 0 {
+      return Effect(value: .timerStop)
+    } else {
+      return .none
+    }
+    
+  case .timerStop:
+    state.isAvailable = false
+    return .cancel(id: TimerId())
+    
+  case .requestAgain:
+    let request = IssueCodeEntity.Request(phoneNumber: state.phoneNumber)
+    return environment.appService.authService
+      .issuePhoneCode(request)
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(VerificationNumberCheckAction.issuePhoneCodeResponse)
+    
+  case let .verificationResponse(.success(response)):
     guard let response = response else { return .none }
     if let tempToken = response.tempToken {
-      try? TokenManager.shared.saveTempToken(tempToken)
+      environment.appService.authService
+        .saveToken(tempToken: tempToken)
       return Effect(value: .setRoute(.termsOfService))
     }
     
+    if let accessToken = response.accessToken,
+       let refreshToken = response.refreshToken {
+      environment.appService.authService
+        .saveToken(
+          accessToken: accessToken,
+          refreshToken: refreshToken
+        )
+      return Effect(value: .loginSuccess)
+    }
     return .none
-  case .compareVerficationNumberResponse(.failure):
+    
+  case let .issuePhoneCodeResponse(.success(response)):
+    guard let response = response else { return .none }
+    state.expireSeconds = response.expire * 60
+    return .merge([
+      .cancel(id: TimerId()),
+      Effect(value: .timerStart)
+    ])
+    
+  case .verificationResponse(.failure):
     return .none
+    
+  case .issuePhoneCodeResponse(.failure):
+    return .none
+    
   case .otpFieldAction(.lastFieldTrigger):
-    let requestModel = VerificationEntity.Request(
+    let request = VerificationEntity.Request(
       phoneNumber: state.phoneNumber,
       verificationCode: state.otpFieldState.result
     )
     return environment.appService.authService
-      .verification(request: requestModel)
+      .verification(request)
       .receive(on: environment.mainQueue)
       .catchToEffect()
-      .map(VerificationNumberCheckAction.compareVerficationNumberResponse)
+      .map(VerificationNumberCheckAction.verificationResponse)
+    
   case .termsOfServiceAction:
     return .none
+    
   case .mainTabAction:
     return .none
+    
   case .otpFieldAction:
     return .none
+    
   case let .setRoute(selectedRoute):
     if selectedRoute == nil {
-      state.termsOfServiceState = .init()
+      state.termsOfServiceState = nil
+    } else if selectedRoute == .termsOfService {
+      state.termsOfServiceState = .init(
+        TermsOfServiceState(phoneNumber: state.phoneNumber)
+      )
     }
     state.route = selectedRoute
     return .none

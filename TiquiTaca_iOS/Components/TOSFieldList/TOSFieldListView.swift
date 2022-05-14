@@ -21,23 +21,24 @@ struct TOSFieldListView: View {
   
   var body: some View {
     WithViewStore(store) { viewStore in
-      VStack(spacing: 19) {
+      VStack(spacing: 0) {
         ForEach(viewStore.termsOfServiceModels) { model in
-          HStack(alignment: .center, spacing: 12) {
+          HStack(spacing: .spacingXXS) {
             Button {
               viewStore.send(.check(model.id))
             } label: {
               if model.isChecked {
-                Image(systemName: "checkmark.circle.fill")
+                Image("checkFill")
               } else {
-                Image(systemName: "checkmark.circle")
+                Image("check")
               }
             }
             
-            HStack(alignment: .center, spacing: 0) {
-              Text(model.isRequired ? "[필수]" : "[선택]")
+            HStack(spacing: 0) {
+              Text(model.isRequired ? "[필수] " : "[선택] ")
               Text(model.description)
             }
+            .foregroundColor(.white)
             
             Spacer()
             
@@ -45,7 +46,7 @@ struct TOSFieldListView: View {
               viewStore.send(.selectDetail)
             } label: {
               Text("보기")
-                .underline()
+                .foregroundColor(.white800)
             }
             .sheet(
               isPresented: viewStore.binding(
@@ -56,7 +57,8 @@ struct TOSFieldListView: View {
               WebView(url: model.url)
             }
           }
-          .font(.system(size: 13))
+          .font(.body4)
+          .padding(.vertical, .spacingS)
         }
       }
     }

@@ -12,8 +12,9 @@ struct TermsOfServiceState: Equatable {
     case createProfile
   }
   var route: Route?
+  var phoneNumber: String = ""
   var tosFieldListState: TOSFieldListViewState = .init()
-  var createProfileState: CreateProfileState = .init()
+  var createProfileState: CreateProfileState?
 }
 
 enum TermsOfServiceAction: Equatable {
@@ -39,6 +40,7 @@ let termsOfServiceReducer = Reducer<
       environment: { _ in Void() }
     ),
   createProfileReducer
+    .optional()
     .pullback(
       state: \.createProfileState,
       action: /TermsOfServiceAction.createProfileAction,
@@ -64,7 +66,12 @@ let termsOfServiceReducerCore = Reducer<
     return .none
   case let .setRoute(selectedRoute):
     if selectedRoute == nil {
-      state.createProfileState = .init()
+      state.createProfileState = nil
+    } else if selectedRoute == .createProfile {
+      state.createProfileState = .init(
+        phoneNumber: state.phoneNumber,
+        isAgreed: state.tosFieldListState.isAllCheckDone
+      )
     }
     state.route = selectedRoute
     return .none

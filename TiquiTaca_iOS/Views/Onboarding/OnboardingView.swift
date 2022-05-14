@@ -33,8 +33,8 @@ struct OnboardingView: View {
   
   var body: some View {
     NavigationView {
-      VStack(alignment: .center, spacing: 79) {
-        VStack {
+      VStack(alignment: .center, spacing: 80) {
+        VStack(spacing: .spacingS) {
           PageControl(
             numberOfPages: 3,
             currentPage: viewStore.binding(
@@ -42,16 +42,17 @@ struct OnboardingView: View {
               send: Action.pageControlTapped
             )
           )
-          PageView(
+          OnboardingPageView(
             currentPage: viewStore.binding(
               get: \.currentPage,
               send: Action.onboardingPageSwipe
             )
           )
+          .frame(maxWidth: .infinity, maxHeight: 440)
         }
         .vCenter()
         
-        VStack(spacing: 24) {
+        VStack(spacing: .spacingXL) {
           NavigationLink(
             tag: State.Route.signIn,
             selection: viewStore.binding(
@@ -68,6 +69,7 @@ struct OnboardingView: View {
                 Text("로그인")
                   .foregroundColor(.green500)
               }
+              .font(.subtitle4)
             }
           )
           NavigationLink(
@@ -84,6 +86,7 @@ struct OnboardingView: View {
                 viewStore.send(.setRoute(.signUp))
               } label: {
                 Text("시작하기")
+                  .font(.subtitle1)
               }
               .buttonStyle(TTButtonLargeGreenStyle())
             }
@@ -116,6 +119,7 @@ extension OnboardingView {
   }
 }
 
+// MARK: - Preview
 struct OnboardingView_Previews: PreviewProvider {
   static var previews: some View {
     OnboardingView(
