@@ -1,7 +1,6 @@
 {
   "images" : [
     {
-      "filename" : "info.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
@@ -11,7 +10,6 @@
       "scale" : "2x"
     },
     {
-      "filename" : "info@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
