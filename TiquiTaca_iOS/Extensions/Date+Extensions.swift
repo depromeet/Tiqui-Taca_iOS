@@ -8,9 +8,13 @@
 import Foundation
 
 enum DateFormatType: String{
-	case HHMM
+	case HHmm = "HH:mm"
 }
 
 extension Date {
-	
+	func convertFormatType(type: DateFormatType) -> Date {
+		let dateFormatter = DateFormatter()
+		dateFormatter.dateFormat = type.rawValue
+		return dateFormatter.date(from: "\(self)") ?? Date()
+	}
 }
