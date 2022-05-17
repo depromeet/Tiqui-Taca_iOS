@@ -1,7 +1,9 @@
 excluded:
-- ${PWD}/DerivedData
 - TiquiTaca_NetworkModule
 - TiquiTaca_DesignSystem
+- ${PWD}/DerivedData
+- R.generated.swift
+- Pods
 
 disabled_rules:
   - discarded_notification_center_observer
@@ -9,6 +11,7 @@ disabled_rules:
   - orphaned_doc_comment
   - todo
   - unused_capture_list
+  - nesting
 
 opt_in_rules:
   - array_init
@@ -41,16 +44,13 @@ opt_in_rules:
   - pattern_matching_keywords
   - prefer_self_type_over_type_of_self
   - redundant_nil_coalescing
-  - redundant_type_annotation
   - strict_fileprivate
   - toggle_bool
-  - trailing_closure
   - unneeded_parentheses_in_closure_argument
   - unused_import
   - vertical_whitespace_closing_braces
   - vertical_whitespace_opening_braces
   - yoda_condition
-
 
 custom_rules:
   array_constructor:
@@ -99,7 +99,7 @@ private_over_fileprivate:
   validate_extensions: true
 
 trailing_whitespace:
-  ignores_empty_lines: false
+  ignores_empty_lines: true
   ignores_comments: true
 
 vertical_whitespace:
