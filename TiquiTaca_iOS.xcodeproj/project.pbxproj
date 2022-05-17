@@ -171,8 +171,9 @@
 		F2C02C7D27F8824C004C4235 /* TiquiTaca_iOSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TiquiTaca_iOSTests.swift; sourceTree = "<group>"; };
 		F2C02CA827F89A86004C4235 /* TTDesignSystemModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TTDesignSystemModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2C02CA927F89A86004C4235 /* TTNetworkModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TTNetworkModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F2DEC4E8283324E70018F545 /* TiquiTaca_iOSDebug.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = TiquiTaca_iOSDebug.entitlements; path = TiquiTaca_iOS/TiquiTaca_iOSDebug.entitlements; sourceTree = SOURCE_ROOT; };
+		F2DEC4E9283324E70018F545 /* TiquiTaca_iOS.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = TiquiTaca_iOS.entitlements; path = TiquiTaca_iOS/TiquiTaca_iOS.entitlements; sourceTree = SOURCE_ROOT; };
 		F2F1ED6E2817ABE900AC4FDD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		F2F1ED702817B35B00AC4FDD /* TiquiTaca_iOS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TiquiTaca_iOS.entitlements; sourceTree = "<group>"; };
 		F2F1ED7128182D1400AC4FDD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		F2F1ED7C281C3D6900AC4FDD /* VerificationEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationEntity.swift; sourceTree = "<group>"; };
 		F2F1ED7E281C40BB00AC4FDD /* UserEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEntity.swift; sourceTree = "<group>"; };
@@ -334,6 +335,8 @@
 		F20992A82805CCD1002C170C /* SupportingFile */ = {
 			isa = PBXGroup;
 			children = (
+				F2DEC4E9283324E70018F545 /* TiquiTaca_iOS.entitlements */,
+				F2DEC4E8283324E70018F545 /* TiquiTaca_iOSDebug.entitlements */,
 				F2F1FFBE28049D7E00F3A8E4 /* Info.plist */,
 				F2F1ED6E2817ABE900AC4FDD /* GoogleService-Info.plist */,
 				F24B1EEE28086CA0003D4E1D /* .swiftlint.yml */,
@@ -395,7 +398,6 @@
 		F2C02C6B27F8824A004C4235 /* TiquiTaca_iOS */ = {
 			isa = PBXGroup;
 			children = (
-				F2F1ED702817B35B00AC4FDD /* TiquiTaca_iOS.entitlements */,
 				F2FDA219280BBF8300B2ED75 /* AppDelegate.swift */,
 				F2F1ED7128182D1400AC4FDD /* SceneDelegate.swift */,
 				F2FDA211280BAF2200B2ED75 /* Components */,
@@ -1071,6 +1073,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TiquiTaca_iOS/TiquiTaca_iOSDebug.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
