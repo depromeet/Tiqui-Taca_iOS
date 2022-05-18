@@ -62,6 +62,9 @@ jobs:
           cp "./$PROVISION" "$HOME/Library/MobileDevice/Provisioning Profiles/$UUID.mobileprovision"
         done
         
+    - name: CocoaPods Install
+      run: pod install
+        
     - name: Archive app
       run: |
         xcodebuild clean archive -workspace $XC_WORKSPACE -scheme $XC_SCHEME -configuration release -archivePath $XC_ARCHIVE
