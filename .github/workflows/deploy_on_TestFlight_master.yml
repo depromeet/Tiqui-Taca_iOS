@@ -72,11 +72,17 @@ jobs:
     - name: Export app
       run: |
         xcodebuild -exportArchive -archivePath $XC_ARCHIVE -exportOptionsPlist ExportOptions.plist -exportPath . -allowProvisioningUpdates
-        
+
+    - name: Install private API key P8
+      env:
+        PRIVATE_API_KEY_BASE64: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+        API_KEY: ${{ secrets.APPSTORE_API_KEY_ID }}
+      run: |
+        mkdir -p ~/private_keys
+        echo -n "$PRIVATE_API_KEY_BASE64" | base64 --decode --output ~/private_keys/AuthKey_$API_KEY.p8
+
     - name: Upload app to TestFlight
-      uses: apple-actions/upload-testflight-build@v1
-      with:
-        app-path: 'TiquiTaca_iOS.ipa'
-        issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
-        api-key-id: ${{ secrets.APPSTORE_API_KEY_ID }}
-        api-private-key: ${{ secrets.APPSTORE_API_PRIVATE_KEY }}
+      env:
+        API_KEY: ${{ secrets.APPSTORE_API_KEY_ID }}
+        API_ISSUER : ${{ secrets.APPSTORE_ISSUER_ID  }}
+      ddsrun: xcrun altool --output-format xml --upload-app -f TiquiTaca_iOS.ipa -t ios --apiKey $API_KEY --apiIssuer $API_ISSUER
