@@ -37,8 +37,8 @@ struct MyPageView: View {
                         mainQueue: .main
                       ))
                     )
-                  }
-                ) {
+                  })
+                {
                   Image("edit")
                 }
                   .alignmentGuide(.bottom) { $0[.bottom] }
@@ -57,80 +57,58 @@ struct MyPageView: View {
               Image("rating\(viewStore.level)")
             }
           }
-          .padding(.spacingXL)
+          .padding(.spacingL)
           .foregroundColor(.white)
           .background(Color.black800)
           
-          
-          List {
-            Button {
-              viewStore.send(.selectSheet(.myInfoView))
-            } label: {
-              MypageRow(imageName: "myInfo", title: "내 정보")
-            }
-            MypageRow(imageName: "alarm", title: "알림설정", toggleVisible: true, togglePressed: viewStore.isAppAlarmOn)
-            Button {
-              viewStore.send(.selectSheet(.blockHistoryView))
-            } label: {
-              MypageRow(imageName: "block", title: "차단 이력")
-            }
-            Button {
-              viewStore.send(.selectSheet(.noticeView))
-            } label: {
-              MypageRow(imageName: "info", title: "공지사항")
-            }
-            Button {
-              viewStore.send(.selectSheet(.myTermsOfServiceView))
-            } label: {
-              MypageRow(imageName: "terms", title: "이용약관")
-            }
-            Button {
-              viewStore.send(.selectSheet(.csCenterView))
-            } label: {
-              MypageRow(imageName: "center", title: "고객센터")
-            }
-            MypageRow(imageName: "version", title: "버전 정보", version: viewStore.appVersion)
-              .fullScreenCover(
-                isPresented: viewStore.binding(
-                  get: \.popupPresented,
-                  send: MyPageAction.dismissDetail
-                ),
-                content: {
-                  switch viewStore.sheetChoice {
-                  case .myInfoView:
-                    MyInfoView(store: store.scope(
-                      state: \.myInfoViewState,
-                      action: MyPageAction.myInfoView
-                    ))
-                  case .blockHistoryView:
-                    MyBlockHistoryView(store: .init(
-                      initialState: MyBlockHistoryState(),
-                      reducer: myBlockHistoryReducer,
-                      environment: MyBlockHistoryEnvironment(
-                        appService: .init(),
-                        mainQueue: .main
-                      ))
-                    )
-                  case .noticeView:
-                    NoticeView(store: .init(
-                      initialState: NoticeState(),
-                      reducer: noticeReducer,
-                      environment: NoticeEnvironment()))
-                    
-                  case .myTermsOfServiceView:
-                    MyTermsOfServiceView(store: .init(
-                      initialState: MyTermsOfServiceState(),
-                      reducer: myTermsOfServiceReducer,
-                      environment: MyTermsOfServiceEnvironment()))
-                    
-                  case .csCenterView:
-                    CsCenterView()
-                  default:
-                    CsCenterView()
-                  }
-                })
+          ForEach(0..<viewStore.rowInfo.count) { idx in
+            MypageRow(rowInfo: viewStore.rowInfo[idx])
+              .onTapGesture(perform: {
+                viewStore.send(.selectSheetIndex(idx))
+              })
           }
-          .listStyle(.plain)
+          .padding([.leading, .trailing], .spacingS)
+          Spacer()
+          
+          .fullScreenCover(
+            isPresented: viewStore.binding(
+              get: \.popupPresented,
+              send: MyPageAction.dismissDetail
+            ),
+            content: {
+              switch viewStore.sheetChoice {
+              case .myInfoView:
+                MyInfoView(store: store.scope(
+                  state: \.myInfoViewState,
+                  action: MyPageAction.myInfoView
+                ))
+              case .blockHistoryView:
+                MyBlockHistoryView(store: .init(
+                  initialState: MyBlockHistoryState(),
+                  reducer: myBlockHistoryReducer,
+                  environment: MyBlockHistoryEnvironment(
+                    appService: .init(),
+                    mainQueue: .main
+                  ))
+                )
+              case .noticeView:
+                NoticeView(store: .init(
+                  initialState: NoticeState(),
+                  reducer: noticeReducer,
+                  environment: NoticeEnvironment()))
+                
+              case .myTermsOfServiceView:
+                MyTermsOfServiceView(store: .init(
+                  initialState: MyTermsOfServiceState(),
+                  reducer: myTermsOfServiceReducer,
+                  environment: MyTermsOfServiceEnvironment()))
+                
+              case .csCenterView:
+                CsCenterView()
+              default:
+                CsCenterView()
+              }
+            })
         }
         .onAppear(
           perform: {
@@ -138,36 +116,35 @@ struct MyPageView: View {
           })
         .navigationBarTitle("", displayMode: .inline)
         .navigationBarHidden(true)
+        .background(Color.white)
       }
     }
   }
 }
 
 struct MypageRow: View {
-  var imageName: String
-  var title: String
-  var version: String = ""
-  var toggleVisible: Bool = false
-  @State var togglePressed = false
-  
+  var rowInfo: MypageRowInfo
+  //  @State var togglePressed = false
   var body: some View {
     HStack {
-      Image(imageName)
+      Image(rowInfo.imageName)
       
-      Text(title)
+      Text(rowInfo.title)
         .font(.subtitle3)
         .foregroundColor(.black900)
       
-      Toggle("", isOn: $togglePressed)
+      Toggle("", isOn: .constant(false))//$togglePressed)
         .toggleStyle(SwitchToggleStyle(tint: .blue900))
-        .opacity(toggleVisible ? 1 : 0)
+        .opacity(rowInfo.toggleVisible ? 1 : 0)
       
-      Text("v. \(version)")
+      Text("v. \(rowInfo.version)")
         .font(.subtitle3)
         .foregroundColor(.blue900)
-        .opacity(version.isEmpty ? 0 : 1)
-        .frame(width: version.isEmpty ? 0 : 80)
+        .opacity(rowInfo.version.isEmpty ? 0 : 1)
+        .frame(width: rowInfo.version.isEmpty ? 0 : 80)
     }
+    .background(Color.white)
+    .frame(maxWidth: .infinity)
   }
 }
 
@@ -183,5 +160,6 @@ struct MyPageView_Previews: PreviewProvider {
         )
       )
     )
+    .previewInterfaceOrientation(.portrait)
   }
 }

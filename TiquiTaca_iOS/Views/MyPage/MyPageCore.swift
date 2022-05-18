@@ -11,23 +11,44 @@ import Foundation
 
 struct MyPageState: Equatable {
   var myInfoViewState: MyInfoState = .init()
-  var nickname = "닉네임"
+  var nickname = ""
+  var phoneNumber = ""
   var profileImage: ProfileImage = .init()
   var level = 1
   var createdAt: String = ""
   var createDday = 0
   var isAppAlarmOn = false
-  var appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
   var popupPresented = false
   var sheetChoice: MyPageSheetChoice?
+  var rowInfo = [
+    MypageRowInfo(imageName: "myInfo", title: "내 정보"),
+    MypageRowInfo(imageName: "alarm", title: "알림설정", toggleVisible: true),
+    MypageRowInfo(imageName: "block", title: "차단 이력"),
+    MypageRowInfo(imageName: "info", title: "공지사항"),
+    MypageRowInfo(imageName: "terms", title: "이용약관"),
+    MypageRowInfo(imageName: "center", title: "고객센터"),
+    MypageRowInfo(imageName: "version",
+                  title: "버전정보",
+                  version: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as! String)
+  ]
+}
+
+struct MypageRowInfo: Equatable, Identifiable {
+  var id = UUID()
+  var imageName: String
+  var title: String
+  var version: String = ""
+  var toggleVisible: Bool = false
 }
 
 enum MyPageSheetChoice: Hashable, Identifiable {
   case myInfoView
+  case alarmSet
   case blockHistoryView
   case noticeView
   case myTermsOfServiceView
   case csCenterView
+  case versionInfo
   case none
   
   var id: MyPageSheetChoice { self }
@@ -49,7 +70,7 @@ enum MyPageAction: Equatable {
   case getAlarmRequestSuccess
   
   case selectDetail
-  case selectSheet(MyPageSheetChoice)
+  case selectSheetIndex(Int)
   case dismissDetail
   case logout
 }
@@ -103,6 +124,14 @@ let myPageReducerCore = Reducer<
     state.nickname = response?.nickname ?? ""
     state.isAppAlarmOn = response?.appAlarm ?? false
     state.level = response?.level ?? 0
+    state.phoneNumber = response?.phoneNumber ?? ""
+    
+    if var phoneNumber = response?.phoneNumber, phoneNumber.count > 9 {
+      phoneNumber.insert("-", at: phoneNumber.index(phoneNumber.startIndex, offsetBy: 3))
+      phoneNumber.insert("-", at: phoneNumber.index(phoneNumber.endIndex, offsetBy: -4))
+      
+      state.phoneNumber = phoneNumber
+    }
     
     let createdDateString = response?.createdAt ?? ""
     let iso8601Formatter = ISO8601DateFormatter()
@@ -115,7 +144,7 @@ let myPageReducerCore = Reducer<
     state.createDday = Calendar(identifier: .gregorian)
       .dateComponents([.day], from: createdDate ?? Date(), to: Date()).day ?? 0
     
-    state.myInfoViewState = .init(nickname: state.nickname, phoneNumber: "", createdAt: state.createdAt)
+    state.myInfoViewState = .init(nickname: state.nickname, phoneNumber: state.phoneNumber, createdAt: state.createdAt)
     return Effect(value: .getProfileRequestSuccess)
     
   case .getProfileInfoResponse(.failure):
@@ -144,11 +173,29 @@ let myPageReducerCore = Reducer<
   case .selectDetail:
     return .none
     
-  case let .selectSheet(presentedSheet):
-    state.sheetChoice = presentedSheet
+  case let .selectSheetIndex(index):
     state.popupPresented = true
+    switch index {
+    case 0:
+      state.sheetChoice = .myInfoView
+    case 1:
+      state.sheetChoice = .alarmSet
+      state.popupPresented = false
+    case 2:
+      state.sheetChoice = .blockHistoryView
+    case 3:
+      state.sheetChoice = .noticeView
+    case 4:
+      state.sheetChoice = .myTermsOfServiceView
+    case 5:
+      state.sheetChoice = .csCenterView
+    case 6:
+      state.sheetChoice = .versionInfo
+      state.popupPresented = false
+    default:
+      state.sheetChoice = MyPageSheetChoice.none
+    }
     return .none
-    
   case .dismissDetail:
     state.popupPresented = false
 //    if state.sheetChoice == .myInfoView {
@@ -157,6 +204,5 @@ let myPageReducerCore = Reducer<
     return .none
   case .logout:
     return .none
-
   }
 }
