@@ -50,6 +50,8 @@ struct MyBlockHistoryView: View {
           
           Spacer()
         }
+        .background(Color.white)
+        
         TTPopupView.init(
           popUpCase: .twoLineTwoButton,
           title: "'\(viewStore.unBlockUser?.nickname ?? "")' 님을 차단 해제하시겠어요?",

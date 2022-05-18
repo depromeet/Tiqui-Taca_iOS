@@ -84,6 +84,7 @@ struct MyInfoView: View {
           
           Spacer()
         }
+        .background(Color.white)
         
         TTPopupView.init(
           popUpCase: viewStore.popupType == .logout ? .oneLineTwoButton : .twoLineTwoButton,

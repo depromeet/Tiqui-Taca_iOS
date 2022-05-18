@@ -69,9 +69,9 @@ struct CsCenterView: View {
       .frame(maxWidth: .infinity)
     }
     .sheet(isPresented: $isShowingMailView) {
-      
     }
     .padding(.spacingXL)
+    .background(Color.white)
   }
 }
 
