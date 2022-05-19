@@ -12,6 +12,7 @@ struct PhoneVerificationState: Equatable {
   var phoneNumber: String = ""
   var isAvailablePhoneNumber: Bool = false
   var expireMinute: Int = 0
+  var verificationCode: String = "" // 인증번호 테스트용
 }
 
 enum PhoneVerificationAction: Equatable {
@@ -45,6 +46,7 @@ let phoneVerficationReducer = Reducer<
       .map(PhoneVerificationAction.issuePhoneCodeResponse)
   case let .issuePhoneCodeResponse(.success(response)):
     state.expireMinute = response?.expire ?? 0
+    state.verificationCode = response?.verficiationCode ?? ""
     return Effect(value: .phoneNumberRequestSuccess)
   case .issuePhoneCodeResponse(.failure):
     return .none
