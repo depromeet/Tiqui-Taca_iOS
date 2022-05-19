@@ -7,31 +7,107 @@
 
 import Combine
 import ComposableArchitecture
+import TTNetworkModule
+import SwiftUI
 
 struct ChatState: Equatable {
-	var dummyState = 0
-	var currentTabIdx = 0
+	var currentTab: RoomListType = .like
+	var isFirstLoad = true
+	var willEnterRoomInfo: RoomInfoEntity.Response?
+	
+	var lastLoadTime: String = Date().ISO8601Format()
+	var enteredRoom: RoomInfoEntity.Response?
+	var likeRoomList: [RoomInfoEntity.Response] = []
+	var popularRoomList: [RoomInfoEntity.Response] = []
 }
 
 enum ChatAction: Equatable {
-	case tabChange(Int)
+	case onAppear
+	case fetchEnteredRoomInfo
+	case fetchLikeRoomList
+	case fetchPopularRoomList
+	
+	case responsePopularRoomList(Result<[RoomInfoEntity.Response]?, HTTPError>)
+	case responseLikeRoomList(Result<[RoomInfoEntity.Response]?, HTTPError>)
+	case responseEnteredRoom(Result<RoomInfoEntity.Response?, HTTPError>)
+	
+	case tabChange(RoomListType)
+	case removeFavoriteRoom(RoomInfoEntity.Response)
+	case enterRoomPopup(RoomInfoEntity.Response)
+	case dismissPopup
+	case refresh
 }
 
 struct ChatEnvironment {
-  let appService: AppService
-  let mainQueue: AnySchedulerOf<DispatchQueue>
+	let appService: AppService
+	let mainQueue: AnySchedulerOf<DispatchQueue>
 }
 
 let chatReducer = Reducer<
 	ChatState,
 	ChatAction,
 	ChatEnvironment
-> { state, action, _ in
+> { state, action, environment in
 	switch action {
-	case .tabChange(let tabIdx):
-		guard state.currentTabIdx != tabIdx else { return .none }
-		state.currentTabIdx = tabIdx
-		print("change TabIdx: \(tabIdx)")
+	case .onAppear:
+		state.lastLoadTime = Date().ISO8601Format()
+		return .merge(
+			Effect(value: .fetchEnteredRoomInfo)
+				.eraseToEffect(),
+			Effect(value: .fetchLikeRoomList)
+				.eraseToEffect(),
+			Effect(value: .fetchPopularRoomList)
+				.eraseToEffect()
+		)
+	// MARK: Requeset
+	case .fetchEnteredRoomInfo:
+		return environment.appService.roomService
+			.getEnteredRoom()
+			.receive(on: environment.mainQueue)
+			.catchToEffect()
+			.map(ChatAction.responseEnteredRoom)
+	case .fetchLikeRoomList:
+		return environment.appService.roomService
+			.getLikeRoomList()
+			.receive(on: environment.mainQueue)
+			.catchToEffect()
+			.map(ChatAction.responseLikeRoomList)
+	case .fetchPopularRoomList:
+		return environment.appService.roomService
+			.getPopularRoomList()
+			.receive(on: environment.mainQueue)
+			.catchToEffect()
+			.map(ChatAction.responsePopularRoomList)
+	case .removeFavoriteRoom(let room):
 		return .none
+	// MARK: Response
+	case let .responseEnteredRoom(.success(res)):
+		state.enteredRoom = res
+		return .none
+	case let .responseLikeRoomList(.success(res)):
+		state.likeRoomList = res ?? []
+		return .none
+	case let .responsePopularRoomList(.success(res)):
+		state.popularRoomList = res ?? []
+		return .none
+	case .responseEnteredRoom(.failure),
+		.responseLikeRoomList(.failure),
+		.responsePopularRoomList(.failure):
+		return .none
+	// MARK: View Action
+	case .tabChange(let type):
+		guard state.currentTab != type else { return .none }
+		state.currentTab = type
+		return .none
+	case .enterRoomPopup(let room):
+		state.willEnterRoomInfo = room
+		return .none
+	case .dismissPopup:
+		state.willEnterRoomInfo = nil
+		return .none
+	case .refresh:
+		state.lastLoadTime = Date().ISO8601Format()
+		return Effect(value: .onAppear)
+			.eraseToEffect()
 	}
 }

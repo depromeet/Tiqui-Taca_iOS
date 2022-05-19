@@ -11,6 +11,7 @@ import Combine
 protocol AuthServiceType {
   var isLoggedIn: Bool { get }
   func signOut()
+  func deleteTempToken()
   func saveToken(tempToken: TokenEntity)
   func saveToken(accessToken: TokenEntity, refreshToken: TokenEntity)
   
@@ -37,6 +38,10 @@ final class AuthService: AuthServiceType {
   
   func signOut() {
     TokenManager.shared.deleteToken()
+  }
+  
+  func deleteTempToken() {
+    TokenManager.shared.deleteTempToken()
   }
   
   func saveToken(tempToken: TokenEntity) {
