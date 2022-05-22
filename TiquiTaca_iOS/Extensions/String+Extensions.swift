@@ -1,5 +1,5 @@
 //
-//  String+Extension.swift
+//  String+Extensions.swift
 //  TiquiTaca_iOS
 //
 //  Created by 강민석 on 2022/05/13.

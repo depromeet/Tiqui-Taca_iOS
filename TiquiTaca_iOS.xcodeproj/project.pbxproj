@@ -39,7 +39,7 @@
 		F25C79B4282AB4D7009C60EE /* Int+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25C79B3282AB4D7009C60EE /* Int+Extensions.swift */; };
 		F25C79B6282C1FC0009C60EE /* ProfileImageListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25C79B5282C1FC0009C60EE /* ProfileImageListView.swift */; };
 		F25C79B8282CB5F2009C60EE /* CheckNicknameEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25C79B7282CB5F2009C60EE /* CheckNicknameEntity.swift */; };
-		F25C79BA282D7524009C60EE /* String+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25C79B9282D7524009C60EE /* String+Extension.swift */; };
+		F25C79BA282D7524009C60EE /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25C79B9282D7524009C60EE /* String+Extensions.swift */; };
 		F25C79BC282D91BC009C60EE /* UserCreationEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25C79BB282D91BC009C60EE /* UserCreationEntity.swift */; };
 		F25C79C6282E96A2009C60EE /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25C79C5282E96A2009C60EE /* UserService.swift */; };
 		F25C79C8282F1881009C60EE /* TabViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25C79C7282F1881009C60EE /* TabViewItem.swift */; };
@@ -162,7 +162,7 @@
 		F25C79B3282AB4D7009C60EE /* Int+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extensions.swift"; sourceTree = "<group>"; };
 		F25C79B5282C1FC0009C60EE /* ProfileImageListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileImageListView.swift; sourceTree = "<group>"; };
 		F25C79B7282CB5F2009C60EE /* CheckNicknameEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CheckNicknameEntity.swift; sourceTree = "<group>"; };
-		F25C79B9282D7524009C60EE /* String+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extension.swift"; sourceTree = "<group>"; };
+		F25C79B9282D7524009C60EE /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		F25C79BB282D91BC009C60EE /* UserCreationEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCreationEntity.swift; sourceTree = "<group>"; };
 		F25C79C5282E96A2009C60EE /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		F25C79C7282F1881009C60EE /* TabViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewItem.swift; sourceTree = "<group>"; };
@@ -577,7 +577,7 @@
 			children = (
 				8601F658281308CB0085F692 /* View+Extensions.swift */,
 				F25C79B3282AB4D7009C60EE /* Int+Extensions.swift */,
-				F25C79B9282D7524009C60EE /* String+Extension.swift */,
+				F25C79B9282D7524009C60EE /* String+Extensions.swift */,
 				86BEED81282F3FD500EA0C5B /* Date+Extensions.swift */,
 				86783242282651A90034EACC /* Color+Extensions.swift */,
 				F2B268B52839FF1A0011EA43 /* MapKit+Extensions.swift */,
@@ -929,7 +929,7 @@
 				F2F1ED7F281C40BB00AC4FDD /* UserEntity.swift in Sources */,
 				F981FA1C282600C40000A531 /* MyTermsOfServiceCore.swift in Sources */,
 				8601F65C281309B10085F692 /* SplashView.swift in Sources */,
-				F25C79BA282D7524009C60EE /* String+Extension.swift in Sources */,
+				F25C79BA282D7524009C60EE /* String+Extensions.swift in Sources */,
 				F981FA1A282600B50000A531 /* MyTermsOfServiceView.swift in Sources */,
 				86E494832814F05D00551CCD /* MainTabCore.swift in Sources */,
 				86E494932814FDE900551CCD /* MsgAndNotiCore.swift in Sources */,

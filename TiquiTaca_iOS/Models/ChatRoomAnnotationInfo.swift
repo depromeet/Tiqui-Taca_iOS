@@ -46,16 +46,6 @@ struct ChatRoomAnnotationInfo: Identifiable, Equatable, Hashable {
 }
 
 extension ChatRoomAnnotationInfo {
-  public static func == (lhs: Self, rhs: Self) -> Bool {
-    lhs.id == rhs.id
-    && lhs.name == rhs.name
-    && lhs.category == rhs.category
-    && lhs.radius == rhs.radius
-    && lhs.userCount == rhs.userCount
-    && lhs.coordinate.latitude == rhs.coordinate.latitude
-    && lhs.coordinate.longitude == rhs.coordinate.longitude
-  }
-  
   public func hash(into hasher: inout Hasher) {
     hasher.combine(id)
     hasher.combine(name)
