@@ -7,6 +7,7 @@
 
 import Combine
 import ComposableArchitecture
+import ComposableCoreLocation
 
 struct MainTabState: Equatable {
   // Feature State
@@ -27,6 +28,7 @@ enum MainTabAction: Equatable {
 struct MainTabEnvironment {
   let appService: AppService
   let mainQueue: AnySchedulerOf<DispatchQueue>
+  var locationManager: LocationManager
 }
 
 let mainTabReducer = Reducer<
@@ -41,7 +43,8 @@ let mainTabReducer = Reducer<
       environment: {
         MainMapEnvironment(
           appService: $0.appService,
-          mainQueue: $0.mainQueue
+          mainQueue: $0.mainQueue,
+          locationManager: $0.locationManager
         )
       }
     ),

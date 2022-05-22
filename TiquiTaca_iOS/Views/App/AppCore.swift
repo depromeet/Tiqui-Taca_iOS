@@ -6,6 +6,7 @@
 //
 
 import ComposableArchitecture
+import ComposableCoreLocation
 
 struct AppState: Equatable {
   enum Route {
@@ -30,6 +31,7 @@ enum AppAction: Equatable {
 struct AppEnvironment {
   let appService: AppService
   let mainQueue: AnySchedulerOf<DispatchQueue>
+  var locationManager: LocationManager
 }
 
 let appReducer = Reducer<
@@ -57,7 +59,8 @@ let appReducer = Reducer<
       environment: {
         MainTabEnvironment(
           appService: $0.appService,
-          mainQueue: $0.mainQueue
+          mainQueue: $0.mainQueue,
+          locationManager: $0.locationManager
         )
       }
     ),

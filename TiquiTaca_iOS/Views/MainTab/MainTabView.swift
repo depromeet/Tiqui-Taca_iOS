@@ -130,7 +130,8 @@ struct MainTabView_Previews: PreviewProvider {
         reducer: mainTabReducer,
         environment: .init(
           appService: .init(),
-          mainQueue: .main
+          mainQueue: .main,
+          locationManager: .live
         )
       )
     )

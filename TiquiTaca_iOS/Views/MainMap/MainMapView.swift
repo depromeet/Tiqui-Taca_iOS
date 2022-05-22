@@ -22,12 +22,14 @@ struct MainMapView: View {
     let chatRoomAnnotationInfos: [ChatRoomAnnotationInfo]
     let selectedAnnotationId: String?
     let region: MKCoordinateRegion
+    let alert: AlertState<MainMapAction>?
     
     init(state: State) {
       isPresentBottomSheet = state.isPresentBottomSheet
       chatRoomAnnotationInfos = state.chatRoomAnnotationInfos
       selectedAnnotationId = state.selectedAnnotationId
       region = state.region
+      alert = state.alert
     }
   }
   
@@ -78,6 +80,7 @@ struct MainMapView: View {
             }
             
             Button {
+              viewStore.send(.currentLocationButtonTapped)
             } label: {
               Image("locationPolygon")
                 .frame(width: 48, height: 48)
@@ -105,6 +108,10 @@ struct MainMapView: View {
         // room detail
       }
     }
+    .alert(
+      store.scope(state: { $0.alert }),
+      dismiss: .dismissAlertButtonTapped
+    )
     .onAppear {
       viewStore.send(.onAppear)
     }
@@ -119,7 +126,8 @@ struct MainMapView_Previews: PreviewProvider {
         reducer: mainMapReducer,
         environment: .init(
           appService: .init(),
-          mainQueue: .main
+          mainQueue: .main,
+          locationManager: .live
         )
       )
     )
