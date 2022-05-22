@@ -30,7 +30,6 @@ opt_in_rules:
   - first_where
   - force_unwrapping
   - implicitly_unwrapped_optional
-  - indentation_width
   - last_where
   - legacy_random
   - literal_expression_end_indentation
@@ -82,9 +81,6 @@ identifier_name:
     - x
     - y
     - z
-
-indentation_width:
-  indentation_width: 2
 
 line_length:
   ignores_urls: true
