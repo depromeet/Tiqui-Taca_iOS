@@ -8,29 +8,59 @@
 import Foundation
 
 enum LocationCategory: String, Codable {
-  case UNIVERSITY
-  case EXHIBITION
-  case HANRIVERPRAK
+  case university = "UNIVERSITY"
+  case concerthall = "CONCERTHALL"
+  case hanriverpark = "HANRIVERPRAK"
+  case stadium = "STADIUM"
+  case exhibition = "EXHIBITION"
+  case amusementpark = "AMUSEMENTPARK"
+  case departmentstore = "DEPARTMENTSTORE"
+  case all = "ALL"
+  case favorite = "FAVORITE"
   
   var imageName: String {
     switch self {
-    case .UNIVERSITY:
-      return "category1"
-    case .EXHIBITION:
-      return "category2"
-    case .HANRIVERPRAK:
-      return "category3"
+    case .university:
+      return "category_university"
+    case .concerthall:
+      return "category_concerthall"
+    case .hanriverpark:
+      return "category_hanriverpark"
+    case .stadium:
+      return "category_stadium"
+    case .exhibition:
+      return "category_exhibition"
+    case .amusementpark:
+      return "category_amusementpark"
+    case .departmentstore:
+      return "category_departmentstore"
+    case .all:
+      return ""
+    case .favorite:
+      return "category_favorite"
     }
   }
   
   var locationName: String {
     switch self {
-    case .UNIVERSITY:
+    case .university:
       return "대학교"
-    case .EXHIBITION:
-      return "전시회"
-    case .HANRIVERPRAK:
+    case .concerthall:
+      return "공연장"
+    case .hanriverpark:
       return "한강공원"
+    case .stadium:
+      return "경기장"
+    case .exhibition:
+      return "전시장"
+    case .amusementpark:
+      return "놀이공원"
+    case .departmentstore:
+      return "백화점"
+    case .all:
+      return "전체"
+    case .favorite:
+      return "즐겨찾기한 곳"
     }
   }
 }

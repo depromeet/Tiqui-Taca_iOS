@@ -42,7 +42,7 @@ struct ChatRoomAnnotationView_Previews: PreviewProvider {
       info: .init(
         id: "",
         name: "여의도한강공원",
-        category: .HANRIVERPRAK,
+        category: .hanriverpark,
         radius: 0,
         userCount: 300,
         latitude: 0.0,
