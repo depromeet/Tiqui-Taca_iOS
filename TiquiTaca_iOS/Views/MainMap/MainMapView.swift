@@ -6,8 +6,8 @@
 //
 
 import SwiftUI
+import MapKit
 import ComposableArchitecture
-import ComposableCoreLocation
 import TTDesignSystemModule
 
 struct MainMapView: View {
@@ -21,7 +21,7 @@ struct MainMapView: View {
     let isPresentBottomSheet: Bool
     let chatRoomAnnotationInfos: [ChatRoomAnnotationInfo]
     let selectedAnnotationId: String?
-    let region: CoordinateRegion?
+    let region: MKCoordinateRegion
     
     init(state: State) {
       isPresentBottomSheet = state.isPresentBottomSheet
@@ -39,16 +39,20 @@ struct MainMapView: View {
   var body: some View {
     ZStack {
       ZStack {
-        MapView(
-          annotationInfos: viewStore.chatRoomAnnotationInfos,
-          region: viewStore.binding(
+        Map(
+          coordinateRegion: viewStore.binding(
             get: \.region,
             send: Action.updateRegion
           ),
-          selectedAnnotationId: viewStore.binding(
-            get: \.selectedAnnotationId,
-            send: Action.setSelectedAnnotationId
-          )
+          annotationItems: viewStore.chatRoomAnnotationInfos,
+          annotationContent: { chatRoomInfo in
+            MapAnnotation(coordinate: chatRoomInfo.coordinate) {
+              ChatRoomAnnotationView(info: chatRoomInfo)
+                .onTapGesture {
+                  viewStore.send(.setSelectedAnnotationId(chatRoomInfo.id))
+                }
+            }
+          }
         )
         .edgesIgnoringSafeArea([.all])
         
@@ -56,7 +60,7 @@ struct MainMapView: View {
           // 상단 리스트
           
           Spacer()
-        
+          
           // 하단 버튼
           HStack(spacing: .spacingM) {
             Button {

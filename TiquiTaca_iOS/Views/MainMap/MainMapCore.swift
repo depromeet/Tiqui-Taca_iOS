@@ -5,26 +5,28 @@
 //  Created by 김록원 on 2022/04/24.
 //
 
-import Combine
+import MapKit
 import ComposableArchitecture
+import ComposableCoreLocation
 
 struct MainMapState: Equatable {
   var isPresentBottomSheet: Bool = false
   var chatRoomAnnotationInfos: [ChatRoomAnnotationInfo] = []
   var selectedAnnotationId: String?
-  var region: CoordinateRegion?
+  var region: MKCoordinateRegion = .init()
 }
 
 enum MainMapAction: Equatable {
   case onAppear
   case setPresentBottomSheet(Bool)
   case setSelectedAnnotationId(String?)
-  case updateRegion(CoordinateRegion?)
+  case updateRegion(MKCoordinateRegion)
 }
 
 struct MainMapEnvironment {
   let appService: AppService
   let mainQueue: AnySchedulerOf<DispatchQueue>
+//  var locationManager: LocationManager
 }
 
 let mainMapReducer = Reducer<

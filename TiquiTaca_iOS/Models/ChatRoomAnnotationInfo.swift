@@ -1,5 +1,5 @@
 //
-//  ChatRoomInfo.swift
+//  ChatRoomAnnotationInfo.swift
 //  TiquiTaca_iOS
 //
 //  Created by 강민석 on 2022/05/14.
@@ -19,24 +19,30 @@ import MapKit
 //  "lng": 0
 //}
 
-struct ChatRoomAnnotationInfo: Equatable, Hashable {
+struct ChatRoomAnnotationInfo: Identifiable, Equatable, Hashable {
   let id: String
   let name: String
-  let category: String
+  let category: LocationCategory
   let radius: Int
   let userCount: Int
   let coordinate: CLLocationCoordinate2D
   
-//  init(
-//    id: String,
-//    name: String,
-//    category: String,
-//    radius: Int,
-//    userCount: Int,
-//    coordinate: CLLocationCoordinate2D
-//  ) {
-//    self.id = id
-//  }
+  init(
+    id: String,
+    name: String,
+    category: LocationCategory,
+    radius: Int,
+    userCount: Int,
+    latitude: Double,
+    longitude: Double
+  ) {
+    self.id = id
+    self.name = name
+    self.category = category
+    self.radius = radius
+    self.userCount = userCount
+    coordinate = .init(latitude: latitude, longitude: longitude)
+  }
 }
 
 extension ChatRoomAnnotationInfo {
