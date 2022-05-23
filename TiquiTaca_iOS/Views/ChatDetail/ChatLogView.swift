@@ -11,7 +11,14 @@ struct ChatLogView: View {
 	let chatLogList: [ChatLogEntity.Response]
 	
 	var body: some View {
-		Text("Hello, World!")
+    VStack {
+      List {
+        ForEach(chatLogList) { chatlog in
+          
+          
+        }
+      }
+    }
 	}
 }
 
