@@ -8,6 +8,8 @@
 import Foundation
 
 enum LocationCategory: String, Codable {
+  case all = "ALL"
+  case favorite = "FAVORITE"
   case university = "UNIVERSITY"
   case concerthall = "CONCERTHALL"
   case hanriverpark = "HANRIVERPRAK"
@@ -15,11 +17,13 @@ enum LocationCategory: String, Codable {
   case exhibition = "EXHIBITION"
   case amusementpark = "AMUSEMENTPARK"
   case departmentstore = "DEPARTMENTSTORE"
-  case all = "ALL"
-  case favorite = "FAVORITE"
   
   var imageName: String {
     switch self {
+    case .all:
+      return ""
+    case .favorite:
+      return "category_favorite"
     case .university:
       return "category_university"
     case .concerthall:
@@ -34,15 +38,15 @@ enum LocationCategory: String, Codable {
       return "category_amusementpark"
     case .departmentstore:
       return "category_departmentstore"
-    case .all:
-      return ""
-    case .favorite:
-      return "category_favorite"
     }
   }
   
   var locationName: String {
     switch self {
+    case .all:
+      return "전체"
+    case .favorite:
+      return "즐겨찾기한 곳"
     case .university:
       return "대학교"
     case .concerthall:
@@ -57,10 +61,10 @@ enum LocationCategory: String, Codable {
       return "놀이공원"
     case .departmentstore:
       return "백화점"
-    case .all:
-      return "전체"
-    case .favorite:
-      return "즐겨찾기한 곳"
     }
   }
+}
+
+extension LocationCategory: CaseIterable, Identifiable {
+  var id: Self { self }
 }

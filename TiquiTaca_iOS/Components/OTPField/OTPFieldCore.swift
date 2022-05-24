@@ -7,15 +7,6 @@
 
 import ComposableArchitecture
 
-struct OTPField: Equatable, Identifiable {
-  var id: Int
-  var text: String
-  
-  var isFilled: Bool {
-    return !text.isEmpty
-  }
-}
-
 struct OTPFieldState: Equatable {
   var fields: [OTPField] = [
     .init(id: 0, text: ""),
