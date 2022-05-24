@@ -59,39 +59,40 @@ struct MainMapView: View {
         .edgesIgnoringSafeArea([.all])
         
         VStack {
-          // 상단 리스트
+          LocationCategoryListView(selectedCategory: .constant(.all))
           
-          Spacer()
-          
-          // 하단 버튼
-          HStack(spacing: .spacingM) {
-            Button {
-              viewStore.send(.setPresentBottomSheet(true))
-            } label: {
-              HStack(spacing: .spacingM) {
-                Text("지금 인기있는 채팅방 알아보기")
-                  .font(.body2)
-                Image("popular")
-              }
-              .frame(width: 265, height: 48)
-              .background(Color.black800)
-              .cornerRadius(16)
-              .foregroundColor(.white)
-            }
-            
-            Button {
-              viewStore.send(.currentLocationButtonTapped)
-            } label: {
-              Image("locationPolygon")
-                .frame(width: 48, height: 48)
+          VStack {
+            Spacer()
+            // 하단 버튼
+            HStack(spacing: .spacingM) {
+              Button {
+                viewStore.send(.setPresentBottomSheet(true))
+              } label: {
+                HStack(spacing: .spacingM) {
+                  Text("지금 인기있는 채팅방 알아보기")
+                    .font(.body2)
+                  Image("popular")
+                }
+                .frame(width: 265, height: 48)
                 .background(Color.black800)
-                .cornerRadius(24)
+                .cornerRadius(16)
+                .foregroundColor(.white)
+              }
+              
+              Button {
+                viewStore.send(.currentLocationButtonTapped)
+              } label: {
+                Image("locationPolygon")
+                  .frame(width: 48, height: 48)
+                  .background(Color.black800)
+                  .cornerRadius(24)
+              }
             }
+            .hCenter()
+            .padding(.bottom, .spacingL)
           }
-          .hCenter()
-          .padding(.bottom, .spacingL)
+          .padding(.horizontal, .spacingXL)
         }
-        .padding(.horizontal, .spacingXL)
       }
       
       TTBottomSheetView(
