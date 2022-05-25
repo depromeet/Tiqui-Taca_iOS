@@ -56,7 +56,7 @@ private extension ChatMessageView {
     HStack(alignment: .bottom) {
       Spacer()
       Text("23:00")
-        .font(.ttcaption2)
+        .font(.cap2)
         .foregroundColor(.white900)
       
       Text(viewStore.sentMessage)
@@ -96,40 +96,46 @@ private extension ChatMessageView {
           .opacity(viewStore.inside ? 1 : 0)
       )
       
-      VStack(alignment: .leading) {
-        Text(viewStore.id)
-          .font(.body7)
-          .foregroundColor(.white900)
-        
-        HStack(alignment: .top) {
-          if viewStore.type != 1 {
-            Text("질문")
-              .font(.body4)
-              .foregroundColor(.green500)
-          }
+      HStack(alignment: .bottom) {
+        VStack(alignment: .leading) {
+          Text(viewStore.id)
+            .font(.body7)
+            .foregroundColor(.white900)
           
-          Text(viewStore.receivedMessage)
-            .font(.body4)
-            .foregroundColor(viewStore.type == 1 ? Color.black : Color.white)
-          
-          if viewStore.type != 1 {
-            Image("reply")
+          HStack(alignment: .top) {
+            if viewStore.type != 0 {
+              Text("질문")
+                .font(.body4)
+                .foregroundColor(.green500)
+            }
+            
+            HStack(alignment: .bottom) {
+              Text(viewStore.receivedMessage)
+                .font(.body4)
+                .foregroundColor(viewStore.type == 0 ? Color.black : Color.white)
+              
+              if viewStore.type != 0 {
+                Image("reply")
+              }
+            }
           }
+          .padding([.top, .bottom], 9)
+          .padding([.leading, .trailing], 14)
+          .background(viewStore.type == 0 ? Color.white150 : Color.black)
+          .cornerRadius(14, corners: [.topRight, .bottomLeft, .bottomRight])
+          .frame(
+            minWidth: 10,
+            idealWidth: 266,
+            maxWidth: 266,
+            alignment: .topLeading
+          )
         }
-        .padding([.top, .bottom], 9)
-        .padding([.leading, .trailing], 14)
-        .background(viewStore.type == 1 ? Color.white150 : Color.black)
-        .cornerRadius(14, corners: [.topRight, .bottomLeft, .bottomRight])
-        .frame(
-          minWidth: 10,
-          idealWidth: 266,
-          maxWidth: 266,
-          alignment: .topLeading
-        )
+        
+        
+        Text("23:00")
+          .font(.cap2)
+          .foregroundColor(.white900)
       }
-      Text("23:00")
-        .font(.ttcaption2)
-        .foregroundColor(.white900)
       
       Spacer()
     }
