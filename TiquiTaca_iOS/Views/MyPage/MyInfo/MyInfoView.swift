@@ -86,31 +86,36 @@ struct MyInfoView: View {
         }
         .background(Color.white)
         
-        TTPopupView.init(
-          popUpCase: viewStore.popupType == .logout ? .oneLineTwoButton : .twoLineTwoButton,
-          topImageString: viewStore.popupType == .logout ? "logout_g" : "withdrawal_g",
-          title: viewStore.popupType == .logout ? "로그아웃 하시겠어요?" : "정말 티키타카를 탈퇴하시겠어요?",
-          subtitle: viewStore.popupType == .logout ? "" : "탈퇴하면 회원정보와 앱 활동 내역이 모두 삭제돼요.",
-          leftButtonName: "취소",
-          rightButtonName: viewStore.popupType == .logout ? "로그아웃" : "탈퇴하기",
-          confirm: {
-            viewStore.send(viewStore.popupType == .logout ?
-                           MyInfoAction.logoutAction : MyInfoAction.withDrawalAction)
-
-          },
-          cancel: {
-            viewStore.send(.dismissPopup)
+        .ttPopup(
+          isShowing: viewStore.binding(
+            get: \.popupPresented,
+            send: MyInfoAction.dismissPopup
+          ),
+          topImageString: viewStore.popupType == .logout ? "logout_g" : "withdrawal_g") {
+            TTPopupView.init(
+              popUpCase: viewStore.popupType == .logout ? .oneLineTwoButton : .twoLineTwoButton,
+              title: viewStore.popupType == .logout ? "로그아웃 하시겠어요?" : "정말 티키타카를 탈퇴하시겠어요?",
+              subtitle: viewStore.popupType == .logout ? "" : "탈퇴하면 회원정보와 앱 활동 내역이 모두 삭제돼요.",
+              leftButtonName: "취소",
+              rightButtonName: viewStore.popupType == .logout ? "로그아웃" : "탈퇴하기",
+              confirm: {
+                viewStore.send(
+                  viewStore.popupType == .logout ?
+                  MyInfoAction.logoutAction : MyInfoAction.withDrawalAction)
+              },
+              cancel: {
+                viewStore.send(.dismissPopup)
+              }
+            )
           }
-        )
-        .opacity(viewStore.popupPresented ? 1 : 0)
-        .onChange(of: viewStore.isDismissCurrentView) { isDismissCurrentView in
-          if isDismissCurrentView {
-            self.presentationMode.wrappedValue.dismiss()
+          .onChange(of: viewStore.isDismissCurrentView) { isDismissCurrentView in
+            if isDismissCurrentView {
+              self.presentationMode.wrappedValue.dismiss()
+            }
           }
-        }
-        .onDisappear {
-          viewStore.send(.movingAction(viewStore.dismissType))
-        }
+          .onDisappear {
+            viewStore.send(.movingAction(viewStore.dismissType))
+          }
       }
     }
   }
