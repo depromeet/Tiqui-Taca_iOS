@@ -10,141 +10,148 @@ import ComposableArchitecture
 import TTDesignSystemModule
 
 struct MyPageView: View {
-  let store: Store<MyPageState, MyPageAction>
-  @State var sheetState: MyPageSheetChoice?
+  typealias State = MyPageState
+  typealias Action = MyPageAction
   
-  var body: some View {
-    WithViewStore(self.store) { viewStore in
-      NavigationView {
-        VStack {
-          VStack {
-            Text("마이페이지")
-              .font(.heading1)
-              .frame(maxWidth: .infinity, alignment: .leading)
-            
-            Image(viewStore.profileImage.imageName)
-              .overlay(
-                NavigationLink(
-                  destination: {
-                    ChangeProfileView(store: .init(
-                      initialState: ChangeProfileState(
-                        nickname: viewStore.nickname,
-                        profileImage: viewStore.profileImage
-                      ),
-                      reducer: changeProfileReducer,
-                      environment: ChangeProfileEnvironment(
-                        appService: AppService(),
-                        mainQueue: .main
-                      ))
-                    )
-                  })
-                {
-                  Image("edit")
-                }
-                  .alignmentGuide(.bottom) { $0[.bottom] }
-                  .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
-              )
-            Text(viewStore.nickname)
-              .font(.heading2)
-            
-            Text("최초가입일 \(viewStore.createdAt) / 티키타카와 +\(String(viewStore.createDday))일 째")
-              .font(.body7)
-              .foregroundColor(.white900)
-            
-            Button {
-              
-            } label: {
-              Image("rating\(viewStore.level)")
-            }
-          }
-          .padding(.spacingL)
-          .foregroundColor(.white)
-          .background(Color.black800)
-          
-          ForEach(0..<viewStore.rowInfo.count) { idx in
-            MypageRow(rowInfo: viewStore.rowInfo[idx])
-              .onTapGesture(perform: {
-                viewStore.send(.selectSheetIndex(idx))
-              })
-          }
-          .padding([.leading, .trailing], .spacingS)
-          Spacer()
-          
-          .fullScreenCover(
-            isPresented: viewStore.binding(
-              get: \.popupPresented,
-              send: MyPageAction.dismissDetail
-            ),
-            content: {
-              switch viewStore.sheetChoice {
-              case .myInfoView:
-                MyInfoView(store: store.scope(
-                  state: \.myInfoViewState,
-                  action: MyPageAction.myInfoView
-                ))
-              case .blockHistoryView:
-                MyBlockHistoryView(store: .init(
-                  initialState: MyBlockHistoryState(),
-                  reducer: myBlockHistoryReducer,
-                  environment: MyBlockHistoryEnvironment(
-                    appService: .init(),
-                    mainQueue: .main
-                  ))
-                )
-              case .noticeView:
-                NoticeView(store: .init(
-                  initialState: NoticeState(),
-                  reducer: noticeReducer,
-                  environment: NoticeEnvironment()))
-                
-              case .myTermsOfServiceView:
-                MyTermsOfServiceView(store: .init(
-                  initialState: MyTermsOfServiceState(),
-                  reducer: myTermsOfServiceReducer,
-                  environment: MyTermsOfServiceEnvironment()))
-                
-              case .csCenterView:
-                CsCenterView()
-              default:
-                CsCenterView()
-              }
-            })
-        }
-        .onAppear(
-          perform: {
-            viewStore.send(.getProfileInfo)
-          })
-        .navigationBarTitle("", displayMode: .inline)
-        .navigationBarHidden(true)
-        .background(Color.white)
-      }
+  private let store: Store<State, Action>
+  @ObservedObject private var viewStore: ViewStore<ViewState, Action>
+  
+  struct ViewState: Equatable {
+    let route: State.Route?
+    let myInfoViewState: MyInfoState
+    let nickname: String
+    let phoneNumber: String
+    let profileImage: ProfileImage
+    let level: Int
+    let createdAt: String
+    let createDday: Int
+    let isAppAlarmOn: Bool
+    let rowInfo: [MyPageItemInfo]
+    
+    init(state: State) {
+      route = state.route
+      myInfoViewState = state.myInfoViewState
+      nickname = state.nickname
+      phoneNumber = state.phoneNumber
+      profileImage = state.profileImage
+      level = state.level
+      createdAt = state.createdAt
+      createDday = state.createDday
+      isAppAlarmOn = state.isAppAlarmOn
+      rowInfo = state.rowInfo
     }
   }
-}
-
-struct MypageRow: View {
-  var rowInfo: MypageRowInfo
-  //  @State var togglePressed = false
+  
+  init(store: Store<State, Action>) {
+    self.store = store
+    viewStore = ViewStore.init(store.scope(state: ViewState.init))
+  }
+  
   var body: some View {
-    HStack {
-      Image(rowInfo.imageName)
-      
-      Text(rowInfo.title)
-        .font(.subtitle3)
-        .foregroundColor(.black900)
-      
-      Toggle("", isOn: .constant(false))//$togglePressed)
-        .toggleStyle(SwitchToggleStyle(tint: .blue900))
-        .opacity(rowInfo.toggleVisible ? 1 : 0)
-      
-      Text("v. \(rowInfo.version)")
-        .font(.subtitle3)
-        .foregroundColor(.blue900)
-        .opacity(rowInfo.version.isEmpty ? 0 : 1)
-        .frame(width: rowInfo.version.isEmpty ? 0 : 80)
+    NavigationView {
+      VStack {
+        VStack {
+          Text("마이페이지")
+            .font(.heading1)
+            .frame(maxWidth: .infinity, alignment: .leading)
+          
+          ZStack(alignment: .bottomTrailing) {
+            Image(viewStore.profileImage.imageName)
+            NavigationLink(
+              destination: {
+                ChangeProfileView(
+                  store: .init(
+                    initialState: .init(
+                      nickname: viewStore.nickname,
+                      profileImage: viewStore.profileImage
+                    ),
+                    reducer: changeProfileReducer,
+                    environment: .init(
+                      appService: AppService(),
+                      mainQueue: .main
+                    )
+                  )
+                )
+              }, label: {
+                Image("edit")
+              }
+            )
+          }
+          
+          Text(viewStore.nickname)
+            .font(.heading2)
+          
+          Text("최초가입일 \(viewStore.createdAt) / 티키타카와 +\(String(viewStore.createDday))일 째")
+            .font(.body7)
+            .foregroundColor(.white900)
+          
+          Button {
+            // popup 띄우기
+          } label: {
+            Image("rating\(viewStore.level)")
+          }
+        }
+        .padding(.spacingL)
+        .foregroundColor(.white)
+        .background(Color.black800)
+        
+        ForEach(viewStore.rowInfo) { item in
+          MypageRow(rowInfo: item)
+            .onTapGesture {
+              viewStore.send(.setRoute(item.itemType))
+            }
+        }
+        .padding([.leading, .trailing], .spacingS)
+        
+        Spacer()
+      }
+      .fullScreenCover(
+        item: viewStore.binding(
+          get: \.route,
+          send: MyPageAction.setRoute
+        )
+      ) { route in
+        switch route {
+        case .myInfoView:
+          MyInfoView(store: store.scope(
+            state: \.myInfoViewState,
+            action: MyPageAction.myInfoView
+          ))
+        case .blockHistoryView:
+          MyBlockHistoryView(store: .init(
+            initialState: MyBlockHistoryState(),
+            reducer: myBlockHistoryReducer,
+            environment: MyBlockHistoryEnvironment(
+              appService: .init(),
+              mainQueue: .main
+            ))
+          )
+        case .noticeView:
+          NoticeView(store: .init(
+            initialState: NoticeState(),
+            reducer: noticeReducer,
+            environment: NoticeEnvironment()))
+          
+        case .myTermsOfServiceView:
+          MyTermsOfServiceView(store: .init(
+            initialState: MyTermsOfServiceState(),
+            reducer: myTermsOfServiceReducer,
+            environment: MyTermsOfServiceEnvironment()))
+          
+        case .csCenterView:
+          CsCenterView()
+          
+        default:
+          EmptyView()
+        }
+      }
+      .navigationBarTitle("", displayMode: .inline)
+      .navigationBarHidden(true)
+      .background(Color.white)
+      .onAppear {
+        viewStore.send(.getProfileInfo)
+      }
     }
-    .background(Color.white)
-    .frame(maxWidth: .infinity)
   }
 }
 
