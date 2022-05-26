@@ -7,13 +7,10 @@
 
 import TTNetworkModule
 
-
-
 enum ChatLogEntity {
 	struct Request: Codable, JSONConvertible { }
 	
 	struct Response: Codable, Equatable, Identifiable {
-		
 		var id: String?
 		// var sender: ChatSenderEntity?
 		var inside: Bool?
@@ -45,4 +42,3 @@ enum ChatLogEntity {
 		}
 	}
 }
-

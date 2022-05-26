@@ -15,7 +15,6 @@ struct LocationCategoryListView: View {
       HStack(spacing: .spacingXS) {
         ForEach(LocationCategory.allCases) { category in
           Button {
-            
           } label: {
             HStack(spacing: .spacingXXS) {
               if !category.imageName.isEmpty {
