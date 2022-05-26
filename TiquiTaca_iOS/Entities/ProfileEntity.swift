@@ -12,6 +12,7 @@ enum ProfileEntity {
     let id: String
     let nickname: String
     let profile: ProfileType
+    let phoneNumber: String
     //    let fcmToken: String
     let appAlarm: Bool
     let chatAlarm: Bool
@@ -24,6 +25,7 @@ enum ProfileEntity {
       case id = "_id"
       case nickname
       case profile
+      case phoneNumber
       //      case fcmToken = "FCMToken"
       case appAlarm
       case chatAlarm
@@ -38,6 +40,7 @@ enum ProfileEntity {
       id = (try? container.decode(String.self, forKey: .id)) ?? ""
       nickname = (try? container.decode(String.self, forKey: .nickname)) ?? ""
       profile = (try? container.decode(ProfileType.self, forKey: .profile)) ?? ProfileType(type: 0)
+      phoneNumber = (try? container.decode(String.self, forKey: .phoneNumber)) ?? ""
       appAlarm = (try? container.decode(Bool.self, forKey: .appAlarm)) ?? false
       chatAlarm = (try? container.decode(Bool.self, forKey: .chatAlarm)) ?? false
       iBlockUsers = (try? container.decode([String].self, forKey: .iBlockUsers)) ?? []
