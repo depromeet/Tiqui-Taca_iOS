@@ -76,7 +76,8 @@ struct AppView_Previews: PreviewProvider {
         reducer: appReducer,
         environment: .init(
           appService: .init(),
-          mainQueue: .main
+          mainQueue: .main,
+          locationManager: .live
         )
       )
     )

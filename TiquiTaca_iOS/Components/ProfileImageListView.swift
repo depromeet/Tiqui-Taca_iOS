@@ -7,15 +7,6 @@
 
 import SwiftUI
 
-struct ProfileImage: Equatable {
-  /// Type Range: 1 ~ 30
-  var type: Int = 1
-  
-  var imageName: String {
-    return "profile\(type)"
-  }
-}
-
 struct ProfileImageListView: View {
   @Binding var selectedProfile: ProfileImage
   

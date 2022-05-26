@@ -19,7 +19,8 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         reducer: appReducer,
         environment: .init(
           appService: appService,
-          mainQueue: .main
+          mainQueue: .main,
+          locationManager: .live
         )
       )
     )

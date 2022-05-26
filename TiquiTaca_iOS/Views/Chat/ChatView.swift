@@ -263,20 +263,20 @@ private struct PopularRoomListView: View {
 	}
 	
 	var body: some View {
-    WithViewStore(store.scope(state: \.popularRoomList)) { popularListViewStore in
+    WithViewStore(store.scope(state: \.popularRoomList)) { viewStore in
       List {
-        if popularListViewStore.state.isEmpty {
+        if viewStore.state.isEmpty {
           NoDataView(noDataType: .popular)
             .padding(.top, .spacingXXXL * 2)
         } else {
-          ForEach(popularListViewStore.state.enumerated().map({$0}), id: \.element.id) { index, room in
+          ForEach(viewStore.state.enumerated().map { $0 }, id: \.element.id) { index, room in
             RoomListCell(ranking: index + 1, info: room, type: .popular )
               .listRowSeparator(.hidden)
               .listRowInsets(EdgeInsets())
-              .onTapGesture(perform: {
+              .onTapGesture {
                 isPopupPresent = true
                 ViewStore(store).send(.enterRoomPopup(room))
-              })
+              }
           }
         }
       }
