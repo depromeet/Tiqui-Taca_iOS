@@ -263,40 +263,41 @@ private struct PopularRoomListView: View {
 	}
 	
 	var body: some View {
-		WithViewStore(store.scope(state: \.popularRoomList)) { popularListViewStore in
-			List {
-				if popularListViewStore.state.isEmpty {
-					NoDataView(noDataType: .popular)
-						.padding(.top, .spacingXXXL * 2)
-				} else {
-					ForEach(popularListViewStore.state.enumerated().map({$0}), id: \.element.id) { index, room in
-						RoomListCell(ranking: index + 1, info: room, type: .popular )
-							.listRowSeparator(.hidden)
-							.listRowInsets(EdgeInsets())
-							.fullScreenCover(isPresented: $isPopupPresent, content: {
-								TTPopupView.init(
-									popUpCase: .oneLineTwoButton,
-									topImageString: "",
-									title: "이미 참여 중인 채팅방이 있어요",
-									subtitle: "해당 채팅방을 참가할 경우 이전 채팅방에선 나가게 됩니다",
-									leftButtonName: "취소",
-									rightButtonName: "참여하기",
-									confirm: { isPopupPresent = false },
-									cancel: { isPopupPresent = false }
-								)
-							})
-							.onTapGesture(perform: {
-								isPopupPresent = true
-								ViewStore(store).send(.enterRoomPopup(room))
-							})
-					}
-				}
-			}
-				.refreshable {
-					ViewStore(store).send(.refresh)
-				}
-		}
-	}
+    WithViewStore(store.scope(state: \.popularRoomList)) { popularListViewStore in
+      List {
+        if popularListViewStore.state.isEmpty {
+          NoDataView(noDataType: .popular)
+            .padding(.top, .spacingXXXL * 2)
+        } else {
+          ForEach(popularListViewStore.state.enumerated().map({$0}), id: \.element.id) { index, room in
+            RoomListCell(ranking: index + 1, info: room, type: .popular )
+              .listRowSeparator(.hidden)
+              .listRowInsets(EdgeInsets())
+              .onTapGesture(perform: {
+                isPopupPresent = true
+                ViewStore(store).send(.enterRoomPopup(room))
+              })
+          }
+        }
+      }
+      .ttPopup(
+        isShowing: $isPopupPresent
+      ) {
+        TTPopupView.init(
+          popUpCase: .oneLineTwoButton,
+          title: "이미 참여 중인 채팅방이 있어요",
+          subtitle: "해당 채팅방을 참가할 경우 이전 채팅방에선 나가게 됩니다",
+          leftButtonName: "취소",
+          rightButtonName: "참여하기",
+          confirm: { isPopupPresent = false },
+          cancel: { isPopupPresent = false }
+        )
+      }
+      .refreshable {
+        ViewStore(store).send(.refresh)
+      }
+    }
+  }
 }
 
 // MARK: NoData View

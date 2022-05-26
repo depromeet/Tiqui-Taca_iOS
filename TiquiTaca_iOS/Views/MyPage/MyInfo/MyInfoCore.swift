@@ -9,8 +9,8 @@ import ComposableArchitecture
 import TTNetworkModule
 
 struct MyInfoState: Equatable {
-  var nickname = "변경하려는 닉네임"
-  var phoneNumber = "010-1234-5678"
+  var nickname = ""
+  var phoneNumber = ""
   var createdAt: String = ""
   var nicknameChanging = false
   var popupPresented = false
