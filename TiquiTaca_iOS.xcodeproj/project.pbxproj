@@ -62,6 +62,8 @@
 		F2DEC4E0282F34510018F545 /* ChatRoomAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2DEC4DF282F34510018F545 /* ChatRoomAnnotationView.swift */; };
 		F2DEC4E4282F3AF20018F545 /* ChatRoomAnnotationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2DEC4E3282F3AF20018F545 /* ChatRoomAnnotationInfo.swift */; };
 		F2E38EE5283E825A007C96F7 /* MyPageItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38EE4283E825A007C96F7 /* MyPageItem.swift */; };
+		F2E38EE7283FDB0C007C96F7 /* MyPageItemInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38EE6283FDB0C007C96F7 /* MyPageItemInfo.swift */; };
+		F2E38EE9283FDB2C007C96F7 /* MyPageItemType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38EE8283FDB2C007C96F7 /* MyPageItemType.swift */; };
 		F2F1ED6F2817ABE900AC4FDD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F2F1ED6E2817ABE900AC4FDD /* GoogleService-Info.plist */; };
 		F2F1ED7228182D1400AC4FDD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED7128182D1400AC4FDD /* SceneDelegate.swift */; };
 		F2F1ED7D281C3D6900AC4FDD /* VerificationEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED7C281C3D6900AC4FDD /* VerificationEntity.swift */; };
@@ -195,6 +197,8 @@
 		F2DEC4E8283324E70018F545 /* TiquiTaca_iOSDebug.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = TiquiTaca_iOSDebug.entitlements; path = TiquiTaca_iOS/TiquiTaca_iOSDebug.entitlements; sourceTree = SOURCE_ROOT; };
 		F2DEC4E9283324E70018F545 /* TiquiTaca_iOS.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = TiquiTaca_iOS.entitlements; path = TiquiTaca_iOS/TiquiTaca_iOS.entitlements; sourceTree = SOURCE_ROOT; };
 		F2E38EE4283E825A007C96F7 /* MyPageItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageItem.swift; sourceTree = "<group>"; };
+		F2E38EE6283FDB0C007C96F7 /* MyPageItemInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageItemInfo.swift; sourceTree = "<group>"; };
+		F2E38EE8283FDB2C007C96F7 /* MyPageItemType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageItemType.swift; sourceTree = "<group>"; };
 		F2F1ED6E2817ABE900AC4FDD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F2F1ED7128182D1400AC4FDD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		F2F1ED7C281C3D6900AC4FDD /* VerificationEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationEntity.swift; sourceTree = "<group>"; };
@@ -413,6 +417,8 @@
 				F2B268C9283BE1200011EA43 /* OTPField.swift */,
 				F2B268CB283BE1530011EA43 /* TermsOfService.swift */,
 				F2B268CD283BE18D0011EA43 /* ProfileImage.swift */,
+				F2E38EE6283FDB0C007C96F7 /* MyPageItemInfo.swift */,
+				F2E38EE8283FDB2C007C96F7 /* MyPageItemType.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -910,6 +916,7 @@
 				F2F1ED7228182D1400AC4FDD /* SceneDelegate.swift in Sources */,
 				F96C0DE8282EAFBE004BF1C7 /* ChangeProfileEntity.swift in Sources */,
 				F2F1ED8C281E632500AC4FDD /* PhoneVerificationView.swift in Sources */,
+				F2E38EE9283FDB2C007C96F7 /* MyPageItemType.swift in Sources */,
 				F96C0DE6282EA83D004BF1C7 /* ValidNicknameEntity.swift in Sources */,
 				F2FDA21A280BBF8300B2ED75 /* AppDelegate.swift in Sources */,
 				F981FA23282653A00000A531 /* BlockListCore.swift in Sources */,
@@ -979,6 +986,7 @@
 				86B296162837862500A981FC /* ChatLogEntity.swift in Sources */,
 				F993ADC92816C79C00718E9F /* OTPFieldCore.swift in Sources */,
 				F25C79C8282F1881009C60EE /* TabViewItem.swift in Sources */,
+				F2E38EE7283FDB0C007C96F7 /* MyPageItemInfo.swift in Sources */,
 				F2F1ED83281C6B2F00AC4FDD /* OTPFieldView.swift in Sources */,
 				F2F1ED96281E868300AC4FDD /* VerificationNumberCheckView.swift in Sources */,
 				86783243282651A90034EACC /* Color+Extensions.swift in Sources */,
