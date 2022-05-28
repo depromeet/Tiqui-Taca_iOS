@@ -35,7 +35,7 @@ enum MyPageAction: Equatable {
   case setRoute(MyPageState.Route?)
   case myInfoView(MyInfoAction)
   case getProfileInfo
-  case getProfileInfoResponse(Result<ProfileEntity.Response?, HTTPError>)
+  case getProfileInfoResponse(Result<UserEntity.Response?, HTTPError>)
   case getProfileRequestSuccess
   case alarmToggle
   case getAlarmRequestResponse(Result<AppAlarmEntity.Response?, HTTPError>)
