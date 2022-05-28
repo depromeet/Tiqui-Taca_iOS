@@ -64,6 +64,9 @@
 		F2E38EE5283E825A007C96F7 /* MyPageItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38EE4283E825A007C96F7 /* MyPageItem.swift */; };
 		F2E38EE7283FDB0C007C96F7 /* MyPageItemInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38EE6283FDB0C007C96F7 /* MyPageItemInfo.swift */; };
 		F2E38EE9283FDB2C007C96F7 /* MyPageItemType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38EE8283FDB2C007C96F7 /* MyPageItemType.swift */; };
+		F2E38EEE28420C75007C96F7 /* PopularChatRoomListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38EED28420C75007C96F7 /* PopularChatRoomListView.swift */; };
+		F2E38EF028420C90007C96F7 /* PopularChatRoomListCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38EEF28420C90007C96F7 /* PopularChatRoomListCore.swift */; };
+		F2E38EF528423721007C96F7 /* PopularChatRoomListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38EF428423721007C96F7 /* PopularChatRoomListItem.swift */; };
 		F2F1ED6F2817ABE900AC4FDD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F2F1ED6E2817ABE900AC4FDD /* GoogleService-Info.plist */; };
 		F2F1ED7228182D1400AC4FDD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED7128182D1400AC4FDD /* SceneDelegate.swift */; };
 		F2F1ED7D281C3D6900AC4FDD /* VerificationEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED7C281C3D6900AC4FDD /* VerificationEntity.swift */; };
@@ -199,6 +202,9 @@
 		F2E38EE4283E825A007C96F7 /* MyPageItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageItem.swift; sourceTree = "<group>"; };
 		F2E38EE6283FDB0C007C96F7 /* MyPageItemInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageItemInfo.swift; sourceTree = "<group>"; };
 		F2E38EE8283FDB2C007C96F7 /* MyPageItemType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageItemType.swift; sourceTree = "<group>"; };
+		F2E38EED28420C75007C96F7 /* PopularChatRoomListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularChatRoomListView.swift; sourceTree = "<group>"; };
+		F2E38EEF28420C90007C96F7 /* PopularChatRoomListCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularChatRoomListCore.swift; sourceTree = "<group>"; };
+		F2E38EF428423721007C96F7 /* PopularChatRoomListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularChatRoomListItem.swift; sourceTree = "<group>"; };
 		F2F1ED6E2817ABE900AC4FDD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F2F1ED7128182D1400AC4FDD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		F2F1ED7C281C3D6900AC4FDD /* VerificationEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationEntity.swift; sourceTree = "<group>"; };
@@ -316,6 +322,9 @@
 		86E494842814F18600551CCD /* MainMap */ = {
 			isa = PBXGroup;
 			children = (
+				F2E38EEC283FE6A8007C96F7 /* RoomDetail */,
+				F2E38EEB283FE6A1007C96F7 /* ChatRoomList */,
+				F2E38EEA283FE694007C96F7 /* PopularChatRoomList */,
 				86E494882814FDAE00551CCD /* MainMapView.swift */,
 				86E4948A2814FDBC00551CCD /* MainMapCore.swift */,
 			);
@@ -478,6 +487,30 @@
 				90ED3E866555D3D7D6ABC769 /* Pods_TiquiTaca_iOSTests.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F2E38EEA283FE694007C96F7 /* PopularChatRoomList */ = {
+			isa = PBXGroup;
+			children = (
+				F2E38EF428423721007C96F7 /* PopularChatRoomListItem.swift */,
+				F2E38EED28420C75007C96F7 /* PopularChatRoomListView.swift */,
+				F2E38EEF28420C90007C96F7 /* PopularChatRoomListCore.swift */,
+			);
+			path = PopularChatRoomList;
+			sourceTree = "<group>";
+		};
+		F2E38EEB283FE6A1007C96F7 /* ChatRoomList */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = ChatRoomList;
+			sourceTree = "<group>";
+		};
+		F2E38EEC283FE6A8007C96F7 /* RoomDetail */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = RoomDetail;
 			sourceTree = "<group>";
 		};
 		F2F1ED79281C3B6000AC4FDD /* Entities */ = {
@@ -929,6 +962,7 @@
 				86BEED82282F3FD500EA0C5B /* Date+Extensions.swift in Sources */,
 				F2DEC4E0282F34510018F545 /* ChatRoomAnnotationView.swift in Sources */,
 				867832462826DE890034EACC /* RoomListCell.swift in Sources */,
+				F2E38EF528423721007C96F7 /* PopularChatRoomListItem.swift in Sources */,
 				F2F1ED98281E869D00AC4FDD /* VerificationNumberCheckCore.swift in Sources */,
 				F2B268BD283AAF090011EA43 /* LocationCategoryListView.swift in Sources */,
 				86E4948D2814FDC700551CCD /* ChatView.swift in Sources */,
@@ -967,6 +1001,7 @@
 				8601F65C281309B10085F692 /* SplashView.swift in Sources */,
 				F25C79BA282D7524009C60EE /* String+Extensions.swift in Sources */,
 				F981FA1A282600B50000A531 /* MyTermsOfServiceView.swift in Sources */,
+				F2E38EEE28420C75007C96F7 /* PopularChatRoomListView.swift in Sources */,
 				86E494832814F05D00551CCD /* MainTabCore.swift in Sources */,
 				86E494932814FDE900551CCD /* MsgAndNotiCore.swift in Sources */,
 				F25C79B4282AB4D7009C60EE /* Int+Extensions.swift in Sources */,
@@ -991,6 +1026,7 @@
 				F2F1ED96281E868300AC4FDD /* VerificationNumberCheckView.swift in Sources */,
 				86783243282651A90034EACC /* Color+Extensions.swift in Sources */,
 				86032A26282C22A50061D3F9 /* RoomService.swift in Sources */,
+				F2E38EF028420C90007C96F7 /* PopularChatRoomListCore.swift in Sources */,
 				F981FA1F282604AA0000A531 /* CsCenterView.swift in Sources */,
 				F2F1ED89281E612E00AC4FDD /* SignUpView.swift in Sources */,
 				F9B90C9C28117DDF003FFEEB /* AuthService.swift in Sources */,
