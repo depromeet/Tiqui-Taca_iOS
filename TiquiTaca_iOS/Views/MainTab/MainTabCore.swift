@@ -7,10 +7,11 @@
 
 import Combine
 import ComposableArchitecture
+import ComposableCoreLocation
 
 struct MainTabState: Equatable {
   // Feature State
-  var mapFeature: MapState = .init()
+  var mainMapFeature: MainMapState = .init()
   var chatFeature: ChatState = .init()
   var msgAndNotiFeature: MsgAndNotiState = .init()
   var myPageFeature: MyPageState = .init()
@@ -18,7 +19,7 @@ struct MainTabState: Equatable {
 
 enum MainTabAction: Equatable {
   // Feature Action
-  case mapFeature(MapAction)
+  case mainMapFeature(MainMapAction)
   case chatFeature(ChatAction)
   case msgAndNotiFeature(MsgAndNotiAction)
   case myPageFeature(MyPageAction)
@@ -27,6 +28,7 @@ enum MainTabAction: Equatable {
 struct MainTabEnvironment {
   let appService: AppService
   let mainQueue: AnySchedulerOf<DispatchQueue>
+  var locationManager: LocationManager
 }
 
 let mainTabReducer = Reducer<
@@ -34,14 +36,15 @@ let mainTabReducer = Reducer<
   MainTabAction,
   MainTabEnvironment
 >.combine([
-  mapReducer
+  mainMapReducer
     .pullback(
-      state: \.mapFeature,
-      action: /MainTabAction.mapFeature,
+      state: \.mainMapFeature,
+      action: /MainTabAction.mainMapFeature,
       environment: {
-        MapEnvironment(
+        MainMapEnvironment(
           appService: $0.appService,
-          mainQueue: $0.mainQueue
+          mainQueue: $0.mainQueue,
+          locationManager: $0.locationManager
         )
       }
     ),
@@ -87,7 +90,7 @@ let mainTabCore = Reducer<
   MainTabEnvironment
 > { _, action, _ in
   switch action {
-  case .mapFeature:
+  case .mainMapFeature:
     return .none
   case .chatFeature:
     return .none

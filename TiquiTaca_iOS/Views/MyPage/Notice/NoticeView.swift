@@ -45,6 +45,7 @@ struct NoticeView: View {
             .opacity(viewStore.noticeList.isEmpty ? 1 : 0)
         )
       }
+      .background(Color.white)
     }
   }
 }

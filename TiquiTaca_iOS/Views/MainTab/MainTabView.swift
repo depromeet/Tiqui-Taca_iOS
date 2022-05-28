@@ -46,7 +46,6 @@ struct MainTabView: View {
         }
         .tag(3)
     }
-    .tint(.black700)
   }
 }
 
@@ -59,10 +58,10 @@ private struct MapTab: View {
   }
   
   var body: some View {
-    MapView(
+    MainMapView(
       store: store.scope(
-        state: \.mapFeature,
-        action: MainTabAction.mapFeature
+        state: \.mainMapFeature,
+        action: MainTabAction.mainMapFeature
       )
     )
   }
@@ -131,7 +130,8 @@ struct MainTabView_Previews: PreviewProvider {
         reducer: mainTabReducer,
         environment: .init(
           appService: .init(),
-          mainQueue: .main
+          mainQueue: .main,
+          locationManager: .live
         )
       )
     )

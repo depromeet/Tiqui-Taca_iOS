@@ -13,9 +13,6 @@ struct SignInState: Equatable {
     case verificationNumberCheck
   }
   var route: Route?
-  var phoneNumber: String = ""
-  var verificationCode: String = ""
-  var expireMinute: Int = 0
   var verificationNumberCheckState: VerificationNumberCheckState?
   var phoneVerficationState: PhoneVerificationState = .init()
 }
@@ -80,7 +77,8 @@ let signInCore = Reducer<
     } else if selectedRoute == .verificationNumberCheck {
       state.verificationNumberCheckState = .init(
         phoneNumber: state.phoneVerficationState.phoneNumber,
-        expireSeconds: state.phoneVerficationState.expireMinute * 60
+        expireSeconds: state.phoneVerficationState.expireMinute * 60,
+        verificationCode: state.phoneVerficationState.verificationCode
       )
     }
     state.route = selectedRoute

@@ -45,6 +45,7 @@ struct MyTermsOfServiceView: View {
         }
         .listStyle(.plain)
       }
+      .background(Color.white)
     }
   }
 }

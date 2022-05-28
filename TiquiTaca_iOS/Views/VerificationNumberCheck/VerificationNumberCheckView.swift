@@ -21,12 +21,14 @@ struct VerificationNumberCheckView: View {
     let phoneNumber: String
     let expireSeconds: Int
     let isAvailable: Bool
+    let verficationCode: String // 인증번호 테스트용
     
     init(state: State) {
       route = state.route
       phoneNumber = state.phoneNumber
       expireSeconds = state.expireSeconds
       isAvailable = state.isAvailable
+      verficationCode = state.verificationCode
     }
   }
   
@@ -45,6 +47,10 @@ struct VerificationNumberCheckView: View {
         Text("\(viewStore.phoneNumber)로 전송된 인증번호 6자리를 입력하세요.")
           .foregroundColor(.white600)
           .font(.body3)
+          .hLeading()
+        Text("전송된 인증번호: \(viewStore.verficationCode)")
+          .foregroundColor(.green500)
+          .font(.body4)
           .hLeading()
       }
       .padding(.horizontal, .spacingXL)

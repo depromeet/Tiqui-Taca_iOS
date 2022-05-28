@@ -8,14 +8,6 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct TermsOfService: Equatable, Identifiable {
-  let id: UUID = .init()
-  let description: String
-  let isRequired: Bool
-  let url: URL?
-  var isChecked = false
-}
-
 struct TOSFieldListView: View {
   let store: Store<TOSFieldListViewState, TOSFieldListViewAction>
   
