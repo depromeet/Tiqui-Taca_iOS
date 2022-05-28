@@ -94,6 +94,8 @@
 		F96CDE772824EF9B002DEB90 /* MyInfoCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F96CDE762824EF9B002DEB90 /* MyInfoCore.swift */; };
 		F971D84728421A1F00E2FAE8 /* ChatMessageCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F971D84528421A1F00E2FAE8 /* ChatMessageCore.swift */; };
 		F971D84828421A1F00E2FAE8 /* ChatMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F971D84628421A1F00E2FAE8 /* ChatMessageView.swift */; };
+		F971D84D28421D8800E2FAE8 /* ChatRoom.swift in Sources */ = {isa = PBXBuildFile; fileRef = F971D84C28421D8800E2FAE8 /* ChatRoom.swift */; };
+		F971D85028421DBB00E2FAE8 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = F971D84F28421DBB00E2FAE8 /* Message.swift */; };
 		F981FA152825FB000000A531 /* NoticeCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F981FA142825FB000000A531 /* NoticeCore.swift */; };
 		F981FA172825FB0A0000A531 /* NoticeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F981FA162825FB0A0000A531 /* NoticeView.swift */; };
 		F981FA1A282600B50000A531 /* MyTermsOfServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F981FA19282600B50000A531 /* MyTermsOfServiceView.swift */; };
@@ -233,6 +235,8 @@
 		F96CDE762824EF9B002DEB90 /* MyInfoCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyInfoCore.swift; sourceTree = "<group>"; };
 		F971D84528421A1F00E2FAE8 /* ChatMessageCore.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatMessageCore.swift; sourceTree = "<group>"; };
 		F971D84628421A1F00E2FAE8 /* ChatMessageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatMessageView.swift; sourceTree = "<group>"; };
+		F971D84C28421D8800E2FAE8 /* ChatRoom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoom.swift; sourceTree = "<group>"; };
+		F971D84F28421DBB00E2FAE8 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		F981FA142825FB000000A531 /* NoticeCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeCore.swift; sourceTree = "<group>"; };
 		F981FA162825FB0A0000A531 /* NoticeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeView.swift; sourceTree = "<group>"; };
 		F981FA19282600B50000A531 /* MyTermsOfServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTermsOfServiceView.swift; sourceTree = "<group>"; };
@@ -418,6 +422,7 @@
 		F2B268B8283A1A420011EA43 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F971D84E28421DA900E2FAE8 /* Realm */,
 				F2DEC4E3282F3AF20018F545 /* ChatRoomAnnotationInfo.swift */,
 				F2B268B9283A1A750011EA43 /* LocationCategory.swift */,
 				F2B268C9283BE1200011EA43 /* OTPField.swift */,
@@ -648,6 +653,15 @@
 				F96CDE762824EF9B002DEB90 /* MyInfoCore.swift */,
 			);
 			path = MyInfo;
+			sourceTree = "<group>";
+		};
+		F971D84E28421DA900E2FAE8 /* Realm */ = {
+			isa = PBXGroup;
+			children = (
+				F971D84C28421D8800E2FAE8 /* ChatRoom.swift */,
+				F971D84F28421DBB00E2FAE8 /* Message.swift */,
+			);
+			path = Realm;
 			sourceTree = "<group>";
 		};
 		F981FA132825F9CA0000A531 /* Notice */ = {
@@ -936,6 +950,7 @@
 				F2DEC4E0282F34510018F545 /* ChatRoomAnnotationView.swift in Sources */,
 				867832462826DE890034EACC /* RoomListCell.swift in Sources */,
 				F971D84828421A1F00E2FAE8 /* ChatMessageView.swift in Sources */,
+				F971D84D28421D8800E2FAE8 /* ChatRoom.swift in Sources */,
 				F2F1ED98281E869D00AC4FDD /* VerificationNumberCheckCore.swift in Sources */,
 				F2B268BD283AAF090011EA43 /* LocationCategoryListView.swift in Sources */,
 				86E4948D2814FDC700551CCD /* ChatView.swift in Sources */,
@@ -965,6 +980,7 @@
 				F248EB032813273A00430C3B /* CreateProfileCore.swift in Sources */,
 				F2B268CE283BE18D0011EA43 /* ProfileImage.swift in Sources */,
 				F9B45A1F282BE9DB00948586 /* AppAlarmEntity.swift in Sources */,
+				F971D85028421DBB00E2FAE8 /* Message.swift in Sources */,
 				F2127642281021C700FB568D /* TermsOfServiceCore.swift in Sources */,
 				F96CDE772824EF9B002DEB90 /* MyInfoCore.swift in Sources */,
 				F25C79B8282CB5F2009C60EE /* CheckNicknameEntity.swift in Sources */,
