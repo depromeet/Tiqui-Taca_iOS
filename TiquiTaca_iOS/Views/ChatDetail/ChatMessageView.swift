@@ -51,7 +51,7 @@ struct ChatMessageView: View {
   }
 }
 
-private extension ChatMessageView {
+extension ChatMessageView {
   var sentBubble: some View {
     HStack(alignment: .bottom) {
       Spacer()
