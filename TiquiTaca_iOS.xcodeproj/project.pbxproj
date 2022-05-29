@@ -45,7 +45,6 @@
 		F25C79BA282D7524009C60EE /* String+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25C79B9282D7524009C60EE /* String+Extensions.swift */; };
 		F25C79BC282D91BC009C60EE /* UserCreationEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25C79BB282D91BC009C60EE /* UserCreationEntity.swift */; };
 		F25C79C6282E96A2009C60EE /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25C79C5282E96A2009C60EE /* UserService.swift */; };
-		F25C79C8282F1881009C60EE /* TabViewItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F25C79C7282F1881009C60EE /* TabViewItem.swift */; };
 		F2B268B62839FF1A0011EA43 /* MapKit+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B268B52839FF1A0011EA43 /* MapKit+Extensions.swift */; };
 		F2B268BA283A1A750011EA43 /* LocationCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B268B9283A1A750011EA43 /* LocationCategory.swift */; };
 		F2B268BD283AAF090011EA43 /* LocationCategoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2B268BC283AAF090011EA43 /* LocationCategoryListView.swift */; };
@@ -65,6 +64,7 @@
 		F2E38EE7283FDB0C007C96F7 /* MyPageItemInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38EE6283FDB0C007C96F7 /* MyPageItemInfo.swift */; };
 		F2E38EE9283FDB2C007C96F7 /* MyPageItemType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38EE8283FDB2C007C96F7 /* MyPageItemType.swift */; };
 		F2E38EF828424BEE007C96F7 /* ImageAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F2E38EF728424BEE007C96F7 /* ImageAssets.xcassets */; };
+		F2E38EFB2843D43D007C96F7 /* TabViewType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38EFA2843D43D007C96F7 /* TabViewType.swift */; };
 		F2F1ED6F2817ABE900AC4FDD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F2F1ED6E2817ABE900AC4FDD /* GoogleService-Info.plist */; };
 		F2F1ED7228182D1400AC4FDD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED7128182D1400AC4FDD /* SceneDelegate.swift */; };
 		F2F1ED7D281C3D6900AC4FDD /* VerificationEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED7C281C3D6900AC4FDD /* VerificationEntity.swift */; };
@@ -179,7 +179,6 @@
 		F25C79B9282D7524009C60EE /* String+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+Extensions.swift"; sourceTree = "<group>"; };
 		F25C79BB282D91BC009C60EE /* UserCreationEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCreationEntity.swift; sourceTree = "<group>"; };
 		F25C79C5282E96A2009C60EE /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
-		F25C79C7282F1881009C60EE /* TabViewItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewItem.swift; sourceTree = "<group>"; };
 		F2B268B52839FF1A0011EA43 /* MapKit+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "MapKit+Extensions.swift"; sourceTree = "<group>"; };
 		F2B268B9283A1A750011EA43 /* LocationCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCategory.swift; sourceTree = "<group>"; };
 		F2B268BC283AAF090011EA43 /* LocationCategoryListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCategoryListView.swift; sourceTree = "<group>"; };
@@ -201,6 +200,7 @@
 		F2E38EE6283FDB0C007C96F7 /* MyPageItemInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageItemInfo.swift; sourceTree = "<group>"; };
 		F2E38EE8283FDB2C007C96F7 /* MyPageItemType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageItemType.swift; sourceTree = "<group>"; };
 		F2E38EF728424BEE007C96F7 /* ImageAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ImageAssets.xcassets; sourceTree = "<group>"; };
+		F2E38EFA2843D43D007C96F7 /* TabViewType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewType.swift; sourceTree = "<group>"; };
 		F2F1ED6E2817ABE900AC4FDD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F2F1ED7128182D1400AC4FDD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		F2F1ED7C281C3D6900AC4FDD /* VerificationEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationEntity.swift; sourceTree = "<group>"; };
@@ -422,6 +422,7 @@
 				F2B268CD283BE18D0011EA43 /* ProfileImage.swift */,
 				F2E38EE6283FDB0C007C96F7 /* MyPageItemInfo.swift */,
 				F2E38EE8283FDB2C007C96F7 /* MyPageItemType.swift */,
+				F2E38EFA2843D43D007C96F7 /* TabViewType.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -567,7 +568,6 @@
 				8601F660281393640085F692 /* PageControl.swift */,
 				F2F1ED9A281EDACE00AC4FDD /* OnboardingPageView.swift */,
 				F25C79B5282C1FC0009C60EE /* ProfileImageListView.swift */,
-				F25C79C7282F1881009C60EE /* TabViewItem.swift */,
 				F2B268BC283AAF090011EA43 /* LocationCategoryListView.swift */,
 			);
 			path = Components;
@@ -972,6 +972,7 @@
 				F25C79BA282D7524009C60EE /* String+Extensions.swift in Sources */,
 				F981FA1A282600B50000A531 /* MyTermsOfServiceView.swift in Sources */,
 				86E494832814F05D00551CCD /* MainTabCore.swift in Sources */,
+				F2E38EFB2843D43D007C96F7 /* TabViewType.swift in Sources */,
 				86E494932814FDE900551CCD /* MsgAndNotiCore.swift in Sources */,
 				F25C79B4282AB4D7009C60EE /* Int+Extensions.swift in Sources */,
 				869FC8DC282A561F00B14345 /* RoomInfoEntity.swift in Sources */,
@@ -989,7 +990,6 @@
 				F2F1EDAF2829335A00AC4FDD /* AppView.swift in Sources */,
 				86B296162837862500A981FC /* ChatLogEntity.swift in Sources */,
 				F993ADC92816C79C00718E9F /* OTPFieldCore.swift in Sources */,
-				F25C79C8282F1881009C60EE /* TabViewItem.swift in Sources */,
 				F2E38EE7283FDB0C007C96F7 /* MyPageItemInfo.swift in Sources */,
 				F2F1ED83281C6B2F00AC4FDD /* OTPFieldView.swift in Sources */,
 				F2F1ED96281E868300AC4FDD /* VerificationNumberCheckView.swift in Sources */,

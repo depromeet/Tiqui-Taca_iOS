@@ -59,6 +59,10 @@ struct MainMapView: View {
         .edgesIgnoringSafeArea([.all])
         
         VStack {
+          NavigationLink("test") {
+            EmptyView()
+          }
+          
           LocationCategoryListView(selectedCategory: .constant(.all))
           
           VStack {
@@ -109,6 +113,7 @@ struct MainMapView: View {
         // room detail
       }
     }
+    .navigationTitle("지도")
     .alert(
       store.scope(state: { $0.alert }),
       dismiss: .dismissAlertButtonTapped
