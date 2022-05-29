@@ -67,6 +67,7 @@
 		F2E38EEE28420C75007C96F7 /* PopularChatRoomListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38EED28420C75007C96F7 /* PopularChatRoomListView.swift */; };
 		F2E38EF028420C90007C96F7 /* PopularChatRoomListCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38EEF28420C90007C96F7 /* PopularChatRoomListCore.swift */; };
 		F2E38EF528423721007C96F7 /* PopularChatRoomListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38EF428423721007C96F7 /* PopularChatRoomListItem.swift */; };
+		F2E38EF828424BEE007C96F7 /* ImageAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F2E38EF728424BEE007C96F7 /* ImageAssets.xcassets */; };
 		F2F1ED6F2817ABE900AC4FDD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F2F1ED6E2817ABE900AC4FDD /* GoogleService-Info.plist */; };
 		F2F1ED7228182D1400AC4FDD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED7128182D1400AC4FDD /* SceneDelegate.swift */; };
 		F2F1ED7D281C3D6900AC4FDD /* VerificationEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED7C281C3D6900AC4FDD /* VerificationEntity.swift */; };
@@ -202,6 +203,7 @@
 		F2E38EE4283E825A007C96F7 /* MyPageItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageItem.swift; sourceTree = "<group>"; };
 		F2E38EE6283FDB0C007C96F7 /* MyPageItemInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageItemInfo.swift; sourceTree = "<group>"; };
 		F2E38EE8283FDB2C007C96F7 /* MyPageItemType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageItemType.swift; sourceTree = "<group>"; };
+		F2E38EF728424BEE007C96F7 /* ImageAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ImageAssets.xcassets; sourceTree = "<group>"; };
 		F2E38EED28420C75007C96F7 /* PopularChatRoomListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularChatRoomListView.swift; sourceTree = "<group>"; };
 		F2E38EEF28420C90007C96F7 /* PopularChatRoomListCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularChatRoomListCore.swift; sourceTree = "<group>"; };
 		F2E38EF428423721007C96F7 /* PopularChatRoomListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularChatRoomListItem.swift; sourceTree = "<group>"; };
@@ -406,6 +408,7 @@
 				F2C02C7027F8824C004C4235 /* Assets.xcassets */,
 				F24B1EF22808741B003D4E1D /* Preview Content */,
 				F2FDA215280BBDAC00B2ED75 /* LaunchScreen.storyboard */,
+				F2E38EF728424BEE007C96F7 /* ImageAssets.xcassets */,
 			);
 			path = Resource;
 			sourceTree = "<group>";
@@ -826,6 +829,7 @@
 				F2FDA216280BBDAC00B2ED75 /* LaunchScreen.storyboard in Resources */,
 				F2C02C7127F8824C004C4235 /* Assets.xcassets in Resources */,
 				F981FA2A2826A32A0000A531 /* Pretendard-Medium.otf in Resources */,
+				F2E38EF828424BEE007C96F7 /* ImageAssets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -28,6 +28,8 @@ struct MyInfoView: View {
               presentationMode.wrappedValue.dismiss()
             } label: {
               Image("idelete")
+                .resizable()
+                .frame(width: 24, height: 24)
             }
           }
           .padding(EdgeInsets(top: 28, leading: .spacingXL, bottom: 22, trailing: .spacingXL))
