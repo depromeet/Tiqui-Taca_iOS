@@ -51,7 +51,6 @@ struct MainTabView: View {
               Image(viewStore.selectedTab == .map ? "map_active" : "map")
             }
           }
-          .navigationBarHidden(true)
         ChatView(store: chatViewStore)
           .tag(TabViewType.chat)
           .tabItem {
@@ -60,7 +59,6 @@ struct MainTabView: View {
               Image(viewStore.selectedTab == .chat ? "chat_active" : "chat")
             }
           }
-          .navigationBarHidden(true)
         MsgAndNotiView(store: msgAndNotiViewStore)
           .tag(TabViewType.msgAndNoti)
           .tabItem {
@@ -69,7 +67,6 @@ struct MainTabView: View {
               Image(viewStore.selectedTab == .msgAndNoti ? "letter_active" : "letter")
             }
           }
-          .navigationBarHidden(true)
         MyPageView(store: myPageViewStore)
           .tag(TabViewType.myPage)
           .tabItem {
@@ -78,8 +75,9 @@ struct MainTabView: View {
               Image(viewStore.selectedTab == .myPage ? "mypage_active" : "mypage")
             }
           }
-          .navigationBarHidden(true)
       }
+      .navigationBarTitleDisplayMode(.inline)
+      .navigationBarHidden(true)
     }
   }
 }
