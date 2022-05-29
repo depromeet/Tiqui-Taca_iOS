@@ -8,10 +8,10 @@
 import TTNetworkModule
 
 enum UserEntity {
-  struct Response: Codable, Equatable {
+  struct Response: Codable, Equatable, Identifiable {
     let id: String
     let nickname: String
-    let profile: ProfileType
+    let profile: ProfileImage
     let phoneNumber: String
     //    let fcmToken: String
     let appAlarm: Bool
@@ -39,7 +39,7 @@ enum UserEntity {
       let container = try decoder.container(keyedBy: CodingKeys.self)
       id = (try? container.decode(String.self, forKey: .id)) ?? ""
       nickname = (try? container.decode(String.self, forKey: .nickname)) ?? ""
-      profile = (try? container.decode(ProfileType.self, forKey: .profile)) ?? ProfileType(type: 0)
+      profile = (try? container.decode(ProfileImage.self, forKey: .profile)) ?? ProfileImage(type: 0)
       phoneNumber = (try? container.decode(String.self, forKey: .phoneNumber)) ?? ""
       appAlarm = (try? container.decode(Bool.self, forKey: .appAlarm)) ?? false
       chatAlarm = (try? container.decode(Bool.self, forKey: .chatAlarm)) ?? false

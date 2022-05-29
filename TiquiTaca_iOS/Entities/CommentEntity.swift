@@ -7,7 +7,7 @@
 
 import TTNetworkModule
 
-struct CommentEntity: Codable, Equatable {
+struct CommentEntity: Codable, Equatable, Identifiable {
   let id: String
   let comment: String
   let user: UserEntity.Response?

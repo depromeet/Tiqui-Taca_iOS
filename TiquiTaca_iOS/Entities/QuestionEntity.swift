@@ -13,6 +13,7 @@ enum QuestionEntity {
     let user: UserEntity.Response?
     let content: String
     let commentList: [CommentEntity]
+    let createdAt: Date
     let likesCount: Int
     let commentsCount: Int
     let ilike: Bool
@@ -22,6 +23,7 @@ enum QuestionEntity {
       case user
       case content
       case commentList
+      case createdAt
       case likesCount
       case commentsCount
       case ilike
@@ -33,6 +35,7 @@ enum QuestionEntity {
       user = try? container.decode(UserEntity.Response.self, forKey: .user)
       content = (try? container.decode(String.self, forKey: .content)) ?? ""
       commentList = (try? container.decode([CommentEntity].self, forKey: .commentList)) ?? []
+      createdAt = (try? container.decode(Date.self, forKey: .createdAt)) ?? Date()
       likesCount = (try? container.decode(Int.self, forKey: .likesCount)) ?? 0
       commentsCount = (try? container.decode(Int.self, forKey: .commentsCount)) ?? 0
       ilike = (try? container.decode(Bool.self, forKey: .ilike)) ?? false
