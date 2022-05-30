@@ -36,7 +36,7 @@ struct ChatView: View {
             currentTab: viewStore.binding(
               get: \.currentTab,
               send: ChatAction.tabChange),
-            currentTime: "13:15 기준"// viewStore.state.lastLoadTime
+            currentTime: viewStore.state.lastLoadTime
           )
         }
         .background(Color.black800)
@@ -149,7 +149,7 @@ private struct TabKindView: View {
       )
       .buttonStyle(TabButton())
       .disabled(currentTab == .popular)
-      Text(currentTime)
+      Text(currentTime + " 기준")
         .foregroundColor(.white800)
         .font(.system(size: 13, weight: .semibold, design: .default))
         .padding(.trailing, 24)
@@ -251,29 +251,44 @@ private struct PopularRoomListView: View {
               .listRowSeparator(.hidden)
               .listRowInsets(EdgeInsets())
               .onTapGesture {
+                UIView.setAnimationsEnabled(false)
                 isPopupPresent = true
                 ViewStore(store).send(.enterRoomPopup(room))
               }
           }
         }
       }
-      .ttPopup(
-        isShowing: $isPopupPresent
-      ) {
-        TTPopupView.init(
-          popUpCase: .oneLineTwoButton,
-          title: "이미 참여 중인 채팅방이 있어요",
-          subtitle: "해당 채팅방을 참가할 경우 이전 채팅방에선 나가게 됩니다",
-          leftButtonName: "취소",
-          rightButtonName: "참여하기",
-          confirm: { isPopupPresent = false },
-          cancel: { isPopupPresent = false }
-        )
+      .fullScreenCover(isPresented: $isPopupPresent) {
+        AlertVIew(isPopupPresent: $isPopupPresent)
+          .background(BackgroundTransparentView())
+          .onDisappear {
+            UIView.setAnimationsEnabled(true)
+          }
       }
       .refreshable {
         ViewStore(store).send(.refresh)
       }
     }
+  }
+}
+
+private struct AlertVIew: View {
+  @Binding var isPopupPresent: Bool
+  
+  // 이미 참여중인 채팅방 or 참여중인 채팅방 없음 -> 바로 Detail로
+  // 채팅방 인원 풀 -> 경고만
+  // 채팅방 교체할 것인지 -> 경고 후 참가
+  var body: some View {
+    TTPopupView.init(
+      popUpCase: .oneLineTwoButton,
+      title: "이미 참여 중인 채팅방이 있어요",
+      subtitle: "해당 채팅방을 참가할 경우 이전 채팅방에선 나가게 됩니다",
+      leftButtonName: "취소",
+      rightButtonName: "참여하기",
+      confirm: { isPopupPresent = false },
+      cancel: { isPopupPresent = false }
+    )
+    .padding(EdgeInsets(top: 0, leading: 24, bottom: 0, trailing: 24))
   }
 }
 
@@ -305,6 +320,19 @@ private struct EnterRoomAlertView: View {
   var body: some View {
     VStack { }
   }
+}
+
+// MARK: Trasnparent Background
+struct BackgroundTransparentView: UIViewRepresentable {
+  func makeUIView(context: Context) -> UIView {
+    let view = UIView()
+    DispatchQueue.main.async {
+      view.superview?.superview?.backgroundColor = Color.black900.opacity(0.7).uiColor
+    }
+    return view
+  }
+
+  func updateUIView(_ uiView: UIView, context: Context) {}
 }
 
 struct ChatView_Previews: PreviewProvider {

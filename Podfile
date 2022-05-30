@@ -22,6 +22,9 @@ target 'TiquiTaca_iOS' do
   pod 'SwiftLint', '= 0.47.0'
   pod 'R.swift', '= 6.1.0'
 
+  # Sochet
+  pod 'Socket.IO-Client-Swift', '= 15.2.0'
+
   # Tiqui-Taca_iOS_Podspec
   pod 'ComposableArchitecture'
   pod 'CasePaths'
