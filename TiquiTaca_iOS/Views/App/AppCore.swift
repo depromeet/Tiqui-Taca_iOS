@@ -134,7 +134,7 @@ let appCore = Reducer<
   ):
     return Effect(value: .signIn)
     
-  case .mainTabAction(.myPageFeature(.logout)):
+  case .mainTabAction(.myPageAction(.logout)):
     return Effect(value: .signOut)
     
   case .onboardingAction:

@@ -109,6 +109,7 @@ struct MainMapView: View {
         // room detail
       }
     }
+    .navigationTitle("지도")
     .alert(
       store.scope(state: { $0.alert }),
       dismiss: .dismissAlertButtonTapped
