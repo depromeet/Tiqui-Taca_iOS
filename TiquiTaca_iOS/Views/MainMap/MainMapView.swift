@@ -59,10 +59,6 @@ struct MainMapView: View {
         .edgesIgnoringSafeArea([.all])
         
         VStack {
-          NavigationLink("test") {
-            EmptyView()
-          }
-          
           LocationCategoryListView(selectedCategory: .constant(.all))
           
           VStack {
