@@ -129,7 +129,6 @@ struct ChangeProfileView: View {
     .background(Color.black800)
     .ignoresSafeArea(.keyboard)
     .navigationBarBackButtonHidden(true)
-    .navigationTitle("프로필 수정하기")
     .toolbar {
       ToolbarItem(placement: .navigationBarLeading) {
         Button {
@@ -137,6 +136,11 @@ struct ChangeProfileView: View {
         } label: {
           Image("leftArrow")
         }
+      }
+      ToolbarItem(placement: .principal) {
+        Text("프로필 수정하기")
+          .font(.subtitle2)
+          .foregroundColor(.white200)
       }
       ToolbarItem(placement: .navigationBarTrailing) {
         Button {
