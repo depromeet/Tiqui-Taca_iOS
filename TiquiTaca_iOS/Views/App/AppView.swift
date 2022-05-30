@@ -7,6 +7,7 @@
 
 import SwiftUI
 import ComposableArchitecture
+import TTDesignSystemModule
 
 struct AppView: View {
   typealias State = AppState
@@ -17,9 +18,11 @@ struct AppView: View {
   
   struct ViewState: Equatable {
     let route: State.Route
+    let isLoading: Bool
     
     init(state: State) {
       route = state.route
+      isLoading = state.isLoading
     }
   }
   
@@ -30,18 +33,27 @@ struct AppView: View {
   
   var body: some View {
     Group {
-      switch viewStore.route {
-      case .splash:
-        SplashView()
-      case .onboarding:
-        IfLetStore(
-          onboardingStore,
-          then: OnboardingView.init
-        )
-      case .mainTab:
-        IfLetStore(
-          mainTabStore,
-          then: MainTabView.init
+      ZStack {
+        switch viewStore.route {
+        case .splash:
+          SplashView()
+        case .onboarding:
+          IfLetStore(
+            onboardingStore,
+            then: OnboardingView.init
+          )
+        case .mainTab:
+          IfLetStore(
+            mainTabStore,
+            then: MainTabView.init
+          )
+        }
+        TTIndicator(
+          style: .medium,
+          isAnimating: viewStore.binding(
+            get: \.isLoading,
+            send: Action.setLoading
+          )
         )
       }
     }

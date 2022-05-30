@@ -17,6 +17,7 @@ struct AppState: Equatable {
   var route: Route = .splash
   var onboardingState: OnboardingState?
   var mainTabState: MainTabState?
+  var isLoading: Bool = false
 }
 
 enum AppAction: Equatable {
@@ -26,6 +27,7 @@ enum AppAction: Equatable {
   case signOut
   case onboardingAction(OnboardingAction)
   case mainTabAction(MainTabAction)
+  case setLoading(Bool)
 }
 
 struct AppEnvironment {
@@ -77,6 +79,10 @@ let appCore = Reducer<
     state.route = selectedRoute
     return .none
     
+  case let .setLoading(isLoading):
+    state.isLoading = isLoading
+    return .none
+    
   case .onAppear:
     if environment.appService.authService.isLoggedIn {
       state.mainTabState = .init()
@@ -93,10 +99,19 @@ let appCore = Reducer<
     return Effect(value: .setRoute(.mainTab))
     
   case .signOut: // 로그아웃 (하위 reducer의 로그아웃 관련 이벤트)
-    environment.appService.authService.signOut()
     state.mainTabState = nil
     state.onboardingState = .init()
-    return Effect(value: .setRoute(.onboarding))
+    
+    return .concatenate([
+      Effect(value: .setLoading(true)),
+      environment.appService.authService
+        .signOut()
+        .receive(on: environment.mainQueue)
+        .catchToEffect()
+        .fireAndForget(),
+      Effect(value: .setLoading(false)),
+      Effect(value: .setRoute(.onboarding))
+    ])
     
   case .onboardingAction( // 로그인
     .signInAction(
