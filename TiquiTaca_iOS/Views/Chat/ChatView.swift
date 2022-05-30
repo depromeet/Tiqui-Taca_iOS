@@ -19,8 +19,17 @@ struct ChatView: View {
   
   var body: some View {
     WithViewStore(self.store) { viewStore in
-      ZStack {
-        VStack(spacing: 0) {
+      VStack(spacing: 0) {
+        VStack(spacing: .spacingM) {
+          HStack(spacing: 0) {
+            Text("채팅방")
+              .font(.heading1)
+              .foregroundColor(.white)
+              .padding(.horizontal, .spacingXL)
+              .hLeading()
+          }
+          .padding(.top, .spacingXL)
+          
           CurrentChatView(roomInfo: viewStore.state.enteredRoom)
           
           TabKindView(
@@ -29,17 +38,18 @@ struct ChatView: View {
               send: ChatAction.tabChange),
             currentTime: "13:15 기준"// viewStore.state.lastLoadTime
           )
-          
-          if viewStore.state.currentTab == .like {
-            LikeRoomListView(store: store)
-          } else {
-            PopularRoomListView(store: store)
-          }
         }
-        .listStyle(.plain)
-        .navigationTitle("채팅방")
-        .onAppear(perform: { viewStore.send(.onAppear) })
+        .background(Color.black800)
+        
+        if viewStore.state.currentTab == .like {
+          LikeRoomListView(store: store)
+        } else {
+          PopularRoomListView(store: store)
+        }
       }
+      .listStyle(.plain)
+      .navigationTitle("채팅방")
+      .onAppear(perform: { viewStore.send(.onAppear) })
     }
   }
 }
@@ -110,15 +120,11 @@ private struct CurrentChatView: View {
           .hLeading()
         }
       }
-      .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
       .background(Color.black600)
       .cornerRadius(16)
       .padding([.leading, .trailing], 24)
-      .padding(.top, 16)
-      .padding(.bottom, 18)
-      .frame(height: 116 + 32)
+      .frame(height: 116)
     }
-    .background(Color.black800)
   }
 }
 
@@ -150,7 +156,6 @@ private struct TabKindView: View {
         .hTrailing()
     }
     .frame(height: 40)
-    .background(Color.black800)
   }
 }
 
