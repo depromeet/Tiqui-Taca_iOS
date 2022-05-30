@@ -68,10 +68,10 @@
 		F2E38EF528423721007C96F7 /* PopularChatRoomListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38EF428423721007C96F7 /* PopularChatRoomListItem.swift */; };
 		F2E38EF828424BEE007C96F7 /* ImageAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F2E38EF728424BEE007C96F7 /* ImageAssets.xcassets */; };
 		F2E38EFB2843D43D007C96F7 /* TabViewType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38EFA2843D43D007C96F7 /* TabViewType.swift */; };
+		F2E38EFF28451CE5007C96F7 /* RoomLikeEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38EFE28451CE5007C96F7 /* RoomLikeEntity.swift */; };
 		F2F1ED6F2817ABE900AC4FDD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F2F1ED6E2817ABE900AC4FDD /* GoogleService-Info.plist */; };
 		F2F1ED7228182D1400AC4FDD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED7128182D1400AC4FDD /* SceneDelegate.swift */; };
 		F2F1ED7D281C3D6900AC4FDD /* VerificationEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED7C281C3D6900AC4FDD /* VerificationEntity.swift */; };
-		F2F1ED7F281C40BB00AC4FDD /* UserEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED7E281C40BB00AC4FDD /* UserEntity.swift */; };
 		F2F1ED81281C533000AC4FDD /* IssueCodeEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED80281C533000AC4FDD /* IssueCodeEntity.swift */; };
 		F2F1ED83281C6B2F00AC4FDD /* OTPFieldView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED82281C6B2F00AC4FDD /* OTPFieldView.swift */; };
 		F2F1ED87281E612700AC4FDD /* SignInView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED86281E612700AC4FDD /* SignInView.swift */; };
@@ -207,10 +207,10 @@
 		F2E38EF428423721007C96F7 /* PopularChatRoomListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularChatRoomListItem.swift; sourceTree = "<group>"; };
 		F2E38EF728424BEE007C96F7 /* ImageAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ImageAssets.xcassets; sourceTree = "<group>"; };
 		F2E38EFA2843D43D007C96F7 /* TabViewType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewType.swift; sourceTree = "<group>"; };
+		F2E38EFE28451CE5007C96F7 /* RoomLikeEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomLikeEntity.swift; sourceTree = "<group>"; };
 		F2F1ED6E2817ABE900AC4FDD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F2F1ED7128182D1400AC4FDD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		F2F1ED7C281C3D6900AC4FDD /* VerificationEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationEntity.swift; sourceTree = "<group>"; };
-		F2F1ED7E281C40BB00AC4FDD /* UserEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserEntity.swift; sourceTree = "<group>"; };
 		F2F1ED80281C533000AC4FDD /* IssueCodeEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueCodeEntity.swift; sourceTree = "<group>"; };
 		F2F1ED82281C6B2F00AC4FDD /* OTPFieldView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPFieldView.swift; sourceTree = "<group>"; };
 		F2F1ED86281E612700AC4FDD /* SignInView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignInView.swift; sourceTree = "<group>"; };
@@ -522,7 +522,6 @@
 			children = (
 				F25C79BB282D91BC009C60EE /* UserCreationEntity.swift */,
 				F2F1ED7C281C3D6900AC4FDD /* VerificationEntity.swift */,
-				F2F1ED7E281C40BB00AC4FDD /* UserEntity.swift */,
 				F2F1ED80281C533000AC4FDD /* IssueCodeEntity.swift */,
 				F9B45A1C282BDA5700948586 /* ProfileEntity.swift */,
 				F9B45A1E282BE9DB00948586 /* AppAlarmEntity.swift */,
@@ -532,6 +531,7 @@
 				F96C0DE7282EAFBE004BF1C7 /* ChangeProfileEntity.swift */,
 				869FC8DB282A561F00B14345 /* RoomInfoEntity.swift */,
 				86B296152837862500A981FC /* ChatLogEntity.swift */,
+				F2E38EFE28451CE5007C96F7 /* RoomLikeEntity.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -980,6 +980,7 @@
 				8601F659281308CB0085F692 /* View+Extensions.swift in Sources */,
 				F9669F6428251E59004624F8 /* MyBlockHistoryView.swift in Sources */,
 				F9B45A1D282BDA5700948586 /* ProfileEntity.swift in Sources */,
+				F2E38EFF28451CE5007C96F7 /* RoomLikeEntity.swift in Sources */,
 				F96CDE752824EF8C002DEB90 /* MyInfoView.swift in Sources */,
 				F2F1ED9B281EDACE00AC4FDD /* OnboardingPageView.swift in Sources */,
 				F981FA152825FB000000A531 /* NoticeCore.swift in Sources */,
@@ -1000,7 +1001,6 @@
 				F25C79B8282CB5F2009C60EE /* CheckNicknameEntity.swift in Sources */,
 				F21276462811C6D500FB568D /* TOSFieldListViewCore.swift in Sources */,
 				F2FA365C2808897C00A24789 /* R.generated.swift in Sources */,
-				F2F1ED7F281C40BB00AC4FDD /* UserEntity.swift in Sources */,
 				F981FA1C282600C40000A531 /* MyTermsOfServiceCore.swift in Sources */,
 				8601F65C281309B10085F692 /* SplashView.swift in Sources */,
 				F25C79BA282D7524009C60EE /* String+Extensions.swift in Sources */,
