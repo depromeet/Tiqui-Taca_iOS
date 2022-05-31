@@ -16,7 +16,6 @@ enum TTBottomSheet {
   }
   
   static let Options: [BottomSheet.Options] = [
-    .allowContentDrag,
     .swipeToDismiss,
     .tapToDismiss,
     .dragIndicatorColor(.white),
