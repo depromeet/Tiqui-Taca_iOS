@@ -9,8 +9,21 @@ import SwiftUI
 import BottomSheetSwiftUI
 
 enum TTBottomSheet {
+  /// Types: top, middle, hidden
   enum Position: CGFloat, CaseIterable {
     case top = 0.9
+    case middle = 0.5
+    case hidden = 0
+  }
+  
+  /// Types: top, hidden
+  enum TopPosition: CGFloat, CaseIterable {
+    case top = 0.9
+    case hidden = 0
+  }
+  
+  /// Types: middle, hidden
+  enum MiddlePosition: CGFloat, CaseIterable {
     case middle = 0.5
     case hidden = 0
   }
