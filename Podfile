@@ -7,6 +7,9 @@ inhibit_all_warnings!
 target 'TiquiTaca_iOS' do
   use_frameworks!
   
+  # UI
+  pod 'BottomSheetSwiftUI', '= 2.7.0'
+  
   # Firebase
   pod 'Firebase/Analytics', '= 8.15.0'
   pod 'Firebase/Messaging', '= 8.15.0'
