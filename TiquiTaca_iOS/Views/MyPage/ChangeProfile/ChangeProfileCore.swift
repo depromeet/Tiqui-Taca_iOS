@@ -10,7 +10,7 @@ import ComposableArchitecture
 struct ChangeProfileState: Equatable {
   var nickname: String = ""
   var profileImage: ProfileImage = .init()
-  var isSheetPresented: Bool = false
+  var bottomSheetPosition: TTBottomSheet.MiddlePosition = .hidden
   var nicknameError: NicknameError = .none
   var isAvailableCompletion: Bool = false
   
@@ -23,7 +23,7 @@ enum ChangeProfileAction: Equatable {
   case doneButtonTapped
   case nicknameChanged(String)
   case setProfileImage(ProfileImage)
-  case setBottomSheet(Bool)
+  case setBottomSheetPosition(TTBottomSheet.MiddlePosition)
   case presentPopup
   case dismissPopup
   case validNicknameResponse(Result<ValidNicknameEntity.Response?, HTTPError>)
@@ -122,8 +122,8 @@ let changeProfileReducer = Reducer<
     state.profileImage = profileImage
     return .none
     
-  case let .setBottomSheet(isPresent):
-    state.isSheetPresented = isPresent
+  case let .setBottomSheetPosition(position):
+    state.bottomSheetPosition = position
     return .none
     
   case .dismissPopup:
