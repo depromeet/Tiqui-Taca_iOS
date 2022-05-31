@@ -417,6 +417,7 @@
 		F2B268B8283A1A420011EA43 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				F2E38F00284644C8007C96F7 /* TTBottomSheet.swift */,
 				F2DEC4E3282F3AF20018F545 /* ChatRoomAnnotationInfo.swift */,
 				F2B268B9283A1A750011EA43 /* LocationCategory.swift */,
 				F2B268C9283BE1200011EA43 /* OTPField.swift */,
@@ -501,7 +502,6 @@
 				F96C0DE7282EAFBE004BF1C7 /* ChangeProfileEntity.swift */,
 				869FC8DB282A561F00B14345 /* RoomInfoEntity.swift */,
 				86B296152837862500A981FC /* ChatLogEntity.swift */,
-				F2E38F00284644C8007C96F7 /* TTBottomSheet.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
