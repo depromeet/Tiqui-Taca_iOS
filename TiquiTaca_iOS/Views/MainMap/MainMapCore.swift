@@ -10,7 +10,7 @@ import ComposableArchitecture
 import ComposableCoreLocation
 
 struct MainMapState: Equatable {
-  var isPresentBottomSheet: Bool = false
+  var bottomSheetPosition: TTBottomSheet.Position = .hidden
   var chatRoomAnnotationInfos: [ChatRoomAnnotationInfo] = []
   var selectedAnnotationId: String?
   var region: MKCoordinateRegion = .init()
@@ -20,7 +20,7 @@ struct MainMapState: Equatable {
 
 enum MainMapAction: Equatable {
   case onAppear
-  case setPresentBottomSheet(Bool)
+  case setBottomSheetPosition(TTBottomSheet.Position)
   case setSelectedAnnotationId(String?)
   case updateRegion(MKCoordinateRegion)
   case locationManager(LocationManager.Action)
@@ -87,8 +87,8 @@ let mainMapCore = Reducer<
       return .none
     }
     
-  case let .setPresentBottomSheet(isPresent):
-    state.isPresentBottomSheet = isPresent
+  case let .setBottomSheetPosition(position):
+    state.bottomSheetPosition = position
     return .none
     
   case let .setSelectedAnnotationId(id):

@@ -69,6 +69,7 @@
 		F2E38EF828424BEE007C96F7 /* ImageAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F2E38EF728424BEE007C96F7 /* ImageAssets.xcassets */; };
 		F2E38EFB2843D43D007C96F7 /* TabViewType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38EFA2843D43D007C96F7 /* TabViewType.swift */; };
 		F2E38EFF28451CE5007C96F7 /* RoomLikeEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38EFE28451CE5007C96F7 /* RoomLikeEntity.swift */; };
+		F2E38F01284644C8007C96F7 /* TTBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38F00284644C8007C96F7 /* TTBottomSheet.swift */; };
 		F2E38F05284685D4007C96F7 /* NicknameError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38F04284685D4007C96F7 /* NicknameError.swift */; };
 		F2F1ED6F2817ABE900AC4FDD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F2F1ED6E2817ABE900AC4FDD /* GoogleService-Info.plist */; };
 		F2F1ED7228182D1400AC4FDD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED7128182D1400AC4FDD /* SceneDelegate.swift */; };
@@ -209,6 +210,7 @@
 		F2E38EF728424BEE007C96F7 /* ImageAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ImageAssets.xcassets; sourceTree = "<group>"; };
 		F2E38EFA2843D43D007C96F7 /* TabViewType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewType.swift; sourceTree = "<group>"; };
 		F2E38EFE28451CE5007C96F7 /* RoomLikeEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomLikeEntity.swift; sourceTree = "<group>"; };
+		F2E38F00284644C8007C96F7 /* TTBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTBottomSheet.swift; sourceTree = "<group>"; };
 		F2E38F04284685D4007C96F7 /* NicknameError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameError.swift; sourceTree = "<group>"; };
 		F2F1ED6E2817ABE900AC4FDD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F2F1ED7128182D1400AC4FDD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -534,6 +536,7 @@
 				F96C0DE7282EAFBE004BF1C7 /* ChangeProfileEntity.swift */,
 				869FC8DB282A561F00B14345 /* RoomInfoEntity.swift */,
 				86B296152837862500A981FC /* ChatLogEntity.swift */,
+				F2E38F00284644C8007C96F7 /* TTBottomSheet.swift */,
 				F2E38EFE28451CE5007C96F7 /* RoomLikeEntity.swift */,
 			);
 			path = Entities;
@@ -1028,6 +1031,7 @@
 				F2E38EE5283E825A007C96F7 /* MyPageItem.swift in Sources */,
 				F2F1EDAF2829335A00AC4FDD /* AppView.swift in Sources */,
 				86B296162837862500A981FC /* ChatLogEntity.swift in Sources */,
+				F2E38F01284644C8007C96F7 /* TTBottomSheet.swift in Sources */,
 				F993ADC92816C79C00718E9F /* OTPFieldCore.swift in Sources */,
 				F2E38EE7283FDB0C007C96F7 /* MyPageItemInfo.swift in Sources */,
 				F2F1ED83281C6B2F00AC4FDD /* OTPFieldView.swift in Sources */,
