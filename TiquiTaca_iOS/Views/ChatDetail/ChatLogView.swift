@@ -70,13 +70,17 @@ struct ChatLogView: View {
           Button {
             viewStore.send(.roomAlamOff)
           } label: {
-            Image(viewStore.roomAlarm ? "chat_alarmOn" : "chat_alarmOff")
+            Image(viewStore.roomAlarm ? "alarmOn" : "alarmOff")
+              .resizable()
+              .frame(width: 24, height: 24)
           }
           
           Button {
             viewStore.send(.chatMenuClicked)
           } label: {
-            Image("chat_menu")
+            Image("menu")
+              .resizable()
+              .frame(width: 24, height:24)
           }
         }
         .padding([.leading, .trailing], 10)

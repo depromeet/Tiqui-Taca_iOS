@@ -37,9 +37,9 @@ struct QuestionListView: View {
       
       if viewStore.questionList.isEmpty {
         VStack(alignment: .center) {
-          Image("answer_g")
+          Image("bxNoAnswer")
             .resizable()
-            .frame(width: 108, height: 108)
+            .frame(width: 160, height: 160)
             .padding(.spacingM)
           Text("아직 사용자들이 남긴 질문이 없어요!\n처음으로 질문을 남겨보세요!")
             .font(.body2)

@@ -71,7 +71,9 @@ struct QuestionDetailView: View {
                 .foregroundColor(.white800)
             }
             
-            Image("question_comment")
+            Image("comments")
+              .resizable()
+              .frame(width: 20, height: 20)
             Text("\(viewStore.question?.commentsCount ?? 0)")
               .font(.body7)
               .foregroundColor(.white800)
@@ -102,9 +104,9 @@ struct QuestionDetailView: View {
         .listStyle(.plain)
       } else {
         VStack(alignment: .center) {
-          Image("comment_g")
+          Image("bxPancil")
             .resizable()
-            .frame(width: 108, height: 108)
+            .frame(width: 160, height: 160)
             .padding(.spacingM)
           Text("아직 사용자들이 남긴 답변이 없어요!\n처음으로 질문에 답변해보세요!")
             .font(.body2)

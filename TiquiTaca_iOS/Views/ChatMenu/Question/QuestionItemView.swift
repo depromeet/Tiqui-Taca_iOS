@@ -60,7 +60,9 @@ struct QuestionItemView: View {
         }
         
         Spacer()
-        Image("right_arrow")
+        Image("arrowForward")
+          .resizable()
+          .frame(width: 24, height: 24)
       }
       
       VStack {
@@ -77,7 +79,9 @@ struct QuestionItemView: View {
               .foregroundColor(.white800)
           }
           
-          Image("question_comment")
+          Image("comments")
+            .resizable()
+            .frame(width: 20, height: 20)
           Text("\(viewStore.commentsCount)")
             .font(.body7)
             .foregroundColor(.white800)

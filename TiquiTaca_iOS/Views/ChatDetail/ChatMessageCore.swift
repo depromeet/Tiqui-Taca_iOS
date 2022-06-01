@@ -12,7 +12,7 @@ struct ChatMessageState: Equatable {
   var profileImage: String = "defaultProfile"
   var inside: Bool = true
   var type: Int = 1
-  var receivedMessage: String = "공백포함 22자까지 텍스트확장입니다다다공백포함 22자까지 텍스트확장입니다다다공백포함 22자까지 텍스트확장입니다다다"
+  var receivedMessage: String = "공백포함 22자까지"
   var createdAt: Date?
   
   var sentMessage: String = "보낸 메시지"

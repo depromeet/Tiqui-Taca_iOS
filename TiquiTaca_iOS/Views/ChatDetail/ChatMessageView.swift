@@ -46,8 +46,10 @@ struct ChatMessageView: View {
   }
   
   var body: some View {
-    receivedBubble
-    sentBubble
+    VStack {
+      receivedBubble
+      sentBubble
+    }
   }
 }
 
@@ -86,10 +88,12 @@ extension ChatMessageView {
         Image(viewStore.profileImage)
           .resizable()
           .frame(width: 30, height: 30)
+          .padding(3)
       }
       .frame(width: 34, height: 35)
       .overlay(
-        Image("insideFlag")
+        Image("chatflag")
+          .resizable()
           .frame(width: 12, height: 12)
           .alignmentGuide(.bottom) { $0[.bottom] }
           .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)

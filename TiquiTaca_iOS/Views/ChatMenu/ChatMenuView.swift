@@ -44,7 +44,7 @@ struct ChatMenuView: View {
       VStack(alignment: .leading) {
         if viewStore.questionList.isEmpty {
           VStack(alignment: .center) {
-            Image("answer_g")
+            Image("bxNoAnswer")
               .resizable()
               .frame(width: 108, height: 108)
               .padding(16)
