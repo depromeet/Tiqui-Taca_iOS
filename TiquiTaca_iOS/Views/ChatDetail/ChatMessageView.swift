@@ -91,7 +91,7 @@ extension ChatMessageView {
   var receivedBubble: some View {
     HStack(alignment: .top) {
       ZStack(alignment: .center) {
-        Image("insideFlag_b")
+        Image("chatflagBackground")
           .resizable()
           .frame(width: 32, height: 32)
           .opacity(viewStore.inside ? 1 : 0)

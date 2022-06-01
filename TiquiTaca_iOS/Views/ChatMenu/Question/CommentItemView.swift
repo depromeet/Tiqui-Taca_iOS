@@ -49,7 +49,7 @@ struct CommentItemView: View {
         Button {
           viewStore.send(.moreClickAction)
         } label: {
-          Image("question_more")
+          Image("moreVertical")
         }
       }
       

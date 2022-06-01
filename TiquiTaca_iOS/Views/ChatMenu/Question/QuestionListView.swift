@@ -120,7 +120,7 @@ struct QuestionListView: View {
               .font(.cap2)
               .foregroundColor(.white)
             
-            Image("down_arrow")
+            Image("arrowDownWhite")
           }
         }
         .padding([.top, .bottom], 4)

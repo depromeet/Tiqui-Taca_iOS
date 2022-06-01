@@ -53,7 +53,7 @@ struct QuestionDetailView: View {
           Button {
             viewStore.send(.moreClickAction)
           } label: {
-            Image("question_more")
+            Image("moreVertical")
           }
         }
         
@@ -65,7 +65,7 @@ struct QuestionDetailView: View {
             Button {
               viewStore.send(.likeClickAction)
             } label: {
-              Image(viewStore.question?.ilike ?? false ? "reply_good_on" : "reply_good_off")
+              Image(viewStore.question?.ilike ?? false ? "replyGoodOn" : "replyGoodOff")
               Text("\(viewStore.question?.likesCount ?? 0)")
                 .font(.body7)
                 .foregroundColor(.white800)

@@ -73,7 +73,7 @@ struct QuestionItemView: View {
           Button {
             viewStore.send(.likeClickAction)
           } label: {
-            Image(viewStore.ilike ? "reply_good_on" : "reply_good_off")
+            Image(viewStore.ilike ? "replyGoodOn" : "replyGoodOff")
             Text("\(viewStore.likesCount)")
               .font(.body7)
               .foregroundColor(.white800)
