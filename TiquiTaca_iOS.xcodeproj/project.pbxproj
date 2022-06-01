@@ -66,6 +66,7 @@
 		F2E38EF828424BEE007C96F7 /* ImageAssets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F2E38EF728424BEE007C96F7 /* ImageAssets.xcassets */; };
 		F2E38EFB2843D43D007C96F7 /* TabViewType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38EFA2843D43D007C96F7 /* TabViewType.swift */; };
 		F2E38F01284644C8007C96F7 /* TTBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38F00284644C8007C96F7 /* TTBottomSheet.swift */; };
+		F2E38F0728470FA6007C96F7 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F2E38F0628470FA6007C96F7 /* Settings.bundle */; };
 		F2F1ED6F2817ABE900AC4FDD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F2F1ED6E2817ABE900AC4FDD /* GoogleService-Info.plist */; };
 		F2F1ED7228182D1400AC4FDD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED7128182D1400AC4FDD /* SceneDelegate.swift */; };
 		F2F1ED7D281C3D6900AC4FDD /* VerificationEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED7C281C3D6900AC4FDD /* VerificationEntity.swift */; };
@@ -203,6 +204,7 @@
 		F2E38EF728424BEE007C96F7 /* ImageAssets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = ImageAssets.xcassets; sourceTree = "<group>"; };
 		F2E38EFA2843D43D007C96F7 /* TabViewType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewType.swift; sourceTree = "<group>"; };
 		F2E38F00284644C8007C96F7 /* TTBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTBottomSheet.swift; sourceTree = "<group>"; };
+		F2E38F0628470FA6007C96F7 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		F2F1ED6E2817ABE900AC4FDD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F2F1ED7128182D1400AC4FDD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		F2F1ED7C281C3D6900AC4FDD /* VerificationEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationEntity.swift; sourceTree = "<group>"; };
@@ -433,6 +435,7 @@
 		F2C02C6027F8824A004C4235 = {
 			isa = PBXGroup;
 			children = (
+				F2E38F0628470FA6007C96F7 /* Settings.bundle */,
 				F2C02C6B27F8824A004C4235 /* TiquiTaca_iOS */,
 				F2C02C7C27F8824C004C4235 /* TiquiTaca_iOSTests */,
 				F2C02C6A27F8824A004C4235 /* Products */,
@@ -793,6 +796,7 @@
 			files = (
 				F24B1EEF28086CA0003D4E1D /* .swiftlint.yml in Resources */,
 				F2C02C7427F8824C004C4235 /* Preview Assets.xcassets in Resources */,
+				F2E38F0728470FA6007C96F7 /* Settings.bundle in Resources */,
 				F981FA2B2826A32A0000A531 /* Pretendard-Bold.otf in Resources */,
 				F981FA2C2826A32A0000A531 /* Pretendard-SemiBold.otf in Resources */,
 				F2F1ED6F2817ABE900AC4FDD /* GoogleService-Info.plist in Resources */,
