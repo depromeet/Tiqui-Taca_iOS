@@ -50,7 +50,10 @@ let chatReducer = Reducer<
 > { state, action, environment in
 	switch action {
 	case .onAppear:
+    guard state.isFirstLoad else { return .none }
+    
 		state.lastLoadTime = Date.current(type: .HHmm)
+    state.isFirstLoad = true
 		return .merge(
 			Effect(value: .fetchEnteredRoomInfo)
 				.eraseToEffect(),
@@ -107,7 +110,13 @@ let chatReducer = Reducer<
 		return .none
 	case .refresh:
 		state.lastLoadTime = Date.current(type: .HHmm)
-		return Effect(value: .onAppear)
-			.eraseToEffect()
+    return .merge(
+      Effect(value: .fetchEnteredRoomInfo)
+        .eraseToEffect(),
+      Effect(value: .fetchLikeRoomList)
+        .eraseToEffect(),
+      Effect(value: .fetchPopularRoomList)
+        .eraseToEffect()
+    )
 	}
 }

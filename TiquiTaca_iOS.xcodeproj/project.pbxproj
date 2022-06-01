@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0911DA5B28451FAA00FCC470 /* SocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0911DA5A28451FAA00FCC470 /* SocketService.swift */; };
+		0963D1352846F15A005E7B70 /* ChatDetailCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0963D1342846F15A005E7B70 /* ChatDetailCore.swift */; };
 		3F0B780950BED104CA13722B /* Pods_TiquiTaca_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BE9660275CF15262D33E074 /* Pods_TiquiTaca_iOS.framework */; };
 		732798BD47A40FA84BC24EEF /* Pods_TiquiTaca_iOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90ED3E866555D3D7D6ABC769 /* Pods_TiquiTaca_iOSTests.framework */; };
 		8601F659281308CB0085F692 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8601F658281308CB0085F692 /* View+Extensions.swift */; };
@@ -141,6 +142,7 @@
 /* Begin PBXFileReference section */
 		05987FBDD23F2EC17BC9A0EF /* Pods-TiquiTaca_iOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TiquiTaca_iOSTests.debug.xcconfig"; path = "Target Support Files/Pods-TiquiTaca_iOSTests/Pods-TiquiTaca_iOSTests.debug.xcconfig"; sourceTree = "<group>"; };
 		0911DA5A28451FAA00FCC470 /* SocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketService.swift; sourceTree = "<group>"; };
+		0963D1342846F15A005E7B70 /* ChatDetailCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDetailCore.swift; sourceTree = "<group>"; };
 		6BE9660275CF15262D33E074 /* Pods_TiquiTaca_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TiquiTaca_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8601F658281308CB0085F692 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		8601F65B281309B10085F692 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
@@ -313,6 +315,7 @@
 			children = (
 				86B29611283781CB00A981FC /* ChatDetailView.swift */,
 				86B296132837859C00A981FC /* ChatLogView.swift */,
+				0963D1342846F15A005E7B70 /* ChatDetailCore.swift */,
 			);
 			path = ChatDetail;
 			sourceTree = "<group>";
@@ -927,6 +930,7 @@
 				F96C0DE6282EA83D004BF1C7 /* ValidNicknameEntity.swift in Sources */,
 				F2FDA21A280BBF8300B2ED75 /* AppDelegate.swift in Sources */,
 				F981FA23282653A00000A531 /* BlockListCore.swift in Sources */,
+				0963D1352846F15A005E7B70 /* ChatDetailCore.swift in Sources */,
 				F2F1ED7D281C3D6900AC4FDD /* VerificationEntity.swift in Sources */,
 				86E494892814FDAE00551CCD /* MainMapView.swift in Sources */,
 				86E4948B2814FDBC00551CCD /* MainMapCore.swift in Sources */,
