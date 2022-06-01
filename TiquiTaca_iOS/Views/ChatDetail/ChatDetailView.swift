@@ -9,7 +9,20 @@ import SwiftUI
 
 struct ChatDetailView: View {
 	var body: some View {
-		ChatLogView(chatLogList: [])
+    VStack {
+      ChatLogView(
+        store: .init(
+          initialState: ChatLogState(chatLogList: []),
+          reducer: chatLogReducer,
+          environment: ChatLogEnvironment(
+            appService: .init(),
+            mainQueue: .main
+          )
+        )
+      )
+      
+      //키보드
+    }
 	}
 }
 
