@@ -17,16 +17,16 @@ struct ChatMenuView: View {
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
   
   struct ViewState: Equatable {
-    let roomName: String
-    let participantCount: Int
-    let participantList: [UserEntity.Response]
+    let roomInfo: RoomInfoEntity.Response?
+    let roomUserCount: Int
+    let roomUserList: [UserEntity.Response]
     let questionCount: Int
     let questionList: [QuestionEntity.Response]
     
     init(state: State) {
-      roomName = state.roomName
-      participantCount = state.participantCount
-      participantList = state.participantList
+      roomInfo = state.roomInfo
+      roomUserCount = state.roomUserCount
+      roomUserList = state.roomUserList
       questionCount = state.questionCount
       questionList = state.questionList
     }
@@ -88,12 +88,30 @@ struct ChatMenuView: View {
             }
           }
         }
-        Button {
-          viewStore.send(.clickQuestionAll)
-        } label: {
-          Text("질문 전체보기")
-        }
-        .buttonStyle(TTButtonLargeBlackStyle())
+        
+        NavigationLink(
+          destination: {
+            QuestionListView(
+              store: .init(
+                initialState: QuestionListState(),
+                reducer: questionListReducer,
+                environment:
+                  QuestionListEnvironment(
+                    appService: AppService(),
+                    mainQueue: .main
+                  )
+              )
+            )
+          }, label: {
+            Button {
+//              viewStore.send(.clickQuestionAll)
+            } label: {
+              Text("질문 전체보기")
+                .foregroundColor(.white)
+            }
+            .buttonStyle(TTButtonLargeBlackStyle())
+          }
+        )
       }
       .padding(15)
       VStack {
@@ -106,13 +124,13 @@ struct ChatMenuView: View {
           .font(.heading3)
           .foregroundColor(.black800)
         
-        Text("총 \(viewStore.participantCount)명의 참여자")
+        Text("총 \(viewStore.roomUserCount)명의 참여자")
           .font(.body7)
           .foregroundColor(.black100)
           List {
-            ForEach(viewStore.participantList) { participant in
+            ForEach(viewStore.roomUserList) { participant in
               HStack {
-                ForEach(0..<4) { row in
+                ForEach(0..<4) { _ in
                   VStack(alignment: .center) {
                     Image(participant.profile.imageName)
                       .resizable()
@@ -134,6 +152,11 @@ struct ChatMenuView: View {
     }
     .background(Color.white)
     .ignoresSafeArea()
+    .onAppear {
+      viewStore.send(.getRoomInfo)
+      viewStore.send(.getRoomUserListInfo)
+      viewStore.send(.getQuestionList)
+    }
   }
   
   var topNavigationView: some View {
@@ -145,9 +168,9 @@ struct ChatMenuView: View {
           Image("chat_backButton")
         }
         
-        Text(viewStore.roomName)
+        Text(viewStore.roomInfo?.name ?? "")
           .foregroundColor(Color.white)
-        Text("+ \(viewStore.participantCount)")
+        Text("+ \(viewStore.roomUserCount)")
           .foregroundColor(Color.white)
         
         Spacer()

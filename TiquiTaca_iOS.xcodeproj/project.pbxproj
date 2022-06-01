@@ -89,6 +89,8 @@
 		F2FDA216280BBDAC00B2ED75 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F2FDA215280BBDAC00B2ED75 /* LaunchScreen.storyboard */; };
 		F2FDA21A280BBF8300B2ED75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FDA219280BBF8300B2ED75 /* AppDelegate.swift */; };
 		F2FDA228280C0EE300B2ED75 /* TermsOfServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FDA227280C0EE300B2ED75 /* TermsOfServiceView.swift */; };
+		F90F8D502847925D0011EDAC /* QuestionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F90F8D4F2847925D0011EDAC /* QuestionService.swift */; };
+		F90F8D522847BAED0011EDAC /* RoomUserInfoEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F90F8D512847BAED0011EDAC /* RoomUserInfoEntity.swift */; };
 		F9322E6D284231BD00EB956E /* ChatLogCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9322E6C284231BD00EB956E /* ChatLogCore.swift */; };
 		F9322E70284242CF00EB956E /* ChatMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9322E6F284242CF00EB956E /* ChatMenuView.swift */; };
 		F9322E72284242DA00EB956E /* ChatMenuCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9322E71284242DA00EB956E /* ChatMenuCore.swift */; };
@@ -246,6 +248,8 @@
 		F2FDA219280BBF8300B2ED75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F2FDA227280C0EE300B2ED75 /* TermsOfServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceView.swift; sourceTree = "<group>"; };
 		F5D04B5F76393475F2238F76 /* Pods-TiquiTaca_iOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TiquiTaca_iOSTests.release.xcconfig"; path = "Target Support Files/Pods-TiquiTaca_iOSTests/Pods-TiquiTaca_iOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		F90F8D4F2847925D0011EDAC /* QuestionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionService.swift; sourceTree = "<group>"; };
+		F90F8D512847BAED0011EDAC /* RoomUserInfoEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomUserInfoEntity.swift; sourceTree = "<group>"; };
 		F9322E6C284231BD00EB956E /* ChatLogCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogCore.swift; sourceTree = "<group>"; };
 		F9322E6F284242CF00EB956E /* ChatMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMenuView.swift; sourceTree = "<group>"; };
 		F9322E71284242DA00EB956E /* ChatMenuCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMenuCore.swift; sourceTree = "<group>"; };
@@ -545,6 +549,7 @@
 				86B296152837862500A981FC /* ChatLogEntity.swift */,
 				F9322E7328424A9600EB956E /* QuestionEntity.swift */,
 				F9322E7528424DA900EB956E /* CommentEntity.swift */,
+				F90F8D512847BAED0011EDAC /* RoomUserInfoEntity.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -626,6 +631,7 @@
 				F9B90C9B28117DDF003FFEEB /* AuthService.swift */,
 				F25C79C5282E96A2009C60EE /* UserService.swift */,
 				86032A25282C22A50061D3F9 /* RoomService.swift */,
+				F90F8D4F2847925D0011EDAC /* QuestionService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1093,10 +1099,12 @@
 				F2F1ED96281E868300AC4FDD /* VerificationNumberCheckView.swift in Sources */,
 				86783243282651A90034EACC /* Color+Extensions.swift in Sources */,
 				86032A26282C22A50061D3F9 /* RoomService.swift in Sources */,
+				F90F8D502847925D0011EDAC /* QuestionService.swift in Sources */,
 				F981FA1F282604AA0000A531 /* CsCenterView.swift in Sources */,
 				F2F1ED89281E612E00AC4FDD /* SignUpView.swift in Sources */,
 				F9322E72284242DA00EB956E /* ChatMenuCore.swift in Sources */,
 				F9B90C9C28117DDF003FFEEB /* AuthService.swift in Sources */,
+				F90F8D522847BAED0011EDAC /* RoomUserInfoEntity.swift in Sources */,
 				F9DB0B3728294F66002F6AD8 /* ChangeProfileCore.swift in Sources */,
 				F9322E7628424DA900EB956E /* CommentEntity.swift in Sources */,
 				F2F1ED87281E612700AC4FDD /* SignInView.swift in Sources */,

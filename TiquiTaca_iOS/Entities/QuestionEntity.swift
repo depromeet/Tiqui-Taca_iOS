@@ -8,6 +8,10 @@
 import TTNetworkModule
 
 enum QuestionEntity {
+  struct Request: Codable, JSONConvertible {
+    let filter: String
+  }
+  
   struct Response: Codable, Equatable, Identifiable {
     let id: String
     let user: UserEntity.Response?

@@ -14,12 +14,13 @@ struct QuestionListState: Equatable {
   var enterQuestionDetail: Bool = false
 }
 
-enum QuestionSortType {
-  //NOTANSWERED, OLDORDER, NEWORDER, RECENT(서버)
+enum QuestionSortType: String {
+  //NOTANSWERED, OLDORDER, NEWORDER, RECENT(최신2개)
   //모든 답변, 미답변, 오래된 순(기획)
-  case recent
-  case notanswered
-  case oldorder
+  case recent = "RECENT"
+  case notanswered = "NOTANSWERED"
+  case oldorder = "OLDORDER"
+  case neworder = "NEWORDER"
 }
 
 enum QuestionListAction: Equatable {

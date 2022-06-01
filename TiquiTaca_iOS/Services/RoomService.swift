@@ -13,6 +13,9 @@ protocol RoomServiceType {
 	func getLikeRoomList() -> AnyPublisher<[RoomInfoEntity.Response]?, HTTPError>
 	func getEnteredRoom() -> AnyPublisher<RoomInfoEntity.Response?, HTTPError>
 	func registLikeRoom(roomId: String) -> AnyPublisher<RoomLikeEntity.Response?, HTTPError>
+  func getMyRoomInfo() -> AnyPublisher<RoomInfoEntity.Response?, HTTPError>
+  func exitRoom(roomId: String) -> AnyPublisher<DefaultResponse?, HTTPError>
+  func getRoomUserList(roomId: String) -> AnyPublisher<RoomUserInfoEntity.Response?, HTTPError>
 }
 
 final class RoomService: RoomServiceType {
@@ -37,4 +40,19 @@ final class RoomService: RoomServiceType {
 	func registLikeRoom(roomId: String) -> AnyPublisher<RoomLikeEntity.Response?, HTTPError> {
 		network.request(.likeRoom(roomId: roomId), responseType: RoomLikeEntity.Response.self)
 	}
+  
+  func getMyRoomInfo() -> AnyPublisher<RoomInfoEntity.Response?, HTTPError> {
+    network.request(.getMyRoom, responseType: RoomInfoEntity.Response.self)
+  }
+  
+  func exitRoom(roomId: String) -> AnyPublisher<DefaultResponse?, HTTPError> {
+    network.request(.exitRoom(roomId: roomId), responseType: DefaultResponse.self)
+  }
+  
+  func getRoomUserList(roomId: String) -> AnyPublisher<RoomUserInfoEntity.Response?, HTTPError> {
+    network.request(.getUserList(roomId: roomId), responseType: RoomUserInfoEntity.Response.self)
+  }
+}
+
+struct DefaultResponse: Codable, Equatable {
 }
