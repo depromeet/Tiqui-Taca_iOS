@@ -30,7 +30,7 @@ struct ChangeProfileView: View {
   struct ViewState: Equatable {
     let nickname: String
     let profileImage: ProfileImage
-    let isSheetPresented: Bool
+    let bottomSheetPosition: TTBottomSheet.MiddlePosition
     let nicknameError: NicknameError
     let isAvailableCompletion: Bool
     let popupPresented: Bool
@@ -39,7 +39,7 @@ struct ChangeProfileView: View {
     init(state: State) {
       nickname = state.nickname
       profileImage = state.profileImage
-      isSheetPresented = state.isSheetPresented
+      bottomSheetPosition = state.bottomSheetPosition
       nicknameError = state.nicknameError
       isAvailableCompletion = state.isAvailableCompletion
       popupPresented = state.popupPresented
@@ -59,7 +59,7 @@ struct ChangeProfileView: View {
           Image(viewStore.profileImage.imageName)
           Button {
             focusField = false
-            viewStore.send(.setBottomSheet(true))
+            viewStore.send(.setBottomSheetPosition(.middle))
           } label: {
             Image("edit")
           }
@@ -96,23 +96,6 @@ struct ChangeProfileView: View {
       .padding(.horizontal, .spacingXL)
       .padding(.top, 120)
       
-      TTBottomSheetView(
-        isOpen: viewStore.binding(
-          get: \.isSheetPresented,
-          send: ChangeProfileAction.setBottomSheet
-        ),
-        minHeight: 0,
-        maxHeight: 294,
-        content: {
-          ProfileImageListView(
-            selectedProfile: viewStore.binding(
-              get: \.profileImage,
-              send: ChangeProfileAction.setProfileImage
-            )
-          ).padding(.top, .spacingXXL)
-        }
-      )
-      
       TTPopupView.init(
         popUpCase: .twoLineOneButton,
         title: "앗, 닉네임을 바꿀 수 없어요!",
@@ -129,7 +112,20 @@ struct ChangeProfileView: View {
     .background(Color.black800)
     .ignoresSafeArea(.keyboard)
     .navigationBarBackButtonHidden(true)
-    .navigationTitle("프로필 수정하기")
+    .bottomSheet(
+      bottomSheetPosition: viewStore.binding(
+        get: \.bottomSheetPosition,
+        send: Action.setBottomSheetPosition
+      ),
+      options: TTBottomSheet.Options
+    ) {
+      ProfileImageListView(
+        selectedProfile: viewStore.binding(
+          get: \.profileImage,
+          send: ChangeProfileAction.setProfileImage
+        )
+      ).padding(.top, .spacingXXL)
+    }
     .toolbar {
       ToolbarItem(placement: .navigationBarLeading) {
         Button {
@@ -137,6 +133,11 @@ struct ChangeProfileView: View {
         } label: {
           Image("leftArrow")
         }
+      }
+      ToolbarItem(placement: .principal) {
+        Text("프로필 수정하기")
+          .font(.subtitle2)
+          .foregroundColor(.white200)
       }
       ToolbarItem(placement: .navigationBarTrailing) {
         Button {
@@ -154,7 +155,6 @@ struct ChangeProfileView: View {
     }
     .onTapGesture {
       focusField = false
-      viewStore.send(.setBottomSheet(false))
     }
   }
 }
@@ -164,7 +164,7 @@ struct ChangeProfileView_Previews: PreviewProvider {
   static var previews: some View {
     CreateProfileView(
       store: Store(
-        initialState: .init(isSheetPresented: true),
+        initialState: .init(),
         reducer: createProfileReducer,
         environment: .init(
           appService: .init(),

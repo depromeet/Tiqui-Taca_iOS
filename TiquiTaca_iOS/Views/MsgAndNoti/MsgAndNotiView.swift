@@ -48,12 +48,13 @@ struct MsgAndNotiView: View {
             .opacity(viewStore.letterList.isEmpty ? 1 : 0)
         )
       }
+      .navigationTitle("쪽지·알림")
     }
   }
 }
-  
+
 struct LetterRow: View {
-//  var notice: Notice
+  //  var notice: Notice
   
   var body: some View {
     VStack(alignment: .leading) {

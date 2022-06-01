@@ -10,19 +10,21 @@ import ComposableArchitecture
 import ComposableCoreLocation
 
 struct MainTabState: Equatable {
-  // Feature State
-  var mainMapFeature: MainMapState = .init()
-  var chatFeature: ChatState = .init()
-  var msgAndNotiFeature: MsgAndNotiState = .init()
-  var myPageFeature: MyPageState = .init()
+  var selectedTab: TabViewType = .map
+  
+  var mainMapState: MainMapState = .init()
+  var chatState: ChatState = .init()
+  var msgAndNotiState: MsgAndNotiState = .init()
+  var myPageState: MyPageState = .init()
 }
 
 enum MainTabAction: Equatable {
-  // Feature Action
-  case mainMapFeature(MainMapAction)
-  case chatFeature(ChatAction)
-  case msgAndNotiFeature(MsgAndNotiAction)
-  case myPageFeature(MyPageAction)
+  case setSelectedTab(TabViewType)
+  
+  case mainMapAction(MainMapAction)
+  case chatAction(ChatAction)
+  case msgAndNotiAction(MsgAndNotiAction)
+  case myPageAction(MyPageAction)
 }
 
 struct MainTabEnvironment {
@@ -38,8 +40,8 @@ let mainTabReducer = Reducer<
 >.combine([
   mainMapReducer
     .pullback(
-      state: \.mainMapFeature,
-      action: /MainTabAction.mainMapFeature,
+      state: \.mainMapState,
+      action: /MainTabAction.mainMapAction,
       environment: {
         MainMapEnvironment(
           appService: $0.appService,
@@ -50,8 +52,8 @@ let mainTabReducer = Reducer<
     ),
   chatReducer
     .pullback(
-      state: \.chatFeature,
-      action: /MainTabAction.chatFeature,
+      state: \.chatState,
+      action: /MainTabAction.chatAction,
       environment: {
         ChatEnvironment(
           appService: $0.appService,
@@ -61,8 +63,8 @@ let mainTabReducer = Reducer<
     ),
   msgAndNotiReducer
     .pullback(
-      state: \.msgAndNotiFeature,
-      action: /MainTabAction.msgAndNotiFeature,
+      state: \.msgAndNotiState,
+      action: /MainTabAction.msgAndNotiAction,
       environment: {
         MsgAndNotiEnvironment(
           appService: $0.appService,
@@ -72,8 +74,8 @@ let mainTabReducer = Reducer<
     ),
   myPageReducer
     .pullback(
-      state: \.myPageFeature,
-      action: /MainTabAction.myPageFeature,
+      state: \.myPageState,
+      action: /MainTabAction.myPageAction,
       environment: {
         MyPageEnvironment(
           appService: $0.appService,
@@ -88,15 +90,18 @@ let mainTabCore = Reducer<
   MainTabState,
   MainTabAction,
   MainTabEnvironment
-> { _, action, _ in
+> { state, action, _ in
   switch action {
-  case .mainMapFeature:
+  case let .setSelectedTab(selectedTab):
+    state.selectedTab = selectedTab
     return .none
-  case .chatFeature:
+  case .mainMapAction:
     return .none
-  case .msgAndNotiFeature:
+  case .chatAction:
     return .none
-  case .myPageFeature:
+  case .msgAndNotiAction:
+    return .none
+  case .myPageAction:
     return .none
   }
 }
