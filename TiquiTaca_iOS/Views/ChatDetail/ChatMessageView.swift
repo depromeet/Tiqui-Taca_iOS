@@ -21,22 +21,25 @@ struct ChatMessageView: View {
     var id: String = ""
     var profileImage: String = "defaultProfile"
     var inside: Bool = false
-    var type: Int = 1
+    var receivedType: Int? = 0
     var receivedMessage: String = ""
-    var createdAt: Date?
+    var createdAt: String?
     
     var sentMessage: String = ""
-    var sentAt: Date?
+    var sentAt: String?
+    var sentType: Int? = 0
     
     init(state: State) {
       id = state.id
       profileImage = state.profileImage
       inside = state.inside
-      type = state.type
+      receivedType = state.receivedType
       receivedMessage = state.receivedMessage
       createdAt = state.createdAt
       
       sentMessage = state.sentMessage
+      sentAt = state.sentAt
+      sentType = state.sentType
     }
   }
   
@@ -57,24 +60,32 @@ extension ChatMessageView {
   var sentBubble: some View {
     HStack(alignment: .bottom) {
       Spacer()
-      Text("23:00")
+      Text(viewStore.sentAt?.getTimeStringFromDateString() ?? "")
         .font(.cap2)
         .foregroundColor(.white900)
       
-      Text(viewStore.sentMessage)
-        .font(.body4)
+      HStack(alignment: .top) {
+        if viewStore.sentType != MessageType.text.rawValue {
+          Text("질문")
+            .font(.body4)
+            .foregroundColor(.blue900)
+        }
+        
+        Text(viewStore.sentMessage)
+          .font(.body4)
+      }
         .padding([.top, .bottom], 9)
         .padding([.leading, .trailing], 14)
         .background(Color.green500)
         .cornerRadius(14, corners: [.topLeft, .bottomLeft, .bottomRight])
-        .frame(
-          minWidth: 10,
-          idealWidth: 244,
-          maxWidth: 244,
-          alignment: .topLeading
-        )
+//        .frame(
+//          minWidth: 10,
+//          idealWidth: 244,
+//          maxWidth: 244,
+//          alignment: .topLeading
+//        )
     }
-//    .padding(.trailing, 10)
+    .padding(.trailing, 10)
   }
   
   var receivedBubble: some View {
@@ -107,7 +118,7 @@ extension ChatMessageView {
             .foregroundColor(.white900)
           
           HStack(alignment: .top) {
-            if viewStore.type != 0 {
+            if viewStore.receivedType != MessageType.text.rawValue {
               Text("질문")
                 .font(.body4)
                 .foregroundColor(.green500)
@@ -116,34 +127,36 @@ extension ChatMessageView {
             HStack(alignment: .bottom) {
               Text(viewStore.receivedMessage)
                 .font(.body4)
-                .foregroundColor(viewStore.type == 0 ? Color.black : Color.white)
+                .foregroundColor(viewStore.receivedType == MessageType.text.rawValue ? Color.black : Color.white)
               
-              if viewStore.type != 0 {
+              if viewStore.receivedType != MessageType.text.rawValue {
                 Image("reply")
               }
             }
           }
           .padding([.top, .bottom], 9)
           .padding([.leading, .trailing], 14)
-          .background(viewStore.type == 0 ? Color.white150 : Color.black)
-          .cornerRadius(14, corners: [.topRight, .bottomLeft, .bottomRight])
-          .frame(
-            minWidth: 10,
-            idealWidth: 266,
-            maxWidth: 266,
-            alignment: .topLeading
+          .background(
+            viewStore.receivedType == MessageType.text.rawValue ? Color.white150 : Color.black
           )
+          .cornerRadius(14, corners: [.topRight, .bottomLeft, .bottomRight])
+//          .frame(
+//            minWidth: 10,
+//            idealWidth: 266,
+//            maxWidth: 266,
+//            alignment: .topLeading
+//          )
         }
         
         
-        Text("23:00")
+        Text(viewStore.createdAt?.getTimeStringFromDateString() ?? "")
           .font(.cap2)
           .foregroundColor(.white900)
       }
       
       Spacer()
     }
-    .padding(.leading, 10)
+    .padding(10)
   }
 }
 

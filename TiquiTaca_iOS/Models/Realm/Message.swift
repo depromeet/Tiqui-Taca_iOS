@@ -8,11 +8,6 @@
 import RealmSwift
 
 class Message: Object {
-  enum MessageType: Int {
-    case text = 0
-    case question = 1
-  }
-  
   @objc dynamic var roomId: String = ""
   @objc dynamic var senderNickname: String?
   @objc dynamic var senderProfileImage: String?
@@ -24,4 +19,9 @@ class Message: Object {
   @objc dynamic var sentAt: Date?
   
   var messageType: MessageType?
+}
+
+enum MessageType: Int {
+  case text = 0
+  case question = 1
 }

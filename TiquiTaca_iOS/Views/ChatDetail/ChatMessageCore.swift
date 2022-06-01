@@ -11,15 +11,17 @@ struct ChatMessageState: Equatable {
   var id: String = "하갱"
   var profileImage: String = "defaultProfile"
   var inside: Bool = true
-  var type: Int = 1
-  var receivedMessage: String = "공백포함 22자까지"
-  var createdAt: Date?
+  var receivedType: Int? = MessageType.question.rawValue
+  var receivedMessage: String = "공백포함 22자까지 텍스트확장입니다다다공백포함 22자까지 텍스트확장입니다다다공백포함 22자까지 텍스트확장입니다다다"
+  var createdAt: String?
   
-  var sentMessage: String = "보낸 메시지"
-  var sentAt: Date?
+  var sentMessage: String = "공백포함 22자까지 텍스트확장입니다다다공백포함 22자까지 텍스트확장입니다다다공백포함 22자까지 텍스트확장입니다다다"
+  var sentAt: String?
+  var sentType: Int? = MessageType.question.rawValue
 }
 
 enum ChatMessageAction: Equatable {
+  
 }
 
 struct ChatMessageEnvironment {
