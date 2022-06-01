@@ -24,6 +24,7 @@ target 'TiquiTaca_iOS' do
   # Util
   pod 'SwiftLint', '= 0.47.0'
   pod 'R.swift', '= 6.1.0'
+  pod 'LicensePlist', '= 3.22.0'
 
   # Tiqui-Taca_iOS_Podspec
   pod 'ComposableArchitecture'
@@ -39,4 +40,12 @@ target 'TiquiTaca_iOS' do
     # Pods for testing
   end
 
+end
+
+post_install do |installer|
+  # Generate LicensePlist
+  system("rm -rf Settings.bundle/tiqui-taca.LicensePlist")
+  system("rm -f Settings.bundle/tiqui-taca.LicensePlist.plist")
+  system("Pods/LicensePlist/license-plist --add-version-numbers --suppress-opening-directory --output-path Settings.bundle --prefix tiqui-taca.LicensePlist")
+  system("rm -f Settings.bundle/tiqui-taca.LicensePlist.latest_result.txt")
 end
