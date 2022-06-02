@@ -63,28 +63,40 @@ struct ChatMenuView: View {
           
           List {
             ForEach(viewStore.questionList.prefix(2)) { question in
-              QuestionItemView(
-                store: .init(
-                  initialState: QuestionItemState(
-                    id: question.id,
-                    user: question.user,
-                    content: question.content,
-                    commentList: question.commentList,
-                    createdAt: question.createdAt,
-                    likesCount: question.likesCount,
-                    commentsCount: question.commentsCount,
-                    ilike: question.ilike
-                  ),
-                  reducer: questionItemReducer,
-                  environment: QuestionItemEnvironment(
-                    appService: AppService(),
-                    mainQueue: .main
+              NavigationLink(
+                destination: {
+                  QuestionDetailView(
+                    store: .init(
+                      initialState: QuestionDetailState(),
+                      reducer: questionDetailReducer,
+                      environment: QuestionDetailEnvironment(
+                        appService: AppService(),
+                        mainQueue: .main
+                      )
+                    )
                   )
-                )
+                }, label: {
+                  QuestionItemView(
+                    store: .init(
+                      initialState: QuestionItemState(
+                        id: question.id,
+                        user: question.user,
+                        content: question.content,
+                        commentList: question.commentList,
+                        createdAt: question.createdAt,
+                        likesCount: question.likesCount,
+                        commentsCount: question.commentsCount,
+                        ilike: question.ilike
+                      ),
+                      reducer: questionItemReducer,
+                      environment: QuestionItemEnvironment(
+                        appService: AppService(),
+                        mainQueue: .main
+                      )
+                    )
+                  )
+                }
               )
-            }
-            .onTapGesture {
-              viewStore.send(.selectQuestionDetail)
             }
           }
         }

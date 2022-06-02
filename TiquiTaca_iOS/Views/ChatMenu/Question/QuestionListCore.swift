@@ -6,17 +6,18 @@
 //
 
 import ComposableArchitecture
+import TTNetworkModule
 
 struct QuestionListState: Equatable {
   var questionList: [QuestionEntity.Response] = []
-  var sortType: QuestionSortType = .oldorder
+  var sortType: QuestionSortType = .neworder
   var bottomSheetPresented: Bool = false
   var enterQuestionDetail: Bool = false
 }
 
 enum QuestionSortType: String {
   //NOTANSWERED, OLDORDER, NEWORDER, RECENT(최신2개)
-  //모든 답변, 미답변, 오래된 순(기획)
+  //모든 답변, 미답변, 오래된 순
   case recent = "RECENT"
   case notanswered = "NOTANSWERED"
   case oldorder = "OLDORDER"
@@ -27,6 +28,9 @@ enum QuestionListAction: Equatable {
   case backButtonAction
   case selectSortType
   case selectQuestionDetail
+  
+  case getQuestionListByType
+  case getQuestionListByTypeResponse(Result<[QuestionEntity.Response], HTTPError>)
 }
 
 struct QuestionListEnvironment {
@@ -40,6 +44,18 @@ let questionListReducer = Reducer<
   QuestionListEnvironment
 > { state, action, environment in
   switch action {
+  case let .getQuestionListByType:
+    let request = QuestionEntity.Request(
+      filter: state.sortType.rawValue
+    )
+    return environment.appService.questionService
+      .getQuestionList(request)
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(QuestionListAction.getQuestionListByTypeResponse)
+  case let .getQuestionListByTypeResponse(.success(response)):
+    state.questionList = response
+    return .none
   case .selectSortType:
     state.bottomSheetPresented = true
     return .none
