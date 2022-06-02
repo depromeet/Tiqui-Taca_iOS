@@ -7,12 +7,18 @@
 
 
 import SwiftUI
+import ComposableArchitecture
 import TTDesignSystemModule
 
 struct ChatDetailView: View {
   @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+  let roomInfo: RoomInfoEntity.Response?
+  var store: Store<ChatDetailState, ChatDetailAction>
   
-  init() {
+  init(roomInfo: RoomInfoEntity.Response?, store: Store<ChatDetailState, ChatDetailAction>) {
+    self.roomInfo = roomInfo
+    self.store = store
+    
     configNaviBar()
     UITextView.appearance().backgroundColor = .clear
   }
@@ -50,6 +56,7 @@ struct ChatDetailView: View {
             }
           }
         }
+        
         ToolbarItem(placement: .navigationBarTrailing) {
           HStack(spacing: 0) {
             Button(action: { }) {
@@ -70,6 +77,7 @@ struct ChatDetailView: View {
   private func configNaviBar() {
     let standardAppearance = UINavigationBarAppearance()
     standardAppearance.configureWithTransparentBackground()
+    
     standardAppearance.backgroundColor = Color.black800.uiColor.withAlphaComponent(0.95)
     standardAppearance.titleTextAttributes = [
       .foregroundColor: Color.white.uiColor,
@@ -150,8 +158,8 @@ private struct InputMessageView: View {
   }
 }
 
-struct ChatDetailView_Previews: PreviewProvider {
-	static var previews: some View {
-		ChatDetailView()
-	}
-}
+//struct ChatDetailView_Previews: PreviewProvider {
+//	static var previews: some View {
+//		ChatDetailView()
+//	}
+//}

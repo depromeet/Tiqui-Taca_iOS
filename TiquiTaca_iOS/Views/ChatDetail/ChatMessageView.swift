@@ -78,12 +78,6 @@ extension ChatMessageView {
         .padding([.leading, .trailing], 14)
         .background(Color.green500)
         .cornerRadius(14, corners: [.topLeft, .bottomLeft, .bottomRight])
-//        .frame(
-//          minWidth: 10,
-//          idealWidth: 244,
-//          maxWidth: 244,
-//          alignment: .topLeading
-//        )
     }
     .padding(.trailing, 10)
   }
@@ -140,12 +134,6 @@ extension ChatMessageView {
             viewStore.receivedType == MessageType.text.rawValue ? Color.white150 : Color.black
           )
           .cornerRadius(14, corners: [.topRight, .bottomLeft, .bottomRight])
-//          .frame(
-//            minWidth: 10,
-//            idealWidth: 266,
-//            maxWidth: 266,
-//            alignment: .topLeading
-//          )
         }
         
         

@@ -7,18 +7,21 @@
 
 import Combine
 import ComposableArchitecture
+import ComposableCoreLocation
 import TTNetworkModule
 import SwiftUI
 
 struct ChatState: Equatable {
   var currentTab: RoomListType = .like
   var isFirstLoad = true
-  var willEnterRoomInfo: RoomInfoEntity.Response?
+  var willEnterRoom: RoomInfoEntity.Response?
 	
   var lastLoadTime: String = Date.current(type: .HHmm)
   var enteredRoom: RoomInfoEntity.Response?
   var likeRoomList: [RoomInfoEntity.Response] = []
   var popularRoomList: [RoomInfoEntity.Response] = []
+  
+  var chatDetailState: ChatDetailState = .init()
 }
 
 enum ChatAction: Equatable {
@@ -33,17 +36,36 @@ enum ChatAction: Equatable {
   
   case tabChange(RoomListType)
   case removeFavoriteRoom(RoomInfoEntity.Response)
-  case enterRoomPopup(RoomInfoEntity.Response)
-  case dismissPopup
+  case willEnterRoom(RoomInfoEntity.Response)
   case refresh
+  
+  case chatDetailAction(ChatDetailAction)
 }
 
 struct ChatEnvironment {
 	let appService: AppService
 	let mainQueue: AnySchedulerOf<DispatchQueue>
+  var locationManager: LocationManager
 }
 
 let chatReducer = Reducer<
+  ChatState,
+  ChatAction,
+  ChatEnvironment
+>.combine([
+  chatDetailReducer.pullback(
+    state: \.chatDetailState,
+    action: /ChatAction.chatDetailAction,
+    environment: {
+      ChatDetailEnvironment(
+        appService: $0.appService,
+        mainQueue: $0.mainQueue
+      )}),
+  chatCore
+])
+
+
+let chatCore = Reducer<
 	ChatState,
 	ChatAction,
 	ChatEnvironment
@@ -102,11 +124,8 @@ let chatReducer = Reducer<
 		guard state.currentTab != type else { return .none }
 		state.currentTab = type
 		return .none
-	case .enterRoomPopup(let room):
-		state.willEnterRoomInfo = room
-		return .none
-	case .dismissPopup:
-		state.willEnterRoomInfo = nil
+	case .willEnterRoom(let room):
+		state.willEnterRoom = room
 		return .none
 	case .refresh:
 		state.lastLoadTime = Date.current(type: .HHmm)
@@ -118,5 +137,7 @@ let chatReducer = Reducer<
       Effect(value: .fetchPopularRoomList)
         .eraseToEffect()
     )
+  case .chatDetailAction:
+    return .none
 	}
 }
