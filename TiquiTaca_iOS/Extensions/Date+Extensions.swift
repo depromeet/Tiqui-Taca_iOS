@@ -12,9 +12,12 @@ enum DateFormatType: String {
 }
 
 extension Date {
-  func convertFormatType(type: DateFormatType) -> Date {
+  static func current(type: DateFormatType) -> String {
+    let dateString: String = Date().ISO8601Format()
+    let iso8601DateFormatter = ISO8601DateFormatter()
+    let date = iso8601DateFormatter.date(from: dateString)
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = type.rawValue
-    return dateFormatter.date(from: "\(self)") ?? Date()
+    return dateFormatter.string(for: date!) ?? ""
   }
 }

@@ -11,31 +11,31 @@ import TTNetworkModule
 import SwiftUI
 
 struct ChatState: Equatable {
-	var currentTab: RoomListType = .like
-	var isFirstLoad = true
-	var willEnterRoomInfo: RoomInfoEntity.Response?
+  var currentTab: RoomListType = .like
+  var isFirstLoad = true
+  var willEnterRoomInfo: RoomInfoEntity.Response?
 	
-	var lastLoadTime: String = Date().ISO8601Format()
-	var enteredRoom: RoomInfoEntity.Response?
-	var likeRoomList: [RoomInfoEntity.Response] = []
-	var popularRoomList: [RoomInfoEntity.Response] = []
+  var lastLoadTime: String = Date.current(type: .HHmm)
+  var enteredRoom: RoomInfoEntity.Response?
+  var likeRoomList: [RoomInfoEntity.Response] = []
+  var popularRoomList: [RoomInfoEntity.Response] = []
 }
 
 enum ChatAction: Equatable {
-	case onAppear
-	case fetchEnteredRoomInfo
-	case fetchLikeRoomList
-	case fetchPopularRoomList
-	
-	case responsePopularRoomList(Result<[RoomInfoEntity.Response]?, HTTPError>)
-	case responseLikeRoomList(Result<[RoomInfoEntity.Response]?, HTTPError>)
-	case responseEnteredRoom(Result<RoomInfoEntity.Response?, HTTPError>)
-	
-	case tabChange(RoomListType)
-	case removeFavoriteRoom(RoomInfoEntity.Response)
-	case enterRoomPopup(RoomInfoEntity.Response)
-	case dismissPopup
-	case refresh
+  case onAppear
+  case fetchEnteredRoomInfo
+  case fetchLikeRoomList
+  case fetchPopularRoomList
+  
+  case responsePopularRoomList(Result<[RoomInfoEntity.Response]?, HTTPError>)
+  case responseLikeRoomList(Result<[RoomInfoEntity.Response]?, HTTPError>)
+  case responseEnteredRoom(Result<RoomInfoEntity.Response?, HTTPError>)
+  
+  case tabChange(RoomListType)
+  case removeFavoriteRoom(RoomInfoEntity.Response)
+  case enterRoomPopup(RoomInfoEntity.Response)
+  case dismissPopup
+  case refresh
 }
 
 struct ChatEnvironment {
@@ -50,7 +50,10 @@ let chatReducer = Reducer<
 > { state, action, environment in
 	switch action {
 	case .onAppear:
-		state.lastLoadTime = Date().ISO8601Format()
+    guard state.isFirstLoad else { return .none }
+    
+		state.lastLoadTime = Date.current(type: .HHmm)
+    state.isFirstLoad = true
 		return .merge(
 			Effect(value: .fetchEnteredRoomInfo)
 				.eraseToEffect(),
@@ -106,8 +109,14 @@ let chatReducer = Reducer<
 		state.willEnterRoomInfo = nil
 		return .none
 	case .refresh:
-		state.lastLoadTime = Date().ISO8601Format()
-		return Effect(value: .onAppear)
-			.eraseToEffect()
+		state.lastLoadTime = Date.current(type: .HHmm)
+    return .merge(
+      Effect(value: .fetchEnteredRoomInfo)
+        .eraseToEffect(),
+      Effect(value: .fetchLikeRoomList)
+        .eraseToEffect(),
+      Effect(value: .fetchPopularRoomList)
+        .eraseToEffect()
+    )
 	}
 }
