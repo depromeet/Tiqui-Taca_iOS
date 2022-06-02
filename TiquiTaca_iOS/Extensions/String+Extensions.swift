@@ -22,4 +22,14 @@ extension String {
     let pred = NSPredicate(format: "SELF MATCHES %@", regex)
     return pred.evaluate(with: self)
   }
+  
+  func getTimeStringFromDateString() -> String {
+    let iso8601Formatter = ISO8601DateFormatter()
+    let createdDate = iso8601Formatter.date(from: self)
+    
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "HH:mm"
+    
+    return dateFormatter.string(for: createdDate) ?? ""
+  }
 }

@@ -18,47 +18,63 @@ struct ChatDetailView: View {
   }
   
 	var body: some View {
-    VStack(spacing: 0) {
-      // ChatLogView(chatLogList: [])
-      VStack { Text("로그").hCenter().vCenter().foregroundColor(.black800) }
-        .vCenter()
-        .background(.white)
+//     VStack(spacing: 0) {
+//       // ChatLogView(chatLogList: [])
+//       VStack { Text("로그").hCenter().vCenter().foregroundColor(.black800) }
+//         .vCenter()
+//         .background(.white)
       
-      InputMessageView()
+//       InputMessageView()
+//     }
+//       .navigationBarBackButtonHidden(true)
+//       .toolbar(content: {
+//         ToolbarItem(placement: .navigationBarLeading) {
+//           Button(action: {
+//             self.presentationMode.wrappedValue.dismiss()
+//           }) {
+//             HStack(spacing: 10) {
+//               Image("back")
+//                 .resizable()
+//                 .frame(width: 24, height: 24)
+//               Text("채팅방이름")
+//                 .font(.subtitle2)
+//                 .foregroundColor(.white)
+//             }
+//           }
+//         }
+//         ToolbarItem(placement: .navigationBarTrailing) {
+//           HStack(spacing: 0) {
+//             Button(action: {
+//             }) {
+//               Image("alarm")
+//                 .resizable()
+//                 .frame(width: 24, height: 24)
+//             }
+//             Button(action: {
+//             }) {
+//               Image("menu")
+//                 .resizable()
+//                 .frame(width: 24, height: 24)
+//             }
+//           }
+//         }
+//       })
+
+    VStack {
+      ChatLogView(
+        store: .init(
+          initialState: ChatLogState(chatLogList: []),
+          reducer: chatLogReducer,
+          environment: ChatLogEnvironment(
+            appService: .init(),
+            mainQueue: .main
+          )
+        )
+      )
+      
+      //키보드
     }
-      .navigationBarBackButtonHidden(true)
-      .toolbar(content: {
-        ToolbarItem(placement: .navigationBarLeading) {
-          Button(action: {
-            self.presentationMode.wrappedValue.dismiss()
-          }) {
-            HStack(spacing: 10) {
-              Image("back")
-                .resizable()
-                .frame(width: 24, height: 24)
-              Text("채팅방이름")
-                .font(.subtitle2)
-                .foregroundColor(.white)
-            }
-          }
-        }
-        ToolbarItem(placement: .navigationBarTrailing) {
-          HStack(spacing: 0) {
-            Button(action: {
-            }) {
-              Image("alarm")
-                .resizable()
-                .frame(width: 24, height: 24)
-            }
-            Button(action: {
-            }) {
-              Image("menu")
-                .resizable()
-                .frame(width: 24, height: 24)
-            }
-          }
-        }
-      })
+
 	}
   
   private func configNaviBar() {
