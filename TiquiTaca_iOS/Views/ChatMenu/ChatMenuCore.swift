@@ -10,9 +10,7 @@ import TTNetworkModule
 
 struct ChatMenuState: Equatable {
   var roomInfo: RoomInfoEntity.Response?
-  var roomUserCount: Int = 0
   var roomUserList: [UserEntity.Response] = []
-  var questionCount: Int = 0
   var questionList: [QuestionEntity.Response] = []
   
   var questionItemViewState: QuestionItemState = .init()
@@ -27,6 +25,7 @@ enum ChatMenuAction: Equatable {
   
   case getRoomInfo
   case getRoomInfoResponse(Result<RoomInfoEntity.Response?, HTTPError>)
+  case getRoomInfoRequestSuccess
   
   case getRoomUserListInfo
   case getRoomUserListResponse(Result<RoomUserInfoEntity.Response?, HTTPError>)
@@ -74,6 +73,8 @@ let chatMenuReducerCore = Reducer<
       .map(ChatMenuAction.getRoomInfoResponse)
   case let .getRoomInfoResponse(.success(response)):
     state.roomInfo = response
+    return Effect(value: .getRoomInfoRequestSuccess)
+  case .getRoomInfoRequestSuccess:
     return .none
     
   case .getRoomUserListInfo:
@@ -84,7 +85,6 @@ let chatMenuReducerCore = Reducer<
       .map(ChatMenuAction.getRoomUserListResponse)
   case let .getRoomUserListResponse(.success(response)):
     state.roomUserList = response?.userList ?? []
-    state.roomUserCount = response?.userCount ?? 0
     return .none
   case .getQuestionList:
     let request = QuestionEntity.Request(

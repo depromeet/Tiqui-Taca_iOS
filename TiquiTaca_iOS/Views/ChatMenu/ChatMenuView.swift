@@ -15,19 +15,16 @@ struct ChatMenuView: View {
   
   private let store: Store<State, Action>
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
+  @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
   
   struct ViewState: Equatable {
     let roomInfo: RoomInfoEntity.Response?
-    let roomUserCount: Int
     let roomUserList: [UserEntity.Response]
-    let questionCount: Int
     let questionList: [QuestionEntity.Response]
     
     init(state: State) {
       roomInfo = state.roomInfo
-      roomUserCount = state.roomUserCount
       roomUserList = state.roomUserList
-      questionCount = state.questionCount
       questionList = state.questionList
     }
   }
@@ -57,47 +54,45 @@ struct ChatMenuView: View {
           Text("최근 등록된 질문")
             .font(.heading3)
             .foregroundColor(.black800)
-          Text("총 \(viewStore.questionCount)개의 질문")
+          Text("총 \(viewStore.questionList.count)개의 질문")
             .font(.body7)
             .foregroundColor(.black100)
           
-          List {
-            ForEach(viewStore.questionList.prefix(2)) { question in
-              NavigationLink(
-                destination: {
-                  QuestionDetailView(
-                    store: .init(
-                      initialState: QuestionDetailState(),
-                      reducer: questionDetailReducer,
-                      environment: QuestionDetailEnvironment(
-                        appService: AppService(),
-                        mainQueue: .main
-                      )
+          ForEach(viewStore.questionList.prefix(2)) { question in
+            NavigationLink(
+              destination: {
+                QuestionDetailView(
+                  store: .init(
+                    initialState: QuestionDetailState(),
+                    reducer: questionDetailReducer,
+                    environment: QuestionDetailEnvironment(
+                      appService: AppService(),
+                      mainQueue: .main
                     )
                   )
-                }, label: {
-                  QuestionItemView(
-                    store: .init(
-                      initialState: QuestionItemState(
-                        id: question.id,
-                        user: question.user,
-                        content: question.content,
-                        commentList: question.commentList,
-                        createdAt: question.createdAt,
-                        likesCount: question.likesCount,
-                        commentsCount: question.commentsCount,
-                        ilike: question.ilike
-                      ),
-                      reducer: questionItemReducer,
-                      environment: QuestionItemEnvironment(
-                        appService: AppService(),
-                        mainQueue: .main
-                      )
+                )
+              }, label: {
+                QuestionItemView(
+                  store: .init(
+                    initialState: QuestionItemState(
+                      id: question.id,
+                      user: question.user,
+                      content: question.content,
+                      commentList: question.commentList,
+                      createdAt: question.createdAt,
+                      likesCount: question.likesCount,
+                      commentsCount: question.commentsCount,
+                      ilike: question.ilike
+                    ),
+                    reducer: questionItemReducer,
+                    environment: QuestionItemEnvironment(
+                      appService: AppService(),
+                      mainQueue: .main
                     )
                   )
-                }
-              )
-            }
+                )
+              }
+            )
           }
         }
         
@@ -115,13 +110,16 @@ struct ChatMenuView: View {
               )
             )
           }, label: {
-            Button {
-              viewStore.send(.clickQuestionAll)
-            } label: {
-              Text("질문 전체보기")
-                .foregroundColor(.white)
-            }
-            .buttonStyle(TTButtonLargeBlackStyle())
+            Text("질문 전체보기")
+              .frame(maxWidth: .infinity, maxHeight: 56)
+              .foregroundColor(.white)
+              .background(Color.black900)
+              .cornerRadius(16)
+              .overlay(
+                RoundedRectangle(cornerRadius: 16)
+                  .stroke(Color.black900, lineWidth: 1)
+              )
+              .font(.subtitle1)
           }
         )
       }
@@ -136,33 +134,39 @@ struct ChatMenuView: View {
           .font(.heading3)
           .foregroundColor(.black800)
         
-        Text("총 \(viewStore.roomUserCount)명의 참여자")
+        Text("총 \(viewStore.roomUserList.count)명의 참여자")
           .font(.body7)
           .foregroundColor(.black100)
-          List {
-            ForEach(viewStore.roomUserList) { participant in
-              HStack {
-                ForEach(0..<4) { _ in
-                  VStack(alignment: .center) {
-                    Image(participant.profile.imageName)
-                      .resizable()
-                      .frame(width: 64, height: 64)
-
-                    Text(participant.nickname)
-                      .font(.body3)
-                      .foregroundColor(.black100)
-                  }
+        List {
+          ForEach(viewStore.roomUserList) { participant in
+            HStack {
+              ForEach(0..<4) { _ in
+                VStack(alignment: .center) {
+                  Image(participant.profile.imageName)
+                    .resizable()
+                    .frame(width: 64, height: 64)
+                  
+                  Text(participant.nickname)
+                    .font(.body3)
+                    .foregroundColor(.black100)
                 }
-                .frame(maxWidth: .infinity)
               }
-              .listRowSeparator(.hidden)
+              .frame(maxWidth: .infinity)
             }
+            .background(Color.white)
+            .listRowSeparator(.hidden)
+            
           }
-          .listStyle(.plain)
+        }
+        .background(Color.white)
+        .listStyle(.plain)
       }
+      .background(Color.white)
       .padding(16)
     }
     .background(Color.white)
+    .navigationBarBackButtonHidden(true)
+    .navigationBarHidden(true)
     .ignoresSafeArea()
     .onAppear {
       viewStore.send(.getRoomInfo)
@@ -175,14 +179,14 @@ struct ChatMenuView: View {
     VStack {
       HStack {
         Button {
-          viewStore.send(.backButtonAction)
+          self.presentationMode.wrappedValue.dismiss()
         } label: {
           Image("chat_backButton")
         }
         
         Text(viewStore.roomInfo?.name ?? "")
           .foregroundColor(Color.white)
-        Text("+ \(viewStore.roomUserCount)")
+        Text("+ \(viewStore.roomInfo?.userCount ?? 0)")
           .foregroundColor(Color.white)
         
         Spacer()

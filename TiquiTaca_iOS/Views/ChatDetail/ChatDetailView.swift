@@ -11,6 +11,7 @@ import TTDesignSystemModule
 
 struct ChatDetailView: View {
   @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+  @State private var moveToChatMenuState: Bool = false
   
   init() {
     configNaviBar()
@@ -57,11 +58,31 @@ struct ChatDetailView: View {
                 .resizable()
                 .frame(width: 24, height: 24)
             }
-            Button(action: { }) {
-              Image("menu")
-                .resizable()
-                .frame(width: 24, height: 24)
-            }
+            NavigationLink(
+              destination:
+                ChatMenuView(
+                  store: .init(
+                    initialState: ChatMenuState(),
+                    reducer: chatMenuReducer,
+                    environment: ChatMenuEnvironment(
+                      appService: .init(),
+                      mainQueue: .main
+                    )
+                  )
+                ),
+              isActive: $moveToChatMenuState
+            ) {
+                Image("menu")
+                  .resizable()
+                  .frame(width: 24, height: 24)
+              }
+//            Button(action: {
+//
+//            }) {
+//              Image("menu")
+//                .resizable()
+//                .frame(width: 24, height: 24)
+//            }
           }
         }
       })
