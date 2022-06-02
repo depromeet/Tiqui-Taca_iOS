@@ -26,7 +26,7 @@ target 'TiquiTaca_iOS' do
   pod 'R.swift', '= 6.1.0'
   pod 'LicensePlist', '= 3.22.0'
 
-  # Sochet
+  # Socket
   pod 'Socket.IO-Client-Swift', '= 15.2.0'
 
   # Tiqui-Taca_iOS_Podspec
