@@ -18,49 +18,7 @@ struct ChatDetailView: View {
   }
   
 	var body: some View {
-//     VStack(spacing: 0) {
-//       // ChatLogView(chatLogList: [])
-//       VStack { Text("로그").hCenter().vCenter().foregroundColor(.black800) }
-//         .vCenter()
-//         .background(.white)
-      
-//       InputMessageView()
-//     }
-//       .navigationBarBackButtonHidden(true)
-//       .toolbar(content: {
-//         ToolbarItem(placement: .navigationBarLeading) {
-//           Button(action: {
-//             self.presentationMode.wrappedValue.dismiss()
-//           }) {
-//             HStack(spacing: 10) {
-//               Image("back")
-//                 .resizable()
-//                 .frame(width: 24, height: 24)
-//               Text("채팅방이름")
-//                 .font(.subtitle2)
-//                 .foregroundColor(.white)
-//             }
-//           }
-//         }
-//         ToolbarItem(placement: .navigationBarTrailing) {
-//           HStack(spacing: 0) {
-//             Button(action: {
-//             }) {
-//               Image("alarm")
-//                 .resizable()
-//                 .frame(width: 24, height: 24)
-//             }
-//             Button(action: {
-//             }) {
-//               Image("menu")
-//                 .resizable()
-//                 .frame(width: 24, height: 24)
-//             }
-//           }
-//         }
-//       })
-
-    VStack {
+    VStack(spacing: 0) {
       ChatLogView(
         store: .init(
           initialState: ChatLogState(chatLogList: []),
@@ -68,19 +26,51 @@ struct ChatDetailView: View {
           environment: ChatLogEnvironment(
             appService: .init(),
             mainQueue: .main
-          )
-        )
+        ))
       )
       
-      //키보드
+      InputMessageView()
     }
-
+      .navigationBarBackButtonHidden(true)
+      .toolbar(content: {
+        ToolbarItem(placement: .navigationBarLeading) {
+          Button(action: {
+            self.presentationMode.wrappedValue.dismiss()
+          }) {
+            HStack(spacing: 10) {
+              Image("arrowBack")
+                .renderingMode(.template)
+                .resizable()
+                .scaledToFit()
+                .foregroundColor(.white)
+                .frame(width: 24, height: 24)
+              Text("채팅방이름")
+                .font(.subtitle2)
+                .foregroundColor(.white)
+            }
+          }
+        }
+        ToolbarItem(placement: .navigationBarTrailing) {
+          HStack(spacing: 0) {
+            Button(action: { }) {
+              Image("alarmOn")
+                .resizable()
+                .frame(width: 24, height: 24)
+            }
+            Button(action: { }) {
+              Image("menu")
+                .resizable()
+                .frame(width: 24, height: 24)
+            }
+          }
+        }
+      })
 	}
   
   private func configNaviBar() {
     let standardAppearance = UINavigationBarAppearance()
     standardAppearance.configureWithTransparentBackground()
-    standardAppearance.backgroundColor = Color.black800.uiColor
+    standardAppearance.backgroundColor = Color.black800.uiColor.withAlphaComponent(0.95)
     standardAppearance.titleTextAttributes = [
       .foregroundColor: Color.white.uiColor,
       .font: UIFont.systemFont(ofSize: 16, weight: .semibold)
@@ -133,14 +123,15 @@ private struct InputMessageView: View {
         
         VStack(spacing: 0) {
           Spacer()
+            .frame(minHeight: 0, maxHeight: .infinity)
           Button(action: { }) {
-            Image("send")
+            Image("sendDisable")
               .renderingMode(.template)
               .resizable()
               .scaledToFit()
               .foregroundColor(
                 typingMessage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?
-                Color.black100 :
+                  Color.black100 :
                   Color.green700
               )
               .frame(width: 24, height: 32)
@@ -148,6 +139,7 @@ private struct InputMessageView: View {
         }
       }
         .padding(EdgeInsets(top: 10, leading: 12, bottom: 10, trailing: 12))
+        .padding(0)
         .frame(height: 52)
         .background(Color.white150)
         .cornerRadius(16)
@@ -158,20 +150,8 @@ private struct InputMessageView: View {
   }
 }
 
-
 struct ChatDetailView_Previews: PreviewProvider {
 	static var previews: some View {
 		ChatDetailView()
 	}
-}
-
-// 일단 여기에 넣기
-extension UINavigationController: UIGestureRecognizerDelegate {
-  override open func viewDidLoad() {
-    super.viewDidLoad()
-    interactivePopGestureRecognizer?.delegate = self
-  }
-  public func gestureRecognizerShouldBegin(_ gestureRecognizer: UIGestureRecognizer) -> Bool {
-    return viewControllers.count > 1
-  }
 }
