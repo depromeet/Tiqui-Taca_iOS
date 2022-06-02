@@ -133,7 +133,7 @@ struct QuestionListView: View {
           viewStore.send(.selectSortType)
         } label: {
           HStack {
-            Text("오래된 순")
+            Text(viewStore.sortType.title)
               .font(.cap2)
               .foregroundColor(.white)
             

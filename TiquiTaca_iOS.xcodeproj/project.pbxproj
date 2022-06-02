@@ -124,6 +124,7 @@
 		F9AE9AB128435FE3004A632D /* QuestionDetailCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AE9AB028435FE3004A632D /* QuestionDetailCore.swift */; };
 		F9AE9AB328437A8F004A632D /* CommentItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AE9AB228437A8F004A632D /* CommentItemView.swift */; };
 		F9AE9AB528437A98004A632D /* CommentItemCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AE9AB428437A98004A632D /* CommentItemCore.swift */; };
+		F9AFCD6A2848E8EA009286DE /* QuestionLikeEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AFCD692848E8EA009286DE /* QuestionLikeEntity.swift */; };
 		F9B45A1D282BDA5700948586 /* ProfileEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B45A1C282BDA5700948586 /* ProfileEntity.swift */; };
 		F9B45A1F282BE9DB00948586 /* AppAlarmEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B45A1E282BE9DB00948586 /* AppAlarmEntity.swift */; };
 		F9B90C9C28117DDF003FFEEB /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B90C9B28117DDF003FFEEB /* AuthService.swift */; };
@@ -283,6 +284,7 @@
 		F9AE9AB028435FE3004A632D /* QuestionDetailCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionDetailCore.swift; sourceTree = "<group>"; };
 		F9AE9AB228437A8F004A632D /* CommentItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentItemView.swift; sourceTree = "<group>"; };
 		F9AE9AB428437A98004A632D /* CommentItemCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentItemCore.swift; sourceTree = "<group>"; };
+		F9AFCD692848E8EA009286DE /* QuestionLikeEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionLikeEntity.swift; sourceTree = "<group>"; };
 		F9B45A1C282BDA5700948586 /* ProfileEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEntity.swift; sourceTree = "<group>"; };
 		F9B45A1E282BE9DB00948586 /* AppAlarmEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAlarmEntity.swift; sourceTree = "<group>"; };
 		F9B90C9B28117DDF003FFEEB /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
@@ -550,6 +552,7 @@
 				F9322E7328424A9600EB956E /* QuestionEntity.swift */,
 				F9322E7528424DA900EB956E /* CommentEntity.swift */,
 				F90F8D512847BAED0011EDAC /* RoomUserInfoEntity.swift */,
+				F9AFCD692848E8EA009286DE /* QuestionLikeEntity.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -1021,6 +1024,7 @@
 				86E494892814FDAE00551CCD /* MainMapView.swift in Sources */,
 				86E4948B2814FDBC00551CCD /* MainMapCore.swift in Sources */,
 				86B29612283781CB00A981FC /* ChatDetailView.swift in Sources */,
+				F9AFCD6A2848E8EA009286DE /* QuestionLikeEntity.swift in Sources */,
 				F2F1ED81281C533000AC4FDD /* IssueCodeEntity.swift in Sources */,
 				F2F1ED8E281E632D00AC4FDD /* PhoneVerificationCore.swift in Sources */,
 				86BEED82282F3FD500EA0C5B /* Date+Extensions.swift in Sources */,

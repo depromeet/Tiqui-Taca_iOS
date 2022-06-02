@@ -116,7 +116,7 @@ struct ChatMenuView: View {
             )
           }, label: {
             Button {
-//              viewStore.send(.clickQuestionAll)
+              viewStore.send(.clickQuestionAll)
             } label: {
               Text("질문 전체보기")
                 .foregroundColor(.white)
