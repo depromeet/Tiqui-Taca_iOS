@@ -5,6 +5,7 @@
 //  Created by 김록원 on 2022/05/20.
 //
 
+
 import SwiftUI
 import TTDesignSystemModule
 
@@ -13,6 +14,7 @@ struct ChatDetailView: View {
   
   init() {
     configNaviBar()
+    UITextView.appearance().backgroundColor = .clear
   }
   
 	var body: some View {
@@ -80,29 +82,59 @@ private struct InputMessageView: View {
   @State var isQuestion: Bool = false
   
   var body: some View {
-    HStack(spacing: 8) {
+    HStack(alignment: .bottom, spacing: 8) {
       Button(action: {
         isQuestion.toggle()
       }) {
         Text("질문")
           .font(.body3)
           .padding(.horizontal, 18)
-          .padding(.vertical, 15)
+          .padding(.vertical, 18)
           .foregroundColor(isQuestion ? Color.black900 : Color.black100)
           .background(isQuestion ? Color.green500 : Color.white300)
           .cornerRadius(40)
+          .frame(height: 52)
       }
       
-      HStack(spacing: 4) {
+      HStack(alignment: .center, spacing: 4) {
         TextEditor(text: $typingMessage)
-          .background(.white)
-          .frame(height: 30)
+          .foregroundColor(Color.black900)
+          .font(.body4)
+          .background(
+            ZStack {
+              Text(
+                typingMessage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?
+                  "텍스트를 남겨주세요" : ""
+              )
+                .foregroundColor(Color.black100)
+                .font(.body4)
+                .padding(.leading, 4)
+                .hLeading()
+            }
+          )
           .hLeading()
+          .frame(alignment: .center)
         
-        Button(action: {}) {
-          Text("전송")
+        VStack(spacing: 0) {
+          Spacer()
+          Button(action: { }) {
+            Image("send")
+              .renderingMode(.template)
+              .resizable()
+              .scaledToFit()
+              .foregroundColor(
+                typingMessage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?
+                Color.black100 :
+                  Color.green700
+              )
+              .frame(width: 24, height: 32)
+          }
         }
       }
+        .padding(EdgeInsets(top: 10, leading: 12, bottom: 10, trailing: 12))
+        .frame(height: 52)
+        .background(Color.white150)
+        .cornerRadius(16)
         .hLeading()
     }
       .padding(8)
