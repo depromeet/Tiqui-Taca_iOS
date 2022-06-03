@@ -7,18 +7,36 @@
 
 
 import SwiftUI
+import ComposableArchitecture
 import TTDesignSystemModule
 
 struct ChatDetailView: View {
-  @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-  @State private var moveToChatMenuState: Bool = false
+  typealias State = ChatDetailState
+  typealias Action = ChatDetailAction
   
-  init() {
+  @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+  var store: Store<State, Action>
+  @ObservedObject private var viewStore: ViewStore<ViewState, Action>
+  
+  struct ViewState: Equatable {
+    let currentRoom: RoomInfoEntity.Response
+    let chatMenuState: ChatMenuState
+    
+    init(state: State) {
+      currentRoom = state.currentRoom
+      chatMenuState = state.chatMenuState
+    }
+  }
+  
+  init(store: Store<State, Action>) {
+    self.store = store
+    viewStore = ViewStore(store.scope(state: ViewState.init))
+    
     configNaviBar()
     UITextView.appearance().backgroundColor = .clear
   }
   
-	var body: some View {
+  var body: some View {
     VStack(spacing: 0) {
       ChatLogView(
         store: .init(
@@ -27,74 +45,58 @@ struct ChatDetailView: View {
           environment: ChatLogEnvironment(
             appService: .init(),
             mainQueue: .main
-        ))
+          ))
       )
       
       InputMessageView()
     }
-      .navigationBarBackButtonHidden(true)
-      .toolbar(content: {
-        ToolbarItem(placement: .navigationBarLeading) {
-          Button(action: {
-            self.presentationMode.wrappedValue.dismiss()
-          }) {
-            HStack(spacing: 10) {
-              Image("arrowBack")
-                .renderingMode(.template)
-                .resizable()
-                .scaledToFit()
-                .foregroundColor(.white)
-                .frame(width: 24, height: 24)
-              Text("채팅방이름")
-                .font(.subtitle2)
-                .foregroundColor(.white)
-            }
+    .navigationBarBackButtonHidden(true)
+    .toolbar(content: {
+      ToolbarItem(placement: .navigationBarLeading) {
+        Button {
+          presentationMode.wrappedValue.dismiss()
+        } label: {
+          HStack(spacing: 10) {
+            Image("arrowBack")
+              .renderingMode(.template)
+              .resizable()
+              .scaledToFit()
+              .foregroundColor(.white)
+              .frame(width: 24, height: 24)
+            Text("채팅방이름")
+              .font(.subtitle2)
+              .foregroundColor(.white)
           }
         }
-        ToolbarItem(placement: .navigationBarTrailing) {
-          HStack(spacing: 0) {
-            Button(action: { }) {
-              Image("alarmOn")
-                .resizable()
-                .frame(width: 24, height: 24)
-            }
-            NavigationLink(
-              destination:
-                ChatMenuView(
-                  store: .init(
-                    initialState: ChatMenuState(),
-                    reducer: chatMenuReducer,
-                    environment: ChatMenuEnvironment(
-                      appService: .init(),
-                      mainQueue: .main
-                    )
-                  )
-                )
-                .onAppear {
-                  ChatMenuAction.getQuestionList
-                }
-              ,
-              isActive: $moveToChatMenuState
-            ) {
-                Image("menu")
-                  .resizable()
-                  .frame(width: 24, height: 24)
-              }
-//            Button(action: {
-//
-//            }) {
-//              Image("menu")
-//                .resizable()
-//                .frame(width: 24, height: 24)
-//            }
+      }
+      
+      ToolbarItem(placement: .navigationBarTrailing) {
+        HStack(spacing: 0) {
+          Button {
+          } label: {
+            Image("alarmOn")
+              .resizable()
+              .frame(width: 24, height: 24)
+          }
+          NavigationLink {
+            ChatMenuView(store: chatMenuStore)
+          } label: {
+            Image("menu")
+              .resizable()
+              .frame(width: 24, height: 24)
           }
         }
-      })
-	}
+      }
+    })
+    .onAppear {
+      viewStore.send(.onAppear)
+    }
+  }
   
   private func configNaviBar() {
     let standardAppearance = UINavigationBarAppearance()
     standardAppearance.configureWithTransparentBackground()
+    
     standardAppearance.backgroundColor = Color.black800.uiColor.withAlphaComponent(0.95)
     standardAppearance.titleTextAttributes = [
       .foregroundColor: Color.white.uiColor,
@@ -135,12 +137,12 @@ private struct InputMessageView: View {
             ZStack {
               Text(
                 typingMessage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?
-                  "텍스트를 남겨주세요" : ""
+                "텍스트를 남겨주세요" : ""
               )
-                .foregroundColor(Color.black100)
-                .font(.body4)
-                .padding(.leading, 4)
-                .hLeading()
+              .foregroundColor(Color.black100)
+              .font(.body4)
+              .padding(.leading, 4)
+              .hLeading()
             }
           )
           .hLeading()
@@ -156,27 +158,46 @@ private struct InputMessageView: View {
               .scaledToFit()
               .foregroundColor(
                 typingMessage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?
-                  Color.black100 :
+                Color.black100 :
                   Color.green700
               )
               .frame(width: 24, height: 32)
           }
         }
       }
-        .padding(EdgeInsets(top: 10, leading: 12, bottom: 10, trailing: 12))
-        .padding(0)
-        .frame(height: 52)
-        .background(Color.white150)
-        .cornerRadius(16)
-        .hLeading()
+      .padding(EdgeInsets(top: 10, leading: 12, bottom: 10, trailing: 12))
+      .padding(0)
+      .frame(height: 52)
+      .background(Color.white150)
+      .cornerRadius(16)
+      .hLeading()
     }
-      .padding(8)
-      .background(Color.white50)
+    .padding(8)
+    .background(Color.white50)
+  }
+}
+
+// MARK: - Store init
+extension ChatDetailView {
+  private var chatMenuStore: Store<ChatMenuState, ChatMenuAction> {
+    return store.scope(
+      state: \.chatMenuState,
+      action: Action.chatMenuAction
+    )
   }
 }
 
 struct ChatDetailView_Previews: PreviewProvider {
-	static var previews: some View {
-		ChatDetailView()
-	}
+  static var previews: some View {
+    ChatDetailView(
+      store: .init(
+        initialState: .init(),
+        reducer: chatDetailReducer,
+        environment: .init(
+          appService: .init(),
+          mainQueue: .main
+        )
+      )
+    )
+  }
 }

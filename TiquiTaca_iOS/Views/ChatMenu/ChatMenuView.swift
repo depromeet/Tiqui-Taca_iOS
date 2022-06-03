@@ -17,7 +17,6 @@ struct ChatMenuView: View {
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
   @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
   
-  
   struct ViewState: Equatable {
     let route: State.Route?
     
@@ -67,46 +66,68 @@ struct ChatMenuView: View {
             .font(.body7)
             .foregroundColor(.black100)
           
-          ForEach(viewStore.questionList.prefix(2)) { question in
+          ForEach(viewStore.questionList) { question in
+            Button {
+              viewStore.send(.questionSelected(question.id))
+            } label: {
+              QuestionItemView(model: question)
+            }
+            
             NavigationLink(
+              tag: State.Route.questionDetail,
+              selection: viewStore.binding(
+                get: ,
+                send:
+              ),
               destination: {
                 QuestionDetailView(
-                  store: .init(
-                    initialState: QuestionDetailState(
-                      question: question,
-                      likesCount: question.likesCount,
-                      likeActivated: question.ilike,
-                      commentCount: question.commentsCount
-                    ),
-                    reducer: questionDetailReducer,
-                    environment: QuestionDetailEnvironment(
-                      appService: AppService(),
-                      mainQueue: .main
-                    )
-                  )
-                )
-              }, label: {
-                QuestionItemView(
-                  store: .init(
-                    initialState: QuestionItemState(
-                      id: question.id,
-                      user: question.user,
-                      content: question.content,
-                      commentList: question.commentList,
-                      createdAt: question.createdAt,
-                      likesCount: question.likesCount,
-                      commentsCount: question.commentsCount,
-                      ilike: question.ilike
-                    ),
-                    reducer: questionItemReducer,
-                    environment: QuestionItemEnvironment(
-                      appService: AppService(),
-                      mainQueue: .main
-                    )
+                  store: store.scope(
+                    state: <#T##(State) -> LocalState#>,
+                    action: <#T##(LocalAction) -> Action#>
                   )
                 )
               }
+              label: EmptyView.init
             )
+            
+            NavigationLink(
+              tag: State.Route.questionList,
+              selection: viewStore.binding(
+                get: ,
+                send:
+              ),
+              destination: {
+                QuestionListView(
+                  store: store.scope(
+                    state: <#T##(State) -> LocalState#>,
+                    action: <#T##(LocalAction) -> Action#>
+                  )
+                )
+              }
+              label: EmptyView.init
+            )
+            
+//            NavigationLink(
+//              destination: {
+//                QuestionDetailView(
+//                  store: .init(
+//                    initialState: QuestionDetailState(
+//                      question: question,
+//                      likesCount: question.likesCount,
+//                      likeActivated: question.ilike,
+//                      commentCount: question.commentsCount
+//                    ),
+//                    reducer: questionDetailReducer,
+//                    environment: QuestionDetailEnvironment(
+//                      appService: AppService(),
+//                      mainQueue: .main
+//                    )
+//                  )
+//                )
+//              }, label: {
+                
+//              }
+//            )
           }
         }
         
@@ -179,7 +200,7 @@ struct ChatMenuView: View {
     .ignoresSafeArea()
     .onAppear {
 //      viewStore.send(.getRoomInfo)
-//      viewStore.send(.getRoomUserListInfo)
+      viewStore.send(.getRoomUserListInfo)
       viewStore.send(.getQuestionList)
     }
     .ttPopup(

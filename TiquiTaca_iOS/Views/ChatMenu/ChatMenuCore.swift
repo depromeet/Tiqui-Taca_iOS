@@ -62,10 +62,10 @@ let chatMenuReducer = Reducer<
     .pullback(
       state: \.questionItemViewState,
       action: /ChatMenuAction.questionItemView,
-      environment: { _ in
+      environment: {
         QuestionItemEnvironment(
-          appService: AppService(),
-          mainQueue: .main
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
         )
       }
     ),
@@ -73,10 +73,10 @@ let chatMenuReducer = Reducer<
     .pullback(
       state: \.questionListViewState,
       action: /ChatMenuAction.questionListView,
-      environment: { _ in
+      environment: {
         QuestionListEnvironment(
-          appService: AppService(),
-          mainQueue: .main
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
         )
       }
     ),

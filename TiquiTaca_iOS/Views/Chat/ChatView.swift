@@ -253,12 +253,16 @@ private struct PopularRoomListView: View {
                   isPopupPresent = true
                   ViewStore(store).send(.enterRoomPopup(room))
                 }
-              NavigationLink(
-                destination: ChatDetailView(),
-                isActive: $moveToChatDetailState
-              ) { EmptyView() }
-                .frame(height: 0)
-                .hidden()
+              
+              NavigationLink(isActive: $moveToChatDetailState) {
+                ChatDetailView(
+                  store: store.scope(
+                    state: \.chatDetailState,
+                    action: ChatAction.chatDetailAction
+                  )
+                )
+              } label: {
+              }
             }
               .listRowSeparator(.hidden)
               .listRowInsets(EdgeInsets())
