@@ -105,30 +105,47 @@ struct QuestionListView: View {
         Text("필터")
           .font(.body2)
           .foregroundColor(.black100)
-          .vCenter()
+          .hCenter()
           .frame(height: 10)
+          .padding(12)
+        
+        Rectangle().fill(Color.black600)
+          .frame(height: 1)
+          .hCenter()
+        
         Button {
           viewStore.send(.selectSortType(.neworder))
         } label: {
           Text("모든 질문")
+            .hCenter()
             .font(.subtitle2)
             .foregroundColor(.white)
         }
         .frame(height: 54)
+        
+        Rectangle().fill(Color.black600)
+          .frame(height: 1)
+          .hCenter()
         
         Button {
           viewStore.send(.selectSortType(.notanswered))
         } label: {
           Text("미답변")
+            .hCenter()
             .font(.subtitle2)
             .foregroundColor(.white)
         }
         .frame(height: 54)
         
+        Rectangle().fill(Color.black600)
+          .frame(height: 1)
+          .hCenter()
+        
         Button {
           viewStore.send(.selectSortType(.oldorder))
         } label: {
           Text("오래된 순")
+            .hCenter()
             .font(.subtitle2)
             .foregroundColor(.white)
         }

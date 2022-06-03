@@ -69,7 +69,11 @@ struct ChatDetailView: View {
                       mainQueue: .main
                     )
                   )
-                ),
+                )
+                .onAppear {
+                  ChatMenuAction.getQuestionList
+                }
+              ,
               isActive: $moveToChatMenuState
             ) {
                 Image("menu")

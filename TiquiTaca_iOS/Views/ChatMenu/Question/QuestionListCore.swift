@@ -68,7 +68,7 @@ let questionListReducer = Reducer<
     return .none
   case let .selectSortType(type):
     state.sortType = type
-//    state.bottomSheetPresented = true
+    state.bottomSheetPosition = .hidden
     return .none
   case .selectQuestionDetail:
     state.enterQuestionDetail = true

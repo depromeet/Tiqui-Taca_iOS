@@ -10,13 +10,12 @@ import TTNetworkModule
 
 struct QuestionDetailState: Equatable {
   var question: QuestionEntity.Response?
-  var likeCount: Int = 0 // API response
+  var likesCount: Int = 0 // API response
   var likeActivated: Bool = false
   var commentCount: Int = 0
 }
 
 enum QuestionDetailAction: Equatable {
-  case backButtonAction
   case moreClickAction
   case likeClickAction
   case writeComment
@@ -43,7 +42,7 @@ let questionDetailReducer = Reducer<
       .map(QuestionDetailAction.likeClickResponse)
   case let .likeClickResponse(.success(response)):
     state.likeActivated = response?.ilike ?? false
-    state.likeCount += state.likeActivated ? 1 : 0
+    state.likesCount += state.likeActivated ? 1 : 0
     return .none
   default :
     return .none

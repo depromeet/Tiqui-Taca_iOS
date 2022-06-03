@@ -14,13 +14,20 @@ struct QuestionDetailView: View {
   typealias Action = QuestionDetailAction
   
   let store: Store<State, Action>
-  let viewStore: ViewStore<ViewState, Action>
-  
+  @ObservedObject var viewStore: ViewStore<ViewState, Action>
+  @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+ 
   struct ViewState: Equatable {
     let question: QuestionEntity.Response?
+    let likesCount: Int
+    let likeActivated: Bool
+    let commentCount: Int
     
     init(state: State) {
       question = state.question
+      likesCount = state.likesCount
+      likeActivated = state.likeActivated
+      commentCount = state.commentCount
     }
   }
   
@@ -65,8 +72,8 @@ struct QuestionDetailView: View {
             Button {
               viewStore.send(.likeClickAction)
             } label: {
-              Image(viewStore.question?.ilike ?? false ? "replyGoodOn" : "replyGoodOff")
-              Text("\(viewStore.question?.likesCount ?? 0)")
+              Image(viewStore.likeActivated ? "replyGoodOn" : "replyGoodOff")
+              Text("\(viewStore.likesCount)")
                 .font(.body7)
                 .foregroundColor(.white800)
             }
@@ -115,6 +122,7 @@ struct QuestionDetailView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
       }
     }
+    .navigationBarHidden(true)
     .background(Color.white)
     .ignoresSafeArea()
   }
@@ -123,7 +131,7 @@ struct QuestionDetailView: View {
     VStack {
       HStack {
         Button {
-          viewStore.send(.backButtonAction)
+          self.presentationMode.wrappedValue.dismiss()
         } label: {
           Image("chat_backButton")
         }

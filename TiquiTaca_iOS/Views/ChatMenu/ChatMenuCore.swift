@@ -9,18 +9,29 @@ import ComposableArchitecture
 import TTNetworkModule
 
 struct ChatMenuState: Equatable {
+  enum Route {
+    case quetionList
+    case questionDetail
+  }
+  var route: Route?
   var roomInfo: RoomInfoEntity.Response?
   var roomUserList: [UserEntity.Response] = []
   var questionList: [QuestionEntity.Response] = []
+  var unreadChatCount: Int? = 0 //값 받아와야함
   
   var questionItemViewState: QuestionItemState = .init()
+  var questionListViewState: QuestionListState = .init()
+  
+  var popupPresented: Bool = false
 }
 
 enum ChatMenuAction: Equatable {
+  case setRoute(ChatMenuState.Route)
   case roomExit
   case selectQuestionDetail
   case clickQuestionAll
   case questionItemView(QuestionItemAction)
+  case questionListView(QuestionListAction)
   
   case getRoomInfo
   case getRoomInfoResponse(Result<RoomInfoEntity.Response?, HTTPError>)
@@ -32,6 +43,9 @@ enum ChatMenuAction: Equatable {
   case getQuestionList
   case getQuestionListResponse(Result<[QuestionEntity.Response]?, HTTPError>)
   case roomExitReponse(Result<DefaultResponse?, HTTPError>)
+  
+  case presentPopup
+  case dismissPopup
 }
 
 struct ChatMenuEnvironment {
@@ -50,6 +64,17 @@ let chatMenuReducer = Reducer<
       action: /ChatMenuAction.questionItemView,
       environment: { _ in
         QuestionItemEnvironment(
+          appService: AppService(),
+          mainQueue: .main
+        )
+      }
+    ),
+  questionListReducer
+    .pullback(
+      state: \.questionListViewState,
+      action: /ChatMenuAction.questionListView,
+      environment: { _ in
+        QuestionListEnvironment(
           appService: AppService(),
           mainQueue: .main
         )
@@ -85,6 +110,7 @@ let chatMenuReducerCore = Reducer<
   case let .getRoomUserListResponse(.success(response)):
     state.roomUserList = response?.userList ?? []
     return .none
+    
   case .getQuestionList:
     let request = QuestionEntity.Request(
       filter: QuestionSortType.recent.rawValue
@@ -111,10 +137,30 @@ let chatMenuReducerCore = Reducer<
     return .none
     
   case let .questionItemView(questionItemAction):
-    switch questionItemAction {
-    default:
-      return .none
-    }
+    return .none
+  case let .questionListView(questionListAction):
+    return .none
+  case let .setRoute(selectedRoute):
+//    if selectedRoute == .questionDetail {
+//      state.questionItemViewState = .init(
+//        id: <#T##String#>,
+//        user: <#T##UserEntity.Response?#>,
+//        content: <#T##String#>,
+//        commentList: <#T##[CommentEntity]#>,
+//        createdAt: <#T##Date#>,
+//        likesCount: <#T##Int#>,
+//        commentsCount: <#T##Int#>,
+//        ilike: <#T##Bool#>
+//      )
+//    }
+    state.route = selectedRoute
+    return .none
+  case .presentPopup:
+    state.popupPresented = true
+    return .none
+  case .dismissPopup:
+    state.popupPresented = false
+    return .none
   default:
     return .none
   }

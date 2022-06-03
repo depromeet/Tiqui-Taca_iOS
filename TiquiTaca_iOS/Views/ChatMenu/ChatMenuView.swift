@@ -17,15 +17,24 @@ struct ChatMenuView: View {
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
   @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
   
+  
   struct ViewState: Equatable {
+    let route: State.Route?
+    
     let roomInfo: RoomInfoEntity.Response?
     let roomUserList: [UserEntity.Response]
     let questionList: [QuestionEntity.Response]
+    let unreadChatCount: Int?
+    
+    let popupPresented: Bool
     
     init(state: State) {
+      route = state.route
       roomInfo = state.roomInfo
       roomUserList = state.roomUserList
       questionList = state.questionList
+      unreadChatCount = state.unreadChatCount
+      popupPresented = state.popupPresented
     }
   }
   
@@ -63,7 +72,12 @@ struct ChatMenuView: View {
               destination: {
                 QuestionDetailView(
                   store: .init(
-                    initialState: QuestionDetailState(),
+                    initialState: QuestionDetailState(
+                      question: question,
+                      likesCount: question.likesCount,
+                      likeActivated: question.ilike,
+                      commentCount: question.commentsCount
+                    ),
                     reducer: questionDetailReducer,
                     environment: QuestionDetailEnvironment(
                       appService: AppService(),
@@ -111,7 +125,8 @@ struct ChatMenuView: View {
             )
           }, label: {
             Text("질문 전체보기")
-              .frame(maxWidth: .infinity, maxHeight: 56)
+//              .frame(maxWidth: .infinity, maxHeight: 56)
+              .frame(maxWidth: .infinity, minHeight: 56)
               .foregroundColor(.white)
               .background(Color.black900)
               .cornerRadius(16)
@@ -137,25 +152,19 @@ struct ChatMenuView: View {
         Text("총 \(viewStore.roomUserList.count)명의 참여자")
           .font(.body7)
           .foregroundColor(.black100)
-        List {
-          ForEach(viewStore.roomUserList) { participant in
-            HStack {
-              ForEach(0..<4) { _ in
-                VStack(alignment: .center) {
-                  Image(participant.profile.imageName)
-                    .resizable()
-                    .frame(width: 64, height: 64)
-                  
-                  Text(participant.nickname)
-                    .font(.body3)
-                    .foregroundColor(.black100)
-                }
+        ScrollView {
+          LazyVGrid(columns: colums, spacing: 20) {
+            ForEach(viewStore.roomUserList) { participant in
+              VStack(alignment: .center) {
+                Image(participant.profile.imageName)
+                  .resizable()
+                  .frame(width: 64, height: 64)
+                
+                Text(participant.nickname)
+                  .font(.body3)
+                  .foregroundColor(.black100)
               }
-              .frame(maxWidth: .infinity)
             }
-            .background(Color.white)
-            .listRowSeparator(.hidden)
-            
           }
         }
         .background(Color.white)
@@ -169,9 +178,28 @@ struct ChatMenuView: View {
     .navigationBarHidden(true)
     .ignoresSafeArea()
     .onAppear {
-      viewStore.send(.getRoomInfo)
-      viewStore.send(.getRoomUserListInfo)
+//      viewStore.send(.getRoomInfo)
+//      viewStore.send(.getRoomUserListInfo)
       viewStore.send(.getQuestionList)
+    }
+    .ttPopup(
+      isShowing: viewStore.binding(
+        get: \.popupPresented,
+        send: ChatMenuAction.dismissPopup
+      )
+    ) {
+      TTPopupView.init(
+        popUpCase: .twoLineTwoButton,
+        title: "해당 채팅방에서\n나가시겠습니까?",
+        leftButtonName: "취소",
+        rightButtonName: "나가기",
+        confirm: {
+          viewStore.send(.roomExit)
+        },
+        cancel: {
+          viewStore.send(.dismissPopup)
+        }
+      )
     }
   }
   
@@ -186,13 +214,13 @@ struct ChatMenuView: View {
         
         Text(viewStore.roomInfo?.name ?? "")
           .foregroundColor(Color.white)
-        Text("+ \(viewStore.roomInfo?.userCount ?? 0)")
+        Text("+ \(viewStore.unreadChatCount ?? 0)")
           .foregroundColor(Color.white)
         
         Spacer()
         
         Button {
-          viewStore.send(.roomExit)
+          viewStore.send(.presentPopup)
         } label: {
           Image("chat_exit")
         }
@@ -204,6 +232,13 @@ struct ChatMenuView: View {
     .background(Color.black800)
     .frame(height: 88)
   }
+  
+  let colums = [
+    GridItem(.flexible()),
+    GridItem(.flexible()),
+    GridItem(.flexible()),
+    GridItem(.flexible())
+  ]
 }
 
 struct ChatMenuView_Previews: PreviewProvider {
