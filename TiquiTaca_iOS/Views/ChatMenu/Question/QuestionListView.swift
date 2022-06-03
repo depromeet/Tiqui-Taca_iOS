@@ -15,14 +15,17 @@ struct QuestionListView: View {
   
   private let store: Store<State, Action>
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
+  @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
   
   struct ViewState: Equatable {
     let questionList: [QuestionEntity.Response]
     let sortType: QuestionSortType
+    let bottomSheetPosition: TTBottomSheet.Position
     
     init(state: State) {
       questionList = state.questionList
       sortType = state.sortType
+      bottomSheetPosition = state.bottomSheetPosition
     }
   }
   
@@ -86,23 +89,69 @@ struct QuestionListView: View {
               }
             )
           }
-//          .onTapGesture {
-//            viewStore.send(.selectQuestionDetail)
-//          }
         }
       }
       
       Spacer()
     }
+    .bottomSheet(
+      bottomSheetPosition: viewStore.binding(
+        get: \.bottomSheetPosition,
+        send: Action.setBottomSheetPosition
+      ),
+      options: TTBottomSheet.Options
+    ) {
+      VStack {
+        Text("필터")
+          .font(.body2)
+          .foregroundColor(.black100)
+          .vCenter()
+          .frame(height: 10)
+        Button {
+          viewStore.send(.selectSortType(.neworder))
+        } label: {
+          Text("모든 질문")
+            .font(.subtitle2)
+            .foregroundColor(.white)
+        }
+        .frame(height: 54)
+        
+        Button {
+          viewStore.send(.selectSortType(.notanswered))
+        } label: {
+          Text("미답변")
+            .font(.subtitle2)
+            .foregroundColor(.white)
+        }
+        .frame(height: 54)
+        
+        Button {
+          viewStore.send(.selectSortType(.oldorder))
+        } label: {
+          Text("오래된 순")
+            .font(.subtitle2)
+            .foregroundColor(.white)
+        }
+        .frame(height: 54)
+        Spacer()
+      }
+      .vCenter()
+      .hCenter()
+    }
     .background(Color.white)
+    .navigationBarBackButtonHidden(true)
+    .navigationBarHidden(true)
     .ignoresSafeArea()
+    .onAppear {
+      viewStore.send(.getQuestionListByType)
+    }
   }
   
   var topNavigationView: some View {
     VStack {
       HStack {
         Button {
-          viewStore.send(.backButtonAction)
+          self.presentationMode.wrappedValue.dismiss()
         } label: {
           Image("chat_backButton")
         }
@@ -130,7 +179,8 @@ struct QuestionListView: View {
         Spacer()
         
         Button {
-          viewStore.send(.selectSortType)
+//          viewStore.send(.selectSortType)
+          viewStore.send(.setBottomSheetPosition(.middle))
         } label: {
           HStack {
             Text(viewStore.sortType.title)

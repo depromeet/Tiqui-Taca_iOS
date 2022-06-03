@@ -17,7 +17,6 @@ struct ChatMenuState: Equatable {
 }
 
 enum ChatMenuAction: Equatable {
-  case backButtonAction
   case roomExit
   case selectQuestionDetail
   case clickQuestionAll

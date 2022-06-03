@@ -10,9 +10,10 @@ import TTNetworkModule
 
 struct QuestionListState: Equatable {
   var questionList: [QuestionEntity.Response] = []
-  var sortType: QuestionSortType = .oldorder
+  var sortType: QuestionSortType = .neworder
   var bottomSheetPresented: Bool = false
   var enterQuestionDetail: Bool = false
+  var bottomSheetPosition: TTBottomSheet.Position = .hidden
 }
 
 enum QuestionSortType: String {
@@ -34,9 +35,9 @@ enum QuestionSortType: String {
 }
 
 enum QuestionListAction: Equatable {
-  case backButtonAction
-  case selectSortType
+  case selectSortType(QuestionSortType)
   case selectQuestionDetail
+  case setBottomSheetPosition(TTBottomSheet.Position)
   
   case getQuestionListByType
   case getQuestionListByTypeResponse(Result<[QuestionEntity.Response]?, HTTPError>)
@@ -53,7 +54,7 @@ let questionListReducer = Reducer<
   QuestionListEnvironment
 > { state, action, environment in
   switch action {
-  case let .getQuestionListByType:
+  case .getQuestionListByType:
     let request = QuestionEntity.Request(
       filter: state.sortType.rawValue
     )
@@ -65,11 +66,15 @@ let questionListReducer = Reducer<
   case let .getQuestionListByTypeResponse(.success(response)):
     state.questionList = response ?? []
     return .none
-  case .selectSortType:
-    state.bottomSheetPresented = true
+  case let .selectSortType(type):
+    state.sortType = type
+//    state.bottomSheetPresented = true
     return .none
   case .selectQuestionDetail:
     state.enterQuestionDetail = true
+    return .none
+  case let .setBottomSheetPosition(position):
+    state.bottomSheetPosition = position
     return .none
   default:
     return .none
