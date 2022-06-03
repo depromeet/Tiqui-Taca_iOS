@@ -26,6 +26,8 @@ struct ChatMenuView: View {
     let unreadChatCount: Int?
     
     let popupPresented: Bool
+    let questionDetailViewState: QuestionDetailState
+    let questionListViewState: QuestionListState
     
     init(state: State) {
       route = state.route
@@ -34,6 +36,9 @@ struct ChatMenuView: View {
       questionList = state.questionList
       unreadChatCount = state.unreadChatCount
       popupPresented = state.popupPresented
+      
+      questionDetailViewState = state.questionDetailViewState
+      questionListViewState = state.questionListViewState
     }
   }
   
@@ -71,99 +76,23 @@ struct ChatMenuView: View {
               viewStore.send(.questionSelected(question.id))
             } label: {
               QuestionItemView(model: question)
+                .padding([.top, .bottom], 4)
             }
-            
-            NavigationLink(
-              tag: State.Route.questionDetail,
-              selection: viewStore.binding(
-                get: ,
-                send:
-              ),
-              destination: {
-                QuestionDetailView(
-                  store: store.scope(
-                    state: <#T##(State) -> LocalState#>,
-                    action: <#T##(LocalAction) -> Action#>
-                  )
-                )
-              }
-              label: EmptyView.init
-            )
-            
-            NavigationLink(
-              tag: State.Route.questionList,
-              selection: viewStore.binding(
-                get: ,
-                send:
-              ),
-              destination: {
-                QuestionListView(
-                  store: store.scope(
-                    state: <#T##(State) -> LocalState#>,
-                    action: <#T##(LocalAction) -> Action#>
-                  )
-                )
-              }
-              label: EmptyView.init
-            )
-            
-//            NavigationLink(
-//              destination: {
-//                QuestionDetailView(
-//                  store: .init(
-//                    initialState: QuestionDetailState(
-//                      question: question,
-//                      likesCount: question.likesCount,
-//                      likeActivated: question.ilike,
-//                      commentCount: question.commentsCount
-//                    ),
-//                    reducer: questionDetailReducer,
-//                    environment: QuestionDetailEnvironment(
-//                      appService: AppService(),
-//                      mainQueue: .main
-//                    )
-//                  )
-//                )
-//              }, label: {
-                
-//              }
-//            )
           }
         }
         
-        NavigationLink(
-          destination: {
-            QuestionListView(
-              store: .init(
-                initialState: QuestionListState(),
-                reducer: questionListReducer,
-                environment:
-                  QuestionListEnvironment(
-                    appService: AppService(),
-                    mainQueue: .main
-                  )
-              )
-            )
-          }, label: {
-            Text("질문 전체보기")
-//              .frame(maxWidth: .infinity, maxHeight: 56)
-              .frame(maxWidth: .infinity, minHeight: 56)
-              .foregroundColor(.white)
-              .background(Color.black900)
-              .cornerRadius(16)
-              .overlay(
-                RoundedRectangle(cornerRadius: 16)
-                  .stroke(Color.black900, lineWidth: 1)
-              )
-              .font(.subtitle1)
-          }
-        )
+        Button {
+          viewStore.send(.questionListButtonClicked)
+        } label: {
+          Text("질문 전체보기")
+        }
+        .frame(height: 48)
+        .buttonStyle(TTButtonLargeBlackStyle())
       }
       .padding(15)
-      VStack {
-      }
+      
+      Rectangle().fill(Color.white50)
       .frame(maxWidth: .infinity, maxHeight: 8)
-      .background(Color.white50)
       
       VStack(alignment: .leading) {
         Text("현재 티키타카 중인 사람들")
@@ -193,13 +122,47 @@ struct ChatMenuView: View {
       }
       .background(Color.white)
       .padding(16)
+      
+      NavigationLink(
+        tag: State.Route.questionDetail,
+        selection: viewStore.binding(
+          get: \.route,
+          send: Action.setRoute
+        ),
+        destination: {
+          QuestionDetailView(
+            store: store.scope(
+              state: \.questionDetailViewState,
+              action: ChatMenuAction.questionDetailView
+            )
+          )
+        },
+        label: EmptyView.init
+      )
+      
+      NavigationLink(
+        tag: State.Route.questionList,
+        selection: viewStore.binding(
+          get: \.route,
+          send: Action.setRoute
+        ),
+        destination: {
+          QuestionListView(
+            store: store.scope(
+              state: \.questionListViewState,
+              action: ChatMenuAction.questionListView
+            )
+          )
+        },
+        label: EmptyView.init
+      )
     }
     .background(Color.white)
     .navigationBarBackButtonHidden(true)
     .navigationBarHidden(true)
     .ignoresSafeArea()
     .onAppear {
-//      viewStore.send(.getRoomInfo)
+      viewStore.send(.getRoomInfo)  //추후 제거되어야함
       viewStore.send(.getRoomUserListInfo)
       viewStore.send(.getQuestionList)
     }

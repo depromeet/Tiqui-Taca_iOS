@@ -10,48 +10,17 @@ import ComposableArchitecture
 import TTDesignSystemModule
 
 struct QuestionItemView: View {
-  typealias State = QuestionItemState
-  typealias Action = QuestionItemAction
-  
-  private let store: Store<State, Action>
-  @ObservedObject private var viewStore: ViewStore<ViewState, Action>
-  
-  struct ViewState: Equatable {
-    var id: String
-    var user: UserEntity.Response?
-    var content: String
-    var commentList: [CommentEntity]
-    var createdAt: Date
-    var likesCount: Int
-    var commentsCount: Int
-    var ilike: Bool
-    
-    init(state: State) {
-      id = state.id
-      user = state.user
-      content = state.content
-      commentList = state.commentList
-      createdAt = state.createdAt
-      likesCount = state.likesCount
-      commentsCount = state.commentsCount
-      ilike = state.ilike
-    }
-  }
-  
-  init(store: Store<State, Action>) {
-    self.store = store
-    viewStore = ViewStore.init(store.scope(state: ViewState.init))
-  }
-  
+  var model: QuestionEntity.Response
+
   var body: some View {
     VStack(alignment: .leading) {
       HStack(alignment: .top) {
-        Image(viewStore.user?.profile.imageName ?? "defaultProfile")
+        Image(model.user?.profile.imageName ?? "defaultProfile")
           .resizable()
           .frame(width: 32, height: 32)
         
         VStack(alignment: .leading) {
-          Text(viewStore.user?.nickname ?? "")
+          Text(model.user?.nickname ?? "")
             .font(.body4)
             .foregroundColor(.black900)
           Text("1시간 전")
@@ -65,24 +34,21 @@ struct QuestionItemView: View {
           .frame(width: 24, height: 24)
       }
       
-      VStack {
-        Text(viewStore.content)
+      VStack(alignment: .leading) {
+        Text(model.content)
           .font(.body3)
           .foregroundColor(.black900)
+        
         HStack {
-          Button {
-            viewStore.send(.likeClickAction)
-          } label: {
-            Image(viewStore.ilike ? "replyGoodOn" : "replyGoodOff")
-            Text("\(viewStore.likesCount)")
-              .font(.body7)
-              .foregroundColor(.white800)
-          }
+          Image(model.ilike ? "replyGoodOn" : "replyGoodOff")
+          Text("\(model.likesCount)")
+            .font(.body7)
+            .foregroundColor(.white800)
           
           Image("comments")
             .resizable()
             .frame(width: 20, height: 20)
-          Text("\(viewStore.commentsCount)")
+          Text("\(model.commentsCount)")
             .font(.body7)
             .foregroundColor(.white800)
         }
@@ -96,17 +62,8 @@ struct QuestionItemView: View {
   }
 }
 
-struct QuestionItemView_Previews: PreviewProvider {
-  static var previews: some View {
-    QuestionItemView(
-      store: .init(
-        initialState: QuestionItemState(),
-        reducer: questionItemReducer,
-        environment: QuestionItemEnvironment(
-          appService: AppService(),
-          mainQueue: .main
-        )
-      )
-    )
-  }
-}
+//struct QuestionItemView_Previews: PreviewProvider {
+//  static var previews: some View {
+////    QuestionItemView(model: QuestionEntity.Response.)
+//  }
+//}

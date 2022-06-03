@@ -18,11 +18,13 @@ struct QuestionListView: View {
   @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
   
   struct ViewState: Equatable {
+    let route: State.Route?
     let questionList: [QuestionEntity.Response]
     let sortType: QuestionSortType
     let bottomSheetPosition: TTBottomSheet.Position
     
     init(state: State) {
+      route = state.route
       questionList = state.questionList
       sortType = state.sortType
       bottomSheetPosition = state.bottomSheetPosition
@@ -52,47 +54,36 @@ struct QuestionListView: View {
       } else {
         List {
           ForEach(viewStore.questionList) { question in
-            NavigationLink(
-              destination: {
-                QuestionDetailView(
-                  store: .init(
-                    initialState: QuestionDetailState(
-                      question: question
-                    ),
-                    reducer: questionDetailReducer,
-                    environment: QuestionDetailEnvironment(
-                      appService: AppService(),
-                      mainQueue: .main
-                    )
-                  )
-                )
-              }, label: {
-                QuestionItemView(
-                  store: .init(
-                    initialState: QuestionItemState(
-                      id: question.id,
-                      user: question.user,
-                      content: question.content,
-                      commentList: question.commentList,
-                      createdAt: question.createdAt,
-                      likesCount: question.likesCount,
-                      commentsCount: question.commentsCount,
-                      ilike: question.ilike
-                    ),
-                    reducer: questionItemReducer,
-                    environment: QuestionItemEnvironment(
-                      appService: AppService(),
-                      mainQueue: .main
-                    )
-                  )
-                )
-              }
-            )
+            Button {
+              viewStore.send(.selectQuestionDetail(question.id))
+            } label: {
+              QuestionItemView(model: question)
+            }
+            .listRowBackground(Color.white)
+            .listRowSeparator(.hidden)
           }
+          .background(Color.white)
         }
+        .listStyle(.plain)
       }
       
       Spacer()
+      NavigationLink(
+        tag: State.Route.questionDetail,
+        selection: viewStore.binding(
+          get: \.route,
+          send: Action.setRoute
+        ),
+        destination: {
+          QuestionDetailView(
+            store: store.scope(
+              state: \.questionDetailViewState,
+              action: QuestionListAction.questionDetailView
+            )
+          )
+        },
+        label: EmptyView.init
+      )
     }
     .bottomSheet(
       bottomSheetPosition: viewStore.binding(

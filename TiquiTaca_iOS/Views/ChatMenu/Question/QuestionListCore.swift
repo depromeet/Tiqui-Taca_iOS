@@ -9,11 +9,16 @@ import ComposableArchitecture
 import TTNetworkModule
 
 struct QuestionListState: Equatable {
+  enum Route {
+    case questionDetail
+  }
+  var route: Route?
   var questionList: [QuestionEntity.Response] = []
   var sortType: QuestionSortType = .neworder
   var bottomSheetPresented: Bool = false
-  var enterQuestionDetail: Bool = false
   var bottomSheetPosition: TTBottomSheet.Position = .hidden
+  
+  var questionDetailViewState: QuestionDetailState = .init(questionId: "")
 }
 
 enum QuestionSortType: String {
@@ -36,11 +41,14 @@ enum QuestionSortType: String {
 
 enum QuestionListAction: Equatable {
   case selectSortType(QuestionSortType)
-  case selectQuestionDetail
+  case selectQuestionDetail(String)
   case setBottomSheetPosition(TTBottomSheet.Position)
   
   case getQuestionListByType
   case getQuestionListByTypeResponse(Result<[QuestionEntity.Response]?, HTTPError>)
+  
+  case questionDetailView(QuestionDetailAction)
+  case setRoute(QuestionListState.Route?)
 }
 
 struct QuestionListEnvironment {
@@ -49,6 +57,25 @@ struct QuestionListEnvironment {
 }
 
 let questionListReducer = Reducer<
+  QuestionListState,
+  QuestionListAction,
+  QuestionListEnvironment
+>.combine([
+  questionDetailReducer
+    .pullback(
+      state: \.questionDetailViewState,
+      action: /QuestionListAction.questionDetailView,
+      environment:{
+        QuestionDetailEnvironment.init(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
+        )
+      }
+    ),
+    questionListCore
+])
+
+let questionListCore = Reducer<
   QuestionListState,
   QuestionListAction,
   QuestionListEnvironment
@@ -66,17 +93,23 @@ let questionListReducer = Reducer<
   case let .getQuestionListByTypeResponse(.success(response)):
     state.questionList = response ?? []
     return .none
+  case .getQuestionListByTypeResponse(.failure):
+    return .none
   case let .selectSortType(type):
     state.sortType = type
     state.bottomSheetPosition = .hidden
     return .none
-  case .selectQuestionDetail:
-    state.enterQuestionDetail = true
+  case let .selectQuestionDetail(questionId):
+    state.route = .questionDetail
+    state.questionDetailViewState = .init(questionId: questionId)
     return .none
   case let .setBottomSheetPosition(position):
     state.bottomSheetPosition = position
     return .none
-  default:
+  case .questionDetailView(_):
+    return .none
+  case let .setRoute(selectedRoute):
+    state.route = selectedRoute
     return .none
   }
 }

@@ -10,27 +10,28 @@ import TTNetworkModule
 
 struct ChatMenuState: Equatable {
   enum Route {
-    case quetionList
     case questionDetail
+    case questionList
   }
   var route: Route?
   var roomInfo: RoomInfoEntity.Response?
   var roomUserList: [UserEntity.Response] = []
   var questionList: [QuestionEntity.Response] = []
   var unreadChatCount: Int? = 0 //값 받아와야함
+  var selectedQuestionId: String?
   
-  var questionItemViewState: QuestionItemState = .init()
+  var questionDetailViewState: QuestionDetailState = .init(questionId: "")
   var questionListViewState: QuestionListState = .init()
   
   var popupPresented: Bool = false
 }
 
 enum ChatMenuAction: Equatable {
-  case setRoute(ChatMenuState.Route)
+  case setRoute(ChatMenuState.Route?)
   case roomExit
-  case selectQuestionDetail
-  case clickQuestionAll
-  case questionItemView(QuestionItemAction)
+  case questionSelected(String)
+  case questionListButtonClicked
+  case questionDetailView(QuestionDetailAction)
   case questionListView(QuestionListAction)
   
   case getRoomInfo
@@ -58,12 +59,12 @@ let chatMenuReducer = Reducer<
   ChatMenuAction,
   ChatMenuEnvironment
 >.combine([
-  questionItemReducer
+  questionDetailReducer
     .pullback(
-      state: \.questionItemViewState,
-      action: /ChatMenuAction.questionItemView,
+      state: \.questionDetailViewState,
+      action: /ChatMenuAction.questionDetailView,
       environment: {
-        QuestionItemEnvironment(
+        QuestionDetailEnvironment(
           appService: $0.appService,
           mainQueue: $0.mainQueue
         )
@@ -89,6 +90,7 @@ let chatMenuReducerCore = Reducer<
   ChatMenuEnvironment
 > { state, action, environment in
   switch action {
+  // MARK: 방 정보 API (추후 제거)
   case .getRoomInfo:
     return environment.appService.roomService
       .getMyRoomInfo()
@@ -100,7 +102,10 @@ let chatMenuReducerCore = Reducer<
     return Effect(value: .getRoomInfoRequestSuccess)
   case .getRoomInfoRequestSuccess:
     return .none
+  case .getRoomInfoResponse(.failure):
+    return .none
     
+  // MARK: 채팅방 참여자 API
   case .getRoomUserListInfo:
     return environment.appService.roomService
       .getRoomUserList(roomId: state.roomInfo?.id ?? "")
@@ -110,7 +115,10 @@ let chatMenuReducerCore = Reducer<
   case let .getRoomUserListResponse(.success(response)):
     state.roomUserList = response?.userList ?? []
     return .none
-    
+  case .getRoomUserListResponse(.failure):
+    return .none
+  
+  // MARK: 질문 리스트 API
   case .getQuestionList:
     let request = QuestionEntity.Request(
       filter: QuestionSortType.recent.rawValue
@@ -125,7 +133,8 @@ let chatMenuReducerCore = Reducer<
     return .none
   case .getQuestionListResponse(.failure):
     return .none
-    
+  
+  // MARK: 방 나가기 API
   case .roomExit:
     return environment.appService.roomService
       .exitRoom(roomId: state.roomInfo?.id ?? "")
@@ -133,35 +142,37 @@ let chatMenuReducerCore = Reducer<
       .catchToEffect()
       .map(ChatMenuAction.roomExitReponse)
   case let .roomExitReponse(.success(response)):
-    #warning("채팅 탭으로 가는 액션 필요")
+  #warning("채팅 탭으로 가는 액션 필요")
+    return .none
+  case .roomExitReponse(.failure):
     return .none
     
-  case let .questionItemView(questionItemAction):
+  case let .questionDetailView(questionDetailAction):
     return .none
   case let .questionListView(questionListAction):
     return .none
+    
   case let .setRoute(selectedRoute):
-//    if selectedRoute == .questionDetail {
-//      state.questionItemViewState = .init(
-//        id: <#T##String#>,
-//        user: <#T##UserEntity.Response?#>,
-//        content: <#T##String#>,
-//        commentList: <#T##[CommentEntity]#>,
-//        createdAt: <#T##Date#>,
-//        likesCount: <#T##Int#>,
-//        commentsCount: <#T##Int#>,
-//        ilike: <#T##Bool#>
-//      )
-//    }
+    if selectedRoute == .questionDetail {
+      state.questionDetailViewState = .init(questionId: state.selectedQuestionId ?? "")
+    }
     state.route = selectedRoute
     return .none
+    
+  case let .questionSelected(questionId):
+    state.selectedQuestionId = questionId
+    state.questionDetailViewState = .init(questionId: state.selectedQuestionId ?? "")
+    state.route = .questionDetail
+    return .none
+  case .questionListButtonClicked:
+    state.route = .questionList
+    return .none
+    
   case .presentPopup:
     state.popupPresented = true
     return .none
   case .dismissPopup:
     state.popupPresented = false
-    return .none
-  default:
     return .none
   }
 }
