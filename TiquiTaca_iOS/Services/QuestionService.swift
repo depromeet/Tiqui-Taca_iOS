@@ -10,7 +10,7 @@ import Combine
 
 protocol QuestionServiceType {
   func getQuestionList(_ request: QuestionEntity.Request) -> AnyPublisher<[QuestionEntity.Response]?, HTTPError>
-  
+  func getQuestionDetail(questionId: String) -> AnyPublisher<QuestionEntity.Response?, HTTPError>
   func likeQuestion(questionId: String) -> AnyPublisher<QuestionLikeEntity.Response?, HTTPError>
 }
 
@@ -23,6 +23,10 @@ final class QuestionService: QuestionServiceType {
   
   func getQuestionList(_ request: QuestionEntity.Request) -> AnyPublisher<[QuestionEntity.Response]?, HTTPError> {
     network.request(.questionList(request), responseType: [QuestionEntity.Response].self)
+  }
+  
+  func getQuestionDetail(questionId: String) -> AnyPublisher<QuestionEntity.Response?, HTTPError> {
+    network.request(.questionDetail(questionId: questionId), responseType: QuestionEntity.Response.self)
   }
   
   func likeQuestion(questionId: String) -> AnyPublisher<QuestionLikeEntity.Response?, HTTPError> {

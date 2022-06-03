@@ -9,6 +9,7 @@ import ComposableArchitecture
 import TTNetworkModule
 
 struct QuestionDetailState: Equatable {
+  var questionId: String
   var question: QuestionEntity.Response?
   var likesCount: Int = 0 // API response
   var likeActivated: Bool = false
@@ -20,6 +21,8 @@ enum QuestionDetailAction: Equatable {
   case likeClickAction
   case writeComment
   
+  case getQuestionDetail
+  case getQuestionDetailResponse(Result<QuestionEntity.Response?, HTTPError>)
   case likeClickResponse(Result<QuestionLikeEntity.Response?, HTTPError>)
 }
 
@@ -34,6 +37,18 @@ let questionDetailReducer = Reducer<
   QuestionDetailEnvironment
 > { state, action, environment in
   switch action {
+  case .getQuestionDetail:
+    return environment.appService.questionService
+      .getQuestionDetail(questionId: state.questionId)
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(QuestionDetailAction.getQuestionDetailResponse)
+  case let .getQuestionDetailResponse(.success(response)):
+    state.question = response
+    return .none
+  case .getQuestionDetailResponse(.failure):
+    return .none
+    
   case .likeClickAction:
     return environment.appService.questionService
       .likeQuestion(questionId: state.question?.id ?? "")
@@ -44,7 +59,12 @@ let questionDetailReducer = Reducer<
     state.likeActivated = response?.ilike ?? false
     state.likesCount += state.likeActivated ? 1 : 0
     return .none
-  default :
+  case .likeClickResponse(.failure):
+    return .none
+    
+  case .moreClickAction:
+    return .none
+  case .writeComment:
     return .none
   }
 }

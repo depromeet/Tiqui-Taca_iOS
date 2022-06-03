@@ -64,10 +64,11 @@ struct QuestionDetailView: View {
           }
         }
         
-        VStack {
+        VStack(alignment: .leading) {
           Text(viewStore.question?.content ?? "")
             .font(.body3)
             .foregroundColor(.black900)
+            .hLeading()
           HStack {
             Button {
               viewStore.send(.likeClickAction)
@@ -101,14 +102,11 @@ struct QuestionDetailView: View {
           .foregroundColor(.black800)
           .padding(.leading, 20)
           .padding(.top, 12)
-        
-        List {
-          ForEach(viewStore.question?.commentList ?? []) { comment in
-            
-          }
-          .listRowSeparator(.hidden)
+    
+        ForEach(viewStore.question?.commentList ?? []) { comment in
+          
         }
-        .listStyle(.plain)
+        .listRowSeparator(.hidden)
       } else {
         VStack(alignment: .center) {
           Image("bxPancil")
@@ -121,6 +119,9 @@ struct QuestionDetailView: View {
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
       }
+    }
+    .onAppear {
+      viewStore.send(.getQuestionDetail)
     }
     .navigationBarHidden(true)
     .background(Color.white)
@@ -159,7 +160,7 @@ struct QuestionDetailView_Previews: PreviewProvider {
   static var previews: some View {
     QuestionDetailView(
       store: .init(
-        initialState: QuestionDetailState(),
+        initialState: QuestionDetailState(questionId: ""),
         reducer: questionDetailReducer,
         environment:
           QuestionDetailEnvironment(
