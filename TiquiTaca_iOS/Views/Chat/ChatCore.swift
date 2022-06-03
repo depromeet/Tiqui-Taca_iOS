@@ -43,8 +43,8 @@ enum ChatAction: Equatable {
 }
 
 struct ChatEnvironment {
-	let appService: AppService
-	let mainQueue: AnySchedulerOf<DispatchQueue>
+  let appService: AppService
+  let mainQueue: AnySchedulerOf<DispatchQueue>
   var locationManager: LocationManager
 }
 
@@ -53,14 +53,15 @@ let chatReducer = Reducer<
   ChatAction,
   ChatEnvironment
 >.combine([
-  chatDetailReducer.pullback(
-    state: \.chatDetailState,
-    action: /ChatAction.chatDetailAction,
-    environment: {
-      ChatDetailEnvironment(
-        appService: $0.appService,
-        mainQueue: $0.mainQueue
-      )}),
+  chatDetailReducer
+    .pullback(
+      state: \.chatDetailState,
+      action: /ChatAction.chatDetailAction,
+      environment: {
+        ChatDetailEnvironment(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
+        )}),
   chatCore
 ])
 
@@ -125,6 +126,7 @@ let chatCore = Reducer<
 		state.currentTab = type
 		return .none
 	case .willEnterRoom(let room):
+      state.chatDetailState.currentRoom = room
 		state.willEnterRoom = room
 		return .none
 	case .refresh:
@@ -139,5 +141,5 @@ let chatCore = Reducer<
     )
   case .chatDetailAction:
     return .none
-	}
+  }
 }

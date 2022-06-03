@@ -13,11 +13,17 @@ import TTNetworkModule
 import SwiftUI
 
 struct ChatDetailState: Equatable {
-  var dummy = ""
+  var currentRoom: RoomInfoEntity.Response = .init()
+  var isFirstLoad = true
 }
 
 enum ChatDetailAction: Equatable {
   case onAppear
+  case connectSocket
+  case disconnectSocket
+  case receiveMessage
+  case sendMessage
+  case socket(SocketService.Action)
 }
 
 struct ChatDetailEnvironment {
@@ -32,6 +38,15 @@ let chatDetailReducer = Reducer<
 > { state, action, environment in
   switch action {
   case .onAppear:
+    guard state.isFirstLoad else { return .none }
+    
+    return environment.appService.socketService
+      .connect(state.currentRoom.id ?? "")
+      .receive(on: environment.mainQueue)
+      .map(ChatDetailAction.socket)
+      .eraseToEffect()
+      .cancellable(id: state.currentRoom.id ?? "")
+  default:
     return .none
   }
 }

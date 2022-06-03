@@ -53,7 +53,6 @@ struct ChatView: View {
         
         NavigationLink(
           destination: ChatDetailView(
-            roomInfo: viewStore.state.willEnterRoom,
             store: store.scope(
               state: \.chatDetailState,
               action: ChatAction.chatDetailAction)

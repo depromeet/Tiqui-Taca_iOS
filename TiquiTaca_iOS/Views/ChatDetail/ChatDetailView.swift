@@ -11,19 +11,30 @@ import ComposableArchitecture
 import TTDesignSystemModule
 
 struct ChatDetailView: View {
-  @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-  let roomInfo: RoomInfoEntity.Response?
-  var store: Store<ChatDetailState, ChatDetailAction>
+  typealias State = ChatDetailState
+  typealias Action = ChatDetailAction
   
-  init(roomInfo: RoomInfoEntity.Response?, store: Store<ChatDetailState, ChatDetailAction>) {
-    self.roomInfo = roomInfo
+  @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+  var store: Store<State, Action>
+  @ObservedObject private var viewStore: ViewStore<ViewState, Action>
+  
+  struct ViewState: Equatable {
+    let currentRoom: RoomInfoEntity.Response
+    
+    init(state: State) {
+      currentRoom = state.currentRoom
+    }
+  }
+  
+  init(store: Store<State, Action>) {
     self.store = store
+    viewStore = ViewStore(store.scope(state: ViewState.init))
     
     configNaviBar()
     UITextView.appearance().backgroundColor = .clear
   }
   
-	var body: some View {
+  var body: some View {
     VStack(spacing: 0) {
       ChatLogView(
         store: .init(
@@ -72,7 +83,10 @@ struct ChatDetailView: View {
           }
         }
       })
-	}
+      .onAppear {
+        viewStore.send(.onAppear)
+      }
+  }
   
   private func configNaviBar() {
     let standardAppearance = UINavigationBarAppearance()
