@@ -70,8 +70,12 @@
 		F2E38EFB2843D43D007C96F7 /* TabViewType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38EFA2843D43D007C96F7 /* TabViewType.swift */; };
 		F2E38EFF28451CE5007C96F7 /* RoomLikeEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38EFE28451CE5007C96F7 /* RoomLikeEntity.swift */; };
 		F2E38F01284644C8007C96F7 /* TTBottomSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38F00284644C8007C96F7 /* TTBottomSheet.swift */; };
-		F2E38F0728470FA6007C96F7 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F2E38F0628470FA6007C96F7 /* Settings.bundle */; };
 		F2E38F05284685D4007C96F7 /* NicknameError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38F04284685D4007C96F7 /* NicknameError.swift */; };
+		F2E38F0728470FA6007C96F7 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F2E38F0628470FA6007C96F7 /* Settings.bundle */; };
+		F2E38F0B28475FFA007C96F7 /* RoomDefaultInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38F0A28475FFA007C96F7 /* RoomDefaultInfo.swift */; };
+		F2E38F0D28477C88007C96F7 /* RoomPreviewResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38F0C28477C88007C96F7 /* RoomPreviewResponse.swift */; };
+		F2E38F0F28477F1B007C96F7 /* RoomFromCategoryResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38F0E28477F1B007C96F7 /* RoomFromCategoryResponse.swift */; };
+		F2E38F13284788B0007C96F7 /* RoomFromCategoryRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38F12284788B0007C96F7 /* RoomFromCategoryRequest.swift */; };
 		F2F1ED6F2817ABE900AC4FDD /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = F2F1ED6E2817ABE900AC4FDD /* GoogleService-Info.plist */; };
 		F2F1ED7228182D1400AC4FDD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED7128182D1400AC4FDD /* SceneDelegate.swift */; };
 		F2F1ED7D281C3D6900AC4FDD /* VerificationEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2F1ED7C281C3D6900AC4FDD /* VerificationEntity.swift */; };
@@ -212,8 +216,12 @@
 		F2E38EFA2843D43D007C96F7 /* TabViewType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabViewType.swift; sourceTree = "<group>"; };
 		F2E38EFE28451CE5007C96F7 /* RoomLikeEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomLikeEntity.swift; sourceTree = "<group>"; };
 		F2E38F00284644C8007C96F7 /* TTBottomSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TTBottomSheet.swift; sourceTree = "<group>"; };
-		F2E38F0628470FA6007C96F7 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
 		F2E38F04284685D4007C96F7 /* NicknameError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NicknameError.swift; sourceTree = "<group>"; };
+		F2E38F0628470FA6007C96F7 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		F2E38F0A28475FFA007C96F7 /* RoomDefaultInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomDefaultInfo.swift; sourceTree = "<group>"; };
+		F2E38F0C28477C88007C96F7 /* RoomPreviewResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomPreviewResponse.swift; sourceTree = "<group>"; };
+		F2E38F0E28477F1B007C96F7 /* RoomFromCategoryResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomFromCategoryResponse.swift; sourceTree = "<group>"; };
+		F2E38F12284788B0007C96F7 /* RoomFromCategoryRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomFromCategoryRequest.swift; sourceTree = "<group>"; };
 		F2F1ED6E2817ABE900AC4FDD /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		F2F1ED7128182D1400AC4FDD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		F2F1ED7C281C3D6900AC4FDD /* VerificationEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VerificationEntity.swift; sourceTree = "<group>"; };
@@ -526,9 +534,30 @@
 			path = RoomDetail;
 			sourceTree = "<group>";
 		};
+		F2E38F1028478286007C96F7 /* Response */ = {
+			isa = PBXGroup;
+			children = (
+				F2E38F0E28477F1B007C96F7 /* RoomFromCategoryResponse.swift */,
+				F2E38F0C28477C88007C96F7 /* RoomPreviewResponse.swift */,
+			);
+			path = Response;
+			sourceTree = "<group>";
+		};
+		F2E38F112847828C007C96F7 /* Request */ = {
+			isa = PBXGroup;
+			children = (
+				F2E38F12284788B0007C96F7 /* RoomFromCategoryRequest.swift */,
+			);
+			path = Request;
+			sourceTree = "<group>";
+		};
 		F2F1ED79281C3B6000AC4FDD /* Entities */ = {
 			isa = PBXGroup;
 			children = (
+				869FC8DB282A561F00B14345 /* RoomInfoEntity.swift */,
+				F2E38F0A28475FFA007C96F7 /* RoomDefaultInfo.swift */,
+				F2E38F112847828C007C96F7 /* Request */,
+				F2E38F1028478286007C96F7 /* Response */,
 				F25C79BB282D91BC009C60EE /* UserCreationEntity.swift */,
 				F2F1ED7C281C3D6900AC4FDD /* VerificationEntity.swift */,
 				F2F1ED80281C533000AC4FDD /* IssueCodeEntity.swift */,
@@ -538,7 +567,6 @@
 				F25C79B7282CB5F2009C60EE /* CheckNicknameEntity.swift */,
 				F96C0DE5282EA83D004BF1C7 /* ValidNicknameEntity.swift */,
 				F96C0DE7282EAFBE004BF1C7 /* ChangeProfileEntity.swift */,
-				869FC8DB282A561F00B14345 /* RoomInfoEntity.swift */,
 				86B296152837862500A981FC /* ChatLogEntity.swift */,
 				F2E38EFE28451CE5007C96F7 /* RoomLikeEntity.swift */,
 			);
@@ -1007,6 +1035,7 @@
 				F2E38F05284685D4007C96F7 /* NicknameError.swift in Sources */,
 				F2B268CE283BE18D0011EA43 /* ProfileImage.swift in Sources */,
 				F9B45A1F282BE9DB00948586 /* AppAlarmEntity.swift in Sources */,
+				F2E38F13284788B0007C96F7 /* RoomFromCategoryRequest.swift in Sources */,
 				F2127642281021C700FB568D /* TermsOfServiceCore.swift in Sources */,
 				F96CDE772824EF9B002DEB90 /* MyInfoCore.swift in Sources */,
 				F25C79B8282CB5F2009C60EE /* CheckNicknameEntity.swift in Sources */,
@@ -1030,10 +1059,12 @@
 				86E494912814FDE100551CCD /* MsgAndNotiView.swift in Sources */,
 				F2B268CA283BE1210011EA43 /* OTPField.swift in Sources */,
 				F9DB0B3528294F56002F6AD8 /* ChangeProfileView.swift in Sources */,
+				F2E38F0D28477C88007C96F7 /* RoomPreviewResponse.swift in Sources */,
 				F2F1ED93281E636B00AC4FDD /* SignInCore.swift in Sources */,
 				8601F65F281393550085F692 /* OnboardingView.swift in Sources */,
 				F2E38EE5283E825A007C96F7 /* MyPageItem.swift in Sources */,
 				F2F1EDAF2829335A00AC4FDD /* AppView.swift in Sources */,
+				F2E38F0F28477F1B007C96F7 /* RoomFromCategoryResponse.swift in Sources */,
 				86B296162837862500A981FC /* ChatLogEntity.swift in Sources */,
 				F2E38F01284644C8007C96F7 /* TTBottomSheet.swift in Sources */,
 				F993ADC92816C79C00718E9F /* OTPFieldCore.swift in Sources */,
@@ -1047,6 +1078,7 @@
 				F2F1ED89281E612E00AC4FDD /* SignUpView.swift in Sources */,
 				F9B90C9C28117DDF003FFEEB /* AuthService.swift in Sources */,
 				F9DB0B3728294F66002F6AD8 /* ChangeProfileCore.swift in Sources */,
+				F2E38F0B28475FFA007C96F7 /* RoomDefaultInfo.swift in Sources */,
 				F2F1ED87281E612700AC4FDD /* SignInView.swift in Sources */,
 				F2B268B62839FF1A0011EA43 /* MapKit+Extensions.swift in Sources */,
 				F25C79C6282E96A2009C60EE /* UserService.swift in Sources */,
