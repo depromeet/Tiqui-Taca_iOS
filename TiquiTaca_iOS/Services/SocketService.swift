@@ -9,7 +9,14 @@ import TTNetworkModule
 import Combine
 import SocketIO
 
-class SocketIOService: NSObject {
+protocol SocketServiceType {
+  func config(roomId: String)
+  func startConnection()
+  func endConnection()
+  func sendMessage()
+}
+
+final class SocketService: NSObject, SocketServiceType {
   var socket: SocketIOClient? = nil
   
   override init() {
