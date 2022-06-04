@@ -98,7 +98,7 @@ let questionListCore = Reducer<
   case let .selectSortType(type):
     state.sortType = type
     state.bottomSheetPosition = .hidden
-    return .none
+    return Effect(value: .getQuestionListByType)
   case let .selectQuestionDetail(questionId):
     state.route = .questionDetail
     state.questionDetailViewState = .init(questionId: questionId)
