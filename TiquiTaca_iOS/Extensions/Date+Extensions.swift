@@ -20,4 +20,11 @@ extension Date {
     dateFormatter.dateFormat = type.rawValue
     return dateFormatter.string(for: date!) ?? ""
   }
+  
+  func getTimeString() -> String {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "HH:mm"
+    
+    return dateFormatter.string(for: self) ?? ""
+  }
 }

@@ -126,7 +126,7 @@ let chatCore = Reducer<
 		state.currentTab = type
 		return .none
 	case .willEnterRoom(let room):
-      state.chatDetailState.currentRoom = room
+    state.chatDetailState = ChatDetailState(currentRoom: room)
 		state.willEnterRoom = room
 		return .none
 	case .refresh:

@@ -41,14 +41,8 @@ struct ChatDetailView: View {
   var body: some View {
     VStack(spacing: 0) {
       List {
-        ForEach(viewStore.chatLogList) { chatlog in
-          ChatMessageView(
-            store: .init(
-              initialState: .init(),
-              reducer: chatMessageReducer,
-              environment: ChatMessageEnvironment()
-            )
-          )
+        ForEach(viewStore.chatLogList) { chatLog in
+          ChatMessageView(chatLog: chatLog)
             .receivedBubble
             .listRowSeparator(.hidden)
             .listRowInsets(EdgeInsets())
@@ -56,7 +50,7 @@ struct ChatDetailView: View {
       }
       .listStyle(.plain)
       
-      InputMessageView(store: store)
+      InputChatView(store: store)
     }
       .navigationBarBackButtonHidden(true)
       .toolbar(content: {
@@ -118,10 +112,11 @@ struct ChatDetailView: View {
   }
 }
 
-private struct InputMessageView: View {
+private struct InputChatView: View {
   private let store: Store<ChatDetailState, ChatDetailAction>
   @State var typingMessage: String = ""
   @State var isQuestion: Bool = false
+  @State var editorHeight: CGFloat = 32
   
   init(store: Store<ChatDetailState, ChatDetailAction>) {
     self.store = store
@@ -143,23 +138,22 @@ private struct InputMessageView: View {
       }
       
       HStack(alignment: .center, spacing: 4) {
-        TextEditor(text: $typingMessage)
+        
+        UITextViewRepresentable(text: $typingMessage, inputHeight: $editorHeight)
           .foregroundColor(Color.black900)
-          .font(.body4)
+          .hLeading()
           .background(
             ZStack {
               Text(
                 typingMessage.isEmpty ?
-                  "텍스트를 남겨주세요" : ""
+                "텍스트를 남겨주세요" : ""
               )
-                .foregroundColor(Color.black100)
-                .font(.body4)
-                .padding(.leading, 4)
-                .hLeading()
+              .foregroundColor(Color.black100)
+              .font(.body4)
+              .padding(.leading, 4)
+              .hLeading()
             }
           )
-          .hLeading()
-          .frame(alignment: .center)
           .onChange(of: typingMessage) {_ in
             if typingMessage.trimmingCharacters(in: .whitespacesAndNewlines)
               .isEmpty {
@@ -180,6 +174,7 @@ private struct InputMessageView: View {
               ViewStore(store).send(.sendMessage(chat))
               isQuestion = false
               typingMessage = ""
+              editorHeight = 32
             }
           }) {
             Image("sendDisable")
@@ -197,7 +192,7 @@ private struct InputMessageView: View {
       }
         .padding(EdgeInsets(top: 10, leading: 12, bottom: 10, trailing: 12))
         .padding(0)
-        .frame(height: 52)
+        .frame(height: 20 + editorHeight)
         .background(Color.white150)
         .cornerRadius(16)
         .hLeading()
@@ -206,6 +201,55 @@ private struct InputMessageView: View {
       .background(Color.white50)
   }
 }
+
+
+struct UITextViewRepresentable: UIViewRepresentable {
+  @Binding var text: String
+  @Binding var inputHeight: CGFloat
+  
+  func makeUIView(context: UIViewRepresentableContext<UITextViewRepresentable>) -> UITextView {
+    let textView = UITextView(frame: .zero)
+    textView.backgroundColor = .clear
+    textView.delegate = context.coordinator
+    textView.font = UIFont(name: "Pretendard-Medium", size: 13)
+    textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+    return textView
+  }
+  
+  func makeCoordinator() -> UITextViewRepresentable.Coordinator {
+    Coordinator(text: self.$text, inputHeight: $inputHeight)
+  }
+  
+  func updateUIView(_ uiView: UITextView, context: UIViewRepresentableContext<UITextViewRepresentable>) {
+    uiView.text = self.text
+  }
+  
+  class Coordinator: NSObject, UITextViewDelegate {
+    @Binding var text: String
+    @Binding var inputHeight: CGFloat
+    
+    let maxHeight: CGFloat = 100
+    
+    init(text: Binding<String>, inputHeight: Binding<CGFloat>) {
+      self._text = text
+      self._inputHeight = inputHeight
+    }
+    
+    func textViewDidChange(_ textView: UITextView) {
+      let spacing = textView.font?.lineHeight ?? 0
+      if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+        textView.text = ""
+        self.text = ""
+        inputHeight = 32
+        return
+      }
+      
+      self.text = textView.text
+      inputHeight = max(32, min(textView.contentSize.height, spacing * 5))
+    }
+  }
+}
+
 
 //struct ChatDetailView_Previews: PreviewProvider {
 //	static var previews: some View {

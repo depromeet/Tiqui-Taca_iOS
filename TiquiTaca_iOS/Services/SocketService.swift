@@ -36,6 +36,7 @@ struct SocketService {
           ])
         ]
         let socket = socketManager.socket(forNamespace: "/chat")
+        // 이미 커넥 되어있는지 확인?
         
         socket.on(clientEvent: .connect) {_, _ in
           print("connect complete")
@@ -50,10 +51,15 @@ struct SocketService {
           subscriber.send(.initialMessages(obj))
         }
         
-        socket.on("new_chat") { res, _ in
-          print("new chat", res)
-          
-          subscriber.send(.newMessage(.init()))
+        socket.on("new_chat") { data, _ in
+          guard let res = data.first else { return }
+          do {
+            let resData = try JSONSerialization.data(withJSONObject: res, options: .fragmentsAllowed)
+            let obj = try JSONDecoder().decode(ChatLogEntity.Response.self, from: resData)
+            subscriber.send(.newMessage(obj))
+          } catch {
+            print("new chat decode error")
+          }
         }
         
         socket.on("exception") { res, _ in

@@ -13,7 +13,6 @@ import SwiftUI
 
 struct ChatDetailState: Equatable {
   var currentRoom: RoomInfoEntity.Response = .init()
-  var isFirstLoad = true
   
   var chatLogList: [ChatLogEntity.Response] = []
 }
@@ -44,9 +43,6 @@ let chatDetailReducer = Reducer<
 > { state, action, environment in
   switch action {
   case .onAppear:
-    guard state.isFirstLoad else { return .none }
-    state.isFirstLoad = false
-    
     return environment.appService.socketService
       .connect(state.currentRoom.id ?? "")
       .receive(on: environment.mainQueue)
