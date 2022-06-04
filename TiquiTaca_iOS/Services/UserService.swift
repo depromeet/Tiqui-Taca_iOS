@@ -16,6 +16,8 @@ protocol UserServiceType {
   func checkValidNickname(nickname: String) -> AnyPublisher<ValidNicknameEntity.Response?, HTTPError>
   func changeProfile(_ request: ChangeProfileEntity.Request) -> AnyPublisher<ChangeProfileEntity.Response?, HTTPError>
   func createUser(_ request: UserCreationEntity.Request) -> AnyPublisher<UserCreationEntity.Response?, HTTPError>
+  func reportUser(userId: String) -> AnyPublisher<ReportEntity.Response?, HTTPError>
+  func blockUser(userId: String) -> AnyPublisher<[BlockUserEntity.Response]?, HTTPError>
 }
 
 final class UserService: UserServiceType {
@@ -52,5 +54,13 @@ final class UserService: UserServiceType {
   func createUser(_ request: UserCreationEntity.Request) -> AnyPublisher<UserCreationEntity.Response?, HTTPError> {
     return network
       .request(.userCreate(request), responseType: UserCreationEntity.Response.self)
+  }
+  
+  func reportUser(userId: String) -> AnyPublisher<ReportEntity.Response?, HTTPError> {
+    return network.request(.reportUser(userId: userId), responseType: ReportEntity.Response.self)
+  }
+  
+  func blockUser(userId: String) -> AnyPublisher<[BlockUserEntity.Response]?, HTTPError> {
+    return network.request(.blockUser(userId: userId), responseType: [BlockUserEntity.Response].self)
   }
 }
