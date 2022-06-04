@@ -15,15 +15,15 @@ struct QuestionItemView: View {
   var body: some View {
     VStack(alignment: .leading) {
       HStack(alignment: .top) {
-        Image(model.user?.profile.imageName ?? "defaultProfile")
+        Image(model.user.profile.imageName)
           .resizable()
           .frame(width: 32, height: 32)
         
         VStack(alignment: .leading) {
-          Text(model.user?.nickname ?? "")
+          Text(model.user.nickname)
             .font(.body4)
             .foregroundColor(.black900)
-          Text("1시간 전")
+          Text(model.createdAt.getTimeTodayOrDate())
             .font(.body8)
             .foregroundColor(.white800)
         }
