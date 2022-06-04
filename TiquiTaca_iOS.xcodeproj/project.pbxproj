@@ -36,6 +36,7 @@
 		F2127642281021C700FB568D /* TermsOfServiceCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2127641281021C700FB568D /* TermsOfServiceCore.swift */; };
 		F2127644281191A800FB568D /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2127643281191A800FB568D /* WebView.swift */; };
 		F21276462811C6D500FB568D /* TOSFieldListViewCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21276452811C6D500FB568D /* TOSFieldListViewCore.swift */; };
+		F22184EA284B3D7B005CE6C3 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22184E9284B3D7B005CE6C3 /* Array+Extensions.swift */; };
 		F248EB012813240500430C3B /* CreateProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F248EB002813240500430C3B /* CreateProfileView.swift */; };
 		F248EB032813273A00430C3B /* CreateProfileCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F248EB022813273A00430C3B /* CreateProfileCore.swift */; };
 		F24B1EEF28086CA0003D4E1D /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = F24B1EEE28086CA0003D4E1D /* .swiftlint.yml */; };
@@ -180,6 +181,7 @@
 		F2127641281021C700FB568D /* TermsOfServiceCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceCore.swift; sourceTree = "<group>"; };
 		F2127643281191A800FB568D /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		F21276452811C6D500FB568D /* TOSFieldListViewCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TOSFieldListViewCore.swift; sourceTree = "<group>"; };
+		F22184E9284B3D7B005CE6C3 /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		F248EB002813240500430C3B /* CreateProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProfileView.swift; sourceTree = "<group>"; };
 		F248EB022813273A00430C3B /* CreateProfileCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProfileCore.swift; sourceTree = "<group>"; };
 		F24B1EEE28086CA0003D4E1D /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
@@ -684,6 +686,7 @@
 				86BEED81282F3FD500EA0C5B /* Date+Extensions.swift */,
 				86783242282651A90034EACC /* Color+Extensions.swift */,
 				F2B268B52839FF1A0011EA43 /* MapKit+Extensions.swift */,
+				F22184E9284B3D7B005CE6C3 /* Array+Extensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -1006,6 +1009,7 @@
 				867832462826DE890034EACC /* RoomListCell.swift in Sources */,
 				F2E38EF528423721007C96F7 /* PopularChatRoomListItem.swift in Sources */,
 				F2F1ED98281E869D00AC4FDD /* VerificationNumberCheckCore.swift in Sources */,
+				F22184EA284B3D7B005CE6C3 /* Array+Extensions.swift in Sources */,
 				F2B268BD283AAF090011EA43 /* LocationCategoryListView.swift in Sources */,
 				86E4948D2814FDC700551CCD /* ChatView.swift in Sources */,
 				86E494952814FDF300551CCD /* MyPageView.swift in Sources */,
