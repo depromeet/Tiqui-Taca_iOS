@@ -6,8 +6,25 @@
 //
 
 import SwiftUI
+import CoreLocation
 
 struct PopularChatRoomListItem: View {
+  let roomInfo: RoomFromCategoryResponse
+  let rankingNumber: Int
+  let currentLocation: CLLocation
+  
+  private var userCountString: String {
+    return "\(roomInfo.userCount)" + "명"
+  }
+  
+  private var subString: String {
+    let categoryName = roomInfo.category?.locationName ?? ""
+    let location = CLLocation(latitude: roomInfo.latitude, longitude: roomInfo.longitude)
+    let distance = currentLocation.distance(from: location)
+    let distanceString = String(Int(distance))
+    return categoryName + " | " + distanceString + "m"
+  }
+  
   var body: some View {
     HStack(spacing: .spacingS) {
       ZStack {
@@ -15,14 +32,15 @@ struct PopularChatRoomListItem: View {
           .resizable()
           .frame(width: 32, height: 32)
           .padding(.spacingXXS)
-        Text("1")
+        Text("\(rankingNumber)")
           .font(.heading3)
+          .foregroundColor(.black700)
       }
       VStack(alignment: .leading, spacing: .spacingXXXS) {
-        Text("한양대학교")
+        Text(roomInfo.name)
           .font(.heading3)
           .foregroundColor(.white)
-        Text("대학교" + " | " + "900" + "m")
+        Text(subString)
           .font(.body3)
           .foregroundColor(.black100)
       }
@@ -31,7 +49,7 @@ struct PopularChatRoomListItem: View {
         Image("peopleColor")
           .resizable()
           .frame(width: 24, height: 24)
-        Text("300" + "명")
+        Text(userCountString)
           .font(.subtitle4)
           .foregroundColor(.white500)
       }
@@ -43,8 +61,12 @@ struct PopularChatRoomListItem: View {
 
 struct PopularChatRoomListItem_Previews: PreviewProvider {
   static var previews: some View {
-    PopularChatRoomListItem()
-      .background(Color.black700)
-      .previewLayout(.sizeThatFits)
+    PopularChatRoomListItem(
+      roomInfo: .init(),
+      rankingNumber: 0,
+      currentLocation: .init(latitude: 0, longitude: 0)
+    )
+    .background(Color.black700)
+    .previewLayout(.sizeThatFits)
   }
 }
