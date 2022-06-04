@@ -12,4 +12,3 @@ enum QuestionLikeEntity {
     let ilike: Bool
   }
 }
-
