@@ -19,17 +19,21 @@ struct MainMapView: View {
   
   struct ViewState: Equatable {
     let bottomSheetPosition: TTBottomSheet.Position
+    let bottomSheetType: MainMapBottomSheetType
     let chatRoomAnnotationInfos: [ChatRoomAnnotationInfo]
     let selectedAnnotationId: String?
     let region: MKCoordinateRegion
     let alert: AlertState<MainMapAction>?
+    let popularChatRoomListState: PopularChatRoomListState
     
     init(state: State) {
       bottomSheetPosition = state.bottomSheetPosition
+      bottomSheetType = state.bottomSheetType
       chatRoomAnnotationInfos = state.chatRoomAnnotationInfos
       selectedAnnotationId = state.selectedAnnotationId
       region = state.region
       alert = state.alert
+      popularChatRoomListState = state.popularChatRoomListState
     }
   }
   
@@ -65,7 +69,7 @@ struct MainMapView: View {
           // 하단 버튼
           HStack(spacing: .spacingM) {
             Button {
-              viewStore.send(.setBottomSheetPosition(.middle))
+              viewStore.send(.popularChatRoomButtonTapped)
             } label: {
               HStack(spacing: .spacingM) {
                 Text("지금 인기있는 채팅방 알아보기")
@@ -100,17 +104,18 @@ struct MainMapView: View {
       ),
       options: TTBottomSheet.Options
     ) {
-      VStack {
-        Text("test")
+      switch viewStore.bottomSheetType {
+      case .roomDetail:
+        // room detail
+        EmptyView()
+      case .chatRoomList:
+        // chat room list // category, favorite
+        EmptyView()
+      case .popularChatRoomList:
+        // popular chat room list
+        PopularChatRoomListView(store: popularChatRoomListStore)
       }
-      .vCenter()
-      .hCenter()
-      // types:
-      // popular chat room list
-      // chat room list // category, favorite
-      // room detail
     }
-    .navigationTitle("지도")
     .alert(
       store.scope(state: { $0.alert }),
       dismiss: .dismissAlertButtonTapped
@@ -118,6 +123,17 @@ struct MainMapView: View {
     .onAppear {
       viewStore.send(.onAppear)
     }
+    .navigationTitle("지도")
+  }
+}
+
+// MARK: - Store init
+extension MainMapView {
+  private var popularChatRoomListStore: Store<PopularChatRoomListState, PopularChatRoomListAction> {
+    return store.scope(
+      state: \.popularChatRoomListState,
+      action: Action.popularChatRoomListAction
+    )
   }
 }
 

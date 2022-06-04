@@ -37,6 +37,7 @@
 		F2127644281191A800FB568D /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2127643281191A800FB568D /* WebView.swift */; };
 		F21276462811C6D500FB568D /* TOSFieldListViewCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21276452811C6D500FB568D /* TOSFieldListViewCore.swift */; };
 		F22184EA284B3D7B005CE6C3 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22184E9284B3D7B005CE6C3 /* Array+Extensions.swift */; };
+		F22184EC284B5DD7005CE6C3 /* MainMapBottomSheetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22184EB284B5DD7005CE6C3 /* MainMapBottomSheetType.swift */; };
 		F248EB012813240500430C3B /* CreateProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F248EB002813240500430C3B /* CreateProfileView.swift */; };
 		F248EB032813273A00430C3B /* CreateProfileCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F248EB022813273A00430C3B /* CreateProfileCore.swift */; };
 		F24B1EEF28086CA0003D4E1D /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = F24B1EEE28086CA0003D4E1D /* .swiftlint.yml */; };
@@ -182,6 +183,7 @@
 		F2127643281191A800FB568D /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		F21276452811C6D500FB568D /* TOSFieldListViewCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TOSFieldListViewCore.swift; sourceTree = "<group>"; };
 		F22184E9284B3D7B005CE6C3 /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
+		F22184EB284B5DD7005CE6C3 /* MainMapBottomSheetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapBottomSheetType.swift; sourceTree = "<group>"; };
 		F248EB002813240500430C3B /* CreateProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProfileView.swift; sourceTree = "<group>"; };
 		F248EB022813273A00430C3B /* CreateProfileCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProfileCore.swift; sourceTree = "<group>"; };
 		F24B1EEE28086CA0003D4E1D /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
@@ -450,6 +452,7 @@
 				F2E38EE8283FDB2C007C96F7 /* MyPageItemType.swift */,
 				F2E38EFA2843D43D007C96F7 /* TabViewType.swift */,
 				F2E38F04284685D4007C96F7 /* NicknameError.swift */,
+				F22184EB284B5DD7005CE6C3 /* MainMapBottomSheetType.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1076,6 +1079,7 @@
 				F2F1ED83281C6B2F00AC4FDD /* OTPFieldView.swift in Sources */,
 				F2F1ED96281E868300AC4FDD /* VerificationNumberCheckView.swift in Sources */,
 				86783243282651A90034EACC /* Color+Extensions.swift in Sources */,
+				F22184EC284B5DD7005CE6C3 /* MainMapBottomSheetType.swift in Sources */,
 				86032A26282C22A50061D3F9 /* RoomService.swift in Sources */,
 				F2E38EF028420C90007C96F7 /* PopularChatRoomListCore.swift in Sources */,
 				F981FA1F282604AA0000A531 /* CsCenterView.swift in Sources */,
