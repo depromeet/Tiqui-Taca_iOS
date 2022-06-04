@@ -10,66 +10,81 @@ import TTNetworkModule
 import Combine
 import SocketIO
 
-protocol SocketServiceType {
-}
-
-fileprivate var connnectedSockets: [AnyHashable: SocketIOClient] = [:]
-
 struct SocketService {
   enum Action: Equatable {
     case initialMessages([ChatLogEntity.Response])
     case newMessage(ChatLogEntity.Response)
   }
-
+  
+  static var connectedSockets: [AnyHashable: SocketIOClient] = [:]
+  static let socketManager = SocketManager(socketURL: URL(string: "ws://52.78.64.242:8081")!)
+  
   var connect: (String) -> Effect<Action, Never>
   var disconnect: (String) -> Effect<Never, Never>
-//  var send: (String, URLSessionWebSocketTask.Message) -> Effect<NSError?, Never>
+  var send: (String, SendChatEntity) -> Effect<NSError?, Never>
 //  var receive: (String) -> Effect<Message, NSError>
   static let live = SocketService(
     connect: { roomId in
-      Effect.run{ subscriber in
-        let socket = SocketManager(
-          socketURL: URL(string: "ws://52.78.64.242:8081")!,
-          config: [
-            .log(true),
-            .compress,
-            .connectParams(["rooId": roomId]),
-            .extraHeaders(["authorization": "Bearer \(UserDefaults.standard.string(forKey: "publicAccessToken") ?? "")"] )
-          ]
-        ).socket(forNamespace: "/chat")
+      Effect.run { subscriber in
+        socketManager.config = [
+          .log(true),
+          .compress,
+          .forceWebsockets(true),
+          .connectParams(["roomId": roomId]),
+          .extraHeaders([
+            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "publicAccessToken") ?? "")"
+          ])
+        ]
+        let socket = socketManager.socket(forNamespace: "/chat")
         
-        socket.on("init") { res, ack in
-          print("init 받아옴", res)
-          subscriber.send(.initialMessages([]))
-        }
-        socket.on("new_chat") { res, ack in
-          print("새로운 챗 받아옴", res)
-          subscriber.send(.newMessage(.init()))
-        }
-        socket.connect()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+        socket.on(clientEvent: .connect) {_, _ in
+          print("connect complete")
           socket.emit("connected")
         }
         
-        connnectedSockets[roomId] = socket
+        socket.on("init") { data, _ in
+          guard let res = data.first as? [Any] else { return }
+          let obj = res.compactMap({ $0 as? [String: Any] })
+            .compactMap({ try? JSONSerialization.data(withJSONObject: $0, options: .fragmentsAllowed) })
+            .compactMap({ try? JSONDecoder().decode(ChatLogEntity.Response.self, from: $0) })
+          subscriber.send(.initialMessages(obj))
+        }
+        
+        socket.on("new_chat") { res, _ in
+          print("new chat", res)
+          
+          subscriber.send(.newMessage(.init()))
+        }
+        
+        socket.on("exception") { res, _ in
+          print("error", res)
+        }
+        
+        socket.connect()
+        
+        connectedSockets[roomId] = socket
         return AnyCancellable {
-          print("???")
-          connnectedSockets[roomId]?.emit("disconnected")
-          connnectedSockets[roomId]?.disconnect()
-          connnectedSockets[roomId] = nil
+          print("디스컨넥티드")
+          connectedSockets[roomId]?.emit("disconnected")
+          connectedSockets[roomId]?.disconnect()
+          connectedSockets[roomId] = nil
         }
       }
     },
     disconnect: { roomId in
       .fireAndForget {
-        connnectedSockets[roomId]?.emit("disconnected")
-        connnectedSockets[roomId]?.disconnect()
-        connnectedSockets[roomId] = nil
+        print("디스컨넥티드")
+        connectedSockets[roomId]?.emit("disconnected")
+        connectedSockets[roomId]?.disconnect()
+        connectedSockets[roomId] = nil
+      }
+    },
+    send: { roomId, chatEntity in
+      .future { callback in
+        connectedSockets[roomId]?.emit("send_chat", chatEntity) {
+          callback(.success(nil))
+        }
       }
     }
-//    send: {
-//
-//    }
   )
 }

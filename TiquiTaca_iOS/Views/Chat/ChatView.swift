@@ -53,6 +53,8 @@ struct ChatView: View {
         
         NavigationLink(
           destination: ChatDetailView(
+            title: (viewStore.state.willEnterRoom?.name ?? "")
+            + " \(viewStore.state.willEnterRoom?.userCount ?? 0)",
             store: store.scope(
               state: \.chatDetailState,
               action: ChatAction.chatDetailAction)
@@ -254,7 +256,7 @@ private struct RoomListView: View {
     List {
       if (roomType == .like && viewStore.likeRoomList.isEmpty) ||
         (roomType == .popular && viewStore.popularRoomList.isEmpty) {
-        NoDataView(noDataType: .like)
+        NoDataView(noDataType: roomType)
           .padding(.top, .spacingXXXL * 2)
           .background(.white)
       } else {

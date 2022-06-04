@@ -16,17 +16,21 @@ struct ChatDetailView: View {
   
   @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
   var store: Store<State, Action>
+  let title: String
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
   
   struct ViewState: Equatable {
     let currentRoom: RoomInfoEntity.Response
+    let chatLogList: [ChatLogEntity.Response]
     
     init(state: State) {
       currentRoom = state.currentRoom
+      chatLogList = state.chatLogList
     }
   }
   
-  init(store: Store<State, Action>) {
+  init(title: String, store: Store<State, Action>) {
+    self.title = title
     self.store = store
     viewStore = ViewStore(store.scope(state: ViewState.init))
     
@@ -36,17 +40,23 @@ struct ChatDetailView: View {
   
   var body: some View {
     VStack(spacing: 0) {
-      ChatLogView(
-        store: .init(
-          initialState: ChatLogState(chatLogList: []),
-          reducer: chatLogReducer,
-          environment: ChatLogEnvironment(
-            appService: .init(),
-            mainQueue: .main
-        ))
-      )
+      List {
+        ForEach(viewStore.chatLogList) { chatlog in
+          ChatMessageView(
+            store: .init(
+              initialState: .init(),
+              reducer: chatMessageReducer,
+              environment: ChatMessageEnvironment()
+            )
+          )
+            .receivedBubble
+            .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets())
+        }
+      }
+      .listStyle(.plain)
       
-      InputMessageView()
+      InputMessageView(store: store)
     }
       .navigationBarBackButtonHidden(true)
       .toolbar(content: {
@@ -61,7 +71,7 @@ struct ChatDetailView: View {
                 .scaledToFit()
                 .foregroundColor(.white)
                 .frame(width: 24, height: 24)
-              Text("채팅방이름")
+              Text( title )
                 .font(.subtitle2)
                 .foregroundColor(.white)
             }
@@ -86,6 +96,9 @@ struct ChatDetailView: View {
       .onAppear {
         viewStore.send(.onAppear)
       }
+      .onDisappear {
+        viewStore.send(.onDisAppear)
+      }
   }
   
   private func configNaviBar() {
@@ -106,8 +119,13 @@ struct ChatDetailView: View {
 }
 
 private struct InputMessageView: View {
+  private let store: Store<ChatDetailState, ChatDetailAction>
   @State var typingMessage: String = ""
   @State var isQuestion: Bool = false
+  
+  init(store: Store<ChatDetailState, ChatDetailAction>) {
+    self.store = store
+  }
   
   var body: some View {
     HStack(alignment: .bottom, spacing: 8) {
@@ -131,7 +149,7 @@ private struct InputMessageView: View {
           .background(
             ZStack {
               Text(
-                typingMessage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?
+                typingMessage.isEmpty ?
                   "텍스트를 남겨주세요" : ""
               )
                 .foregroundColor(Color.black100)
@@ -142,17 +160,34 @@ private struct InputMessageView: View {
           )
           .hLeading()
           .frame(alignment: .center)
+          .onChange(of: typingMessage) {_ in
+            if typingMessage.trimmingCharacters(in: .whitespacesAndNewlines)
+              .isEmpty {
+              typingMessage = ""
+            }
+          }
         
         VStack(spacing: 0) {
           Spacer()
             .frame(minHeight: 0, maxHeight: .infinity)
-          Button(action: { }) {
+          Button(action: {
+            if !typingMessage.isEmpty {
+              let chat = SendChatEntity(
+                inside: true,
+                type: isQuestion ? 1 : 0,
+                message: typingMessage
+              )
+              ViewStore(store).send(.sendMessage(chat))
+              isQuestion = false
+              typingMessage = ""
+            }
+          }) {
             Image("sendDisable")
               .renderingMode(.template)
               .resizable()
               .scaledToFit()
               .foregroundColor(
-                typingMessage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?
+                typingMessage.isEmpty ?
                   Color.black100 :
                   Color.green700
               )
