@@ -12,7 +12,7 @@ import TTNetworkModule
 struct RoomFromCategoryResponse: Codable, JSONConvertible, RoomDefaultInfo {
   let id: String
   let name: String
-  let category: LocationCategory?
+  let category: LocationCategory
   let radius: Int
   let userCount: Int
   let isFavorite: Bool
@@ -35,7 +35,7 @@ struct RoomFromCategoryResponse: Codable, JSONConvertible, RoomDefaultInfo {
   init() {
     id = ""
     name = ""
-    category = nil
+    category = .all
     radius = 0
     userCount = 0
     isFavorite = false
@@ -48,7 +48,7 @@ struct RoomFromCategoryResponse: Codable, JSONConvertible, RoomDefaultInfo {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     id = (try? container.decode(String.self, forKey: .id)) ?? ""
     name = (try? container.decode(String.self, forKey: .name)) ?? ""
-    category = try? container.decode(LocationCategory.self, forKey: .category)
+    category = (try? container.decode(LocationCategory.self, forKey: .category)) ?? .all
     radius = (try? container.decode(Int.self, forKey: .radius)) ?? 0
     userCount = (try? container.decode(Int.self, forKey: .userCount)) ?? 0
     isFavorite = (try? container.decode(Bool.self, forKey: .isFavorite)) ?? false
@@ -59,3 +59,17 @@ struct RoomFromCategoryResponse: Codable, JSONConvertible, RoomDefaultInfo {
 }
 
 extension RoomFromCategoryResponse: Equatable, Identifiable { }
+
+extension RoomFromCategoryResponse {
+  func toChatRoomAnnotationInfo() -> ChatRoomAnnotationInfo {
+    return .init(
+      id: self.id,
+      name: self.name,
+      category: self.category,
+      radius: self.radius,
+      userCount: self.userCount,
+      latitude: self.latitude,
+      longitude: self.longitude
+    )
+  }
+}

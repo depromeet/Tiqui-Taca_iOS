@@ -14,10 +14,10 @@ enum RoomListType {
 
 struct RoomListCell: View {
 	let ranking: Int?
-	let info: RoomInfoEntity.Response
+	let info: RoomPreviewResponse
 	let type: RoomListType
 	
-	init(ranking: Int? = nil, info: RoomInfoEntity.Response, type: RoomListType) {
+	init(ranking: Int? = nil, info: RoomPreviewResponse, type: RoomListType) {
 		self.ranking = ranking
 		self.info = info
 		self.type = type
@@ -32,10 +32,10 @@ struct RoomListCell: View {
 				
 				VStack(spacing: 2) {
 					HStack(spacing: 8) {
-						Text("\(info.name ?? "이름없음")")
+						Text(info.name)
 							.foregroundColor(.black600)
 							.font(.subtitle2)
-            Text(info.category?.locationName ?? "기타")
+            Text(info.category.locationName)
 							.foregroundColor(.black100)
 							.font(.body6)
 							.padding(EdgeInsets(top: 4, leading: 12, bottom: 4, trailing: 12))
@@ -43,7 +43,7 @@ struct RoomListCell: View {
 							.cornerRadius(16)
 					}
 						.hLeading()
-					Text("현재 \(info.userCount ?? 0)명이 티키타카 중 :)")
+					Text("현재 \(info.userCount)명이 티키타카 중 :)")
 						.foregroundColor(.white800)
 						.font(.body3)
 						.hLeading()
@@ -95,7 +95,7 @@ struct RoomListCell_Previews: PreviewProvider {
 	static var previews: some View {
 		RoomListCell(
 			ranking: 1,
-			info: RoomInfoEntity.Response(),
+			info: RoomPreviewResponse(),
 			type: .popular
 		)
 	}

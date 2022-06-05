@@ -13,12 +13,12 @@ import SwiftUI
 struct ChatState: Equatable {
 	var currentTab: RoomListType = .like
 	var isFirstLoad = true
-	var willEnterRoomInfo: RoomInfoEntity.Response?
+	var willEnterRoomInfo: RoomPreviewResponse?
 	
 	var lastLoadTime: String = Date().ISO8601Format()
-	var enteredRoom: RoomInfoEntity.Response?
-	var likeRoomList: [RoomInfoEntity.Response] = []
-	var popularRoomList: [RoomInfoEntity.Response] = []
+	var enteredRoom: RoomPreviewResponse?
+	var likeRoomList: [RoomPreviewResponse] = []
+	var popularRoomList: [RoomPreviewResponse] = []
 }
 
 enum ChatAction: Equatable {
@@ -27,13 +27,13 @@ enum ChatAction: Equatable {
 	case fetchLikeRoomList
 	case fetchPopularRoomList
 	
-	case responsePopularRoomList(Result<[RoomInfoEntity.Response]?, HTTPError>)
-	case responseLikeRoomList(Result<[RoomInfoEntity.Response]?, HTTPError>)
-	case responseEnteredRoom(Result<RoomInfoEntity.Response?, HTTPError>)
+	case responsePopularRoomList(Result<[RoomPreviewResponse]?, HTTPError>)
+	case responseLikeRoomList(Result<[RoomPreviewResponse]?, HTTPError>)
+	case responseEnteredRoom(Result<RoomPreviewResponse?, HTTPError>)
 	
 	case tabChange(RoomListType)
-	case removeFavoriteRoom(RoomInfoEntity.Response)
-	case enterRoomPopup(RoomInfoEntity.Response)
+	case removeFavoriteRoom(RoomPreviewResponse)
+	case enterRoomPopup(RoomPreviewResponse)
 	case dismissPopup
 	case refresh
 }

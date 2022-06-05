@@ -18,7 +18,6 @@
 		86032A26282C22A50061D3F9 /* RoomService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86032A25282C22A50061D3F9 /* RoomService.swift */; };
 		86783243282651A90034EACC /* Color+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86783242282651A90034EACC /* Color+Extensions.swift */; };
 		867832462826DE890034EACC /* RoomListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 867832452826DE890034EACC /* RoomListCell.swift */; };
-		869FC8DC282A561F00B14345 /* RoomInfoEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869FC8DB282A561F00B14345 /* RoomInfoEntity.swift */; };
 		86B29612283781CB00A981FC /* ChatDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B29611283781CB00A981FC /* ChatDetailView.swift */; };
 		86B296142837859C00A981FC /* ChatLogView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B296132837859C00A981FC /* ChatLogView.swift */; };
 		86B296162837862500A981FC /* ChatLogEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86B296152837862500A981FC /* ChatLogEntity.swift */; };
@@ -161,7 +160,6 @@
 		86032A25282C22A50061D3F9 /* RoomService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomService.swift; sourceTree = "<group>"; };
 		86783242282651A90034EACC /* Color+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Color+Extensions.swift"; sourceTree = "<group>"; };
 		867832452826DE890034EACC /* RoomListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomListCell.swift; sourceTree = "<group>"; };
-		869FC8DB282A561F00B14345 /* RoomInfoEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomInfoEntity.swift; sourceTree = "<group>"; };
 		86B29611283781CB00A981FC /* ChatDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDetailView.swift; sourceTree = "<group>"; };
 		86B296132837859C00A981FC /* ChatLogView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogView.swift; sourceTree = "<group>"; };
 		86B296152837862500A981FC /* ChatLogEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogEntity.swift; sourceTree = "<group>"; };
@@ -410,6 +408,14 @@
 			path = SupportingFile;
 			sourceTree = "<group>";
 		};
+		F22184F5284C8B04005CE6C3 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				F2E38F0A28475FFA007C96F7 /* RoomDefaultInfo.swift */,
+			);
+			path = Protocol;
+			sourceTree = "<group>";
+		};
 		F248EAFF281323D100430C3B /* CreateProfile */ = {
 			isa = PBXGroup;
 			children = (
@@ -559,8 +565,7 @@
 		F2F1ED79281C3B6000AC4FDD /* Entities */ = {
 			isa = PBXGroup;
 			children = (
-				869FC8DB282A561F00B14345 /* RoomInfoEntity.swift */,
-				F2E38F0A28475FFA007C96F7 /* RoomDefaultInfo.swift */,
+				F22184F5284C8B04005CE6C3 /* Protocol */,
 				F2E38F112847828C007C96F7 /* Request */,
 				F2E38F1028478286007C96F7 /* Response */,
 				F25C79BB282D91BC009C60EE /* UserCreationEntity.swift */,
@@ -1057,7 +1062,6 @@
 				F2E38EFB2843D43D007C96F7 /* TabViewType.swift in Sources */,
 				86E494932814FDE900551CCD /* MsgAndNotiCore.swift in Sources */,
 				F25C79B4282AB4D7009C60EE /* Int+Extensions.swift in Sources */,
-				869FC8DC282A561F00B14345 /* RoomInfoEntity.swift in Sources */,
 				86E494972814FE0300551CCD /* MyPageCore.swift in Sources */,
 				86E4948F2814FDD000551CCD /* ChatCore.swift in Sources */,
 				F981FA172825FB0A0000A531 /* NoticeView.swift in Sources */,

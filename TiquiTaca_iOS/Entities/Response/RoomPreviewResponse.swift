@@ -11,7 +11,7 @@ import Foundation
 struct RoomPreviewResponse: Codable, RoomDefaultInfo {
   let id: String
   let name: String
-  let category: LocationCategory?
+  let category: LocationCategory
   let userCount: Int
   let latitude: Double
   let longitude: Double
@@ -28,7 +28,7 @@ struct RoomPreviewResponse: Codable, RoomDefaultInfo {
   init() {
     id = ""
     name = ""
-    category = nil
+    category = .all
     userCount = 0
     latitude = 0
     longitude = 0
@@ -38,7 +38,7 @@ struct RoomPreviewResponse: Codable, RoomDefaultInfo {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     id = (try? container.decode(String.self, forKey: .id)) ?? ""
     name = (try? container.decode(String.self, forKey: .name)) ?? ""
-    category = try? container.decode(LocationCategory.self, forKey: .category)
+    category = (try? container.decode(LocationCategory.self, forKey: .category)) ?? .all
     userCount = (try? container.decode(Int.self, forKey: .userCount)) ?? 0
     latitude = (try? container.decode(Double.self, forKey: .latitude)) ?? 0
     longitude = (try? container.decode(Double.self, forKey: .longitude)) ?? 0

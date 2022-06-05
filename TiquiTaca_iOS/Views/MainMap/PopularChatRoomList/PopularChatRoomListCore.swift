@@ -10,7 +10,6 @@ import ComposableCoreLocation
 import TTNetworkModule
 
 struct PopularChatRoomListState: Equatable {
-  var chatRoomList: [RoomFromCategoryResponse] = []
   var popularList: [RoomFromCategoryResponse] = []
   var isLoading: Bool = false
   var currentLocation: CLLocation = .init(latitude: 0, longitude: 0)
@@ -69,8 +68,6 @@ let popularChatRoomListCore = Reducer<
     
   case let .getRoomListResponse(.success(roomList)):
     guard let roomList = roomList else { return .none }
-    state.chatRoomList = roomList
-    
     let sortedList = (roomList.sorted { $0.userCount > $1.userCount })
     state.popularList = Array(sortedList[safe: 0..<3])
     return .none

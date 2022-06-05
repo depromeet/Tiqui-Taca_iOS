@@ -18,7 +18,7 @@ struct PopularChatRoomListItem: View {
   }
   
   private var subString: String {
-    let categoryName = roomInfo.category?.locationName ?? ""
+    let categoryName = roomInfo.category.locationName
     let location = CLLocation(latitude: roomInfo.latitude, longitude: roomInfo.longitude)
     let distance = currentLocation.distance(from: location)
     let distanceString = String(Int(distance))

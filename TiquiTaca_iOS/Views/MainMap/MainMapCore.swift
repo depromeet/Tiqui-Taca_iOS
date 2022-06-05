@@ -9,12 +9,6 @@ import MapKit
 import ComposableArchitecture
 import ComposableCoreLocation
 
-enum MainMapBottomSheetType: Equatable {
-  case roomDetail
-  case chatRoomList
-  case popularChatRoomList
-}
-
 struct MainMapState: Equatable {
   var bottomSheetPosition: TTBottomSheet.Position = .hidden
   var bottomSheetType: MainMapBottomSheetType = .popularChatRoomList
@@ -146,6 +140,14 @@ let mainMapCore = Reducer<
     
   case let .popularChatRoomListAction(.itemSelected(element)):
     // detail 띄우기
+    return .none
+    
+  case let .popularChatRoomListAction(.getRoomListResponse(.success(roomList))):
+    guard let roomList = roomList else { return .none }
+    state.chatRoomAnnotationInfos = roomList
+      .compactMap { element -> ChatRoomAnnotationInfo in
+        return element.toChatRoomAnnotationInfo()
+      }
     return .none
     
   case .popularChatRoomListAction:

@@ -9,9 +9,10 @@ import TTNetworkModule
 import Combine
 
 protocol RoomServiceType {
-	func getPopularRoomList() -> AnyPublisher<[RoomInfoEntity.Response]?, HTTPError>
-	func getLikeRoomList() -> AnyPublisher<[RoomInfoEntity.Response]?, HTTPError>
-	func getEnteredRoom() -> AnyPublisher<RoomInfoEntity.Response?, HTTPError>
+  func getRoomList(_ request: RoomFromCategoryRequest) -> AnyPublisher<[RoomFromCategoryResponse]?, HTTPError>
+	func getPopularRoomList() -> AnyPublisher<[RoomPreviewResponse]?, HTTPError>
+	func getLikeRoomList() -> AnyPublisher<[RoomPreviewResponse]?, HTTPError>
+	func getEnteredRoom() -> AnyPublisher<RoomPreviewResponse?, HTTPError>
 	func registLikeRoom(roomId: String) -> AnyPublisher<RoomLikeEntity.Response?, HTTPError>
 }
 
@@ -21,20 +22,24 @@ final class RoomService: RoomServiceType {
 	init() {
 		network = .init()
 	}
+  
+  func getRoomList(_ request: RoomFromCategoryRequest) -> AnyPublisher<[RoomFromCategoryResponse]?, HTTPError> {
+    return network.request(.getRoomList(request), responseType: [RoomFromCategoryResponse].self)
+  }
 	
-	func getPopularRoomList() -> AnyPublisher<[RoomInfoEntity.Response]?, HTTPError> {
-		network.request(.getPopularRoomList, responseType: [RoomInfoEntity.Response].self)
+	func getPopularRoomList() -> AnyPublisher<[RoomPreviewResponse]?, HTTPError> {
+		return network.request(.getPopularRoomList, responseType: [RoomPreviewResponse].self)
 	}
 	
-	func getLikeRoomList() -> AnyPublisher<[RoomInfoEntity.Response]?, HTTPError> {
-		network.request(.getLikeRoomList, responseType: [RoomInfoEntity.Response].self)
+	func getLikeRoomList() -> AnyPublisher<[RoomPreviewResponse]?, HTTPError> {
+		return network.request(.getLikeRoomList, responseType: [RoomPreviewResponse].self)
 	}
 	
-	func getEnteredRoom() -> AnyPublisher<RoomInfoEntity.Response?, HTTPError> {
-		network.request(.getMyRoom, responseType: RoomInfoEntity.Response.self)
+	func getEnteredRoom() -> AnyPublisher<RoomPreviewResponse?, HTTPError> {
+		return network.request(.getMyRoom, responseType: RoomPreviewResponse.self)
 	}
 	
 	func registLikeRoom(roomId: String) -> AnyPublisher<RoomLikeEntity.Response?, HTTPError> {
-		network.request(.likeRoom(roomId: roomId), responseType: RoomLikeEntity.Response.self)
+		return network.request(.likeRoom(roomId: roomId), responseType: RoomLikeEntity.Response.self)
 	}
 }

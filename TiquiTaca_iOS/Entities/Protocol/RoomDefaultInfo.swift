@@ -10,5 +10,5 @@ import Foundation
 protocol RoomDefaultInfo {
   var id: String { get }
   var name: String { get }
-  var category: LocationCategory? { get }
+  var category: LocationCategory { get }
 }

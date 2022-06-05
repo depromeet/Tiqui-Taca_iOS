@@ -56,7 +56,7 @@ struct ChatView: View {
 
 // MARK: Current Chat View
 private struct CurrentChatView: View {
-  let roomInfo: RoomInfoEntity.Response?
+  let roomInfo: RoomPreviewResponse?
   
   var body: some View {
     VStack {
@@ -182,7 +182,7 @@ private struct TabButton: ButtonStyle {
 private struct RoomListView: View {
   private let store: Store<ChatState, ChatAction>
   private let roomType: RoomListType
-  @Binding var roomList: [RoomInfoEntity.Response]
+  @Binding var roomList: [RoomPreviewResponse]
   @State var isPopupPresent: Bool = false
   
   var body: some View {
