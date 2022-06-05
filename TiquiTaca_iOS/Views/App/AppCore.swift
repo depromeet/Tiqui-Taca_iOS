@@ -95,14 +95,18 @@ let appCore = Reducer<
     state.mainTabState = .init()
     return Effect(value: .setRoute(.mainTab))
     
-  case .signIn: // 로그인 (하위 reducer의 로그인 관련 이벤트)
+  case .signIn:
     environment.appService.authService.deleteTempToken()
-    state.mainTabState = .init()
     state.onboardingState = nil
-    return Effect(value: .setRoute(.mainTab))
+    return environment.appService.userService
+      .fetchMyProfile()
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(AppAction.getMyProfileResponse)
     
-  case .signOut: // 로그아웃 (하위 reducer의 로그아웃 관련 이벤트)
+  case .signOut:
     environment.appService.authService.signOut()
+    environment.appService.userService.deleteMyProfile()
     state.mainTabState = nil
     state.onboardingState = .init()
     return Effect(value: .setRoute(.onboarding))

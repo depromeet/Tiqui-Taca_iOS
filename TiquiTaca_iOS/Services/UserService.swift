@@ -11,6 +11,7 @@ import Combine
 protocol UserServiceType {
   var myProfile: UserEntity.Response? { get set }
   
+  func deleteMyProfile()
   func fetchMyProfile() -> AnyPublisher<UserEntity.Response?, HTTPError>
   func getAppAlarmState() -> AnyPublisher<AppAlarmEntity.Response?, HTTPError>
   func getBlockUserList() -> AnyPublisher<[BlockUserEntity.Response]?, HTTPError>
@@ -28,6 +29,10 @@ final class UserService: UserServiceType {
   }
   
   var myProfile: UserEntity.Response?
+  
+  func deleteMyProfile() {
+    myProfile = nil
+  }
   
   func fetchMyProfile() -> AnyPublisher<UserEntity.Response?, HTTPError> {
     return network.request(.getMyProfile, responseType: UserEntity.Response.self)
