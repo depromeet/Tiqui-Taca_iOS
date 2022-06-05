@@ -41,6 +41,9 @@
 		F22184EA284B3D7B005CE6C3 /* Array+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22184E9284B3D7B005CE6C3 /* Array+Extensions.swift */; };
 		F22184EC284B5DD7005CE6C3 /* MainMapBottomSheetType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22184EB284B5DD7005CE6C3 /* MainMapBottomSheetType.swift */; };
 		F22184F7284C8D45005CE6C3 /* UserEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22184F6284C8D45005CE6C3 /* UserEntity.swift */; };
+		F22184F9284C9276005CE6C3 /* ChatRoomListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22184F8284C9276005CE6C3 /* ChatRoomListView.swift */; };
+		F22184FB284C9283005CE6C3 /* ChatRoomListCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22184FA284C9283005CE6C3 /* ChatRoomListCore.swift */; };
+		F2218500284CB884005CE6C3 /* ChatRoomListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22184FF284CB884005CE6C3 /* ChatRoomListItem.swift */; };
 		F248EB012813240500430C3B /* CreateProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F248EB002813240500430C3B /* CreateProfileView.swift */; };
 		F248EB032813273A00430C3B /* CreateProfileCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F248EB022813273A00430C3B /* CreateProfileCore.swift */; };
 		F24B1EEF28086CA0003D4E1D /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = F24B1EEE28086CA0003D4E1D /* .swiftlint.yml */; };
@@ -206,6 +209,9 @@
 		F22184E9284B3D7B005CE6C3 /* Array+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Array+Extensions.swift"; sourceTree = "<group>"; };
 		F22184EB284B5DD7005CE6C3 /* MainMapBottomSheetType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMapBottomSheetType.swift; sourceTree = "<group>"; };
 		F22184F6284C8D45005CE6C3 /* UserEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserEntity.swift; path = TiquiTaca_iOS/Entities/UserEntity.swift; sourceTree = SOURCE_ROOT; };
+		F22184F8284C9276005CE6C3 /* ChatRoomListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomListView.swift; sourceTree = "<group>"; };
+		F22184FA284C9283005CE6C3 /* ChatRoomListCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomListCore.swift; sourceTree = "<group>"; };
+		F22184FF284CB884005CE6C3 /* ChatRoomListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomListItem.swift; sourceTree = "<group>"; };
 		F248EB002813240500430C3B /* CreateProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProfileView.swift; sourceTree = "<group>"; };
 		F248EB022813273A00430C3B /* CreateProfileCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProfileCore.swift; sourceTree = "<group>"; };
 		F24B1EEE28086CA0003D4E1D /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
@@ -579,6 +585,9 @@
 		F2E38EEB283FE6A1007C96F7 /* ChatRoomList */ = {
 			isa = PBXGroup;
 			children = (
+				F22184FF284CB884005CE6C3 /* ChatRoomListItem.swift */,
+				F22184F8284C9276005CE6C3 /* ChatRoomListView.swift */,
+				F22184FA284C9283005CE6C3 /* ChatRoomListCore.swift */,
 			);
 			path = ChatRoomList;
 			sourceTree = "<group>";
@@ -1119,6 +1128,8 @@
 				F981FA21282653940000A531 /* BlockListView.swift in Sources */,
 				F2F1ED91281E636200AC4FDD /* SignUpCore.swift in Sources */,
 				F2F1EDA828258E0E00AC4FDD /* AppService.swift in Sources */,
+				F22184FB284C9283005CE6C3 /* ChatRoomListCore.swift in Sources */,
+				F22184F9284C9276005CE6C3 /* ChatRoomListView.swift in Sources */,
 				F2DEC4E4282F3AF20018F545 /* ChatRoomAnnotationInfo.swift in Sources */,
 				8601F661281393640085F692 /* PageControl.swift in Sources */,
 				8601F659281308CB0085F692 /* View+Extensions.swift in Sources */,
@@ -1192,6 +1203,7 @@
 				F9322E72284242DA00EB956E /* ChatMenuCore.swift in Sources */,
 				F9B90C9C28117DDF003FFEEB /* AuthService.swift in Sources */,
 				F9DB0B3728294F66002F6AD8 /* ChangeProfileCore.swift in Sources */,
+				F2218500284CB884005CE6C3 /* ChatRoomListItem.swift in Sources */,
 				F9322E7628424DA900EB956E /* CommentEntity.swift in Sources */,
 				F2E38F0B28475FFA007C96F7 /* RoomDefaultInfo.swift in Sources */,
 				F22184F7284C8D45005CE6C3 /* UserEntity.swift in Sources */,
