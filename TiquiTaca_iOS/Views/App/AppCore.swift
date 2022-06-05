@@ -7,6 +7,7 @@
 
 import ComposableArchitecture
 import ComposableCoreLocation
+import TTNetworkModule
 
 struct AppState: Equatable {
   enum Route {
@@ -28,6 +29,7 @@ enum AppAction: Equatable {
   case onboardingAction(OnboardingAction)
   case mainTabAction(MainTabAction)
   case setLoading(Bool)
+  case getMyProfileResponse(Result<UserEntity.Response?, HTTPError>)
 }
 
 struct AppEnvironment {
@@ -85,12 +87,19 @@ let appCore = Reducer<
     
   case .onAppear:
     if environment.appService.authService.isLoggedIn {
-      state.mainTabState = .init()
-      return Effect(value: .setRoute(.mainTab))
+      return environment.appService.userService
+        .fetchMyProfile()
+        .receive(on: environment.mainQueue)
+        .catchToEffect()
+        .map(AppAction.getMyProfileResponse)
     } else {
       state.onboardingState = .init()
       return Effect(value: .setRoute(.onboarding))
     }
+    
+  case .getMyProfileResponse:
+    state.mainTabState = .init()
+    return Effect(value: .setRoute(.mainTab))
     
   case .signIn: // 로그인 (하위 reducer의 로그인 관련 이벤트)
     environment.appService.authService.deleteTempToken()

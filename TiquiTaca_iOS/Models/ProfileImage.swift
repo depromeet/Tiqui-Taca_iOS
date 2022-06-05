@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct ProfileImage: Equatable {
+struct ProfileImage: Equatable, Codable {
   /// Type Range: 1 ~ 30
   var type: Int = 1
   

@@ -35,7 +35,6 @@ enum MyPageAction: Equatable {
   case setRoute(MyPageState.Route?)
   case myInfoView(MyInfoAction)
   case getProfileInfo
-  case getProfileInfoResponse(Result<ProfileEntity.Response?, HTTPError>)
   case getProfileRequestSuccess
   case alarmToggle
   case getAlarmRequestResponse(Result<AppAlarmEntity.Response?, HTTPError>)
@@ -81,27 +80,21 @@ let myPageReducerCore = Reducer<
       return .none
     }
   case .getProfileInfo:
-    return environment.appService.userService
-      .getProfile()
-      .receive(on: environment.mainQueue)
-      .catchToEffect()
-      .map(MyPageAction.getProfileInfoResponse)
+    let myProfile = environment.appService.userService.myProfile
+    state.profileImage.type = myProfile?.profile.type ?? 0
+    state.nickname = myProfile?.nickname ?? ""
+    state.isAppAlarmOn = myProfile?.appAlarm ?? false
+    state.level = myProfile?.level ?? 0
+    state.phoneNumber = myProfile?.phoneNumber ?? ""
     
-  case let .getProfileInfoResponse(.success(response)):
-    state.profileImage.type = response?.profile.type ?? 0
-    state.nickname = response?.nickname ?? ""
-    state.isAppAlarmOn = response?.appAlarm ?? false
-    state.level = response?.level ?? 0
-    state.phoneNumber = response?.phoneNumber ?? ""
-    
-    if var phoneNumber = response?.phoneNumber, phoneNumber.count > 9 {
+    if var phoneNumber = myProfile?.phoneNumber, phoneNumber.count > 9 {
       phoneNumber.insert("-", at: phoneNumber.index(phoneNumber.startIndex, offsetBy: 3))
       phoneNumber.insert("-", at: phoneNumber.index(phoneNumber.endIndex, offsetBy: -4))
       
       state.phoneNumber = phoneNumber
     }
     
-    let createdDateString = response?.createdAt ?? ""
+    let createdDateString = myProfile?.createdAt ?? ""
     let iso8601Formatter = ISO8601DateFormatter()
     let createdDate = iso8601Formatter.date(from: createdDateString)
     
@@ -114,9 +107,6 @@ let myPageReducerCore = Reducer<
     
     state.myInfoViewState = .init(nickname: state.nickname, phoneNumber: state.phoneNumber, createdAt: state.createdAt)
     return Effect(value: .getProfileRequestSuccess)
-    
-  case .getProfileInfoResponse(.failure):
-    return .none
     
   case .getProfileRequestSuccess:
     return .none
