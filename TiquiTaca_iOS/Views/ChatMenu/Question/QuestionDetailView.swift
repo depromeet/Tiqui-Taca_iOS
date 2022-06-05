@@ -17,12 +17,11 @@ struct QuestionDetailView: View {
   let store: Store<State, Action>
   @ObservedObject var viewStore: ViewStore<ViewState, Action>
   @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
- 
+  
   struct ViewState: Equatable {
     let question: QuestionEntity.Response?
     let likesCount: Int
     let likeActivated: Bool
-    let commentCount: Int
     
     let bottomSheetPresented: Bool
     let bottomSheetPosition: TTBottomSheet.Position
@@ -39,7 +38,6 @@ struct QuestionDetailView: View {
       question = state.question
       likesCount = state.likesCount
       likeActivated = state.likeActivated
-      commentCount = state.commentCount
       
       bottomSheetPresented = state.bottomSheetPresented
       bottomSheetPosition = state.bottomSheetPosition
@@ -62,102 +60,54 @@ struct QuestionDetailView: View {
   var body: some View {
     VStack(alignment: .leading) {
       topNavigationView
-      
-      VStack(alignment: .leading) {
-        HStack(alignment: .top) {
-          Image(viewStore.question?.user.profile.imageName ?? "defaultProfile")
-            .resizable()
-            .frame(width: 32, height: 32)
-          
-          VStack(alignment: .leading) {
-            Text(viewStore.question?.user.nickname ?? "")
-              .font(.body4)
-              .foregroundColor(.black900)
-            Text(viewStore.question?.createdAt.getTimeTodayOrDate() ?? "")
-              .font(.body8)
-              .foregroundColor(.white800)
-          }
-          
-          Spacer()
-          
-          Button {
-            viewStore.send(.moreClickAction)
-          } label: {
-            Image("moreVertical")
-          }
-        }
-        
-        VStack(alignment: .leading) {
-          Text(viewStore.question?.content ?? "")
-            .font(.body3)
-            .foregroundColor(.black900)
-            .hLeading()
-          HStack {
-            Image(viewStore.likeActivated ? "replyGoodOn" : "replyGoodOff")
-            Text("\(viewStore.likesCount)")
-              .font(.body7)
-              .foregroundColor(.white800)
-            
-            Image("comments")
-              .resizable()
-              .frame(width: 20, height: 20)
-            Text("\(viewStore.question?.commentsCount ?? 0)")
-              .font(.body7)
-              .foregroundColor(.white800)
-          }
-        }
-      }
-      .padding([.leading, .trailing], 20)
-      .padding(.top, 24)
-      .padding(.bottom, 18)
-      
-      Spacer()
-        .frame(maxWidth: .infinity, maxHeight: 8)
-        .background(Color.white100)
-      
-      if let commentList = viewStore.question?.commentList, !commentList.isEmpty {
-        Text("댓글 \(viewStore.question?.commentList.count ?? 0)")
-          .font(.subtitle1)
-          .foregroundColor(.black800)
-          .padding(.leading, 20)
-          .padding(.top, 12)
-        List {
-//          ForEachStore(
-//            store.scope(
-//              state: \.commentItemStates,
-//              action: Action.comment(id:action:)
-//            ),
-//            content: CommentItemView.init(store: )
-//          )
-          ForEachStore(
-            store.scope(
-              state: \.commentItemStates,
-              action: Action.comment(id:action:)
-            ), content: { store in
-              CommentItemView.init(store: store)
-            }
-          )
+      List {
+        listHeader
           .listRowSeparator(.hidden)
           .listRowInsets(EdgeInsets())
-          .background(Color.white)
+        Section {
+          if let commentList = viewStore.commentItemStates, !commentList.isEmpty {
+            VStack {
+              Text("댓글 \(viewStore.commentItemStates.count)")
+                .hLeading()
+                .font(.subtitle1)
+                .foregroundColor(.black800)
+                .padding(.leading, 20)
+                .padding(.top, 12)
+              
+              ForEachStore(
+                store.scope(
+                  state: \.commentItemStates,
+                  action: Action.comment(id:action:)
+                ), content: { store in
+                  CommentItemView.init(store: store)
+                    .listRowSeparator(.hidden)
+                    .listRowInsets(EdgeInsets())
+                }
+              )
+            }
+            .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets())
+          } else {
+            VStack(alignment: .center) {
+              Spacer()
+              Image("bxPancil")
+                .resizable()
+                .frame(width: 160, height: 160)
+                .padding(.spacingM)
+              Text("아직 사용자들이 남긴 답변이 없어요!\n처음으로 질문에 답변해보세요!")
+                .font(.body2)
+                .foregroundColor(.white900)
+              Spacer()
+            }
+            .frame(maxWidth: .infinity, minHeight: 400, maxHeight: .infinity)
+            .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets())
+          }
         }
-        .listStyle(.plain)
-      } else {
-        VStack(alignment: .center) {
-          Spacer()
-          Image("bxPancil")
-            .resizable()
-            .frame(width: 160, height: 160)
-            .padding(.spacingM)
-          Text("아직 사용자들이 남긴 답변이 없어요!\n처음으로 질문에 답변해보세요!")
-            .font(.body2)
-            .foregroundColor(.white900)
-          Spacer()
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Color.white)
       }
-      
-      Spacer()
+      .listStyle(.plain)
+      .frame(maxHeight: .infinity)
       
       QuestionInputMessageView(
         store: questionInputStore
@@ -305,60 +255,63 @@ struct QuestionDetailView: View {
     }
     .background(Color.black800)
   }
-}
-
-private struct InputMessageView: View {
-  @State var typingMessage: String = ""
   
-  var body: some View {
-    HStack(alignment: .bottom, spacing: 8) {
-      HStack(alignment: .center, spacing: 4) {
-        TextEditor(text: $typingMessage)
-          .foregroundColor(Color.black900)
-          .font(.body4)
-          .background(
-            ZStack {
-              Text(
-                typingMessage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?
-                "텍스트를 남겨주세요" : ""
-              )
-              .foregroundColor(Color.black100)
+  var listHeader: some View {
+    VStack {
+      VStack(alignment: .leading) {
+        HStack(alignment: .top) {
+          Image(viewStore.question?.user.profile.imageName ?? "defaultProfile")
+            .resizable()
+            .frame(width: 32, height: 32)
+          
+          VStack(alignment: .leading) {
+            Text(viewStore.question?.user.nickname ?? "")
               .font(.body4)
-              .padding(.leading, 4)
-              .hLeading()
-            }
-          )
-          .hLeading()
-          .frame(alignment: .center)
-        
-        VStack(spacing: 0) {
+              .foregroundColor(.black900)
+            Text(viewStore.question?.createdAt.getTimeTodayOrDate() ?? "")
+              .font(.body8)
+              .foregroundColor(.white800)
+          }
+          
           Spacer()
-            .frame(minHeight: 0, maxHeight: .infinity)
+          
           Button {
-            
+            viewStore.send(.moreClickAction)
           } label: {
-            Image("sendDisable")
-              .renderingMode(.template)
+            Image("moreVertical")
+          }
+          .buttonStyle(.plain)
+        }
+        
+        VStack(alignment: .leading) {
+          Text(viewStore.question?.content ?? "")
+            .font(.body3)
+            .foregroundColor(.black900)
+            .hLeading()
+          HStack {
+            Image(viewStore.likeActivated ? "replyGoodOn" : "replyGoodOff")
+            Text("\(viewStore.likesCount)")
+              .font(.body7)
+              .foregroundColor(.white800)
+            
+            Image("comments")
               .resizable()
-              .scaledToFit()
-              .foregroundColor(
-                typingMessage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ?
-                Color.black100 :
-                  Color.green700
-              )
-              .frame(width: 24, height: 32)
+              .frame(width: 20, height: 20)
+            Text("\(viewStore.commentItemStates.count)")
+              .font(.body7)
+              .foregroundColor(.white800)
           }
         }
       }
-      .padding(EdgeInsets(top: 10, leading: 12, bottom: 10, trailing: 12))
-      .padding(0)
-      .frame(height: 52)
-      .background(Color.white150)
-      .cornerRadius(16)
-      .hLeading()
+      .padding([.leading, .trailing], 20)
+      .padding(.top, 24)
+      .padding(.bottom, 18)
+      
+      Spacer()
+        .frame(maxWidth: .infinity, maxHeight: 8)
+        .background(Color.white100)
     }
-    .padding(8)
-    .background(Color.white50)
+    .background(Color.white)
   }
 }
 

@@ -16,7 +16,6 @@ struct QuestionDetailState: Equatable {
   var question: QuestionEntity.Response?
   var likesCount: Int = 0 // API response
   var likeActivated: Bool = false
-  var commentCount: Int = 0
   var selectedCommentId: String = ""
   var selectedCommentUserId: String = ""
   
@@ -50,7 +49,7 @@ enum QuestionDetailAction: Equatable {
   case getQuestionDetail
   case getQuestionDetailResponse(Result<QuestionEntity.Response?, HTTPError>)
   case likeClickResponse(Result<QuestionLikeEntity.Response?, HTTPError>)
-  case postCommentResponse(Result<QuestionCommentEntity.Response?, HTTPError>)
+  case postCommentResponse(Result<[QuestionCommentEntity.Response]?, HTTPError>)
   case reportQuestionWriter
   case reportQuestionWriterResponse(Result<ReportEntity.Response?, HTTPError>)
   case blockQuestionWriter
@@ -112,7 +111,6 @@ let questionDetailCore = Reducer<
     state.question = response
     state.likesCount = response?.likesCount ?? 0
     state.likeActivated = response?.ilike ?? false
-    state.commentCount = response?.commentsCount ?? 0
     
     state.question?.commentList.enumerated().forEach({ index, comment in
       state.commentItemStates.insert(CommentItemState(comment: comment), at: index)
@@ -192,7 +190,11 @@ let questionDetailCore = Reducer<
       .catchToEffect()
       .map(QuestionDetailAction.deleteMyCommentResponse)
   case let .deleteMyCommentResponse(.success(response)):
-    return Effect(value: .getQuestionDetail)
+    state.commentItemStates = state.commentItemStates.filter { $0.comment?.id != state.selectedCommentId }
+    
+    state.selectedCommentId = ""
+    state.selectedCommentUserId = ""
+    return .none
   case .deleteMyCommentResponse(.failure):
     return .none
     
@@ -282,12 +284,21 @@ let questionDetailCore = Reducer<
         .receive(on: environment.mainQueue)
         .catchToEffect()
         .map(QuestionDetailAction.postCommentResponse)
-    case .messageTyping:
+    case .messageTyping, .sendMessageAfter:
       return .none
     }
     
   case let .postCommentResponse(.success(response)):
-    return Effect(value: .getQuestionDetail)
+    
+    let addedComment = CommentEntity.init(
+      id: response?.last?.id ?? "",
+      comment: response?.last?.comment ?? "",
+      user: response?.last?.user,
+      createdAt: response?.last?.createdAt ?? ""
+    )
+
+    state.commentItemStates.insert(CommentItemState(comment: addedComment), at: state.commentItemStates.endIndex)
+    return .none
   case .postCommentResponse(.failure):
     return .none
     

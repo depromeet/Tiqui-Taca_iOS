@@ -27,4 +27,11 @@ struct CommentEntity: Codable, Equatable, Identifiable {
     user = try? container.decode(UserEntity.Response.self, forKey: .user)
     createdAt = (try? container.decode(String.self, forKey: .createdAt)) ?? ""
   }
+  
+  init(id: String, comment: String, user: UserEntity.Response?, createdAt: String) {
+    self.id = id
+    self.comment = comment
+    self.user = user
+    self.createdAt = createdAt
+  }
 }

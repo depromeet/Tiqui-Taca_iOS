@@ -14,6 +14,7 @@ struct QuestionInputMessageState: Equatable {
 enum QuestionInputMessageAction: Equatable {
   case messageTyping(String)
   case sendMessage
+  case sendMessageAfter
 }
 
 struct QuestionInputMessageEnvironment: Equatable {
@@ -29,6 +30,9 @@ let questionInputMessageReducer = Reducer<
     state.inputMessage = message
     return .none
   case .sendMessage:
+    return Effect(value: .sendMessageAfter)
+  case .sendMessageAfter:
+    state.inputMessage = ""
     return .none
   }
 }
