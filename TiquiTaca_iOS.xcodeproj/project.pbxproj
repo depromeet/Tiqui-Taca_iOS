@@ -43,6 +43,7 @@
 		F22184F7284C8D45005CE6C3 /* UserEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22184F6284C8D45005CE6C3 /* UserEntity.swift */; };
 		F22184F9284C9276005CE6C3 /* ChatRoomListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22184F8284C9276005CE6C3 /* ChatRoomListView.swift */; };
 		F22184FB284C9283005CE6C3 /* ChatRoomListCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22184FA284C9283005CE6C3 /* ChatRoomListCore.swift */; };
+		F22184FD284C9EED005CE6C3 /* ChatRoomListSortType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22184FC284C9EED005CE6C3 /* ChatRoomListSortType.swift */; };
 		F2218500284CB884005CE6C3 /* ChatRoomListItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22184FF284CB884005CE6C3 /* ChatRoomListItem.swift */; };
 		F2218502284CBB44005CE6C3 /* Double+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2218501284CBB44005CE6C3 /* Double+Extensions.swift */; };
 		F248EB012813240500430C3B /* CreateProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F248EB002813240500430C3B /* CreateProfileView.swift */; };
@@ -212,6 +213,7 @@
 		F22184F6284C8D45005CE6C3 /* UserEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UserEntity.swift; path = TiquiTaca_iOS/Entities/UserEntity.swift; sourceTree = SOURCE_ROOT; };
 		F22184F8284C9276005CE6C3 /* ChatRoomListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomListView.swift; sourceTree = "<group>"; };
 		F22184FA284C9283005CE6C3 /* ChatRoomListCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomListCore.swift; sourceTree = "<group>"; };
+		F22184FC284C9EED005CE6C3 /* ChatRoomListSortType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomListSortType.swift; sourceTree = "<group>"; };
 		F22184FF284CB884005CE6C3 /* ChatRoomListItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomListItem.swift; sourceTree = "<group>"; };
 		F2218501284CBB44005CE6C3 /* Double+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Double+Extensions.swift"; sourceTree = "<group>"; };
 		F248EB002813240500430C3B /* CreateProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProfileView.swift; sourceTree = "<group>"; };
@@ -512,6 +514,7 @@
 				F2E38EFA2843D43D007C96F7 /* TabViewType.swift */,
 				F2E38F04284685D4007C96F7 /* NicknameError.swift */,
 				F22184EB284B5DD7005CE6C3 /* MainMapBottomSheetType.swift */,
+				F22184FC284C9EED005CE6C3 /* ChatRoomListSortType.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1167,6 +1170,7 @@
 				F25C79B8282CB5F2009C60EE /* CheckNicknameEntity.swift in Sources */,
 				F21276462811C6D500FB568D /* TOSFieldListViewCore.swift in Sources */,
 				F2FA365C2808897C00A24789 /* R.generated.swift in Sources */,
+				F22184FD284C9EED005CE6C3 /* ChatRoomListSortType.swift in Sources */,
 				F981FA1C282600C40000A531 /* MyTermsOfServiceCore.swift in Sources */,
 				8601F65C281309B10085F692 /* SplashView.swift in Sources */,
 				F25C79BA282D7524009C60EE /* String+Extensions.swift in Sources */,
