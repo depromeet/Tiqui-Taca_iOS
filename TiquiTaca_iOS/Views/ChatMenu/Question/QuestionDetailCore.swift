@@ -55,6 +55,10 @@ enum QuestionDetailAction: Equatable {
   case reportQuestionWriterResponse(Result<ReportEntity.Response?, HTTPError>)
   case blockQuestionWriter
   case blockQuestionWriterResponse(Result<[BlockUserEntity.Response]?, HTTPError>)
+  case deleteMyQuestion(String)
+  case deleteMyQuestionResponse(Result<QuestionEntity.Response?, HTTPError>)
+  case deleteMyComment(String, String)
+  case deleteMyCommentResponse(Result<QuestionCommentEntity.Response?, HTTPError>)
   
   case reportCommentWriter(String)
   case blockCommentWriter(String)
@@ -170,10 +174,36 @@ let questionDetailCore = Reducer<
       .catchToEffect()
       .map(QuestionDetailAction.blockQuestionWriterResponse)
     
+  case let .deleteMyQuestion(questionId):
+    return environment.appService.questionService
+      .deleteMyQuestion(questionId: questionId)
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(QuestionDetailAction.deleteMyQuestionResponse)
+  case let .deleteMyQuestionResponse(.success(response)):
+    return Effect(value: .getQuestionDetail)
+  case .deleteMyQuestionResponse(.failure):
+    return .none
+    
+  case let .deleteMyComment(questionId, commentId):
+    return environment.appService.questionService
+      .deleteMyComment(questionId: questionId, commentId: commentId)
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(QuestionDetailAction.deleteMyCommentResponse)
+  case let .deleteMyCommentResponse(.success(response)):
+    return Effect(value: .getQuestionDetail)
+  case .deleteMyCommentResponse(.failure):
+    return .none
+    
+    
   case .moreClickAction:
     state.bottomSheetPosition = .threeButton
-    #warning("자기건지 확인")
-    state.bottomType = .contentOther
+    if state.question?.user.id ?? "" == environment.appService.userService.myProfile?.id {
+      state.bottomType = .contentMine
+    } else {
+      state.bottomType = .contentOther
+    }
     return .none
   case .writeComment:
     return .none
@@ -188,13 +218,13 @@ let questionDetailCore = Reducer<
     case .block:
       return Effect(value: .blockQuestionWriter)
     case .delete:
-      return .none
+      return Effect(value: .deleteMyQuestion(state.questionId))
     case .commentReport:
       return Effect(value: .reportCommentWriter(state.selectedCommentUserId))
     case .commentBlock:
       return Effect(value: .blockCommentWriter(state.selectedCommentUserId))
     case .commentDelete:
-      return .none
+      return Effect(value: .deleteMyComment(state.questionId, state.selectedCommentId))
     default:
       return .none
     }
@@ -267,8 +297,11 @@ let questionDetailCore = Reducer<
   case let .comment(id: id, action: action):
     switch action {
     case let .moreClickAction(commentId, commentUserId):
-      #warning("자기건지 확인")
-      state.bottomType = .commentOther
+      if commentUserId == environment.appService.userService.myProfile?.id {
+        state.bottomType = .commentMine
+      } else {
+        state.bottomType = .commentOther
+      }
       state.selectedCommentId = commentId
       state.selectedCommentUserId = commentUserId
       state.bottomSheetPosition = .twoButton

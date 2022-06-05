@@ -182,52 +182,70 @@ struct QuestionDetailView: View {
           .frame(height: 1)
           .hCenter()
         
-        Button {
-          viewStore.send(.bottomSheetAction(.like))
-        } label: {
-          Text("좋아요")
-            .hCenter()
-            .font(.subtitle2)
-            .foregroundColor(.white)
-        }
-        .frame(height: viewStore.bottomType == .contentOther ? 44 : 0)
-        
-        Rectangle().fill(Color.black600)
-          .frame(height: viewStore.bottomType == .contentOther ? 1 : 0)
-          .hCenter()
-        
-        Button {
-          if viewStore.bottomType == .contentOther {
-            viewStore.send(.bottomSheetAction(.report))
-          } else if viewStore.bottomType == .commentOther {
-            viewStore.send(.bottomSheetAction(.commentReport))
+        if viewStore.bottomType == .contentOther ||
+            viewStore.bottomType == .commentOther {
+          Button {
+            viewStore.send(.bottomSheetAction(.like))
+          } label: {
+            Text("좋아요")
+              .hCenter()
+              .font(.subtitle2)
+              .foregroundColor(.white)
           }
-        } label: {
-          Text("신고하기")
+          .frame(height: viewStore.bottomType == .contentOther ? 44 : 0)
+          
+          Rectangle().fill(Color.black600)
+            .frame(height: viewStore.bottomType == .contentOther ? 1 : 0)
             .hCenter()
-            .font(.subtitle2)
-            .foregroundColor(.white)
-        }
-        .frame(height: 44)
-        
-        Rectangle().fill(Color.black600)
-          .frame(height: 1)
-          .hCenter()
-        
-        Button {
-          if viewStore.bottomType == .contentOther {
-            viewStore.send(.bottomSheetAction(.block))
-          } else if viewStore.bottomType == .commentOther {
-            viewStore.send(.bottomSheetAction(.commentBlock))
+          
+          Button {
+            if viewStore.bottomType == .contentOther {
+              viewStore.send(.bottomSheetAction(.report))
+            } else if viewStore.bottomType == .commentOther {
+              viewStore.send(.bottomSheetAction(.commentReport))
+            }
+          } label: {
+            Text("신고하기")
+              .hCenter()
+              .font(.subtitle2)
+              .foregroundColor(.white)
           }
-        } label: {
-          Text("차단하기")
+          .frame(height: 44)
+          
+          Rectangle().fill(Color.black600)
+            .frame(height: 1)
             .hCenter()
-            .font(.subtitle2)
-            .foregroundColor(.white)
+          
+          Button {
+            if viewStore.bottomType == .contentOther {
+              viewStore.send(.bottomSheetAction(.block))
+            } else if viewStore.bottomType == .commentOther {
+              viewStore.send(.bottomSheetAction(.commentBlock))
+            }
+          } label: {
+            Text("차단하기")
+              .hCenter()
+              .font(.subtitle2)
+              .foregroundColor(.white)
+          }
+          .frame(height: 44)
+          Spacer()
+        } else {
+          Button {
+            if viewStore.bottomType == .contentMine {
+              viewStore.send(.bottomSheetAction(.delete))
+            } else if viewStore.bottomType == .commentMine {
+              viewStore.send(.bottomSheetAction(.commentDelete))
+            }
+          } label: {
+            Text("삭제하기")
+              .hCenter()
+              .font(.subtitle2)
+              .foregroundColor(.errorRed)
+          }
+          .frame(height: 44)
+          Spacer()
         }
-        .frame(height: 44)
-        Spacer()
       }
       .vCenter()
       .hCenter()

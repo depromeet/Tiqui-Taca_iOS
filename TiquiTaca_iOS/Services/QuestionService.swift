@@ -13,6 +13,8 @@ protocol QuestionServiceType {
   func getQuestionDetail(questionId: String) -> AnyPublisher<QuestionEntity.Response?, HTTPError>
   func likeQuestion(questionId: String) -> AnyPublisher<QuestionLikeEntity.Response?, HTTPError>
   func postComment(questionId: String, _ request: QuestionCommentEntity.Request) -> AnyPublisher<QuestionCommentEntity.Response?, HTTPError>
+  func deleteMyQuestion(questionId: String) -> AnyPublisher<QuestionEntity.Response?, HTTPError>
+  func deleteMyComment(questionId: String, commentId: String) -> AnyPublisher<QuestionCommentEntity.Response?, HTTPError>
 }
 
 final class QuestionService: QuestionServiceType {
@@ -36,5 +38,13 @@ final class QuestionService: QuestionServiceType {
   
   func postComment(questionId: String, _ request: QuestionCommentEntity.Request) -> AnyPublisher<QuestionCommentEntity.Response?, HTTPError> {
     network.request(.postComment(questionId: questionId, request), responseType: QuestionCommentEntity.Response.self)
+  }
+  
+  func deleteMyQuestion(questionId: String) -> AnyPublisher<QuestionEntity.Response?, HTTPError> {
+    network.request(.removeQuestion(questionId: questionId), responseType: QuestionEntity.Response.self)
+  }
+  
+  func deleteMyComment(questionId: String, commentId: String) -> AnyPublisher<QuestionCommentEntity.Response?, HTTPError> {
+    network.request(.removeComment(questionId: questionId, commentId: commentId), responseType: QuestionCommentEntity.Response.self)
   }
 }
