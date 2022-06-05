@@ -60,6 +60,9 @@ struct MainMapView: View {
         }
       )
       .edgesIgnoringSafeArea([.all])
+      .onTapGesture {
+        viewStore.send(.setBottomSheetPosition(.hidden))
+      }
       
       VStack {
         LocationCategoryListView(selectedCategory: .constant(.all))
