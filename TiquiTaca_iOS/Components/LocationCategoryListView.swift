@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TTDesignSystemModule
 
 struct LocationCategoryListView: View {
   @Binding var selectedCategory: LocationCategory
@@ -24,16 +25,13 @@ struct LocationCategoryListView: View {
                   .frame(width: 24, height: 24)
               }
               Text(category.locationName)
-                .font(.body6)
-                .foregroundColor(selectedCategory == category ? .black900 : .white)
             }
             .padding(.leading, .spacingXS)
             .padding(.trailing, .spacingM)
-            .frame(height: 32)
-            .background(selectedCategory == category ? Color.green500 : Color.black800)
-            .cornerRadius(20)
           }
+          .buttonStyle(TTButtonChipStyle(isSelected: category == selectedCategory))
           .disabled(category == selectedCategory)
+          .frame(height: 33)
         }
       }
       .padding(.horizontal, .spacingXL)
