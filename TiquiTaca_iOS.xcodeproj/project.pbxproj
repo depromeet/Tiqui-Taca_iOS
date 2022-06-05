@@ -125,7 +125,6 @@
 		F9AE9AB128435FE3004A632D /* QuestionDetailCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AE9AB028435FE3004A632D /* QuestionDetailCore.swift */; };
 		F9AE9AB328437A8F004A632D /* CommentItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AE9AB228437A8F004A632D /* CommentItemView.swift */; };
 		F9AE9AB528437A98004A632D /* CommentItemCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AE9AB428437A98004A632D /* CommentItemCore.swift */; };
-		F9B45A1D282BDA5700948586 /* ProfileEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B45A1C282BDA5700948586 /* ProfileEntity.swift */; };
 		F9B45A1F282BE9DB00948586 /* AppAlarmEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B45A1E282BE9DB00948586 /* AppAlarmEntity.swift */; };
 		F9B90C9C28117DDF003FFEEB /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B90C9B28117DDF003FFEEB /* AuthService.swift */; };
 		F9C4F45F282D61D200ECBF9A /* BlockUserEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C4F45E282D61D200ECBF9A /* BlockUserEntity.swift */; };
@@ -285,7 +284,6 @@
 		F9AE9AB028435FE3004A632D /* QuestionDetailCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionDetailCore.swift; sourceTree = "<group>"; };
 		F9AE9AB228437A8F004A632D /* CommentItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentItemView.swift; sourceTree = "<group>"; };
 		F9AE9AB428437A98004A632D /* CommentItemCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentItemCore.swift; sourceTree = "<group>"; };
-		F9B45A1C282BDA5700948586 /* ProfileEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEntity.swift; sourceTree = "<group>"; };
 		F9B45A1E282BE9DB00948586 /* AppAlarmEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAlarmEntity.swift; sourceTree = "<group>"; };
 		F9B90C9B28117DDF003FFEEB /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		F9C4F45E282D61D200ECBF9A /* BlockUserEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockUserEntity.swift; sourceTree = "<group>"; };
@@ -542,7 +540,6 @@
 				F2F1ED7C281C3D6900AC4FDD /* VerificationEntity.swift */,
 				F2F1ED7E281C40BB00AC4FDD /* UserEntity.swift */,
 				F2F1ED80281C533000AC4FDD /* IssueCodeEntity.swift */,
-				F9B45A1C282BDA5700948586 /* ProfileEntity.swift */,
 				F9B45A1E282BE9DB00948586 /* AppAlarmEntity.swift */,
 				F9C4F45E282D61D200ECBF9A /* BlockUserEntity.swift */,
 				F25C79B7282CB5F2009C60EE /* CheckNicknameEntity.swift */,
@@ -1048,7 +1045,6 @@
 				F9669F6428251E59004624F8 /* MyBlockHistoryView.swift in Sources */,
 				F9AE9AB128435FE3004A632D /* QuestionDetailCore.swift in Sources */,
 				F9322E79284253F800EB956E /* QuestionItemView.swift in Sources */,
-				F9B45A1D282BDA5700948586 /* ProfileEntity.swift in Sources */,
 				F96CDE752824EF8C002DEB90 /* MyInfoView.swift in Sources */,
 				F2F1ED9B281EDACE00AC4FDD /* OnboardingPageView.swift in Sources */,
 				F9AE9AAD28435338004A632D /* QuestionListCore.swift in Sources */,
