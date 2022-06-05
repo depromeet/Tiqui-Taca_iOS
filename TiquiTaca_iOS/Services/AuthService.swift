@@ -25,11 +25,12 @@ final class AuthService: AuthServiceType {
   private let network: Network<AuthAPI>
   
   var isLoggedIn: Bool {
-    if TokenManager.shared.loadRefreshToken() == nil {
+    guard let refreshToken = TokenManager.shared.loadRefreshToken(),
+          let expiration = refreshToken.expiration
+    else {
       return false
-    } else {
-      return true
     }
+    return expiration > Date()
   }
   
   init() {
