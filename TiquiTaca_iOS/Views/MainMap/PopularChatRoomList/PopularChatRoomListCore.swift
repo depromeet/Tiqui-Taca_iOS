@@ -53,7 +53,7 @@ let popularChatRoomListCore = Reducer<
       latitude: state.currentLocation.coordinate.latitude,
       longitude: state.currentLocation.coordinate.longitude,
       filter: .all,
-      radius: 1000
+      radius: 10000
     )
     return .concatenate([
       .init(value: .setLoading(true)),
@@ -66,8 +66,8 @@ let popularChatRoomListCore = Reducer<
       .init(value: .setLoading(false))
     ])
     
-  case let .getRoomListResponse(.success(roomList)):
-    guard let roomList = roomList else { return .none }
+  case let .getRoomListResponse(.success(response)):
+    guard let roomList = response else { return .none }
     let sortedList = (roomList.sorted { $0.userCount > $1.userCount })
     state.popularList = Array(sortedList[safe: 0..<3])
     return .none

@@ -7,6 +7,7 @@
 
 import Foundation
 import TTNetworkModule
+import CoreLocation
 
 /// ResFindRoomDto
 struct RoomFromCategoryResponse: Codable, JSONConvertible, RoomDefaultInfo {
@@ -71,5 +72,10 @@ extension RoomFromCategoryResponse {
       latitude: self.latitude,
       longitude: self.longitude
     )
+  }
+  
+  func distance(from currentLocation: CLLocation) -> Double {
+    let location = CLLocation(latitude: self.latitude, longitude: self.longitude)
+    return currentLocation.distance(from: location)
   }
 }

@@ -18,6 +18,6 @@ extension Date {
     let date = iso8601DateFormatter.date(from: dateString)
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = type.rawValue
-    return dateFormatter.string(for: date!) ?? ""
+    return dateFormatter.string(for: date ?? Date()) ?? ""
   }
 }
