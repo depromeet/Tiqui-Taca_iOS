@@ -19,6 +19,7 @@ struct ChatRoomListState: Equatable {
 
 enum ChatRoomListAction: Equatable {
   case setListSortType(ChatRoomListSortType)
+  case setListCategoryType(LocationCategory)
   case itemSelected(RoomFromCategoryResponse)
   case getRoomListResponse(Result<[RoomFromCategoryResponse]?, HTTPError>)
   case requestChatRoomList
@@ -49,6 +50,10 @@ let chatRoomListCore = Reducer<
     if state.listSortType == type { return .none }
     state.listSortType = type
     return sortChatRoomList(&state)
+    
+  case let .setListCategoryType(category):
+    state.listCategoryType = category
+    return Effect(value: .requestChatRoomList)
     
   case .itemSelected:
     return .none

@@ -18,9 +18,9 @@ struct MainMapState: Equatable {
   var alert: AlertState<MainMapAction>?
   var isRequestingCurrentLocation: Bool = false
   
+  var chatRoomListState: ChatRoomListState = .init()
   var popularChatRoomListState: PopularChatRoomListState = .init()
   // var roomDetailState: RoomDetailState = .init()
-  // var chatRoomListState: ChatRoomListState = .init()
 }
 
 enum MainMapAction: Equatable {
@@ -33,10 +33,11 @@ enum MainMapAction: Equatable {
   case currentLocationButtonTapped
   case dismissAlertButtonTapped
   case popularChatRoomButtonTapped
+  case categoryTapped(LocationCategory)
   
+  case chatRoomListAction(ChatRoomListAction)
   case popularChatRoomListAction(PopularChatRoomListAction)
 //  case roomDetailAction(RoomDetailListAction)
-//  case chatRoomListAction(ChatRoomListAction)
 }
 
 struct MainMapEnvironment {
@@ -55,6 +56,17 @@ let mainMapReducer = Reducer<
       state: \.self,
       action: /MainMapAction.locationManager,
       environment: { $0 }
+    ),
+  chatRoomListReducer
+    .pullback(
+      state: \.chatRoomListState,
+      action: /MainMapAction.chatRoomListAction,
+      environment: {
+        ChatRoomListEnvironment(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
+        )
+      }
     ),
   popularChatRoomListReducer
     .pullback(
@@ -138,27 +150,41 @@ let mainMapCore = Reducer<
     state.alert = nil
     return .none
     
+  case .popularChatRoomButtonTapped:
+    return .merge([
+      .init(value: .setBottomSheetType(.popularChatRoomList)),
+      .init(value: .setBottomSheetPosition(.middle))
+    ])
+    
+  case let .categoryTapped(category):
+    if category == .all {
+      return .merge([
+        .init(value: .popularChatRoomButtonTapped),
+        .init(value: .popularChatRoomListAction(.requestChatRoomList))
+      ])
+    } else {
+      return .merge([
+        .init(value: .setBottomSheetType(.chatRoomList)),
+        .init(value: .setBottomSheetPosition(.middle)),
+        .init(value: .chatRoomListAction(.setListCategoryType(category)))
+      ])
+    }
+    
   case let .popularChatRoomListAction(.itemSelected(element)):
     // detail 띄우기
     return .none
     
-  case let .popularChatRoomListAction(.getRoomListResponse(.success(roomList))):
-    guard let roomList = roomList else { return .none }
-    state.chatRoomAnnotationInfos = roomList
-      .compactMap { element -> ChatRoomAnnotationInfo in
-        return element.toChatRoomAnnotationInfo()
-      }
-    return .none
+  case let .popularChatRoomListAction(.getRoomListResponse(.success(response))):
+    return convertToAnnotationModel(&state, roomList: response)
     
   case .popularChatRoomListAction:
     return .none
     
-  case .popularChatRoomButtonTapped:
-    return .merge([
-      .init(value: .setBottomSheetType(.popularChatRoomList)),
-      .init(value: .popularChatRoomListAction(.requestChatRoomList)),
-      .init(value: .setBottomSheetPosition(.middle))
-    ])
+  case let .chatRoomListAction(.getRoomListResponse(.success(response))):
+    return convertToAnnotationModel(&state, roomList: response)
+    
+  case .chatRoomListAction:
+    return .none
   }
 }
 
@@ -191,12 +217,24 @@ private let locationManagerReducer = Reducer<
         span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
       )
     }
+    state.chatRoomListState.currentLocation = location.rawValue
     state.popularChatRoomListState.currentLocation = location.rawValue
     // state.roomDetailState.currentLocation = location.rawValue
-    // state.chatRoomListState.currentLocation = location.rawValue
     return .none
     
   default:
     return .none
   }
+}
+
+private func convertToAnnotationModel(
+  _ state: inout MainMapState,
+  roomList: [RoomFromCategoryResponse]?
+) -> Effect<MainMapAction, Never> {
+  guard let roomList = roomList else { return .none }
+  state.chatRoomAnnotationInfos = roomList
+    .compactMap { element -> ChatRoomAnnotationInfo in
+      return element.toChatRoomAnnotationInfo()
+    }
+  return .none
 }

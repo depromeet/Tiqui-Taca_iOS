@@ -97,12 +97,15 @@ struct ChatRoomListView: View {
                   currentLocation: viewStore.currentLocation
                 )
               }
+              .listRowSeparatorTint(.black600)
+              .listRowBackground(Color.clear)
               .deleteDisabled(viewStore.listCategoryType != .favorite)
             }
             .onDelete { offsets in
               viewStore.send(.deleteItem(offsets))
             }
           }
+          .listStyle(.plain)
           if viewStore.chatRoomList.isEmpty {
             VStack(spacing: .spacingS) {
               Image("bxInfoArrow")

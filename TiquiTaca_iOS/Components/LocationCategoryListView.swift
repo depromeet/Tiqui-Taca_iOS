@@ -15,6 +15,7 @@ struct LocationCategoryListView: View {
       HStack(spacing: .spacingXS) {
         ForEach(LocationCategory.allCases) { category in
           Button {
+            selectedCategory = category
           } label: {
             HStack(spacing: .spacingXXS) {
               if !category.imageName.isEmpty {
@@ -24,14 +25,15 @@ struct LocationCategoryListView: View {
               }
               Text(category.locationName)
                 .font(.body6)
-                .foregroundColor(.white)
+                .foregroundColor(selectedCategory == category ? .black900 : .white)
             }
             .padding(.leading, .spacingXS)
             .padding(.trailing, .spacingM)
             .frame(height: 32)
-            .background(Color.black800)
+            .background(selectedCategory == category ? Color.green500 : Color.black800)
             .cornerRadius(20)
           }
+          .disabled(category == selectedCategory)
         }
       }
       .padding(.horizontal, .spacingXL)
@@ -42,5 +44,6 @@ struct LocationCategoryListView: View {
 struct LocationCategoryListView_Previews: PreviewProvider {
   static var previews: some View {
     LocationCategoryListView(selectedCategory: .constant(.all))
+      .previewLayout(.sizeThatFits)
   }
 }

@@ -24,6 +24,7 @@ struct MainMapView: View {
     let selectedAnnotationId: String?
     let region: MKCoordinateRegion
     let alert: AlertState<MainMapAction>?
+    let chatRoomListState: ChatRoomListState
     let popularChatRoomListState: PopularChatRoomListState
     
     init(state: State) {
@@ -33,6 +34,7 @@ struct MainMapView: View {
       selectedAnnotationId = state.selectedAnnotationId
       region = state.region
       alert = state.alert
+      chatRoomListState = state.chatRoomListState
       popularChatRoomListState = state.popularChatRoomListState
     }
   }
@@ -59,16 +61,21 @@ struct MainMapView: View {
           }
         }
       )
+      .preferredColorScheme(.light)
       .edgesIgnoringSafeArea([.all])
       .onTapGesture {
         viewStore.send(.setBottomSheetPosition(.hidden))
       }
       
       VStack {
-        LocationCategoryListView(selectedCategory: .constant(.all))
-        
+        LocationCategoryListView(
+          selectedCategory: viewStore.binding(
+            get: \.chatRoomListState.listCategoryType,
+            send: MainMapAction.categoryTapped
+          )
+        )
+        Spacer()
         VStack {
-          Spacer()
           // 하단 버튼
           HStack(spacing: .spacingM) {
             Button {
@@ -109,13 +116,10 @@ struct MainMapView: View {
     ) {
       switch viewStore.bottomSheetType {
       case .roomDetail:
-        // room detail
         EmptyView()
       case .chatRoomList:
-        // chat room list // category, favorite
-        EmptyView()
+        ChatRoomListView(store: chatRoomListStore)
       case .popularChatRoomList:
-        // popular chat room list
         PopularChatRoomListView(store: popularChatRoomListStore)
       }
     }
@@ -132,6 +136,13 @@ struct MainMapView: View {
 
 // MARK: - Store init
 extension MainMapView {
+  private var chatRoomListStore: Store<ChatRoomListState, ChatRoomListAction> {
+    return store.scope(
+      state: \.chatRoomListState,
+      action: Action.chatRoomListAction
+    )
+  }
+  
   private var popularChatRoomListStore: Store<PopularChatRoomListState, PopularChatRoomListAction> {
     return store.scope(
       state: \.popularChatRoomListState,
