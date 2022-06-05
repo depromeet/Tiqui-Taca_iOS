@@ -35,7 +35,6 @@ enum ChatLogEntity {
       createdAt = nil
     }
     init(from decoder: Decoder) throws {
-      
       let container = try decoder.container(keyedBy: CodingKeys.self)
       id = (try? container.decode(String.self, forKey: .id)) ?? ""
       sender = (try? container.decode(UserEntity.Response.self, forKey: .sender))

@@ -13,8 +13,8 @@ import SwiftUI
 
 struct ChatDetailState: Equatable {
   var currentRoom: RoomInfoEntity.Response = .init()
-  
   var chatLogList: [ChatLogEntity.Response] = []
+  var receiveNewChat: Bool = false
 }
 
 enum ChatDetailAction: Equatable {
@@ -65,6 +65,7 @@ let chatDetailReducer = Reducer<
     return .none
   case let .socket(.newMessage(message)):
     state.chatLogList.append(message)
+    state.receiveNewChat.toggle()
     return .none
   default:
     return .none

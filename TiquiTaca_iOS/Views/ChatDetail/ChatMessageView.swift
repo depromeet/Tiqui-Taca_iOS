@@ -82,12 +82,13 @@ extension ChatMessageView {
                 .foregroundColor(.green500)
                 .padding(.top, 2)
             }
-            Text(chatLog.message ?? "")
-              .font(.body4)
-              .foregroundColor(chatLog.type == 1 ? Color.white : Color.black)
-              .padding(.top, 2)
-            if chatLog.type == 1 {
-              HStack(alignment: .bottom) {
+            
+            HStack(alignment: .bottom) {
+              Text(chatLog.message ?? "")
+                .font(.body4)
+                .foregroundColor(chatLog.type == 1 ? Color.white : Color.black)
+                .padding(.top, 2)
+              if chatLog.type == 1 {
                 Image("reply")
               }
             }
