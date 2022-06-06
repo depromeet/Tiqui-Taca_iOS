@@ -79,6 +79,7 @@ struct MainTabView: View {
       .navigationBarTitleDisplayMode(.inline)
       .navigationBarHidden(true)
     }
+    .navigationViewStyle(.stack)
   }
 }
 

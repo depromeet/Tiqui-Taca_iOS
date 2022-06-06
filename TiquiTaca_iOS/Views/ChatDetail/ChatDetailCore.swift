@@ -23,16 +23,22 @@ struct ChatDetailState: Equatable {
 
 enum ChatDetailAction: Equatable {
   static func == (lhs: ChatDetailAction, rhs: ChatDetailAction) -> Bool {
-    true
+    false
   }
   
   case onAppear
   case onDisAppear
   case connectSocket
   case disconnectSocket
+  
+  
   case sendMessage(SendChatEntity)
   case sendResponse(NSError?)
   case socket(SocketService.Action)
+  
+  case joinRoom
+  case enteredRoom(Result<RoomInfoEntity.Response?, HTTPError>)
+  
   case chatMenuAction(ChatMenuAction)
 }
 
@@ -67,12 +73,18 @@ let chatDetailCore = Reducer<
 > { state, action, environment in
   switch action {
   case .onAppear:
-    return environment.appService.socketService
-      .connect(state.currentRoom.id ?? "")
-      .receive(on: environment.mainQueue)
-      .map(ChatDetailAction.socket)
-      .eraseToEffect()
-      .cancellable(id: state.currentRoom.id ?? "")
+    guard state.isFirstLoad else { return .none }
+    
+    state.isFirstLoad = false
+    return .merge(
+      Effect(value: .joinRoom),
+      environment.appService.socketService
+        .connect(state.currentRoom.id ?? "")
+        .receive(on: environment.mainQueue)
+        .map(ChatDetailAction.socket)
+        .eraseToEffect()
+        .cancellable(id: state.currentRoom.id ?? "")
+    )
   case .onDisAppear:
     return environment.appService.socketService
       .disconnect(state.currentRoom.id ?? "")
@@ -90,6 +102,16 @@ let chatDetailCore = Reducer<
   case let .socket(.newMessage(message)):
     state.chatLogList.append(message)
     state.receiveNewChat.toggle()
+    return .none
+  case .joinRoom:
+    return environment.appService.roomService
+      .joinRoom(roomId: state.currentRoom.id ?? "")
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(ChatDetailAction.enteredRoom)
+  case let .enteredRoom(.success(res)):
+    return .none
+  case .enteredRoom(.failure):
     return .none
   default:
     return .none

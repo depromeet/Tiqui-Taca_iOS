@@ -23,7 +23,6 @@ struct ChatMenuView: View {
     let roomInfo: RoomInfoEntity.Response?
     let roomUserList: [UserEntity.Response]
     let questionList: [QuestionEntity.Response]
-    let unreadChatCount: Int?
     
     let popupPresented: Bool
     let questionDetailViewState: QuestionDetailState
@@ -34,7 +33,6 @@ struct ChatMenuView: View {
       roomInfo = state.roomInfo
       roomUserList = state.roomUserList
       questionList = state.questionList
-      unreadChatCount = state.unreadChatCount
       popupPresented = state.popupPresented
       
       questionDetailViewState = state.questionDetailViewState
@@ -92,7 +90,7 @@ struct ChatMenuView: View {
       .padding(15)
       
       Rectangle().fill(Color.white50)
-      .frame(maxWidth: .infinity, maxHeight: 8)
+        .frame(maxWidth: .infinity, maxHeight: 8)
       
       VStack(alignment: .leading) {
         Text("현재 티키타카 중인 사람들")
@@ -161,11 +159,10 @@ struct ChatMenuView: View {
     .navigationBarBackButtonHidden(true)
     .navigationBarHidden(true)
     .ignoresSafeArea()
-    .onAppear {
-      viewStore.send(.getRoomInfo)  //추후 제거되어야함
+    .onAppear(perform: {
       viewStore.send(.getRoomUserListInfo)
       viewStore.send(.getQuestionList)
-    }
+    })
     .ttPopup(
       isShowing: viewStore.binding(
         get: \.popupPresented,
@@ -198,7 +195,7 @@ struct ChatMenuView: View {
         
         Text(viewStore.roomInfo?.name ?? "")
           .foregroundColor(Color.white)
-        Text("+ \(viewStore.unreadChatCount ?? 0)")
+        Text("+ \(viewStore.roomInfo?.userCount ?? 0)")
           .foregroundColor(Color.white)
         
         Spacer()

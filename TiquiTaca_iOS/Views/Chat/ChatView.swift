@@ -14,6 +14,7 @@ struct ChatView: View {
   var store: Store<ChatState, ChatAction>
   @State private var moveToChatDetail: Bool = false
   @State private var showPopup: Bool = false
+  @State private var detailView: String?
   
   init(store: Store<ChatState, ChatAction>) {
     self.store = store
@@ -48,19 +49,34 @@ struct ChatView: View {
           store: store,
           type: viewStore.state.currentTab,
           showPopup: $showPopup,
-          moveToChatDetail: $moveToChatDetail)
+          moveToChatDetail: $moveToChatDetail,
+          detailView: $detailView)
           .background(.white)
         
         NavigationLink(
-          destination: ChatDetailView(
-            store: store.scope(
-              state: \.chatDetailState,
-              action: ChatAction.chatDetailAction)
-          ),
-          isActive: $moveToChatDetail
-        ) { EmptyView() }
-          .frame(height: 0)
-          .hidden()
+          tag: "1",
+          selection: $detailView,
+          destination: {
+            ChatDetailView(
+              store: store.scope(
+                state: \.chatDetailState,
+                action: ChatAction.chatDetailAction)
+            )
+          },
+          label: {
+            EmptyView()
+          })
+        
+//        NavigationLink(
+//          destination: ChatDetailView(
+//            store: store.scope(
+//              state: \.chatDetailState,
+//              action: ChatAction.chatDetailAction)
+//          ),
+//          isActive: $moveToChatDetail
+//        ) { EmptyView() }
+//          .frame(height: 0)
+//          .hidden()
       }
         .listStyle(.plain)
         .navigationTitle("채팅방")
@@ -109,53 +125,58 @@ private struct EnteredRoomView: View {
           .hCenter()
           .vCenter()
         } else {
-          Text("현재 참여 중인 채팅방")
-            .hLeading()
-            .foregroundColor(.green500)
-            .font(.subtitle4)
-          
-          Spacer().frame(height: 16)
-          HStack(spacing: 4) {
-            Text(viewStore.enteredRoom?.name ?? "기타")
-              .foregroundColor(.white)
-              .font(.subtitle2)
-            HStack(spacing: 0) {
-              Image("people")
-                .resizable()
-                .frame(width: 24, height: 24)
-              Text("\(viewStore.enteredRoom?.userCount ?? 0)")
-                .foregroundColor(.black100)
-                .font(.body7)
-            }
-            Text("오후 3:15")
-              .foregroundColor(.black100)
-              .font(.body8)
-              .hTrailing()
-          }
-          .hLeading()
-          
-          Spacer().frame(height: 4)
-          HStack {
-            Text("코엑스에서 가장 맛있는 맛집 하나만 알려주실 분 있나요!")
-              .foregroundColor(.white800)
-              .font(.body7)
-              .lineLimit(1)
+          VStack{
+            Text("현재 참여 중인 채팅방")
               .hLeading()
-            VStack {
-              Text("36")
-                .foregroundColor(.black800)
-                .font(.body4)
-                .padding([.leading, .trailing], 6)
-                .padding([.top, .bottom], 2)
+              .foregroundColor(.green500)
+              .font(.subtitle4)
+            
+            Spacer().frame(height: 16)
+            HStack(spacing: 4) {
+              Text(viewStore.enteredRoom?.name ?? "기타")
+                .foregroundColor(.white)
+                .font(.subtitle2)
+              HStack(spacing: 0) {
+                Image("people")
+                  .resizable()
+                  .frame(width: 24, height: 24)
+                Text("\(viewStore.enteredRoom?.userCount ?? 0)")
+                  .foregroundColor(.black100)
+                  .font(.body7)
+              }
+              Text("오후 3:15")
+                .foregroundColor(.black100)
+                .font(.body8)
+                .hTrailing()
             }
-            .background(Color.green900)
-            .cornerRadius(11)
+            .hLeading()
+            
+            Spacer().frame(height: 4)
+            HStack {
+              Text("코엑스에서 가장 맛있는 맛집 하나만 알려주실 분 있나요!")
+                .foregroundColor(.white800)
+                .font(.body7)
+                .lineLimit(1)
+                .hLeading()
+              VStack {
+                Text("36")
+                  .foregroundColor(.black800)
+                  .font(.body4)
+                  .padding([.leading, .trailing], 6)
+                  .padding([.top, .bottom], 2)
+              }
+              
+              .background(Color.green900)
+              .cornerRadius(11)
+            }
+              .hLeading()
           }
-          .hLeading()
+            .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
         }
       }
       .background(Color.black600)
       .cornerRadius(16)
+      
       .padding([.leading, .trailing], 24)
       .frame(height: 116)
       .onTapGesture {
@@ -226,6 +247,7 @@ private struct RoomListView: View {
   @Binding private var showPopup: Bool
   @Binding private var moveToChatDetail: Bool
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
+  @Binding private var detailView: String?
     
   struct ViewState: Equatable {
     let likeRoomList: [RoomInfoEntity.Response]
@@ -241,13 +263,15 @@ private struct RoomListView: View {
     store: Store<State, Action>,
     type: RoomListType,
     showPopup: Binding<Bool>,
-    moveToChatDetail: Binding<Bool>
+    moveToChatDetail: Binding<Bool>,
+    detailView: Binding<String?>
   ) {
     self.store = store
     self.viewStore = ViewStore(store.scope(state: ViewState.init))
     self.roomType = type
     self._showPopup = showPopup
     self._moveToChatDetail = moveToChatDetail
+    self._detailView = detailView
   }
   
   var body: some View {
@@ -284,6 +308,13 @@ private struct RoomListView: View {
         }
       }
     }
+      .fullScreenCover(isPresented: $showPopup) {
+        AlertView(isPopupPresent: $showPopup, moveToChatDetailState: $moveToChatDetail, detailView: $detailView)
+          .background(BackgroundTransparentView())
+      }
+      .refreshable {
+        viewStore.send(.refresh)
+      }
   }
 }
 
@@ -291,6 +322,7 @@ private struct RoomListView: View {
 private struct AlertView: View {
   @Binding var isPopupPresent: Bool
   @Binding var moveToChatDetailState: Bool
+  @Binding var detailView: String?
   
   // 이미 참여중인 채팅방 or 참여중인 채팅방 없음 -> 바로 Detail로
   // 채팅방 인원 풀 -> 경고만
@@ -307,6 +339,7 @@ private struct AlertView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
           UIView.setAnimationsEnabled(true)
           moveToChatDetailState = true
+          detailView = "1"
         }
       },
       cancel: {

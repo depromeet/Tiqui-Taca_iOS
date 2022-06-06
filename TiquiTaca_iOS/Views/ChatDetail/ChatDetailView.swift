@@ -21,7 +21,7 @@ struct ChatDetailView: View {
   struct ViewState: Equatable {
     let currentRoom: RoomInfoEntity.Response
     let chatLogList: [ChatLogEntity.Response]
-        let chatMenuState: ChatMenuState
+    let chatMenuState: ChatMenuState
     
     init(state: State) {
       currentRoom = state.currentRoom
@@ -44,7 +44,7 @@ struct ChatDetailView: View {
       ZStack(alignment: .top) {
         List {
           Section(
-            footer: VStack{}.frame(height: 80).background(.white).padding(0)
+            footer: Spacer().frame(height: 80).background(.white)
           ) {
             ForEach(viewStore.chatLogList.reversed()) { chatLog in
               ChatMessageView(chatLog: chatLog)
@@ -80,23 +80,6 @@ struct ChatDetailView: View {
         viewStore.send(.onDisAppear)
       }
   }
-  
-//  private func configNaviBar() {
-//    let standardAppearance = UINavigationBarAppearance()
-//    standardAppearance.configureWithTransparentBackground()
-//
-//    standardAppearance.backgroundColor = Color.black800.uiColor.withAlphaComponent(0.95)
-//    standardAppearance.titleTextAttributes = [
-//      .foregroundColor: Color.white.uiColor,
-//      .font: UIFont.systemFont(ofSize: 16, weight: .semibold)
-//    ]
-//
-//    UINavigationBar.appearance().standardAppearance = standardAppearance
-//    UINavigationBar.appearance().compactAppearance = standardAppearance
-//    UINavigationBar.appearance().scrollEdgeAppearance = standardAppearance
-//    UINavigationBar.appearance().layoutMargins.left = 24
-//    UINavigationBar.appearance().layoutMargins.bottom = 10
-//  }
 }
 
 private struct InputChatView: View {
@@ -242,7 +225,8 @@ extension ChatDetailView {
               .resizable()
               .frame(width: 24, height: 24)
           }
-          Button {
+          NavigationLink {
+            ChatMenuView(store: chatMenuStore)
           } label: {
             Image("menu")
               .resizable()

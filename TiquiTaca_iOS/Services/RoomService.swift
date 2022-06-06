@@ -15,6 +15,7 @@ protocol RoomServiceType {
 	func registLikeRoom(roomId: String) -> AnyPublisher<RoomLikeEntity.Response?, HTTPError>
   func getMyRoomInfo() -> AnyPublisher<RoomInfoEntity.Response?, HTTPError>
   func exitRoom(roomId: String) -> AnyPublisher<DefaultResponse?, HTTPError>
+  func joinRoom(roomId: String) -> AnyPublisher<RoomInfoEntity.Response?, HTTPError>
   func getRoomUserList(roomId: String) -> AnyPublisher<RoomUserInfoEntity.Response?, HTTPError>
 }
 
@@ -51,6 +52,10 @@ final class RoomService: RoomServiceType {
   
   func getRoomUserList(roomId: String) -> AnyPublisher<RoomUserInfoEntity.Response?, HTTPError> {
     network.request(.getUserList(roomId: roomId), responseType: RoomUserInfoEntity.Response.self)
+  }
+  
+  func joinRoom(roomId: String) -> AnyPublisher<RoomInfoEntity.Response?, HTTPError> {
+    network.request(.joinRoom(roomId: roomId), responseType: RoomInfoEntity.Response.self)
   }
 }
 

@@ -17,7 +17,6 @@ struct ChatMenuState: Equatable {
   var roomInfo: RoomInfoEntity.Response?
   var roomUserList: [UserEntity.Response] = []
   var questionList: [QuestionEntity.Response] = []
-  var unreadChatCount: Int? = 0 //값 받아와야함
   var selectedQuestionId: String?
   
   var questionDetailViewState: QuestionDetailState = .init(questionId: "")
@@ -90,7 +89,7 @@ let chatMenuReducerCore = Reducer<
   ChatMenuEnvironment
 > { state, action, environment in
   switch action {
-  // MARK: 방 정보 API (추후 제거)
+    // MARK: 방 정보 API (추후 제거)
   case .getRoomInfo:
     return environment.appService.roomService
       .getMyRoomInfo()
@@ -105,7 +104,7 @@ let chatMenuReducerCore = Reducer<
   case .getRoomInfoResponse(.failure):
     return .none
     
-  // MARK: 채팅방 참여자 API
+    // MARK: 채팅방 참여자 API
   case .getRoomUserListInfo:
     return environment.appService.roomService
       .getRoomUserList(roomId: state.roomInfo?.id ?? "")
@@ -117,8 +116,8 @@ let chatMenuReducerCore = Reducer<
     return .none
   case .getRoomUserListResponse(.failure):
     return .none
-  
-  // MARK: 질문 리스트 API
+    
+    // MARK: 질문 리스트 API
   case .getQuestionList:
     let request = QuestionEntity.Request(
       filter: QuestionSortType.recent.rawValue
@@ -133,8 +132,8 @@ let chatMenuReducerCore = Reducer<
     return .none
   case .getQuestionListResponse(.failure):
     return .none
-  
-  // MARK: 방 나가기 API
+    
+    // MARK: 방 나가기 API
   case .roomExit:
     return environment.appService.roomService
       .exitRoom(roomId: state.roomInfo?.id ?? "")
@@ -142,7 +141,7 @@ let chatMenuReducerCore = Reducer<
       .catchToEffect()
       .map(ChatMenuAction.roomExitReponse)
   case let .roomExitReponse(.success(response)):
-  #warning("채팅 탭으로 가는 액션 필요")
+#warning("채팅 탭으로 가는 액션 필요")
     return .none
   case .roomExitReponse(.failure):
     return .none

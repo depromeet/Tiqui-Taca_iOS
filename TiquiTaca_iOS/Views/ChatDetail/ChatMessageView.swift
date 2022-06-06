@@ -54,7 +54,7 @@ extension ChatMessageView {
           .frame(width: 32, height: 32)
           .opacity(chatLog.inside == true ? 1 : 0)
         
-        Image("defaultProfile")
+        Image(chatLog.sender?.profile.imageName ?? "defaultProfile")
           .resizable()
           .frame(width: 30, height: 30)
           .padding(3)
