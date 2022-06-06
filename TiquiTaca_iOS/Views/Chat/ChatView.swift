@@ -53,8 +53,6 @@ struct ChatView: View {
         
         NavigationLink(
           destination: ChatDetailView(
-            title: (viewStore.state.willEnterRoom?.name ?? "")
-            + " \(viewStore.state.willEnterRoom?.userCount ?? 0)",
             store: store.scope(
               state: \.chatDetailState,
               action: ChatAction.chatDetailAction)

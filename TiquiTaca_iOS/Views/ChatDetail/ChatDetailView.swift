@@ -15,9 +15,8 @@ struct ChatDetailView: View {
   typealias Action = ChatDetailAction
   
   @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-  var store: Store<State, Action>
-  let title: String
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
+  var store: Store<State, Action>
   
   struct ViewState: Equatable {
     let currentRoom: RoomInfoEntity.Response
@@ -29,71 +28,48 @@ struct ChatDetailView: View {
     }
   }
   
-  init(title: String, store: Store<State, Action>) {
-    self.title = title
+  init(store: Store<State, Action>) {
     self.store = store
     viewStore = ViewStore(store.scope(state: ViewState.init))
-    
-    configNaviBar()
+    UITableView.appearance().tableHeaderView = UIView(frame: .zero)
+    UITableView.appearance().sectionHeaderTopPadding = 0
     UITextView.appearance().backgroundColor = .clear
   }
   
   var body: some View {
     VStack(spacing: 0) {
-      List {
-        ForEach(viewStore.chatLogList) { chatLog in
-          ChatMessageView(chatLog: chatLog)
-            .receivedBubble
-            .listRowSeparator(.hidden)
-            .listRowInsets(EdgeInsets())
+      ZStack(alignment: .top) {
+        List {
+          Section(
+            footer: VStack{}.frame(height: 80).background(.white).padding(0)
+          ) {
+            ForEach(viewStore.chatLogList.reversed()) { chatLog in
+              ChatMessageView(chatLog: chatLog)
+                .receivedBubble
+                .listRowSeparator(.hidden)
+                .listRowInsets(EdgeInsets())
+                .scaleEffect(x: 1, y: -1, anchor: .center)
+            }
+          }
         }
-      }
         .listStyle(.plain)
         .gesture(
           DragGesture().onChanged({_ in
             hideKeyboard()
           })
         )
+        .scaleEffect(x: 1, y: -1, anchor: .center)
+        .padding(EdgeInsets(top: 0, leading: 0, bottom: -44, trailing: 0))
+        .background(.white)
+        
+        navigationView
+      }
       
       InputChatView(store: store)
     }
       .navigationBarBackButtonHidden(true)
-      .toolbar(content: {
-        ToolbarItem(placement: .navigationBarLeading) {
-          Button {
-            self.presentationMode.wrappedValue.dismiss()
-          } label: {
-            HStack(spacing: 10) {
-              Image("arrowBack")
-                .renderingMode(.template)
-                .resizable()
-                .scaledToFit()
-                .foregroundColor(.white)
-                .frame(width: 24, height: 24)
-              Text( title )
-                .font(.subtitle2)
-                .foregroundColor(.white)
-            }
-          }
-        }
-        
-        ToolbarItem(placement: .navigationBarTrailing) {
-          HStack(spacing: 0) {
-            Button {
-            } label: {
-              Image("alarmOn")
-                .resizable()
-                .frame(width: 24, height: 24)
-            }
-            Button {
-            } label: {
-              Image("menu")
-                .resizable()
-                .frame(width: 24, height: 24)
-            }
-          }
-        }
-      })
+      .navigationBarHidden(true)
+      .ignoresSafeArea(.container, edges: .top)
       .onAppear {
         viewStore.send(.onAppear)
       }
@@ -102,21 +78,22 @@ struct ChatDetailView: View {
       }
   }
   
-  private func configNaviBar() {
-    let standardAppearance = UINavigationBarAppearance()
-    standardAppearance.configureWithTransparentBackground()
-    
-    standardAppearance.backgroundColor = Color.black800.uiColor.withAlphaComponent(0.95)
-    standardAppearance.titleTextAttributes = [
-      .foregroundColor: Color.white.uiColor,
-      .font: UIFont.systemFont(ofSize: 16, weight: .semibold)
-    ]
-    UINavigationBar.appearance().standardAppearance = standardAppearance
-    UINavigationBar.appearance().compactAppearance = standardAppearance
-    UINavigationBar.appearance().scrollEdgeAppearance = standardAppearance
-    UINavigationBar.appearance().layoutMargins.left = 24
-    UINavigationBar.appearance().layoutMargins.bottom = 10
-  }
+//  private func configNaviBar() {
+//    let standardAppearance = UINavigationBarAppearance()
+//    standardAppearance.configureWithTransparentBackground()
+//
+//    standardAppearance.backgroundColor = Color.black800.uiColor.withAlphaComponent(0.95)
+//    standardAppearance.titleTextAttributes = [
+//      .foregroundColor: Color.white.uiColor,
+//      .font: UIFont.systemFont(ofSize: 16, weight: .semibold)
+//    ]
+//
+//    UINavigationBar.appearance().standardAppearance = standardAppearance
+//    UINavigationBar.appearance().compactAppearance = standardAppearance
+//    UINavigationBar.appearance().scrollEdgeAppearance = standardAppearance
+//    UINavigationBar.appearance().layoutMargins.left = 24
+//    UINavigationBar.appearance().layoutMargins.bottom = 10
+//  }
 }
 
 private struct InputChatView: View {
@@ -205,6 +182,52 @@ private struct InputChatView: View {
     }
       .padding(8)
       .background(Color.white50)
+  }
+}
+
+extension ChatDetailView {
+  var navigationView: some View {
+    VStack {
+      HStack {
+        Button {
+          self.presentationMode.wrappedValue.dismiss()
+        } label: {
+          HStack(spacing: 10) {
+            Image("arrowBack")
+              .renderingMode(.template)
+              .resizable()
+              .scaledToFit()
+              .foregroundColor(.white)
+              .frame(width: 24, height: 24)
+            Text( viewStore.state.currentRoom.viewTitle )
+              .font(.subtitle2)
+              .foregroundColor(.white)
+          }
+        }
+        
+        Spacer()
+        
+        HStack(spacing: 4) {
+          Button {
+          } label: {
+            Image("alarmOn")
+              .resizable()
+              .frame(width: 24, height: 24)
+          }
+          Button {
+          } label: {
+            Image("menu")
+              .resizable()
+              .frame(width: 24, height: 24)
+          }
+        }
+      }
+      .padding([.leading, .trailing], 10)
+      .padding(.top, 54)
+      .padding(.bottom, 10)
+    }
+    .background(Color.black800.opacity(0.95))
+    .frame(height: 88)
   }
 }
 
