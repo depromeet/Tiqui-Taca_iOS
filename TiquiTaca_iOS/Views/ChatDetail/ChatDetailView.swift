@@ -236,14 +236,15 @@ extension ChatDetailView {
               .resizable()
               .frame(width: 24, height: 24)
           }
-          NavigationLink {
+          NavigationLink(destination:
             ChatMenuView(store: chatMenuStore, shouldPopToRootView: $shouldPopToRootView)
-          } label: {
+          ) {
             Image("menu")
               .resizable()
               .frame(width: 24, height: 24)
           }
-          .isDetailLink(false)
+            .isDetailLink(false)
+            .simultaneousGesture(TapGesture().onEnded{ viewStore.send(.moveToOtherView) })
         }
       }
       .padding([.leading, .trailing], 10)

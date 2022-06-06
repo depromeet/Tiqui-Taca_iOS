@@ -13,9 +13,10 @@ import SwiftUI
 
 struct ChatDetailState: Equatable {
   var currentRoom: RoomInfoEntity.Response = .init()
-  var myInfo: UserEntity.Response? = nil
+  var myInfo: UserEntity.Response?
   
   var isFirstLoad = true
+  var moveToOtherView = false
   var chatLogList: [ChatLogEntity.Response] = []
   var receiveNewChat: Bool = false
   
@@ -39,6 +40,7 @@ enum ChatDetailAction: Equatable {
   
   case joinRoom
   case enteredRoom(Result<RoomInfoEntity.Response?, HTTPError>)
+  case moveToOtherView
   
   case chatMenuAction(ChatMenuAction)
 }
@@ -67,6 +69,8 @@ let chatDetailReducer = Reducer<
   chatDetailCore
 ])
 
+struct ChatDetailId: Hashable { }
+
 let chatDetailCore = Reducer<
   ChatDetailState,
   ChatDetailAction,
@@ -74,6 +78,8 @@ let chatDetailCore = Reducer<
 > { state, action, environment in
   switch action {
   case .onAppear:
+    state.moveToOtherView = false
+    
     guard state.isFirstLoad else { return .none }
     state.myInfo = environment.appService.userService.myProfile
     state.chatMenuState = ChatMenuState(roomInfo: state.currentRoom)
@@ -85,9 +91,10 @@ let chatDetailCore = Reducer<
         .receive(on: environment.mainQueue)
         .map(ChatDetailAction.socket)
         .eraseToEffect()
-        .cancellable(id: state.currentRoom.id ?? "")
+        .cancellable(id: ChatDetailId())
     )
   case .onDisAppear:
+    guard !state.moveToOtherView else { return .none }
     return environment.appService.socketService
       .disconnect(state.currentRoom.id ?? "")
       .eraseToEffect()
@@ -112,6 +119,9 @@ let chatDetailCore = Reducer<
       .catchToEffect()
       .map(ChatDetailAction.enteredRoom)
   case let .enteredRoom(.success(res)):
+    return .none
+  case .moveToOtherView:
+    state.moveToOtherView = true
     return .none
   case .enteredRoom(.failure):
     return .none

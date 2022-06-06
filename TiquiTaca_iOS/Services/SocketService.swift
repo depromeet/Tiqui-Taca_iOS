@@ -16,8 +16,9 @@ struct SocketService {
     case newMessage(ChatLogEntity.Response)
   }
   
-  static var connectedSockets: [AnyHashable: SocketIOClient] = [:]
-  static let socketManager = SocketManager(socketURL: URL(string: "ws://52.78.64.242:8081")!)
+  static let socketURL = URL(string: "ws://52.78.64.242:8081")!
+  static var connectedSockets: [AnyHashable: (SocketIOClient, Effect<SocketService.Action, Never>.Subscriber)] = [:]
+  static var socketManager = SocketManager(socketURL: URL(string: "ws://52.78.64.242:8081")!)
   
   var connect: (String) -> Effect<Action, Never>
   var disconnect: (String) -> Effect<Never, Never>
@@ -26,22 +27,28 @@ struct SocketService {
   static let live = SocketService(
     connect: { roomId in
       Effect.run { subscriber in
-        socketManager.config = [
-          .log(true),
-          .compress,
-          .forceWebsockets(true),
-          .connectParams(["roomId": roomId]),
-          .extraHeaders([
-            "Authorization": "Bearer \(TokenManager.shared.loadAccessToken()?.token ?? "")"
-          ])
-        ]
+        socketManager = SocketManager(
+          socketURL: socketURL,
+          config: [
+            .log(true),
+            .compress,
+            .forceWebsockets(true),
+            .connectParams(["roomId": roomId]),
+            .extraHeaders([
+              "Authorization": "Bearer \(TokenManager.shared.loadAccessToken()?.token ?? "")"
+            ])
+          ]
+        )
         let socket = socketManager.socket(forNamespace: "/chat")
-        // socket.connec
-        // 이미 커넥 되어있는지 확인?
         
-        socket.on(clientEvent: .connect) {_, _ in
+        print("socket roomId", roomId)
+        socket.on(clientEvent: .connect) { _, _ in
           print("connect complete")
           socket.emit("connected")
+        }
+        
+        socket.on(clientEvent: .disconnect) { _, _ in
+          print("disconnect complete")
         }
         
         socket.on("init") { data, _ in
@@ -72,11 +79,12 @@ struct SocketService {
         
         socket.connect()
         
-        connectedSockets[roomId] = socket
+        connectedSockets[roomId] = (socket, subscriber)
         return AnyCancellable {
           print("디스컨넥티드")
-          connectedSockets[roomId]?.emit("disconnected")
-          connectedSockets[roomId]?.disconnect()
+          connectedSockets[roomId]?.0.emit("disconnected")
+          connectedSockets[roomId]?.0.disconnect()
+          connectedSockets[roomId]?.1.send(completion: .finished)
           connectedSockets[roomId] = nil
         }
       }
@@ -84,14 +92,15 @@ struct SocketService {
     disconnect: { roomId in
       .fireAndForget {
         print("디스컨넥티드")
-        connectedSockets[roomId]?.emit("disconnected")
-        connectedSockets[roomId]?.disconnect()
+        connectedSockets[roomId]?.0.emit("disconnected")
+        connectedSockets[roomId]?.0.disconnect()
+        connectedSockets[roomId]?.1.send(completion: .finished)
         connectedSockets[roomId] = nil
       }
     },
     send: { roomId, chatEntity in
       .future { callback in
-        connectedSockets[roomId]?.emit("send_chat", chatEntity) {
+        connectedSockets[roomId]?.0.emit("send_chat", chatEntity) {
           callback(.success(nil))
         }
       }
