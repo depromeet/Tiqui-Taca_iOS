@@ -92,10 +92,6 @@ let appCore = Reducer<
     }
     
   case .getMyProfileResponse:
-    state.mainTabState = .init()
-    return Effect(value: .setRoute(.mainTab))
-    
-  case .signIn: // 로그인 (하위 reducer의 로그인 관련 이벤트)
     environment.appService.authService.deleteTempToken()
     state.mainTabState = .init()
     return Effect(value: .setRoute(.mainTab))

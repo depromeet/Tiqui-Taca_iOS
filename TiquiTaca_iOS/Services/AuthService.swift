@@ -50,7 +50,6 @@ final class AuthService: AuthServiceType {
   }
   
   func saveToken(accessToken: TokenEntity, refreshToken: TokenEntity) {
-    UserDefaults.standard.setValue(accessToken.token, forKey: "publicAccessToken")
     try? TokenManager.shared.saveAccessToken(accessToken)
     try? TokenManager.shared.saveRefreshToken(refreshToken)
   }
