@@ -9,8 +9,8 @@ import Foundation
 import FirebaseMessaging
 
 struct AppService {
-  var fcmToken: String? {
-    return Messaging.messaging().fcmToken
+  var fcmToken: String {
+    return Messaging.messaging().fcmToken ?? ""
   }
   
   let authService: AuthServiceType

@@ -39,6 +39,7 @@
 		F2127642281021C700FB568D /* TermsOfServiceCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2127641281021C700FB568D /* TermsOfServiceCore.swift */; };
 		F2127644281191A800FB568D /* WebView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2127643281191A800FB568D /* WebView.swift */; };
 		F21276462811C6D500FB568D /* TOSFieldListViewCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F21276452811C6D500FB568D /* TOSFieldListViewCore.swift */; };
+		F221850F284E560B005CE6C3 /* FCMUpdateRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F221850E284E560B005CE6C3 /* FCMUpdateRequest.swift */; };
 		F248EB012813240500430C3B /* CreateProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F248EB002813240500430C3B /* CreateProfileView.swift */; };
 		F248EB032813273A00430C3B /* CreateProfileCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F248EB022813273A00430C3B /* CreateProfileCore.swift */; };
 		F24B1EEF28086CA0003D4E1D /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = F24B1EEE28086CA0003D4E1D /* .swiftlint.yml */; };
@@ -194,6 +195,7 @@
 		F2127641281021C700FB568D /* TermsOfServiceCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceCore.swift; sourceTree = "<group>"; };
 		F2127643281191A800FB568D /* WebView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WebView.swift; sourceTree = "<group>"; };
 		F21276452811C6D500FB568D /* TOSFieldListViewCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TOSFieldListViewCore.swift; sourceTree = "<group>"; };
+		F221850E284E560B005CE6C3 /* FCMUpdateRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FCMUpdateRequest.swift; sourceTree = "<group>"; };
 		F248EB002813240500430C3B /* CreateProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProfileView.swift; sourceTree = "<group>"; };
 		F248EB022813273A00430C3B /* CreateProfileCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProfileCore.swift; sourceTree = "<group>"; };
 		F24B1EEE28086CA0003D4E1D /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
@@ -549,6 +551,7 @@
 				86B296152837862500A981FC /* ChatLogEntity.swift */,
 				F9322E7328424A9600EB956E /* QuestionEntity.swift */,
 				F9322E7528424DA900EB956E /* CommentEntity.swift */,
+				F221850E284E560B005CE6C3 /* FCMUpdateRequest.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -1031,6 +1034,7 @@
 				F971D84828421A1F00E2FAE8 /* ChatMessageView.swift in Sources */,
 				F971D84D28421D8800E2FAE8 /* ChatRoom.swift in Sources */,
 				F2F1ED98281E869D00AC4FDD /* VerificationNumberCheckCore.swift in Sources */,
+				F221850F284E560B005CE6C3 /* FCMUpdateRequest.swift in Sources */,
 				F2B268BD283AAF090011EA43 /* LocationCategoryListView.swift in Sources */,
 				86E4948D2814FDC700551CCD /* ChatView.swift in Sources */,
 				86E494952814FDF300551CCD /* MyPageView.swift in Sources */,

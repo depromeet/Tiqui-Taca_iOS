@@ -13,7 +13,7 @@ enum UserEntity {
     let nickname: String
     let profile: ProfileImage
     let phoneNumber: String
-    //    let fcmToken: String
+    let fcmToken: String
     let appAlarm: Bool
     let chatAlarm: Bool
     let iBlockUsers: [String]
@@ -26,7 +26,7 @@ enum UserEntity {
       case nickname
       case profile
       case phoneNumber
-      //      case fcmToken = "FCMToken"
+      case fcmToken = "FCMToken"
       case appAlarm
       case chatAlarm
       case iBlockUsers
@@ -42,6 +42,7 @@ enum UserEntity {
       profile = (try? container.decode(ProfileImage.self, forKey: .profile)) ?? ProfileImage(type: 0)
       phoneNumber = (try? container.decode(String.self, forKey: .phoneNumber)) ?? ""
       appAlarm = (try? container.decode(Bool.self, forKey: .appAlarm)) ?? false
+      fcmToken = (try? container.decode(String.self, forKey: .fcmToken)) ?? ""
       chatAlarm = (try? container.decode(Bool.self, forKey: .chatAlarm)) ?? false
       iBlockUsers = (try? container.decode([String].self, forKey: .iBlockUsers)) ?? []
       createdAt = (try? container.decode(String.self, forKey: .createdAt)) ?? ""
