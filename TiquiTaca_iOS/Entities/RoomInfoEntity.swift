@@ -20,6 +20,8 @@ enum RoomInfoEntity {
     let lastChatMessage: String?
     let lastChatTime: String?
     
+    var distance: Double?
+    
     var viewTitle: String {
       (name ?? "") + " \(userCount ?? 0)"
     }
@@ -32,6 +34,7 @@ enum RoomInfoEntity {
       case notReadChatCount
       case lastChatMessage
       case lastChatTime
+      case distance
     }
     
     init() {
@@ -54,6 +57,7 @@ enum RoomInfoEntity {
       notReadChatCount = try? container.decode(Int?.self, forKey: .notReadChatCount)
       lastChatMessage = try? container.decode(String?.self, forKey: .lastChatMessage)
       lastChatTime = try? container.decode(String?.self, forKey: .lastChatTime)
+      distance = try? container.decode(Double?.self, forKey: .distance)
     }
   }
 }

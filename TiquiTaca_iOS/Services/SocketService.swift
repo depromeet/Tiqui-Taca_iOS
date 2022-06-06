@@ -40,8 +40,8 @@ struct SocketService {
           ]
         )
         let socket = socketManager.socket(forNamespace: "/chat")
+        print("socket connect init ", TokenManager.shared.loadAccessToken()?.token ?? "", roomId)
         
-        print("socket roomId", roomId)
         socket.on(clientEvent: .connect) { _, _ in
           print("connect complete")
           socket.emit("connected")

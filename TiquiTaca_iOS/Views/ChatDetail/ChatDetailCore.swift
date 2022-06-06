@@ -20,6 +20,7 @@ struct ChatDetailState: Equatable {
   var chatLogList: [ChatLogEntity.Response] = []
   var receiveNewChat: Bool = false
   
+  
   var chatMenuState: ChatMenuState = .init()
 }
 
@@ -42,12 +43,14 @@ enum ChatDetailAction: Equatable {
   case enteredRoom(Result<RoomInfoEntity.Response?, HTTPError>)
   case moveToOtherView
   
+  case locationManager(LocationManager.Action)
   case chatMenuAction(ChatMenuAction)
 }
 
 struct ChatDetailEnvironment {
   let appService: AppService
   let mainQueue: AnySchedulerOf<DispatchQueue>
+  let locationManager: LocationManager
 }
 
 let chatDetailReducer = Reducer<

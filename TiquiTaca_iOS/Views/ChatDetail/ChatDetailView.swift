@@ -80,8 +80,8 @@ struct ChatDetailView: View {
             Spacer().frame(height: 90).background(.white)
           }
         }
-          .gesture(
-            DragGesture().onChanged({_ in
+          .simultaneousGesture(
+            TapGesture().onEnded({
               hideKeyboard()
             })
           )
