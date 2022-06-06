@@ -7,13 +7,14 @@
 
 import Combine
 import ComposableArchitecture
+import ComposableCoreLocation
 import TTNetworkModule
 import SwiftUI
 
 struct ChatState: Equatable {
   var currentTab: RoomListType = .like
   var isFirstLoad = true
-  var willEnterRoomInfo: RoomInfoEntity.Response?
+  var willEnterRoom: RoomInfoEntity.Response?
 	
   var lastLoadTime: String = Date.current(type: .HHmm)
   var enteredRoom: RoomInfoEntity.Response?
@@ -35,16 +36,16 @@ enum ChatAction: Equatable {
   
   case tabChange(RoomListType)
   case removeFavoriteRoom(RoomInfoEntity.Response)
-  case enterRoomPopup(RoomInfoEntity.Response)
-  case dismissPopup
+  case willEnterRoom(RoomInfoEntity.Response)
   case refresh
   
   case chatDetailAction(ChatDetailAction)
 }
 
 struct ChatEnvironment {
-	let appService: AppService
-	let mainQueue: AnySchedulerOf<DispatchQueue>
+  let appService: AppService
+  let mainQueue: AnySchedulerOf<DispatchQueue>
+  var locationManager: LocationManager
 }
 
 let chatReducer = Reducer<
@@ -66,10 +67,12 @@ let chatReducer = Reducer<
   chatCore
 ])
 
+
+
 let chatCore = Reducer<
-  ChatState,
-  ChatAction,
-  ChatEnvironment
+	ChatState,
+	ChatAction,
+	ChatEnvironment
 > { state, action, environment in
   switch action {
   case .onAppear:
@@ -77,62 +80,60 @@ let chatCore = Reducer<
     
     state.lastLoadTime = Date.current(type: .HHmm)
     state.isFirstLoad = true
-    return .merge(
-      Effect(value: .fetchEnteredRoomInfo)
-        .eraseToEffect(),
-      Effect(value: .fetchLikeRoomList)
-        .eraseToEffect(),
-      Effect(value: .fetchPopularRoomList)
-        .eraseToEffect()
-    )
-    // MARK: Requeset
-  case .fetchEnteredRoomInfo:
-    return environment.appService.roomService
-      .getEnteredRoom()
-      .receive(on: environment.mainQueue)
-      .catchToEffect()
-      .map(ChatAction.responseEnteredRoom)
-  case .fetchLikeRoomList:
-    return environment.appService.roomService
-      .getLikeRoomList()
-      .receive(on: environment.mainQueue)
-      .catchToEffect()
-      .map(ChatAction.responseLikeRoomList)
-  case .fetchPopularRoomList:
-    return environment.appService.roomService
-      .getPopularRoomList()
-      .receive(on: environment.mainQueue)
-      .catchToEffect()
-      .map(ChatAction.responsePopularRoomList)
-  case .removeFavoriteRoom(let room):
-    return .none
-    // MARK: Response
-  case let .responseEnteredRoom(.success(res)):
-    state.enteredRoom = res
-    return .none
-  case let .responseLikeRoomList(.success(res)):
-    state.likeRoomList = res ?? []
-    return .none
-  case let .responsePopularRoomList(.success(res)):
-    state.popularRoomList = res ?? []
-    return .none
-  case .responseEnteredRoom(.failure),
-      .responseLikeRoomList(.failure),
-      .responsePopularRoomList(.failure):
-    return .none
-    // MARK: View Action
-  case .tabChange(let type):
-    guard state.currentTab != type else { return .none }
-    state.currentTab = type
-    return .none
-  case .enterRoomPopup(let room):
-    state.willEnterRoomInfo = room
-    return .none
-  case .dismissPopup:
-    state.willEnterRoomInfo = nil
-    return .none
-  case .refresh:
-    state.lastLoadTime = Date.current(type: .HHmm)
+		return .merge(
+			Effect(value: .fetchEnteredRoomInfo)
+				.eraseToEffect(),
+			Effect(value: .fetchLikeRoomList)
+				.eraseToEffect(),
+			Effect(value: .fetchPopularRoomList)
+				.eraseToEffect()
+		)
+	// MARK: Requeset
+	case .fetchEnteredRoomInfo:
+		return environment.appService.roomService
+			.getEnteredRoom()
+			.receive(on: environment.mainQueue)
+			.catchToEffect()
+			.map(ChatAction.responseEnteredRoom)
+	case .fetchLikeRoomList:
+		return environment.appService.roomService
+			.getLikeRoomList()
+			.receive(on: environment.mainQueue)
+			.catchToEffect()
+			.map(ChatAction.responseLikeRoomList)
+	case .fetchPopularRoomList:
+		return environment.appService.roomService
+			.getPopularRoomList()
+			.receive(on: environment.mainQueue)
+			.catchToEffect()
+			.map(ChatAction.responsePopularRoomList)
+	case .removeFavoriteRoom(let room):
+		return .none
+	// MARK: Response
+	case let .responseEnteredRoom(.success(res)):
+		state.enteredRoom = res
+		return .none
+	case let .responseLikeRoomList(.success(res)):
+		state.likeRoomList = res ?? []
+		return .none
+	case let .responsePopularRoomList(.success(res)):
+		state.popularRoomList = res ?? []
+		return .none
+	case .responseEnteredRoom(.failure),
+		.responseLikeRoomList(.failure),
+		.responsePopularRoomList(.failure):
+		return .none
+	// MARK: View Action
+	case .tabChange(let type):
+		guard state.currentTab != type else { return .none }
+		state.currentTab = type
+		return .none
+	case .willEnterRoom(let room):
+    state.chatDetailState = ChatDetailState(currentRoom: room)
+		state.willEnterRoom = room
+		return .none
+	case .refresh:
+		state.lastLoadTime = Date.current(type: .HHmm)
     return .merge(
       Effect(value: .fetchEnteredRoomInfo)
         .eraseToEffect(),

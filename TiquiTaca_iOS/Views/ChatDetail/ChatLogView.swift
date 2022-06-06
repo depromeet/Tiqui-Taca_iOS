@@ -37,58 +37,7 @@ struct ChatLogView: View {
   
   var body: some View {
     ZStack(alignment: .top) {
-      List {
-        ForEach(viewStore.chatLogList) { chatlog in
-          ChatMessageView(
-            store: .init(
-              initialState: .init(),
-              reducer: chatMessageReducer,
-              environment: ChatMessageEnvironment()
-            )
-          )
-          .receivedBubble
-        }
-      }
-      .listStyle(.plain)
       
-      
-//      VStack {
-//        HStack {
-//          Button {
-//
-//          } label: {
-//            Image("chat_backButton")
-//          }
-//
-//          Text(viewStore.roomName)
-//            .foregroundColor(Color.white)
-//          Text("+ \(viewStore.participantCount)")
-//            .foregroundColor(Color.white)
-//
-//          Spacer()
-//
-//          Button {
-//            viewStore.send(.roomAlamOff)
-//          } label: {
-//            Image(viewStore.roomAlarm ? "alarmOn" : "alarmOff")
-//              .resizable()
-//              .frame(width: 24, height: 24)
-//          }
-//
-//          Button {
-//            viewStore.send(.chatMenuClicked)
-//          } label: {
-//            Image("menu")
-//              .resizable()
-//              .frame(width: 24, height:24)
-//          }
-//        }
-//        .padding([.leading, .trailing], 10)
-//        .padding(.top, 54)
-//        .padding(.bottom, 10)
-//      }
-//      .background(Color.black800.opacity(0.95))
-//      .frame(height: 88)
     }
     .background(Color.white)
     .ignoresSafeArea()

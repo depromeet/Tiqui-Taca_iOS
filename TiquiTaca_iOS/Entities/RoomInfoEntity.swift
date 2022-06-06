@@ -16,6 +16,10 @@ enum RoomInfoEntity {
     let category: LocationCategory?
     let userCount: Int?
     
+    var viewTitle: String {
+      (name ?? "") + " \(userCount ?? 0)"
+    }
+    
     enum CodingKeys: String, CodingKey {
       case id = "_id"
       case name

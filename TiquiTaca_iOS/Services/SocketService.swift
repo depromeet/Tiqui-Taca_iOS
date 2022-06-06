@@ -5,76 +5,96 @@
 //  Created by 김록원 on 2022/05/27.
 //
 
+import ComposableArchitecture
 import TTNetworkModule
 import Combine
 import SocketIO
 
-class SocketIOService: NSObject {
-  var manager = SocketManager(socketURL: URL(string: "localhost:3000")!, config: [.log(true) , .compress])
-  var socket: SocketIOClient!
-  
-  override init() {
-    socket = self.manager.socket(forNamespace: "/")
-    super.init()
+struct SocketService {
+  enum Action: Equatable {
+    case initialMessages([ChatLogEntity.Response])
+    case newMessage(ChatLogEntity.Response)
   }
   
-  // MARK: 소켓 연결
-  func startConnection() {
-    // 연결전 API 쏘기
-    socket.connect()
-  }
-
-  // MARK: 소켓 연결끝
-  func endConnection() {
-    // 연결 끝내기 전 API 쏘기
-    socket.disconnect()
-  }
-
-  // MARK: 유저 채팅방에 연결
-  func connectToServerWithNickname (
-    nickname: String ,
-    completeHandler: (@escaping ([[String:AnyObject]]) -> Void)
-  ) {
-    //서버에 유저 아이디 전송
-    socket.emit("connectUser", nickname)
-    //서버에서 송신한 데이터 받기
-    socket.on("userList") { (dataArray, ack) in
-        completeHandler(dataArray[0] as! [[String:AnyObject]])
-    }
-    
-    //유저들 입장, 퇴장 듣기
-    listenForOtherMessage()
-  }
-      
-  //MARK: 유저 채팅방에서 삭제
-  func exitChatWithNickname(nickname:String, completeHandler: ()-> Void) {
-      socket.emit("exitUser", nickname)
-      completeHandler()
-  }
+  static var connectedSockets: [AnyHashable: SocketIOClient] = [:]
+  static let socketManager = SocketManager(socketURL: URL(string: "ws://52.78.64.242:8081")!)
   
-  //MARK: 메시지 발송
-  func sendMessage(message: String, withNickname nickname: String) {
-      socket.emit("chatMessage" , nickname, message)
-  }
-  
-  func getChatMessage(
-    completHandler : ( @escaping([String: AnyObject]) -> Void)
-  ) {
-    socket.on("newChatMessage") { (dataArray, ack) in
-        var msgDictionary = [String:AnyObject]()
+  var connect: (String) -> Effect<Action, Never>
+  var disconnect: (String) -> Effect<Never, Never>
+  var send: (String, SendChatEntity) -> Effect<NSError?, Never>
+//  var receive: (String) -> Effect<Message, NSError>
+  static let live = SocketService(
+    connect: { roomId in
+      Effect.run { subscriber in
+        socketManager.config = [
+          .log(true),
+          .compress,
+          .forceWebsockets(true),
+          .connectParams(["roomId": roomId]),
+          .extraHeaders([
+            "Authorization": "Bearer \(TokenManager.shared.loadAccessToken()?.token ?? "")"
+          ])
+        ]
+        let socket = socketManager.socket(forNamespace: "/chat")
+        // socket.connec
+        // 이미 커넥 되어있는지 확인?
         
-        completHandler(msgDictionary)
+        socket.on(clientEvent: .connect) {_, _ in
+          print("connect complete")
+          socket.emit("connected")
+        }
+        
+        socket.on("init") { data, _ in
+          guard let res = data.first as? [Any] else { return }
+          do {
+            let resData = try JSONSerialization.data(withJSONObject: res, options: .fragmentsAllowed)
+            let obj = try JSONDecoder().decode([ChatLogEntity.Response].self, from: resData)
+            subscriber.send(.initialMessages(obj))
+          } catch {
+            print("init decode error")
+          }
+        }
+        
+        socket.on("new_chat") { data, _ in
+          guard let res = data.first else { return }
+          do {
+            let resData = try JSONSerialization.data(withJSONObject: res, options: .fragmentsAllowed)
+            let obj = try JSONDecoder().decode(ChatLogEntity.Response.self, from: resData)
+            subscriber.send(.newMessage(obj))
+          } catch {
+            print("new chat decode error")
+          }
+        }
+        
+        socket.on("exception") { res, _ in
+          print("error", res)
+        }
+        
+        socket.connect()
+        
+        connectedSockets[roomId] = socket
+        return AnyCancellable {
+          print("디스컨넥티드")
+          connectedSockets[roomId]?.emit("disconnected")
+          connectedSockets[roomId]?.disconnect()
+          connectedSockets[roomId] = nil
+        }
+      }
+    },
+    disconnect: { roomId in
+      .fireAndForget {
+        print("디스컨넥티드")
+        connectedSockets[roomId]?.emit("disconnected")
+        connectedSockets[roomId]?.disconnect()
+        connectedSockets[roomId] = nil
+      }
+    },
+    send: { roomId, chatEntity in
+      .future { callback in
+        connectedSockets[roomId]?.emit("send_chat", chatEntity) {
+          callback(.success(nil))
+        }
+      }
     }
-  }
-
-  //MARK: 유저 입장, 퇴장, 타이핑유무 등록
-  private func listenForOtherMessage() {
-    socket.on("userConnectUpdate") { (dataArray, ack) in
-      NotificationCenter.default.post(name: NSNotification.Name(rawValue: "userWasConnectedNotification"), object: dataArray[0] as! [String:AnyObject])
-    }
-    
-    socket.on("userExitUpdate") { (dataArray, ack) in
-      NotificationCenter.default.post(name: NSNotification.Name("userWasDisconnectedNotification"), object: dataArray[0] as! String)
-    }
-  }
+  )
 }
