@@ -94,7 +94,7 @@ let chatCore = Reducer<
         .eraseToEffect()
 		)
 	// MARK: Requeset
-	case .fetchEnteredRoomInfo:
+  case .fetchEnteredRoomInfo:
 		return environment.appService.roomService
 			.getEnteredRoom()
 			.receive(on: environment.mainQueue)
@@ -151,4 +151,3 @@ let chatCore = Reducer<
     return .none
   }
 }
-

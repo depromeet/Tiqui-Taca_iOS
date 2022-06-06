@@ -16,7 +16,7 @@ struct ChatDetailView: View {
   
   @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
-  @Binding var shouldPopToRootView : Bool
+  @Binding var shouldPopToRootView: Bool
   var store: Store<State, Action>
   var logListbottomPadding: Int {
     if #available(iOS 15.4, *) {
@@ -30,11 +30,13 @@ struct ChatDetailView: View {
     let currentRoom: RoomInfoEntity.Response
     let chatLogList: [ChatLogEntity.Response]
     let chatMenuState: ChatMenuState
+    let myInfo: UserEntity.Response?
     
     init(state: State) {
       currentRoom = state.currentRoom
       chatLogList = state.chatLogList
-            chatMenuState = state.chatMenuState
+      chatMenuState = state.chatMenuState
+      myInfo = state.myInfo
     }
   }
   
@@ -54,15 +56,24 @@ struct ChatDetailView: View {
         Section(
           footer: Spacer().frame(height: 80).background(.white)
         ) {
-          ForEach(viewStore.chatLogList.reversed(), id: \.id) { chatLog in
-            ChatMessageView(chatLog: chatLog)
-              .receivedBubble
-              .listRowSeparator(.hidden)
-              .listRowInsets(EdgeInsets())
-              .scaleEffect(x: 1, y: -1, anchor: .center)
+          LazyVStack(alignment: .leading, spacing: 0) {
+            ForEach(viewStore.chatLogList.reversed(), id: \.id) { chatLog in
+              if viewStore.myInfo?.id == chatLog.sender?.id {
+                ChatMessageView(chatLog: chatLog)
+                  .sentBubble
+                  .scaleEffect(x: 1, y: -1, anchor: .center)
+              } else {
+                ChatMessageView(chatLog: chatLog)
+                  .receivedBubble
+                  .scaleEffect(x: 1, y: -1, anchor: .center)
+              }
+            }
           }
+          .listRowSeparator(.hidden)
+          .listRowInsets(EdgeInsets())
         }
       }
+      
       .listStyle(.plain)
       .gesture(
         DragGesture().onChanged({_ in

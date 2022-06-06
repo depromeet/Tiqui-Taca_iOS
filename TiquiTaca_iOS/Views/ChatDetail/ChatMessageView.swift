@@ -13,12 +13,10 @@ struct ChatMessageView: View {
   let chatLog: ChatLogEntity.Response
   
   var body: some View {
-    VStack {
-      receivedBubble
-      sentBubble
-    }
+    sentBubble
   }
 }
+
 
 extension ChatMessageView {
   var sentBubble: some View {
@@ -43,7 +41,9 @@ extension ChatMessageView {
         .background(Color.green500)
         .cornerRadius(14, corners: [.topLeft, .bottomLeft, .bottomRight])
     }
-    .padding(.trailing, 10)
+      .padding(.trailing, 10)
+      .padding(.leading, 20)
+      .padding(.vertical, 2)
   }
   
   var receivedBubble: some View {
@@ -120,6 +120,6 @@ extension ChatMessageView {
 struct ChatMessageView_Previews: PreviewProvider {
   static var previews: some View {
     ChatMessageView(chatLog: .init())
-      .receivedBubble
+      .sentBubble
   }
 }
