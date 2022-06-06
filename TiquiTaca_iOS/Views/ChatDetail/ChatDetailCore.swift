@@ -94,7 +94,10 @@ let chatDetailCore = Reducer<
         .receive(on: environment.mainQueue)
         .map(ChatDetailAction.socket)
         .eraseToEffect()
-        .cancellable(id: ChatDetailId())
+        .cancellable(id: ChatDetailId()),
+      environment.locationManager
+        .delegate()
+        .map(ChatDetailAction.locationManager)
     )
   case .onDisAppear:
     guard !state.moveToOtherView else { return .none }
@@ -127,6 +130,9 @@ let chatDetailCore = Reducer<
     state.moveToOtherView = true
     return .none
   case .enteredRoom(.failure):
+    return .none
+  case let .locationManager(.didUpdateLocations(locations)):
+    print("로케이션 받아옴", locations.first?.coordinate.latitude, locations.first?.coordinate.longitude)
     return .none
   default:
     return .none

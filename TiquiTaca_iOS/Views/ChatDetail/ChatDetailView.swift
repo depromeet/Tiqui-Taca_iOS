@@ -299,6 +299,7 @@ struct UITextViewRepresentable: UIViewRepresentable {
     textView.delegate = context.coordinator
     textView.font = UIFont(name: "Pretendard-Medium", size: 13)
     textView.setContentCompressionResistancePriority(.defaultLow, for: .horizontal)
+    textView.tintColor = Color.green900.uiColor
     return textView
   }
   
