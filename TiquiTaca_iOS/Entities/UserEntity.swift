@@ -54,3 +54,9 @@ enum UserEntity {
 struct ProfileType: Codable, Equatable {
   let type: Int
 }
+
+enum ReportEntity {
+  struct Response: Codable, Equatable, JSONConvertible {
+    let reportSuccess: Bool
+  }
+}

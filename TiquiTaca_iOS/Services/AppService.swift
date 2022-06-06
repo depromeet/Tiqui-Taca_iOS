@@ -15,12 +15,14 @@ struct AppService {
   
   let authService: AuthServiceType
   let userService: UserServiceType
+  let questionService: QuestionServiceType
   let roomService: RoomServiceType
   let socketService: SocketService
   
   init() {
     authService = AuthService()
     userService = UserService()
+    questionService = QuestionService()
     roomService = RoomService()
     socketService = .live
   }

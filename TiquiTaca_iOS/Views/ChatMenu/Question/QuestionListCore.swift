@@ -6,26 +6,49 @@
 //
 
 import ComposableArchitecture
+import TTNetworkModule
 
 struct QuestionListState: Equatable {
+  enum Route {
+    case questionDetail
+  }
+  var route: Route?
   var questionList: [QuestionEntity.Response] = []
-  var sortType: QuestionSortType = .oldorder
+  var sortType: QuestionSortType = .neworder
   var bottomSheetPresented: Bool = false
-  var enterQuestionDetail: Bool = false
+  var bottomSheetPosition: TTBottomSheet.Position = .hidden
+  
+  var questionDetailViewState: QuestionDetailState = .init(questionId: "")
 }
 
-enum QuestionSortType {
-  //NOTANSWERED, OLDORDER, NEWORDER, RECENT(서버)
-  //모든 답변, 미답변, 오래된 순(기획)
-  case recent
-  case notanswered
-  case oldorder
+enum QuestionSortType: String {
+  //NOTANSWERED, OLDORDER, NEWORDER, RECENT(최신2개)
+  //모든 답변, 미답변, 오래된 순
+  case recent = "RECENT"
+  case notanswered = "NOTANSWERED"
+  case oldorder = "OLDORDER"
+  case neworder = "NEWORDER"
+  
+  var title: String {
+    switch self {
+    case .recent: return ""
+    case .notanswered: return "미답변"
+    case .oldorder: return "오래된 순"
+    case .neworder: return "모든 답변"
+    }
+  }
 }
 
 enum QuestionListAction: Equatable {
-  case backButtonAction
-  case selectSortType
-  case selectQuestionDetail
+  case selectSortType(QuestionSortType)
+  case selectQuestionDetail(String)
+  case setBottomSheetPosition(TTBottomSheet.Position)
+  
+  case getQuestionListByType
+  case getQuestionListByTypeResponse(Result<[QuestionEntity.Response]?, HTTPError>)
+  
+  case questionDetailView(QuestionDetailAction)
+  case setRoute(QuestionListState.Route?)
 }
 
 struct QuestionListEnvironment {
@@ -37,15 +60,56 @@ let questionListReducer = Reducer<
   QuestionListState,
   QuestionListAction,
   QuestionListEnvironment
+>.combine([
+  questionDetailReducer
+    .pullback(
+      state: \.questionDetailViewState,
+      action: /QuestionListAction.questionDetailView,
+      environment:{
+        QuestionDetailEnvironment.init(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
+        )
+      }
+    ),
+    questionListCore
+])
+
+let questionListCore = Reducer<
+  QuestionListState,
+  QuestionListAction,
+  QuestionListEnvironment
 > { state, action, environment in
   switch action {
-  case .selectSortType:
-    state.bottomSheetPresented = true
+  case .getQuestionListByType:
+    let request = QuestionEntity.Request(
+      filter: state.sortType.rawValue
+    )
+    return environment.appService.questionService
+      .getQuestionList(request)
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(QuestionListAction.getQuestionListByTypeResponse)
+  case let .getQuestionListByTypeResponse(.success(response)):
+    state.questionList = response ?? []
     return .none
-  case .selectQuestionDetail:
-    state.enterQuestionDetail = true
+  case .getQuestionListByTypeResponse(.failure):
     return .none
-  default:
+  case let .selectSortType(type):
+    state.sortType = type
+    state.bottomSheetPosition = .hidden
+    return Effect(value: .getQuestionListByType)
+  case let .selectQuestionDetail(questionId):
+    state.route = .questionDetail
+    state.questionDetailViewState = .init(questionId: questionId)
+    return .none
+  case let .setBottomSheetPosition(position):
+    state.bottomSheetPosition = position
+    return .none
+  case .questionDetailView(_):
+    return .none
+  case let .setRoute(selectedRoute):
+    state.route = selectedRoute
     return .none
   }
 }

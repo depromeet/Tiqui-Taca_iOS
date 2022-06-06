@@ -61,9 +61,12 @@ let chatReducer = Reducer<
         ChatDetailEnvironment(
           appService: $0.appService,
           mainQueue: $0.mainQueue
-        )}),
+        )
+      }
+    ),
   chatCore
 ])
+
 
 
 let chatCore = Reducer<
@@ -71,11 +74,11 @@ let chatCore = Reducer<
 	ChatAction,
 	ChatEnvironment
 > { state, action, environment in
-	switch action {
-	case .onAppear:
+  switch action {
+  case .onAppear:
     guard state.isFirstLoad else { return .none }
     
-		state.lastLoadTime = Date.current(type: .HHmm)
+    state.lastLoadTime = Date.current(type: .HHmm)
     state.isFirstLoad = true
 		return .merge(
 			Effect(value: .fetchEnteredRoomInfo)
@@ -143,3 +146,4 @@ let chatCore = Reducer<
     return .none
   }
 }
+

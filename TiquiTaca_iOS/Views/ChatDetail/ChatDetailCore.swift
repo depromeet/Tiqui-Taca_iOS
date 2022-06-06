@@ -5,16 +5,20 @@
 //  Created by 김록원 on 2022/06/01.
 //
 
-
 import Combine
 import ComposableArchitecture
+import ComposableCoreLocation
 import TTNetworkModule
 import SwiftUI
 
 struct ChatDetailState: Equatable {
   var currentRoom: RoomInfoEntity.Response = .init()
+  var isFirstLoad = true
+
   var chatLogList: [ChatLogEntity.Response] = []
   var receiveNewChat: Bool = false
+  
+  var chatMenuState: ChatMenuState = .init()
 }
 
 enum ChatDetailAction: Equatable {
@@ -29,6 +33,7 @@ enum ChatDetailAction: Equatable {
   case sendMessage(SendChatEntity)
   case sendResponse(NSError?)
   case socket(SocketService.Action)
+  case chatMenuAction(ChatMenuAction)
 }
 
 struct ChatDetailEnvironment {
@@ -37,6 +42,25 @@ struct ChatDetailEnvironment {
 }
 
 let chatDetailReducer = Reducer<
+  ChatDetailState,
+  ChatDetailAction,
+  ChatDetailEnvironment
+>.combine([
+  chatMenuReducer
+    .pullback(
+      state: \.chatMenuState,
+      action: /ChatDetailAction.chatMenuAction,
+      environment: {
+        ChatMenuEnvironment(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
+        )
+      }
+    ),
+  chatDetailCore
+])
+
+let chatDetailCore = Reducer<
   ChatDetailState,
   ChatDetailAction,
   ChatDetailEnvironment

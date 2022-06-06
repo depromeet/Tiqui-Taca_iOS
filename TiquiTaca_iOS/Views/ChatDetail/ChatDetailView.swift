@@ -21,16 +21,19 @@ struct ChatDetailView: View {
   struct ViewState: Equatable {
     let currentRoom: RoomInfoEntity.Response
     let chatLogList: [ChatLogEntity.Response]
+        let chatMenuState: ChatMenuState
     
     init(state: State) {
       currentRoom = state.currentRoom
       chatLogList = state.chatLogList
+            chatMenuState = state.chatMenuState
     }
   }
   
   init(store: Store<State, Action>) {
     self.store = store
     viewStore = ViewStore(store.scope(state: ViewState.init))
+
     UITableView.appearance().tableHeaderView = UIView(frame: .zero)
     UITableView.appearance().sectionHeaderTopPadding = 0
     UITextView.appearance().backgroundColor = .clear
@@ -180,8 +183,33 @@ private struct InputChatView: View {
         .cornerRadius(16)
         .hLeading()
     }
-      .padding(8)
-      .background(Color.white50)
+    .padding(8)
+    .background(Color.white50)
+  }
+}
+
+// MARK: - Store init
+extension ChatDetailView {
+  private var chatMenuStore: Store<ChatMenuState, ChatMenuAction> {
+    return store.scope(
+      state: \.chatMenuState,
+      action: Action.chatMenuAction
+    )
+  }
+}
+
+struct ChatDetailView_Previews: PreviewProvider {
+  static var previews: some View {
+    ChatDetailView(
+      store: .init(
+        initialState: .init(),
+        reducer: chatDetailReducer,
+        environment: .init(
+          appService: .init(),
+          mainQueue: .main
+        )
+      )
+    )
   }
 }
 

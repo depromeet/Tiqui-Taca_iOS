@@ -284,16 +284,8 @@ private struct RoomListView: View {
         }
       }
     }
-      .fullScreenCover(isPresented: $showPopup) {
-        AlertView(isPopupPresent: $showPopup, moveToChatDetailState: $moveToChatDetail)
-          .background(BackgroundTransparentView())
-      }
-      .refreshable {
-        viewStore.send(.refresh)
-      }
   }
 }
-
 
 // MARK: Alert
 private struct AlertView: View {

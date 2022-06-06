@@ -6,18 +6,18 @@
 //
 
 import ComposableArchitecture
+import Foundation
 
-struct CommentItemState: Equatable {
+struct CommentItemState: Equatable, Identifiable {
+  let id: UUID = UUID()
   var comment: CommentEntity?
 }
 
 enum CommentItemAction: Equatable {
-  case moreClickAction
+  case moreClickAction(String, String)
 }
 
 struct CommentItemEnvironment {
-  let appService: AppService
-  let mainQueue: AnySchedulerOf<DispatchQueue>
 }
 
 let commentItemReducer = Reducer<
@@ -26,7 +26,7 @@ let commentItemReducer = Reducer<
   CommentItemEnvironment
 > { state, action, environment in
   switch action {
-  default:
+  case let .moreClickAction(commentId, commentUser):
     return .none
   }
 }
