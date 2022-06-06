@@ -98,11 +98,29 @@ let appCore = Reducer<
   case .signIn: // 로그인 (하위 reducer의 로그인 관련 이벤트)
     environment.appService.authService.deleteTempToken()
     state.mainTabState = .init()
-    state.onboardingState = nil
     return Effect(value: .setRoute(.mainTab))
     
-  case .signOut: // 로그아웃 (하위 reducer의 로그아웃 관련 이벤트)
+  case .signIn:
+    environment.appService.authService.deleteTempToken()
+    state.onboardingState = nil
+    let request = FCMUpdateRequest(fcmToken: environment.appService.fcmToken)
+    
+    return .concatenate([
+      environment.appService.userService
+        .updateFCMToken(request)
+        .receive(on: environment.mainQueue)
+        .catchToEffect()
+        .fireAndForget(),
+      environment.appService.userService
+        .fetchMyProfile()
+        .receive(on: environment.mainQueue)
+        .catchToEffect()
+        .map(AppAction.getMyProfileResponse)
+    ])
+    
+  case .signOut:
     environment.appService.authService.signOut()
+    environment.appService.userService.deleteMyProfile()
     state.mainTabState = nil
     state.onboardingState = .init()
     return Effect(value: .setRoute(.onboarding))
