@@ -18,6 +18,11 @@ struct MainMapView: View {
   private let store: Store<State, Action>
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
   
+  var showSpreadButton: Bool {
+    return viewStore.bottomSheetType != .popularChatRoomList
+    && viewStore.bottomSheetPosition == .hidden
+  }
+  
   struct ViewState: Equatable {
     let bottomSheetPosition: TTBottomSheet.Position
     let bottomSheetType: MainMapBottomSheetType
@@ -92,13 +97,32 @@ struct MainMapView: View {
       .preferredColorScheme(.light)
       .edgesIgnoringSafeArea([.all])
       
-      VStack {
+      VStack(spacing: .spacingM) {
         LocationCategoryListView(
           selectedCategory: viewStore.binding(
             get: \.chatRoomListState.listCategoryType,
             send: MainMapAction.categoryTapped
           )
         )
+        if showSpreadButton {
+          Button {
+            viewStore.send(.setBottomSheetPosition(.middle))
+          } label: {
+            HStack {
+              Text("리스트 펼쳐보기")
+                .font(.body2)
+                .foregroundColor(.black800)
+              Image("arrowDown")
+                .resizable()
+                .frame(width: 16, height: 16)
+            }
+            .padding(.horizontal, .spacingM)
+            .padding(.vertical, .spacingXS)
+            .background(Color.white50)
+            .cornerRadius(20)
+            .shadow(color: .black.opacity(0.12), radius: 10, x: 0, y: 4)
+          }
+        }
         Spacer()
         VStack {
           HStack(spacing: .spacingM) {
