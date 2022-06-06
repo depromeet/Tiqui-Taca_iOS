@@ -23,6 +23,7 @@ struct ChatMenuState: Equatable {
   var questionListViewState: QuestionListState = .init()
   
   var popupPresented: Bool = false
+  var exitSuccess: Bool = true
 }
 
 enum ChatMenuAction: Equatable {
@@ -141,7 +142,7 @@ let chatMenuReducerCore = Reducer<
       .catchToEffect()
       .map(ChatMenuAction.roomExitReponse)
   case let .roomExitReponse(.success(response)):
-#warning("채팅 탭으로 가는 액션 필요")
+    state.exitSuccess = false
     return .none
   case .roomExitReponse(.failure):
     return .none

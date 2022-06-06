@@ -16,6 +16,7 @@ struct ChatDetailView: View {
   
   @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
+  @Binding var shouldPopToRootView : Bool
   var store: Store<State, Action>
   
   struct ViewState: Equatable {
@@ -30,7 +31,8 @@ struct ChatDetailView: View {
     }
   }
   
-  init(store: Store<State, Action>) {
+  init(store: Store<State, Action>, shouldPopToRootView: Binding<Bool>) {
+    self._shouldPopToRootView = shouldPopToRootView
     self.store = store
     viewStore = ViewStore(store.scope(state: ViewState.init))
 
@@ -181,20 +183,20 @@ extension ChatDetailView {
   }
 }
 
-struct ChatDetailView_Previews: PreviewProvider {
-  static var previews: some View {
-    ChatDetailView(
-      store: .init(
-        initialState: .init(),
-        reducer: chatDetailReducer,
-        environment: .init(
-          appService: .init(),
-          mainQueue: .main
-        )
-      )
-    )
-  }
-}
+//struct ChatDetailView_Previews: PreviewProvider {
+//  static var previews: some View {
+//    ChatDetailView(
+//      store: .init(
+//        initialState: .init(),
+//        reducer: chatDetailReducer,
+//        environment: .init(
+//          appService: .init(),
+//          mainQueue: .main
+//        )
+//      )
+//    )
+//  }
+//}
 
 extension ChatDetailView {
   var navigationView: some View {
@@ -226,12 +228,13 @@ extension ChatDetailView {
               .frame(width: 24, height: 24)
           }
           NavigationLink {
-            ChatMenuView(store: chatMenuStore)
+            ChatMenuView(store: chatMenuStore, shouldPopToRootView: $shouldPopToRootView)
           } label: {
             Image("menu")
               .resizable()
               .frame(width: 24, height: 24)
           }
+          .isDetailLink(false)
         }
       }
       .padding([.leading, .trailing], 10)

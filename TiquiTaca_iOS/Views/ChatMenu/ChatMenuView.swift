@@ -14,6 +14,7 @@ struct ChatMenuView: View {
   typealias Action = ChatMenuAction
   
   private let store: Store<State, Action>
+  @Binding var shouldPopToRootView : Bool
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
   @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
   
@@ -25,6 +26,7 @@ struct ChatMenuView: View {
     let questionList: [QuestionEntity.Response]
     
     let popupPresented: Bool
+    let exitSuccess: Bool
     let questionDetailViewState: QuestionDetailState
     let questionListViewState: QuestionListState
     
@@ -35,14 +37,17 @@ struct ChatMenuView: View {
       questionList = state.questionList
       popupPresented = state.popupPresented
       
+      exitSuccess = state.exitSuccess
       questionDetailViewState = state.questionDetailViewState
       questionListViewState = state.questionListViewState
     }
   }
   
-  init(store: Store<State, Action>) {
+  init(store: Store<State, Action>, shouldPopToRootView: Binding<Bool>) {
+    self._shouldPopToRootView = shouldPopToRootView
     self.store = store
     viewStore = ViewStore.init(store.scope(state: ViewState.init))
+    self.shouldPopToRootView = viewStore.state.exitSuccess
   }
   
   var body: some View {
@@ -221,18 +226,18 @@ struct ChatMenuView: View {
     GridItem(.flexible())
   ]
 }
-
-struct ChatMenuView_Previews: PreviewProvider {
-  static var previews: some View {
-    ChatMenuView(
-      store: .init(
-        initialState: ChatMenuState(),
-        reducer: chatMenuReducer,
-        environment: ChatMenuEnvironment(
-          appService: .init(),
-          mainQueue: .main
-        )
-      )
-    )
-  }
-}
+//
+//struct ChatMenuView_Previews: PreviewProvider {
+//  static var previews: some View {
+//    ChatMenuView(
+//      store: .init(
+//        initialState: ChatMenuState(),
+//        reducer: chatMenuReducer,
+//        environment: ChatMenuEnvironment(
+//          appService: .init(),
+//          mainQueue: .main
+//        )
+//      )
+//    )
+//  }
+//}

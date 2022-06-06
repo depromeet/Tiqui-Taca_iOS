@@ -74,7 +74,7 @@ let chatDetailCore = Reducer<
   switch action {
   case .onAppear:
     guard state.isFirstLoad else { return .none }
-    
+    state.chatMenuState = ChatMenuState(roomInfo: state.currentRoom)
     state.isFirstLoad = false
     return .merge(
       Effect(value: .joinRoom),

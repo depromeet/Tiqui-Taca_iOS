@@ -14,7 +14,6 @@ struct ChatView: View {
   var store: Store<ChatState, ChatAction>
   @State private var moveToChatDetail: Bool = false
   @State private var showPopup: Bool = false
-  @State private var detailView: String?
   
   init(store: Store<ChatState, ChatAction>) {
     self.store = store
@@ -49,34 +48,21 @@ struct ChatView: View {
           store: store,
           type: viewStore.state.currentTab,
           showPopup: $showPopup,
-          moveToChatDetail: $moveToChatDetail,
-          detailView: $detailView)
+          moveToChatDetail: $moveToChatDetail)
           .background(.white)
         
         NavigationLink(
-          tag: "1",
-          selection: $detailView,
-          destination: {
-            ChatDetailView(
-              store: store.scope(
-                state: \.chatDetailState,
-                action: ChatAction.chatDetailAction)
-            )
-          },
-          label: {
-            EmptyView()
-          })
-        
-//        NavigationLink(
-//          destination: ChatDetailView(
-//            store: store.scope(
-//              state: \.chatDetailState,
-//              action: ChatAction.chatDetailAction)
-//          ),
-//          isActive: $moveToChatDetail
-//        ) { EmptyView() }
-//          .frame(height: 0)
-//          .hidden()
+          destination: ChatDetailView(
+            store: store.scope(
+              state: \.chatDetailState,
+              action: ChatAction.chatDetailAction),
+            shouldPopToRootView: $moveToChatDetail
+          ),
+          isActive: $moveToChatDetail
+        ) { EmptyView() }
+          .isDetailLink(false)
+          .frame(height: 0)
+          .hidden()
       }
         .listStyle(.plain)
         .navigationTitle("채팅방")
@@ -247,7 +233,6 @@ private struct RoomListView: View {
   @Binding private var showPopup: Bool
   @Binding private var moveToChatDetail: Bool
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
-  @Binding private var detailView: String?
     
   struct ViewState: Equatable {
     let likeRoomList: [RoomInfoEntity.Response]
@@ -263,15 +248,13 @@ private struct RoomListView: View {
     store: Store<State, Action>,
     type: RoomListType,
     showPopup: Binding<Bool>,
-    moveToChatDetail: Binding<Bool>,
-    detailView: Binding<String?>
+    moveToChatDetail: Binding<Bool>
   ) {
     self.store = store
     self.viewStore = ViewStore(store.scope(state: ViewState.init))
     self.roomType = type
     self._showPopup = showPopup
     self._moveToChatDetail = moveToChatDetail
-    self._detailView = detailView
   }
   
   var body: some View {
@@ -309,7 +292,7 @@ private struct RoomListView: View {
       }
     }
       .fullScreenCover(isPresented: $showPopup) {
-        AlertView(isPopupPresent: $showPopup, moveToChatDetailState: $moveToChatDetail, detailView: $detailView)
+        AlertView(isPopupPresent: $showPopup, moveToChatDetailState: $moveToChatDetail)
           .background(BackgroundTransparentView())
       }
       .refreshable {
@@ -322,7 +305,6 @@ private struct RoomListView: View {
 private struct AlertView: View {
   @Binding var isPopupPresent: Bool
   @Binding var moveToChatDetailState: Bool
-  @Binding var detailView: String?
   
   // 이미 참여중인 채팅방 or 참여중인 채팅방 없음 -> 바로 Detail로
   // 채팅방 인원 풀 -> 경고만
@@ -339,7 +321,6 @@ private struct AlertView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
           UIView.setAnimationsEnabled(true)
           moveToChatDetailState = true
-          detailView = "1"
         }
       },
       cancel: {

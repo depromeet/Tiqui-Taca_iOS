@@ -120,7 +120,7 @@ struct QuestionDetailView: View {
       ),
       options: TTBottomSheet.Options
     ) {
-      VStack {
+      VStack(spacing: 0) {
         Text(viewStore.bottomType?.bottomSheetTitle ?? "")
           .font(.body2)
           .foregroundColor(.black100)
@@ -141,11 +141,12 @@ struct QuestionDetailView: View {
               .hCenter()
               .font(.subtitle2)
               .foregroundColor(.white)
-          }
-          .frame(height: viewStore.bottomType == .contentOther ? 44 : 0)
+              .frame(height: viewStore.bottomType == .contentOther ? 44 : 0)
+          }          
           
           Rectangle().fill(Color.black600)
             .frame(height: viewStore.bottomType == .contentOther ? 1 : 0)
+            .padding(0)
             .hCenter()
           
           Button {
