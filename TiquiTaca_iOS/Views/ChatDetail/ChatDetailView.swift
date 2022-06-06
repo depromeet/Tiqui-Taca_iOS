@@ -11,13 +11,13 @@ import ComposableArchitecture
 import TTDesignSystemModule
 
 struct ChatDetailView: View {
-  typealias State = ChatDetailState
+  typealias CDState = ChatDetailState
   typealias Action = ChatDetailAction
   
   @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
   @Binding var shouldPopToRootView: Bool
-  var store: Store<State, Action>
+  var store: Store<CDState, Action>
   var logListbottomPadding: Int {
     if #available(iOS 15.4, *) {
       return 0
@@ -25,6 +25,8 @@ struct ChatDetailView: View {
       return -44
     }
   }
+  @State var scrollToBottomButtonHidden = false
+  var scrollMinY: CGFloat = 750
   
   struct ViewState: Equatable {
     let currentRoom: RoomInfoEntity.Response
@@ -32,7 +34,7 @@ struct ChatDetailView: View {
     let chatMenuState: ChatMenuState
     let myInfo: UserEntity.Response?
     
-    init(state: State) {
+    init(state: CDState) {
       currentRoom = state.currentRoom
       chatLogList = state.chatLogList
       chatMenuState = state.chatMenuState
@@ -40,7 +42,7 @@ struct ChatDetailView: View {
     }
   }
   
-  init(store: Store<State, Action>, shouldPopToRootView: Binding<Bool>) {
+  init(store: Store<CDState, Action>, shouldPopToRootView: Binding<Bool>) {
     self._shouldPopToRootView = shouldPopToRootView
     self.store = store
     viewStore = ViewStore(store.scope(state: ViewState.init))
@@ -52,31 +54,61 @@ struct ChatDetailView: View {
   
   var body: some View {
     VStack(spacing: 0) {
-      ScrollView {
-        LazyVStack(alignment: .leading, spacing: 0) {
-          Spacer().frame(height: 4).background(.white)
-          ForEach(viewStore.chatLogList.reversed(), id: \.id) { chatLog in
-            if viewStore.myInfo?.id == chatLog.sender?.id {
-              ChatMessageView(chatLog: chatLog)
-                .sentBubble
-                .scaleEffect(x: 1, y: -1, anchor: .center)
-            } else {
-              ChatMessageView(chatLog: chatLog)
-                .receivedBubble
-                .scaleEffect(x: 1, y: -1, anchor: .center)
-            }
+      ScrollViewReader { scrollView in
+        ScrollView {
+          GeometryReader { proxy in
+            Color.clear
+              .preference(
+                key: OffsetPreferenceKey.self,
+                value: proxy.frame(in: .named("frameLayer")).minY
+              )
           }
-          Spacer().frame(height: 90).background(.white)
+            .frame(height: 0)
+          LazyVStack(alignment: .leading, spacing: 0) {
+            Spacer().frame(height: 4).background(.white).id("listBottom")
+            ForEach(viewStore.chatLogList.reversed(), id: \.id) { chatLog in
+              if viewStore.myInfo?.id == chatLog.sender?.id {
+                ChatMessageView(chatLog: chatLog)
+                  .sentBubble
+                  .scaleEffect(x: 1, y: -1, anchor: .center)
+              } else {
+                ChatMessageView(chatLog: chatLog)
+                  .receivedBubble
+                  .scaleEffect(x: 1, y: -1, anchor: .center)
+              }
+            }
+            Spacer().frame(height: 90).background(.white)
+          }
         }
+          .gesture(
+            DragGesture().onChanged({_ in
+              hideKeyboard()
+            })
+          )
+          .scaleEffect(x: 1, y: -1, anchor: .center)
+          .background(.white)
+          .coordinateSpace(name: "frameLayer")
+          .onPreferenceChange(
+            OffsetPreferenceKey.self,
+            perform: { y in
+              scrollToBottomButtonHidden = y <= scrollMinY
+            })
+          .overlay(navigationView, alignment: .top)
+          .overlay(
+            Button {
+              withAnimation { scrollView.scrollTo("listBottom", anchor: .bottom) }
+            } label: {
+              Image("rightArrow").resizable()
+                .frame(width: 32, height: 32)
+                .rotationEffect(.degrees(90))
+                .padding([.bottom, .trailing], 16)
+            }
+              .opacity(scrollToBottomButtonHidden ? 0 : 1)
+            ,
+            alignment: .bottomTrailing
+          )
       }
-        .gesture(
-          DragGesture().onChanged({_ in
-            hideKeyboard()
-          })
-        )
-        .scaleEffect(x: 1, y: -1, anchor: .center)
-        .background(.white)
-        .overlay(navigationView, alignment: .top)
+      
       
       InputChatView(store: store)
     }
@@ -244,7 +276,7 @@ extension ChatDetailView {
               .frame(width: 24, height: 24)
           }
             .isDetailLink(false)
-            .simultaneousGesture(TapGesture().onEnded{ viewStore.send(.moveToOtherView) })
+            .simultaneousGesture(TapGesture().onEnded { viewStore.send(.moveToOtherView) })
         }
       }
       .padding([.leading, .trailing], 10)
@@ -256,7 +288,7 @@ extension ChatDetailView {
   }
 }
 
-
+// MARK: TextView Representable
 struct UITextViewRepresentable: UIViewRepresentable {
   @Binding var text: String
   @Binding var inputHeight: CGFloat
@@ -302,6 +334,12 @@ struct UITextViewRepresentable: UIViewRepresentable {
       inputHeight = max(32, min(textView.contentSize.height, spacing * 5))
     }
   }
+}
+
+// MARK: OffsetPreference
+private struct OffsetPreferenceKey: PreferenceKey {
+  static var defaultValue: CGFloat = .zero
+  static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {}
 }
 
 
