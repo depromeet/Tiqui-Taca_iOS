@@ -98,11 +98,20 @@ let appCore = Reducer<
   case .signIn:
     environment.appService.authService.deleteTempToken()
     state.onboardingState = nil
-    return environment.appService.userService
-      .fetchMyProfile()
-      .receive(on: environment.mainQueue)
-      .catchToEffect()
-      .map(AppAction.getMyProfileResponse)
+    let request = FCMUpdateRequest(fcmToken: environment.appService.fcmToken)
+    
+    return .concatenate([
+      environment.appService.userService
+        .updateFCMToken(request)
+        .receive(on: environment.mainQueue)
+        .catchToEffect()
+        .fireAndForget(),
+      environment.appService.userService
+        .fetchMyProfile()
+        .receive(on: environment.mainQueue)
+        .catchToEffect()
+        .map(AppAction.getMyProfileResponse)
+    ])
     
   case .signOut:
     environment.appService.authService.signOut()

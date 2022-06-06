@@ -13,6 +13,7 @@ protocol UserServiceType {
   
   func deleteMyProfile()
   func fetchMyProfile() -> AnyPublisher<UserEntity.Response?, HTTPError>
+  func updateFCMToken(_ request: FCMUpdateRequest) -> AnyPublisher<Void, HTTPError>
   func getAppAlarmState() -> AnyPublisher<AppAlarmEntity.Response?, HTTPError>
   func getBlockUserList() -> AnyPublisher<[BlockUserEntity.Response]?, HTTPError>
   func unBlockUser(userId: String) -> AnyPublisher<BlockUserEntity.Response?, HTTPError>
@@ -40,6 +41,11 @@ final class UserService: UserServiceType {
         self?.myProfile = response
       })
       .eraseToAnyPublisher()
+  }
+  
+  func updateFCMToken(_ request: FCMUpdateRequest) -> AnyPublisher<Void, HTTPError> {
+    return network
+      .request(.fcmPatch(request))
   }
   
   func getAppAlarmState() -> AnyPublisher<AppAlarmEntity.Response?, HTTPError> {
