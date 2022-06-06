@@ -14,7 +14,7 @@ struct ChatMenuView: View {
   typealias Action = ChatMenuAction
   
   private let store: Store<State, Action>
-  @Binding var shouldPopToRootView : Bool
+  @Binding var shouldPopToRootView: Bool
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
   @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
   

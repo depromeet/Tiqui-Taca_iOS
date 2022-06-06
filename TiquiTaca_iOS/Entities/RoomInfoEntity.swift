@@ -16,6 +16,10 @@ enum RoomInfoEntity {
     let category: LocationCategory?
     let userCount: Int?
     
+    let notReadChatCount: Int?
+    let lastChatMessage: String?
+    let lastChatTime: String?
+    
     var viewTitle: String {
       (name ?? "") + " \(userCount ?? 0)"
     }
@@ -25,6 +29,9 @@ enum RoomInfoEntity {
       case name
       case category
       case userCount
+      case notReadChatCount
+      case lastChatMessage
+      case lastChatTime
     }
     
     init() {
@@ -32,6 +39,10 @@ enum RoomInfoEntity {
       name = nil
       category = nil
       userCount = nil
+      
+      notReadChatCount = nil
+      lastChatMessage = nil
+      lastChatTime = nil
     }
     
     init(from decoder: Decoder) throws {
@@ -40,6 +51,9 @@ enum RoomInfoEntity {
       name = (try? container.decode(String.self, forKey: .name)) ?? ""
       category = try? container.decode(LocationCategory.self, forKey: .category)
       userCount = (try? container.decode(Int.self, forKey: .userCount)) ?? 1
+      notReadChatCount = try? container.decode(Int?.self, forKey: .notReadChatCount)
+      lastChatMessage = try? container.decode(String?.self, forKey: .lastChatMessage)
+      lastChatTime = try? container.decode(String?.self, forKey: .lastChatTime)
     }
   }
 }

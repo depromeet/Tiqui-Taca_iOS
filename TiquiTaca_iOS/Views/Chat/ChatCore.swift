@@ -67,6 +67,7 @@ let chatReducer = Reducer<
   chatCore
 ])
 
+struct TimerId: Hashable { }
 
 let chatCore = Reducer<
 	ChatState,
@@ -85,7 +86,12 @@ let chatCore = Reducer<
 			Effect(value: .fetchLikeRoomList)
 				.eraseToEffect(),
 			Effect(value: .fetchPopularRoomList)
-				.eraseToEffect()
+				.eraseToEffect(),
+      Effect.timer(id: TimerId(), every: .seconds(10), on: DispatchQueue.main.eraseToAnyScheduler())
+        .flatMap({ _ in environment.appService.roomService.getEnteredRoom() })
+        .catchToEffect()
+        .map(ChatAction.responseEnteredRoom)
+        .eraseToEffect()
 		)
 	// MARK: Requeset
 	case .fetchEnteredRoomInfo:

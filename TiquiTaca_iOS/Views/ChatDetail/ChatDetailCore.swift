@@ -13,8 +13,9 @@ import SwiftUI
 
 struct ChatDetailState: Equatable {
   var currentRoom: RoomInfoEntity.Response = .init()
+  var myInfo: UserEntity.Response? = nil
+  
   var isFirstLoad = true
-
   var chatLogList: [ChatLogEntity.Response] = []
   var receiveNewChat: Bool = false
   
@@ -74,6 +75,7 @@ let chatDetailCore = Reducer<
   switch action {
   case .onAppear:
     guard state.isFirstLoad else { return .none }
+    state.myInfo = environment.appService.userService.myProfile
     state.chatMenuState = ChatMenuState(roomInfo: state.currentRoom)
     state.isFirstLoad = false
     return .merge(

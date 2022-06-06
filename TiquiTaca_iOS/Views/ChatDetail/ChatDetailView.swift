@@ -18,6 +18,13 @@ struct ChatDetailView: View {
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
   @Binding var shouldPopToRootView : Bool
   var store: Store<State, Action>
+  var logListbottomPadding: Int {
+    if #available(iOS 15.4, *) {
+      return 0
+    } else {
+      return -44
+    }
+  }
   
   struct ViewState: Equatable {
     let currentRoom: RoomInfoEntity.Response
@@ -43,38 +50,36 @@ struct ChatDetailView: View {
   
   var body: some View {
     VStack(spacing: 0) {
-      ZStack(alignment: .top) {
-        List {
-          Section(
-            footer: Spacer().frame(height: 80).background(.white)
-          ) {
-            ForEach(viewStore.chatLogList.reversed()) { chatLog in
-              ChatMessageView(chatLog: chatLog)
-                .receivedBubble
-                .listRowSeparator(.hidden)
-                .listRowInsets(EdgeInsets())
-                .scaleEffect(x: 1, y: -1, anchor: .center)
-            }
+      List {
+        Section(
+          footer: Spacer().frame(height: 80).background(.white)
+        ) {
+          ForEach(viewStore.chatLogList.reversed(), id: \.id) { chatLog in
+            ChatMessageView(chatLog: chatLog)
+              .receivedBubble
+              .listRowSeparator(.hidden)
+              .listRowInsets(EdgeInsets())
+              .scaleEffect(x: 1, y: -1, anchor: .center)
           }
         }
-        .listStyle(.plain)
-        .gesture(
-          DragGesture().onChanged({_ in
-            hideKeyboard()
-          })
-        )
-        .scaleEffect(x: 1, y: -1, anchor: .center)
-        .padding(EdgeInsets(top: 0, leading: 0, bottom: -44, trailing: 0))
-        .background(.white)
-        
-        navigationView
       }
+      .listStyle(.plain)
+      .gesture(
+        DragGesture().onChanged({_ in
+          hideKeyboard()
+        })
+      )
+      .scaleEffect(x: 1, y: -1, anchor: .center)
+      .padding( EdgeInsets(top: 0, leading: 0, bottom: CGFloat(logListbottomPadding), trailing: 0) )
+      .background(.white)
+      .overlay(navigationView, alignment: .top)
       
       InputChatView(store: store)
     }
       .navigationBarBackButtonHidden(true)
+      .navigationBarTitle("")
       .navigationBarHidden(true)
-      .ignoresSafeArea(.container, edges: .top)
+      .ignoresSafeArea(.all, edges: .top)
       .onAppear {
         viewStore.send(.onAppear)
       }

@@ -111,7 +111,7 @@ private struct EnteredRoomView: View {
           .hCenter()
           .vCenter()
         } else {
-          VStack{
+          VStack {
             Text("현재 참여 중인 채팅방")
               .hLeading()
               .foregroundColor(.green500)
@@ -130,7 +130,7 @@ private struct EnteredRoomView: View {
                   .foregroundColor(.black100)
                   .font(.body7)
               }
-              Text("오후 3:15")
+              Text(viewStore.enteredRoom?.lastChatTime?.getTimeStringFromDateString() ?? "00:00")
                 .foregroundColor(.black100)
                 .font(.body8)
                 .hTrailing()
@@ -139,20 +139,27 @@ private struct EnteredRoomView: View {
             
             Spacer().frame(height: 4)
             HStack {
-              Text("코엑스에서 가장 맛있는 맛집 하나만 알려주실 분 있나요!")
+              Text(
+                (viewStore.enteredRoom?.lastChatMessage ?? "").isEmpty ?
+                  "아직 아무도 채팅을 치지 않았어요" :
+                  (viewStore.enteredRoom?.lastChatMessage ?? "")
+              )
                 .foregroundColor(.white800)
                 .font(.body7)
                 .lineLimit(1)
                 .hLeading()
               VStack {
-                Text("36")
-                  .foregroundColor(.black800)
+                Text(
+                  (viewStore.enteredRoom?.notReadChatCount ?? 0) >= 100 ?
+                    "+99" :
+                    "\(viewStore.enteredRoom?.notReadChatCount ?? 0)"
+                )
+                  .foregroundColor(viewStore.enteredRoom?.notReadChatCount == 0 ? Color.black600 : .black800)
                   .font(.body4)
                   .padding([.leading, .trailing], 6)
                   .padding([.top, .bottom], 2)
               }
-              
-              .background(Color.green900)
+              .background(viewStore.enteredRoom?.notReadChatCount == 0 ? Color.black600 : Color.green900)
               .cornerRadius(11)
             }
               .hLeading()
@@ -162,7 +169,6 @@ private struct EnteredRoomView: View {
       }
       .background(Color.black600)
       .cornerRadius(16)
-      
       .padding([.leading, .trailing], 24)
       .frame(height: 116)
       .onTapGesture {
@@ -225,27 +231,29 @@ private struct TabKindView: View {
 
 
 private struct RoomListView: View {
-  typealias State = ChatState
   typealias Action = ChatAction
   
-  private let store: Store<State, Action>
+  private let store: Store<ChatState, Action>
   let roomType: RoomListType
   @Binding private var showPopup: Bool
   @Binding private var moveToChatDetail: Bool
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
+  @State var selectedRoomUserCount: Int = 0
     
   struct ViewState: Equatable {
     let likeRoomList: [RoomInfoEntity.Response]
     let popularRoomList: [RoomInfoEntity.Response]
+    let enteredRoom: RoomInfoEntity.Response?
     
-    init(state: State) {
+    init(state: ChatState) {
       likeRoomList = state.likeRoomList
       popularRoomList = state.popularRoomList
+      enteredRoom = state.enteredRoom
     }
   }
   
   init(
-    store: Store<State, Action>,
+    store: Store<ChatState, Action>,
     type: RoomListType,
     showPopup: Binding<Bool>,
     moveToChatDetail: Binding<Bool>
@@ -269,7 +277,7 @@ private struct RoomListView: View {
           (roomType == .like ?
             viewStore.likeRoomList :
             viewStore.popularRoomList
-          ).enumerated().map{ $0 }, id: \.element.id
+          ).enumerated().map({ $0 }), id: \.element.id
         ) { index, room in
           RoomListCell(ranking: index + 1, info: room, type: roomType)
             .background(.white)
@@ -282,9 +290,15 @@ private struct RoomListView: View {
               }
             })
             .onTapGesture(perform: {
-              UIView.setAnimationsEnabled(false)
-              showPopup = true
-              viewStore.send(.willEnterRoom(room))
+              if viewStore.enteredRoom == nil || room.id == viewStore.enteredRoom?.id {
+                viewStore.send(.willEnterRoom(room))
+                moveToChatDetail = true
+              } else {
+                selectedRoomUserCount = room.userCount ?? 0
+                UIView.setAnimationsEnabled(false)
+                viewStore.send(.willEnterRoom(room))
+                showPopup = true
+              }
             })
             .listRowSeparator(.hidden)
             .listRowInsets(EdgeInsets())
@@ -292,7 +306,11 @@ private struct RoomListView: View {
       }
     }
       .fullScreenCover(isPresented: $showPopup) {
-        AlertView(isPopupPresent: $showPopup, moveToChatDetailState: $moveToChatDetail)
+        AlertView(
+          isPopupPresent: $showPopup,
+          moveToChatDetailState: $moveToChatDetail,
+          roomUserCount: selectedRoomUserCount
+        )
           .background(BackgroundTransparentView())
       }
       .refreshable {
@@ -305,11 +323,20 @@ private struct RoomListView: View {
 private struct AlertView: View {
   @Binding var isPopupPresent: Bool
   @Binding var moveToChatDetailState: Bool
-  
-  // 이미 참여중인 채팅방 or 참여중인 채팅방 없음 -> 바로 Detail로
+  let roomUserCount: Int
+  var maxUserCount = 300
   // 채팅방 인원 풀 -> 경고만
   // 채팅방 교체할 것인지 -> 경고 후 참가
   var body: some View {
+    if roomUserCount < maxUserCount {
+      existEnteredRoom
+        .padding(EdgeInsets(top: 0, leading: 24, bottom: 0, trailing: 24))
+    } else {
+      overCapacity
+    }
+  }
+  
+  var existEnteredRoom: some View {
     TTPopupView.init(
       popUpCase: .oneLineTwoButton,
       title: "이미 참여 중인 채팅방이 있어요",
@@ -330,7 +357,27 @@ private struct AlertView: View {
         }
       }
     )
-    .padding(EdgeInsets(top: 0, leading: 24, bottom: 0, trailing: 24))
+  }
+  
+  var overCapacity: some View {
+    TTPopupView.init(
+      popUpCase: .oneLineTwoButton,
+      title: "해당 채팅방은 인원이 가득 찼어요",
+      subtitle: "최대 인원수 300명이 차서 입장이 불가능해요",
+      leftButtonName: "닫기",
+      confirm: {
+        isPopupPresent = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+          UIView.setAnimationsEnabled(true)
+        }
+      },
+      cancel: {
+        isPopupPresent = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+          UIView.setAnimationsEnabled(true)
+        }
+      }
+    )
   }
 }
 
@@ -368,7 +415,6 @@ struct BackgroundTransparentView: UIViewRepresentable {
   }
 
   func updateUIView(_ uiView: UIView, context: Context) {
-    
   }
 }
 

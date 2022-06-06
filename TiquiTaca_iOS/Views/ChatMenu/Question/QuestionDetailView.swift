@@ -142,7 +142,7 @@ struct QuestionDetailView: View {
               .font(.subtitle2)
               .foregroundColor(.white)
               .frame(height: viewStore.bottomType == .contentOther ? 44 : 0)
-          }          
+          }
           
           Rectangle().fill(Color.black600)
             .frame(height: viewStore.bottomType == .contentOther ? 1 : 0)
