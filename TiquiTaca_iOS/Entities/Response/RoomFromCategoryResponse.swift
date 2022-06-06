@@ -62,16 +62,8 @@ struct RoomFromCategoryResponse: Codable, JSONConvertible, RoomDefaultInfo {
 extension RoomFromCategoryResponse: Equatable, Identifiable { }
 
 extension RoomFromCategoryResponse {
-  func toChatRoomAnnotationInfo() -> ChatRoomAnnotationInfo {
-    return .init(
-      id: self.id,
-      name: self.name,
-      category: self.category,
-      radius: self.radius,
-      userCount: self.userCount,
-      latitude: self.latitude,
-      longitude: self.longitude
-    )
+  var coordinate: CLLocationCoordinate2D {
+    return .init(latitude: self.latitude, longitude: self.longitude)
   }
   
   func distance(from currentLocation: CLLocation) -> Double {

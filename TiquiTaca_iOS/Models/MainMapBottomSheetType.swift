@@ -8,7 +8,7 @@
 import Foundation
 
 enum MainMapBottomSheetType: Equatable {
-  case roomDetail
+  case chatRoomDetail
   case chatRoomList
   case popularChatRoomList
 }

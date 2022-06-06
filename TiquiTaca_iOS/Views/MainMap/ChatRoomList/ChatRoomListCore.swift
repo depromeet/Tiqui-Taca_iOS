@@ -5,13 +5,13 @@
 //  Created by 강민석 on 2022/06/05.
 //
 
-import ComposableArchitecture
-import ComposableCoreLocation
+import CoreLocation
 import TTNetworkModule
+import ComposableArchitecture
 
 struct ChatRoomListState: Equatable {
   var listSortType: ChatRoomListSortType = .distance
-  var listCategoryType: LocationCategory = .favorite
+  var listCategoryType: LocationCategory = .all
   var chatRoomList: [RoomFromCategoryResponse] = []
   var isLoading: Bool = false
   var currentLocation: CLLocation = .init(latitude: 0, longitude: 0)

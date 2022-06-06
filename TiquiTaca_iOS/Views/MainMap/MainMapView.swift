@@ -20,8 +20,7 @@ struct MainMapView: View {
   struct ViewState: Equatable {
     let bottomSheetPosition: TTBottomSheet.Position
     let bottomSheetType: MainMapBottomSheetType
-    let chatRoomAnnotationInfos: [ChatRoomAnnotationInfo]
-    let selectedAnnotationId: String?
+    let chatRoomAnnotationInfos: [RoomFromCategoryResponse]
     let region: MKCoordinateRegion
     let alert: AlertState<MainMapAction>?
     let chatRoomListState: ChatRoomListState
@@ -31,7 +30,6 @@ struct MainMapView: View {
       bottomSheetPosition = state.bottomSheetPosition
       bottomSheetType = state.bottomSheetType
       chatRoomAnnotationInfos = state.chatRoomAnnotationInfos
-      selectedAnnotationId = state.selectedAnnotationId
       region = state.region
       alert = state.alert
       chatRoomListState = state.chatRoomListState
@@ -56,7 +54,7 @@ struct MainMapView: View {
           MapAnnotation(coordinate: chatRoomInfo.coordinate) {
             ChatRoomAnnotationView(info: chatRoomInfo)
               .onTapGesture {
-                viewStore.send(.setSelectedAnnotationId(chatRoomInfo.id))
+                viewStore.send(.annotationTapped(chatRoomInfo))
               }
           }
         }
@@ -115,8 +113,8 @@ struct MainMapView: View {
       options: TTBottomSheet.Options
     ) {
       switch viewStore.bottomSheetType {
-      case .roomDetail:
-        EmptyView()
+      case .chatRoomDetail:
+        ChatRoomDetailView(store: chatRoomDetailStore)
       case .chatRoomList:
         ChatRoomListView(store: chatRoomListStore)
       case .popularChatRoomList:
@@ -136,6 +134,13 @@ struct MainMapView: View {
 
 // MARK: - Store init
 extension MainMapView {
+  private var chatRoomDetailStore: Store<ChatRoomDetailState, ChatRoomDetailAction> {
+    return store.scope(
+      state: \.chatRoomDetailState,
+      action: Action.chatRoomDetailAction
+    )
+  }
+  
   private var chatRoomListStore: Store<ChatRoomListState, ChatRoomListAction> {
     return store.scope(
       state: \.chatRoomListState,
