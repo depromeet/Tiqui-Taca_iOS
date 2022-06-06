@@ -89,7 +89,7 @@ struct ChatRoomDetailView: View {
           Image(viewStore.isWithinRadius ? "locationIn" : "locationOut")
             .resizable()
             .frame(width: 48, height: 48)
-          Text("반경 외") // 반경 내
+          Text(viewStore.isWithinRadius ? "반경 내" : "반경 외")
             .font(.body2)
             .foregroundColor(.white)
         }

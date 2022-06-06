@@ -26,7 +26,9 @@ struct MainMapView: View {
     let alert: AlertState<MainMapAction>?
     let chatRoomListState: ChatRoomListState
     let popularChatRoomListState: PopularChatRoomListState
+    let chatRoomDetailState: ChatRoomDetailState
     let selectedAnnotationOverlay: [MKCircle]
+    let userTrackingMode: State.MapUserTrackingModeType
     
     init(state: State) {
       bottomSheetPosition = state.bottomSheetPosition
@@ -37,6 +39,8 @@ struct MainMapView: View {
       chatRoomListState = state.chatRoomListState
       popularChatRoomListState = state.popularChatRoomListState
       selectedAnnotationOverlay = state.selectedAnnotationOverlay
+      userTrackingMode = state.userTrackingMode
+      chatRoomDetailState = state.chatRoomDetailState
     }
   }
   
@@ -52,6 +56,11 @@ struct MainMapView: View {
           get: \.region,
           send: Action.setRegion
         ),
+        informationVisibility: .default.union(.userLocation),
+        userTrackingMode: viewStore.binding(
+          get: \.userTrackingMode,
+          send: Action.setUserTrackingMode
+        ),
         annotationItems: viewStore.chatRoomAnnotationInfos,
         annotationContent: { chatRoomInfo in
           ViewMapAnnotation(coordinate: chatRoomInfo.coordinate) {
@@ -66,8 +75,13 @@ struct MainMapView: View {
         overlayContent: { overlay in
           RendererMapOverlay(overlay: overlay) { _, overlay in
             let circleRenderer = MKCircleRenderer(overlay: overlay)
-            circleRenderer.strokeColor = Color.green500.uiColor
-            circleRenderer.fillColor = Color.green900.uiColor.withAlphaComponent(0.3)
+            if viewStore.chatRoomDetailState.isWithinRadius {
+              circleRenderer.strokeColor = Color.green500.uiColor
+              circleRenderer.fillColor = Color.green900.uiColor.withAlphaComponent(0.3)
+            } else {
+              circleRenderer.strokeColor = Color.white50.uiColor
+              circleRenderer.fillColor = Color.white800.uiColor.withAlphaComponent(0.4)
+            }
             circleRenderer.lineWidth = 1
             return circleRenderer
           }

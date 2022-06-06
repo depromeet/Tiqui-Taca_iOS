@@ -5,11 +5,14 @@
 //  Created by 김록원 on 2022/04/24.
 //
 
+import Map
 import MapKit
 import ComposableArchitecture
 import ComposableCoreLocation
 
 struct MainMapState: Equatable {
+  typealias MapUserTrackingModeType = MapUserTrackingMode // Map 네이밍 중복 문제
+  
   var bottomSheetPosition: TTBottomSheet.Position = .hidden
   var bottomSheetType: MainMapBottomSheetType = .popularChatRoomList
   var chatRoomAnnotationInfos: [RoomFromCategoryResponse] = []
@@ -17,6 +20,7 @@ struct MainMapState: Equatable {
   var alert: AlertState<MainMapAction>?
   var isRequestingCurrentLocation: Bool = false
   var selectedAnnotationOverlay: [MKCircle] = []
+  var userTrackingMode: MapUserTrackingModeType = .none
   
   var chatRoomListState: ChatRoomListState = .init()
   var popularChatRoomListState: PopularChatRoomListState = .init()
@@ -34,6 +38,7 @@ enum MainMapAction: Equatable {
   case dismissAlertButtonTapped
   case popularChatRoomButtonTapped
   case categoryTapped(LocationCategory)
+  case setUserTrackingMode(MapUserTrackingMode)
   
   case chatRoomListAction(ChatRoomListAction)
   case popularChatRoomListAction(PopularChatRoomListAction)
@@ -130,12 +135,32 @@ private let mainMapCore = Reducer<
         .fireAndForget()
     case .authorizedAlways, .authorizedWhenInUse:
       state.isRequestingCurrentLocation = true
-      return environment.locationManager
-        .requestLocation()
-        .fireAndForget()
+      return .merge([
+        .init(value: .setUserTrackingMode(.follow)),
+        environment.locationManager
+          .requestLocation()
+          .fireAndForget()
+      ])
     default:
       return .none
     }
+    
+  case let .locationManager(.didUpdateLocations(locations)):
+    guard let location = locations.first else { return .none }
+    if state.isRequestingCurrentLocation {
+      state.isRequestingCurrentLocation = false
+      state.region = MKCoordinateRegion(
+        center: location.coordinate,
+        span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+      )
+    }
+    state.chatRoomListState.currentLocation = location.rawValue
+    state.popularChatRoomListState.currentLocation = location.rawValue
+    state.chatRoomDetailState.currentLocation = location.rawValue
+    return .init(value: .chatRoomDetailAction(.checkCurrentLocationWithinRadius))
+    
+  case .locationManager:
+    return .none
     
   case let .setBottomSheetPosition(position):
     if state.bottomSheetType != .chatRoomList && position == .top {
@@ -149,7 +174,7 @@ private let mainMapCore = Reducer<
     return .none
     
   case let .annotationTapped(annotation):
-    let overlay = MKCircle(center: annotation.coordinate, radius: 1000)
+    let overlay = MKCircle(center: annotation.coordinate, radius: annotation.radius)
     let focusRegion = MKCoordinateRegion(
       center: annotation.coordinate,
       span: .init(latitudeDelta: 0.05, longitudeDelta: 0.05)
@@ -159,10 +184,7 @@ private let mainMapCore = Reducer<
     state.chatRoomDetailState.chatRoom = annotation
     
     return .merge([
-      environment.locationManager
-        .startMonitoringForRegion(monitoringRegion)
-        .cancellable(id: CancelRegionId(), cancelInFlight: true)
-        .fireAndForget(),
+      .init(value: .chatRoomDetailAction(.checkCurrentLocationWithinRadius)),
       .init(value: .setRegion(focusRegion)),
       .init(value: .setBottomSheetType(.chatRoomDetail)),
       .init(value: .setBottomSheetPosition(.middle))
@@ -170,9 +192,6 @@ private let mainMapCore = Reducer<
     
   case let .setRegion(region):
     state.region = region
-    return .none
-    
-  case .locationManager:
     return .none
     
   case .dismissAlertButtonTapped:
@@ -200,6 +219,10 @@ private let mainMapCore = Reducer<
       ])
     }
     
+  case let .setUserTrackingMode(mode):
+    state.userTrackingMode = mode
+    return .none
+    
   case .chatRoomDetailAction:
     return .none
     
@@ -225,41 +248,12 @@ private let locationManagerReducer = Reducer<
   MainMapState,
   LocationManager.Action,
   MainMapEnvironment
-> { state, action, environment in
+> { state, action, _ in
   switch action {
-//  case .didChangeAuthorization(.authorizedAlways),
-//      .didChangeAuthorization(.authorizedWhenInUse):
-//    if state.isRequestingCurrentLocation {
-//      return environment.locationManager
-//        .requestLocation()
-//        .fireAndForget()
-//    }
-//    return .none
-    
   case .didChangeAuthorization(.denied),
       .didChangeAuthorization(.restricted):
     state.alert = .init(title: TextState("위치 서비스 설정이 허용되어야 정상적인 사용이 가능합니다."))
     return .none
-    
-  case let .didUpdateLocations(locations):
-    guard let location = locations.first else { return .none }
-    if state.isRequestingCurrentLocation {
-      state.isRequestingCurrentLocation = false
-      state.region = MKCoordinateRegion(
-        center: location.coordinate,
-        span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
-      )
-    }
-    state.chatRoomListState.currentLocation = location.rawValue
-    state.popularChatRoomListState.currentLocation = location.rawValue
-    state.chatRoomDetailState.currentLocation = location.rawValue
-    return .none
-    
-//  case .didEnterRegion(<#T##Region#>):
-//    return .none
-//
-//  case .didExitRegion(<#T##Region#>):
-//    return .none
     
   default:
     return .none

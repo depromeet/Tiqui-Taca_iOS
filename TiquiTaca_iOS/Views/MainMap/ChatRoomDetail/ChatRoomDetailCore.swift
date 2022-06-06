@@ -16,7 +16,7 @@ struct ChatRoomDetailState: Equatable {
 
 enum ChatRoomDetailAction: Equatable {
   case joinChatRoomButtonTapped
-  case setIsWithinRadius(Bool)
+  case checkCurrentLocationWithinRadius
 }
 
 struct ChatRoomDetailEnvironment {
@@ -41,7 +41,8 @@ let chatRoomDetailCore = Reducer<
   case .joinChatRoomButtonTapped:
     return .none
     
-  case let .setIsWithinRadius(isWithinRadius):
+  case .checkCurrentLocationWithinRadius:
+    let isWithinRadius = state.chatRoom.geofenceRegion.contains(state.currentLocation.coordinate)
     state.isWithinRadius = isWithinRadius
     return .none
   }
