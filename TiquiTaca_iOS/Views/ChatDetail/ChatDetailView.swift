@@ -52,38 +52,31 @@ struct ChatDetailView: View {
   
   var body: some View {
     VStack(spacing: 0) {
-      List {
-        Section(
-          footer: Spacer().frame(height: 80).background(.white)
-        ) {
-          LazyVStack(alignment: .leading, spacing: 0) {
-            ForEach(viewStore.chatLogList.reversed(), id: \.id) { chatLog in
-              if viewStore.myInfo?.id == chatLog.sender?.id {
-                ChatMessageView(chatLog: chatLog)
-                  .sentBubble
-                  .scaleEffect(x: 1, y: -1, anchor: .center)
-              } else {
-                ChatMessageView(chatLog: chatLog)
-                  .receivedBubble
-                  .scaleEffect(x: 1, y: -1, anchor: .center)
-              }
+      ScrollView {
+        LazyVStack(alignment: .leading, spacing: 0) {
+          Spacer().frame(height: 4).background(.white)
+          ForEach(viewStore.chatLogList.reversed(), id: \.id) { chatLog in
+            if viewStore.myInfo?.id == chatLog.sender?.id {
+              ChatMessageView(chatLog: chatLog)
+                .sentBubble
+                .scaleEffect(x: 1, y: -1, anchor: .center)
+            } else {
+              ChatMessageView(chatLog: chatLog)
+                .receivedBubble
+                .scaleEffect(x: 1, y: -1, anchor: .center)
             }
           }
-          .listRowSeparator(.hidden)
-          .listRowInsets(EdgeInsets())
+          Spacer().frame(height: 90).background(.white)
         }
       }
-      
-      .listStyle(.plain)
-      .gesture(
-        DragGesture().onChanged({_ in
-          hideKeyboard()
-        })
-      )
-      .scaleEffect(x: 1, y: -1, anchor: .center)
-      .padding( EdgeInsets(top: 0, leading: 0, bottom: CGFloat(logListbottomPadding), trailing: 0) )
-      .background(.white)
-      .overlay(navigationView, alignment: .top)
+        .gesture(
+          DragGesture().onChanged({_ in
+            hideKeyboard()
+          })
+        )
+        .scaleEffect(x: 1, y: -1, anchor: .center)
+        .background(.white)
+        .overlay(navigationView, alignment: .top)
       
       InputChatView(store: store)
     }
