@@ -7,12 +7,23 @@
 
 import ComposableArchitecture
 import TTNetworkModule
+import IdentifiedCollections
 
 struct MyPageState: Equatable {
   typealias Route = MyPageItemType
   var route: Route?
-  
   var myInfoViewState: MyInfoState = .init()
+  var changeProfileViewState: ChangeProfileState = .init()
+  var myPageItemStates: IdentifiedArrayOf<MyPageItemState> = [
+    .init(rowInfo: .init(itemType: .myInfoView)),
+    .init(rowInfo: .init(itemType: .alarmSet, toggleVisible: true)),
+    .init(rowInfo: .init(itemType: .blockHistoryView)),
+    .init(rowInfo: .init(itemType: .noticeView)),
+    .init(rowInfo: .init(itemType: .myTermsOfServiceView)),
+    .init(rowInfo: .init(itemType: .csCenterView)),
+    .init(rowInfo: .init(itemType: .versionInfo, description: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String))
+  ]
+  
   var nickname = ""
   var phoneNumber = ""
   var profileImage: ProfileImage = .init()
@@ -20,25 +31,28 @@ struct MyPageState: Equatable {
   var createdAt: String = ""
   var createDday = 0
   var isAppAlarmOn = false
-  var rowInfo: [MyPageItemInfo] = [
-    .init(itemType: .myInfoView),
-    .init(itemType: .alarmSet, toggleVisible: true),
-    .init(itemType: .blockHistoryView),
-    .init(itemType: .noticeView),
-    .init(itemType: .myTermsOfServiceView),
-    .init(itemType: .csCenterView),
-    .init(itemType: .versionInfo, description: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String)
-  ]
+//  var rowInfo: [MyPageItemInfo] = [
+//    .init(itemType: .myInfoView),
+//    .init(itemType: .alarmSet, toggleVisible: true),
+//    .init(itemType: .blockHistoryView),
+//    .init(itemType: .noticeView),
+//    .init(itemType: .myTermsOfServiceView),
+//    .init(itemType: .csCenterView),
+//    .init(itemType: .versionInfo, description: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String)
+//  ]
 }
 
 enum MyPageAction: Equatable {
   case setRoute(MyPageState.Route?)
   case myInfoView(MyInfoAction)
+  case changeProfileView(ChangeProfileAction)
+  case mypageItemView(MyPageItemAction)
+  case mypageItem(id: UUID, action: MyPageItemAction)
   case getProfileInfo
   case getProfileRequestSuccess
-  case alarmToggle
-  case getAlarmRequestResponse(Result<AppAlarmEntity.Response?, HTTPError>)
-  case getAlarmRequestSuccess
+//  case alarmToggle
+//  case getAlarmRequestResponse(Result<AppAlarmEntity.Response?, HTTPError>)
+//  case getAlarmRequestSuccess
   case logout
 }
 
@@ -52,12 +66,45 @@ let myPageReducer = Reducer<
   MyPageAction,
   MyPageEnvironment
 >.combine([
+  changeProfileReducer
+    .pullback(
+      state: \.changeProfileViewState,
+      action: /MyPageAction.changeProfileView,
+      environment: {
+        ChangeProfileEnvironment(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
+        )
+      }
+    ),
   myInfoReducer
     .pullback(
       state: \.myInfoViewState,
       action: /MyPageAction.myInfoView,
       environment: { _ in
         MyInfoEnvironment()
+      }
+    ),
+//  myPageItemReducer
+//    .pullback(
+//      state: \.myPageItemStates,
+//      action: /MyPageAction.mypageItemView,
+//      environment: {
+//        MyPageItemEnvironment(
+//          appService: $0.appService,
+//          mainQueue: $0.mainQueue
+//        )
+//      }
+//    ),
+  myPageItemReducer
+    .forEach(
+      state: \.myPageItemStates,
+      action: /MyPageAction.mypageItem(id:action:),
+      environment: {
+        MyPageItemEnvironment(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
+        )
       }
     ),
   myPageReducerCore
@@ -86,6 +133,7 @@ let myPageReducerCore = Reducer<
     state.isAppAlarmOn = myProfile?.appAlarm ?? false
     state.level = myProfile?.level ?? 0
     state.phoneNumber = myProfile?.phoneNumber ?? ""
+    state.changeProfileViewState = ChangeProfileState(nickname: state.nickname, profileImage: state.profileImage)
     
     if var phoneNumber = myProfile?.phoneNumber, phoneNumber.count > 9 {
       phoneNumber.insert("-", at: phoneNumber.index(phoneNumber.startIndex, offsetBy: 3))
@@ -111,32 +159,27 @@ let myPageReducerCore = Reducer<
   case .getProfileRequestSuccess:
     return .none
     
-  case .alarmToggle:
-    return environment.appService.userService
-      .getAppAlarmState()
-      .receive(on: environment.mainQueue)
-      .catchToEffect()
-      .map(MyPageAction.getAlarmRequestResponse)
-    
-  case let .getAlarmRequestResponse(.success(response)):
-    state.isAppAlarmOn = response?.appAlarm ?? false
-    return Effect(value: .getProfileRequestSuccess)
-    
-  case .getAlarmRequestResponse(.failure):
-    return .none
-    
-  case .getAlarmRequestSuccess:
-    return .none
+
     
   case .logout:
     return .none
     
   case let .setRoute(route):
-    if route == .alarmSet || route == .versionInfo {
+    if route == .alarmSet {
       state.route = nil
+      return .none
+    } else if route == .versionInfo {
+      state.route = nil
+      return .none
     } else {
       state.route = route
+      return .none
     }
+  case .changeProfileView:
+    return .none
+  case .mypageItemView:
+    return .none
+  case .mypageItem(id: let id, action: let action):
     return .none
   }
 }

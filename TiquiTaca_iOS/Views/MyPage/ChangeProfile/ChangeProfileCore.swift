@@ -30,6 +30,7 @@ enum ChangeProfileAction: Equatable {
   case checkNicknameResponse(Result<CheckNicknameEntity.Response?, HTTPError>)
   case changeProfile(String, ProfileType)
   case changeProfileResponse(Result<ChangeProfileEntity.Response?, HTTPError>)
+  case getMyProfileResponse(Result<UserEntity.Response?, HTTPError>)
 }
 
 struct ChangeProfileEnvironment {
@@ -100,6 +101,13 @@ let changeProfileReducer = Reducer<
       .map(ChangeProfileAction.changeProfileResponse)
     
   case let .changeProfileResponse(.success(response)):
+//    state.dismissCurrentPage = true
+    return environment.appService.userService
+      .fetchMyProfile()
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(ChangeProfileAction.getMyProfileResponse)
+  case .getMyProfileResponse:
     state.dismissCurrentPage = true
     return .none
     

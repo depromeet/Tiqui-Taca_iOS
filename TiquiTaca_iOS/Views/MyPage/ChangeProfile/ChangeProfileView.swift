@@ -148,7 +148,9 @@ struct ChangeProfileView: View {
             .font(.subtitle1)
         }
         .onChange(of: viewStore.dismissCurrentPage) { isDismissCurrentView in
-          if isDismissCurrentView { self.presentationMode.wrappedValue.dismiss() }
+          if isDismissCurrentView {
+            presentationMode.wrappedValue.dismiss()
+          }
         }
         .disabled(!viewStore.isAvailableCompletion)
       }

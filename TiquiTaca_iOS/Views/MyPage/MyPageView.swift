@@ -10,15 +10,17 @@ import ComposableArchitecture
 import TTDesignSystemModule
 
 struct MyPageView: View {
-  typealias State = MyPageState
+  typealias MyState = MyPageState
   typealias Action = MyPageAction
   
-  private let store: Store<State, Action>
+  private let store: Store<MyState, Action>
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
+  @State private var togglePressed = false
   
   struct ViewState: Equatable {
-    let route: State.Route?
+    let route: MyState.Route?
     let myInfoViewState: MyInfoState
+    let myPageItemStates: IdentifiedArrayOf<MyPageItemState>
     let nickname: String
     let phoneNumber: String
     let profileImage: ProfileImage
@@ -26,11 +28,11 @@ struct MyPageView: View {
     let createdAt: String
     let createDday: Int
     let isAppAlarmOn: Bool
-    let rowInfo: [MyPageItemInfo]
     
-    init(state: State) {
+    init(state: MyState) {
       route = state.route
       myInfoViewState = state.myInfoViewState
+      myPageItemStates = state.myPageItemStates
       nickname = state.nickname
       phoneNumber = state.phoneNumber
       profileImage = state.profileImage
@@ -38,11 +40,10 @@ struct MyPageView: View {
       createdAt = state.createdAt
       createDday = state.createDday
       isAppAlarmOn = state.isAppAlarmOn
-      rowInfo = state.rowInfo
     }
   }
   
-  init(store: Store<State, Action>) {
+  init(store: Store<MyState, Action>) {
     self.store = store
     viewStore = ViewStore.init(store.scope(state: ViewState.init))
   }
@@ -59,16 +60,9 @@ struct MyPageView: View {
           NavigationLink(
             destination: {
               ChangeProfileView(
-                store: .init(
-                  initialState: .init(
-                    nickname: viewStore.nickname,
-                    profileImage: viewStore.profileImage
-                  ),
-                  reducer: changeProfileReducer,
-                  environment: .init(
-                    appService: AppService(),
-                    mainQueue: .main
-                  )
+                store: store.scope(
+                  state: \.changeProfileViewState,
+                  action: MyPageAction.changeProfileView
                 )
               )
             }, label: {
@@ -94,11 +88,16 @@ struct MyPageView: View {
       .foregroundColor(.white)
       .background(Color.black800)
       
-      ForEach(viewStore.rowInfo) { item in
-        MypageRow(rowInfo: item)
-          .onTapGesture {
-            viewStore.send(.setRoute(item.itemType))
-          }
+      ForEachStore(
+        store.scope(
+          state: \.myPageItemStates,
+          action: Action.mypageItem(id: action:)
+        ), content: { store in
+          MypageItem.init(store: store)
+        }
+      )
+      .onTapGesture {
+        viewStore.send(.setRoute(item.itemType))
       }
       .padding([.leading, .trailing], .spacingS)
       
