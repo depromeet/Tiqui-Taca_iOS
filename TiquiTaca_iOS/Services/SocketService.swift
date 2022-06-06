@@ -32,10 +32,11 @@ struct SocketService {
           .forceWebsockets(true),
           .connectParams(["roomId": roomId]),
           .extraHeaders([
-            "Authorization": "Bearer \(UserDefaults.standard.string(forKey: "publicAccessToken") ?? "")"
+            "Authorization": "Bearer \(TokenManager.shared.loadAccessToken()?.token ?? "")"
           ])
         ]
         let socket = socketManager.socket(forNamespace: "/chat")
+        // socket.connec
         // 이미 커넥 되어있는지 확인?
         
         socket.on(clientEvent: .connect) {_, _ in
@@ -45,10 +46,13 @@ struct SocketService {
         
         socket.on("init") { data, _ in
           guard let res = data.first as? [Any] else { return }
-          let obj = res.compactMap({ $0 as? [String: Any] })
-            .compactMap({ try? JSONSerialization.data(withJSONObject: $0, options: .fragmentsAllowed) })
-            .compactMap({ try? JSONDecoder().decode(ChatLogEntity.Response.self, from: $0) })
-          subscriber.send(.initialMessages(obj))
+          do {
+            let resData = try JSONSerialization.data(withJSONObject: res, options: .fragmentsAllowed)
+            let obj = try JSONDecoder().decode([ChatLogEntity.Response].self, from: resData)
+            subscriber.send(.initialMessages(obj))
+          } catch {
+            print("init decode error")
+          }
         }
         
         socket.on("new_chat") { data, _ in

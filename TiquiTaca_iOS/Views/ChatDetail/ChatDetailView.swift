@@ -48,16 +48,21 @@ struct ChatDetailView: View {
             .listRowInsets(EdgeInsets())
         }
       }
-      .listStyle(.plain)
+        .listStyle(.plain)
+        .gesture(
+          DragGesture().onChanged({_ in
+            hideKeyboard()
+          })
+        )
       
       InputChatView(store: store)
     }
       .navigationBarBackButtonHidden(true)
       .toolbar(content: {
         ToolbarItem(placement: .navigationBarLeading) {
-          Button(action: {
+          Button {
             self.presentationMode.wrappedValue.dismiss()
-          }) {
+          } label: {
             HStack(spacing: 10) {
               Image("arrowBack")
                 .renderingMode(.template)
@@ -74,12 +79,14 @@ struct ChatDetailView: View {
         
         ToolbarItem(placement: .navigationBarTrailing) {
           HStack(spacing: 0) {
-            Button(action: { }) {
+            Button {
+            } label: {
               Image("alarmOn")
                 .resizable()
                 .frame(width: 24, height: 24)
             }
-            Button(action: { }) {
+            Button {
+            } label: {
               Image("menu")
                 .resizable()
                 .frame(width: 24, height: 24)
@@ -124,9 +131,9 @@ private struct InputChatView: View {
   
   var body: some View {
     HStack(alignment: .bottom, spacing: 8) {
-      Button(action: {
+      Button {
         isQuestion.toggle()
-      }) {
+      } label: {
         Text("질문")
           .font(.body3)
           .padding(.horizontal, 18)
@@ -138,7 +145,6 @@ private struct InputChatView: View {
       }
       
       HStack(alignment: .center, spacing: 4) {
-        
         UITextViewRepresentable(text: $typingMessage, inputHeight: $editorHeight)
           .foregroundColor(Color.black900)
           .hLeading()
@@ -164,7 +170,7 @@ private struct InputChatView: View {
         VStack(spacing: 0) {
           Spacer()
             .frame(minHeight: 0, maxHeight: .infinity)
-          Button(action: {
+          Button {
             if !typingMessage.isEmpty {
               let chat = SendChatEntity(
                 inside: true,
@@ -176,7 +182,7 @@ private struct InputChatView: View {
               typingMessage = ""
               editorHeight = 32
             }
-          }) {
+          } label: {
             Image("sendDisable")
               .renderingMode(.template)
               .resizable()

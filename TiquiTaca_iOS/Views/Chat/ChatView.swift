@@ -314,14 +314,14 @@ private struct AlertView: View {
       rightButtonName: "참여하기",
       confirm: {
         isPopupPresent = false
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
           UIView.setAnimationsEnabled(true)
           moveToChatDetailState = true
         }
       },
       cancel: {
         isPopupPresent = false
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
           UIView.setAnimationsEnabled(true)
         }
       }
@@ -363,7 +363,9 @@ struct BackgroundTransparentView: UIViewRepresentable {
     return view
   }
 
-  func updateUIView(_ uiView: UIView, context: Context) {}
+  func updateUIView(_ uiView: UIView, context: Context) {
+    
+  }
 }
 
 struct ChatView_Previews: PreviewProvider {
