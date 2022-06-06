@@ -9,6 +9,7 @@ import SwiftUI
 import MapKit
 import ComposableArchitecture
 import TTDesignSystemModule
+import Map
 
 struct MainMapView: View {
   typealias State = MainMapState
@@ -25,6 +26,7 @@ struct MainMapView: View {
     let alert: AlertState<MainMapAction>?
     let chatRoomListState: ChatRoomListState
     let popularChatRoomListState: PopularChatRoomListState
+    let selectedAnnotationOverlay: [MKCircle]
     
     init(state: State) {
       bottomSheetPosition = state.bottomSheetPosition
@@ -34,6 +36,7 @@ struct MainMapView: View {
       alert = state.alert
       chatRoomListState = state.chatRoomListState
       popularChatRoomListState = state.popularChatRoomListState
+      selectedAnnotationOverlay = state.selectedAnnotationOverlay
     }
   }
   
@@ -47,23 +50,33 @@ struct MainMapView: View {
       Map(
         coordinateRegion: viewStore.binding(
           get: \.region,
-          send: Action.updateRegion
+          send: Action.setRegion
         ),
         annotationItems: viewStore.chatRoomAnnotationInfos,
         annotationContent: { chatRoomInfo in
-          MapAnnotation(coordinate: chatRoomInfo.coordinate) {
-            ChatRoomAnnotationView(info: chatRoomInfo)
-              .onTapGesture {
-                viewStore.send(.annotationTapped(chatRoomInfo))
-              }
+          ViewMapAnnotation(coordinate: chatRoomInfo.coordinate) {
+            Button {
+              viewStore.send(.annotationTapped(chatRoomInfo))
+            } label: {
+              ChatRoomAnnotationView(info: chatRoomInfo)
+            }
+          }
+        },
+        overlayItems: viewStore.selectedAnnotationOverlay,
+        overlayContent: { overlay in
+          RendererMapOverlay(overlay: overlay) { _, overlay in
+            let circleRenderer = MKCircleRenderer(overlay: overlay)
+            circleRenderer.strokeColor = Color.green500.uiColor
+            circleRenderer.fillColor = Color.green900.uiColor.withAlphaComponent(0.3)
+            circleRenderer.lineWidth = 1
+            return circleRenderer
           }
         }
       )
+      .offset(y: viewStore.bottomSheetPosition != .hidden ? -100 : 0)
+      .animation(.default, value: viewStore.bottomSheetPosition != .hidden)
       .preferredColorScheme(.light)
       .edgesIgnoringSafeArea([.all])
-      .onTapGesture {
-        viewStore.send(.setBottomSheetPosition(.hidden))
-      }
       
       VStack {
         LocationCategoryListView(
@@ -74,7 +87,6 @@ struct MainMapView: View {
         )
         Spacer()
         VStack {
-          // 하단 버튼
           HStack(spacing: .spacingM) {
             Button {
               viewStore.send(.popularChatRoomButtonTapped)

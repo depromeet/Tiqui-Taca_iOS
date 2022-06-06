@@ -13,6 +13,7 @@ struct ChatRoomAnnotationView: View {
   var body: some View {
     ZStack {
       RoundedRectangle(cornerRadius: 18)
+        .fill(Color.black900)
         .frame(width: 69, height: 59)
         .overlay(
           RoundedRectangle(cornerRadius: 18)

@@ -14,7 +14,7 @@ struct RoomFromCategoryResponse: Codable, JSONConvertible, RoomDefaultInfo {
   let id: String
   let name: String
   let category: LocationCategory
-  let radius: Int
+  let radius: Double
   let userCount: Int
   let isFavorite: Bool
   let isJoin: Bool
@@ -50,7 +50,7 @@ struct RoomFromCategoryResponse: Codable, JSONConvertible, RoomDefaultInfo {
     id = (try? container.decode(String.self, forKey: .id)) ?? ""
     name = (try? container.decode(String.self, forKey: .name)) ?? ""
     category = (try? container.decode(LocationCategory.self, forKey: .category)) ?? .all
-    radius = (try? container.decode(Int.self, forKey: .radius)) ?? 0
+    radius = (try? container.decode(Double.self, forKey: .radius)) ?? 0
     userCount = (try? container.decode(Int.self, forKey: .userCount)) ?? 0
     isFavorite = (try? container.decode(Bool.self, forKey: .isFavorite)) ?? false
     isJoin = (try? container.decode(Bool.self, forKey: .isJoin)) ?? false
@@ -62,6 +62,14 @@ struct RoomFromCategoryResponse: Codable, JSONConvertible, RoomDefaultInfo {
 extension RoomFromCategoryResponse: Equatable, Identifiable { }
 
 extension RoomFromCategoryResponse {
+  var geofenceRegion: CLCircularRegion {
+    return .init(
+      center: self.coordinate,
+      radius: self.radius,
+      identifier: self.id
+    )
+  }
+  
   var coordinate: CLLocationCoordinate2D {
     return .init(latitude: self.latitude, longitude: self.longitude)
   }
