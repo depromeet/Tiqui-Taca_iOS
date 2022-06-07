@@ -24,7 +24,7 @@ struct QuestionDetailView: View {
     let likeActivated: Bool
     
     let bottomSheetPresented: Bool
-    let bottomSheetPosition: TTBottomSheet.Position
+    let bottomSheetPosition: TTBottomSheet.ActionSheetPosition
     let popupPresented: Bool
     let bottomSheetActionType: QuestionBottomActionType?
     let bottomType: QuestionBottomType?

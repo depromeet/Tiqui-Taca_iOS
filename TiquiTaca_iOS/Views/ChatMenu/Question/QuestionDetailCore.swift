@@ -20,7 +20,7 @@ struct QuestionDetailState: Equatable {
   var selectedCommentUserId: String = ""
   
   var bottomSheetPresented: Bool = false
-  var bottomSheetPosition: TTBottomSheet.Position = .hidden
+  var bottomSheetPosition: TTBottomSheet.ActionSheetPosition = .hidden
   var popupPresented: Bool = false
   var bottomSheetActionType: QuestionBottomActionType?
   var bottomType: QuestionBottomType?
@@ -36,7 +36,7 @@ enum QuestionDetailAction: Equatable {
   case likeClickAction
   case writeComment
   
-  case setBottomSheetPosition(TTBottomSheet.Position)
+  case setBottomSheetPosition(TTBottomSheet.ActionSheetPosition)
   case bottomSheetAction(QuestionBottomActionType)
   case presentPopup
   case dismissPopup
@@ -140,7 +140,7 @@ let questionDetailCore = Reducer<
       .catchToEffect()
       .map(QuestionDetailAction.reportQuestionWriterResponse)
   case let .reportQuestionWriterResponse(.success(response)):
-//    if response.reportSuccess
+    //    if response.reportSuccess
     // 성공 Toast
     return .none
   case let .reportQuestionWriterResponse(.failure(error)):
@@ -164,7 +164,7 @@ let questionDetailCore = Reducer<
       .receive(on: environment.mainQueue)
       .catchToEffect()
       .map(QuestionDetailAction.reportQuestionWriterResponse)
-
+    
   case let .blockCommentWriter(userId):
     return environment.appService.userService
       .blockUser(userId: userId)
@@ -267,7 +267,7 @@ let questionDetailCore = Reducer<
     state.popupPresented = false
     return .none
     
-  // 입력창 pullback
+    // 입력창 pullback
   case let .questionInputMessageView(questionInputMessageAction):
     switch questionInputMessageAction {
     case .sendMessage:
@@ -296,7 +296,7 @@ let questionDetailCore = Reducer<
       user: response?.last?.user,
       createdAt: response?.last?.createdAt ?? ""
     )
-
+    
     state.commentItemStates.insert(CommentItemState(comment: addedComment), at: state.commentItemStates.endIndex)
     return .none
   case .postCommentResponse(.failure):
@@ -304,7 +304,7 @@ let questionDetailCore = Reducer<
     
   case let .commentItemView(commentItemAction):
     return .none
-
+    
   case let .comment(id: id, action: action):
     switch action {
     case let .moreClickAction(commentId, commentUserId):
@@ -327,7 +327,7 @@ enum QuestionBottomType {
   case commentOther
   case commentMine
   
-  var bottomSheetPosition: TTBottomSheet.Position {
+  var bottomSheetPosition: TTBottomSheet.ActionSheetPosition {
     switch self {
     case .contentOther:
       return .threeButton

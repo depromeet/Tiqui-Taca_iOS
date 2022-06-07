@@ -9,6 +9,7 @@ import SwiftUI
 import MapKit
 import ComposableArchitecture
 import TTDesignSystemModule
+import Map
 
 struct MainMapView: View {
   typealias State = MainMapState
@@ -17,19 +18,34 @@ struct MainMapView: View {
   private let store: Store<State, Action>
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
   
+  var showSpreadButton: Bool {
+    return viewStore.bottomSheetType != .popularChatRoomList
+    && viewStore.bottomSheetPosition == .hidden
+  }
+  
   struct ViewState: Equatable {
     let bottomSheetPosition: TTBottomSheet.Position
-    let chatRoomAnnotationInfos: [ChatRoomAnnotationInfo]
-    let selectedAnnotationId: String?
+    let bottomSheetType: MainMapBottomSheetType
+    let chatRoomAnnotationInfos: [RoomFromCategoryResponse]
     let region: MKCoordinateRegion
     let alert: AlertState<MainMapAction>?
+    let chatRoomListState: ChatRoomListState
+    let popularChatRoomListState: PopularChatRoomListState
+    let chatRoomDetailState: ChatRoomDetailState
+    let selectedAnnotationOverlay: [MKCircle]
+    let userTrackingMode: State.MapUserTrackingModeType
     
     init(state: State) {
       bottomSheetPosition = state.bottomSheetPosition
+      bottomSheetType = state.bottomSheetType
       chatRoomAnnotationInfos = state.chatRoomAnnotationInfos
-      selectedAnnotationId = state.selectedAnnotationId
       region = state.region
       alert = state.alert
+      chatRoomListState = state.chatRoomListState
+      popularChatRoomListState = state.popularChatRoomListState
+      selectedAnnotationOverlay = state.selectedAnnotationOverlay
+      userTrackingMode = state.userTrackingMode
+      chatRoomDetailState = state.chatRoomDetailState
     }
   }
   
@@ -43,29 +59,75 @@ struct MainMapView: View {
       Map(
         coordinateRegion: viewStore.binding(
           get: \.region,
-          send: Action.updateRegion
+          send: Action.setRegion
+        ),
+        informationVisibility: .default.union(.userLocation),
+        userTrackingMode: viewStore.binding(
+          get: \.userTrackingMode,
+          send: Action.setUserTrackingMode
         ),
         annotationItems: viewStore.chatRoomAnnotationInfos,
         annotationContent: { chatRoomInfo in
-          MapAnnotation(coordinate: chatRoomInfo.coordinate) {
-            ChatRoomAnnotationView(info: chatRoomInfo)
-              .onTapGesture {
-                viewStore.send(.setSelectedAnnotationId(chatRoomInfo.id))
-              }
+          ViewMapAnnotation(coordinate: chatRoomInfo.coordinate) {
+            Button {
+              viewStore.send(.annotationTapped(chatRoomInfo))
+            } label: {
+              ChatRoomAnnotationView(info: chatRoomInfo)
+            }
+          }
+        },
+        overlayItems: viewStore.selectedAnnotationOverlay,
+        overlayContent: { overlay in
+          RendererMapOverlay(overlay: overlay) { _, overlay in
+            let circleRenderer = MKCircleRenderer(overlay: overlay)
+            if viewStore.chatRoomDetailState.isWithinRadius {
+              circleRenderer.strokeColor = Color.green500.uiColor
+              circleRenderer.fillColor = Color.green900.uiColor.withAlphaComponent(0.3)
+            } else {
+              circleRenderer.strokeColor = Color.white50.uiColor
+              circleRenderer.fillColor = Color.white800.uiColor.withAlphaComponent(0.4)
+            }
+            circleRenderer.lineWidth = 1
+            return circleRenderer
           }
         }
       )
+      .offset(y: viewStore.bottomSheetPosition != .hidden ? -100 : 0)
+      .animation(.default, value: viewStore.bottomSheetPosition != .hidden)
+      .preferredColorScheme(.light)
       .edgesIgnoringSafeArea([.all])
       
-      VStack {
-        LocationCategoryListView(selectedCategory: .constant(.all))
-        
+      VStack(spacing: .spacingM) {
+        LocationCategoryListView(
+          selectedCategory: viewStore.binding(
+            get: \.chatRoomListState.listCategoryType,
+            send: MainMapAction.categoryTapped
+          )
+        )
+        if showSpreadButton {
+          Button {
+            viewStore.send(.setBottomSheetPosition(.middle))
+          } label: {
+            HStack {
+              Text("리스트 펼쳐보기")
+                .font(.body2)
+                .foregroundColor(.black800)
+              Image("arrowDown")
+                .resizable()
+                .frame(width: 16, height: 16)
+            }
+            .padding(.horizontal, .spacingM)
+            .padding(.vertical, .spacingXS)
+            .background(Color.white50)
+            .cornerRadius(20)
+            .shadow(color: .black.opacity(0.12), radius: 10, x: 0, y: 4)
+          }
+        }
+        Spacer()
         VStack {
-          Spacer()
-          // 하단 버튼
           HStack(spacing: .spacingM) {
             Button {
-              viewStore.send(.setBottomSheetPosition(.middle))
+              viewStore.send(.popularChatRoomButtonTapped)
             } label: {
               HStack(spacing: .spacingM) {
                 Text("지금 인기있는 채팅방 알아보기")
@@ -100,17 +162,15 @@ struct MainMapView: View {
       ),
       options: TTBottomSheet.Options
     ) {
-      VStack {
-        Text("test")
+      switch viewStore.bottomSheetType {
+      case .chatRoomDetail:
+        ChatRoomDetailView(store: chatRoomDetailStore)
+      case .chatRoomList:
+        ChatRoomListView(store: chatRoomListStore)
+      case .popularChatRoomList:
+        PopularChatRoomListView(store: popularChatRoomListStore)
       }
-      .vCenter()
-      .hCenter()
-      // types:
-      // popular chat room list
-      // chat room list // category, favorite
-      // room detail
     }
-    .navigationTitle("지도")
     .alert(
       store.scope(state: { $0.alert }),
       dismiss: .dismissAlertButtonTapped
@@ -118,6 +178,31 @@ struct MainMapView: View {
     .onAppear {
       viewStore.send(.onAppear)
     }
+    .navigationTitle("지도")
+  }
+}
+
+// MARK: - Store init
+extension MainMapView {
+  private var chatRoomDetailStore: Store<ChatRoomDetailState, ChatRoomDetailAction> {
+    return store.scope(
+      state: \.chatRoomDetailState,
+      action: Action.chatRoomDetailAction
+    )
+  }
+  
+  private var chatRoomListStore: Store<ChatRoomListState, ChatRoomListAction> {
+    return store.scope(
+      state: \.chatRoomListState,
+      action: Action.chatRoomListAction
+    )
+  }
+  
+  private var popularChatRoomListStore: Store<PopularChatRoomListState, PopularChatRoomListAction> {
+    return store.scope(
+      state: \.popularChatRoomListState,
+      action: Action.popularChatRoomListAction
+    )
   }
 }
 

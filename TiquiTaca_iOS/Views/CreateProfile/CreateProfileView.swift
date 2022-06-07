@@ -134,6 +134,7 @@ struct CreateProfileView: View {
       }
     }
     .onTapGesture {
+      viewStore.send(.setBottomSheetPosition(.hidden))
       focusField = false
     }
   }
