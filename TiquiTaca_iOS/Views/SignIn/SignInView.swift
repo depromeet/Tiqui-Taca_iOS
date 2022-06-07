@@ -79,8 +79,8 @@ struct SignInView: View {
 extension SignInView {
   private var phoneVerificationStore: Store<PhoneVerificationState, PhoneVerificationAction> {
     return store.scope(
-      state: \.phoneVerficationState,
-      action: Action.phoneVerficationAction
+      state: \.phoneVerificationState,
+      action: Action.phoneVerificationAction
     )
   }
   

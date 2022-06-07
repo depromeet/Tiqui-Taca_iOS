@@ -102,6 +102,9 @@ struct VerificationNumberCheckView: View {
     .onAppear {
       viewStore.send(.timerStart)
     }
+    .onDisappear {
+      viewStore.send(.timerStop)
+    }
   }
 }
 

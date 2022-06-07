@@ -70,19 +70,19 @@ let verificationNumberCheckReducer = Reducer<
   verificationNumberCheckCore
 ])
 
+struct TimerEffectId: Hashable {}
+
 let verificationNumberCheckCore = Reducer<
   VerificationNumberCheckState,
   VerificationNumberCheckAction,
   VerificationNumberCheckEnvironment
 > { state, action, environment in
-  struct TimerId: Hashable {}
-  
   switch action {
   case .loginSuccess:
-    return.none
+    return .init(value: .timerStop)
     
   case .timerStart:
-    return Effect.timer(id: TimerId(), every: 1, on: environment.mainQueue)
+    return Effect.timer(id: TimerEffectId(), every: 1, on: environment.mainQueue)
       .map { _ in .timerTicked }
     
   case .timerTicked:
@@ -95,7 +95,7 @@ let verificationNumberCheckCore = Reducer<
     
   case .timerStop:
     state.isAvailable = false
-    return .cancel(id: TimerId())
+    return .cancel(id: TimerEffectId())
     
   case .requestAgain:
     let request = IssueCodeEntity.Request(phoneNumber: state.phoneNumber)
