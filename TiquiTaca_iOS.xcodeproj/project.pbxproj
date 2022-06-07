@@ -10,6 +10,7 @@
 		0911DA5B28451FAA00FCC470 /* SocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0911DA5A28451FAA00FCC470 /* SocketService.swift */; };
 		0927967E28484D3700BA3F18 /* UINavigationController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0927967D28484D3700BA3F18 /* UINavigationController+Extensions.swift */; };
 		0963D1352846F15A005E7B70 /* ChatDetailCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0963D1342846F15A005E7B70 /* ChatDetailCore.swift */; };
+		09F630EE284B608900A2250B /* SendChatEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F630ED284B608900A2250B /* SendChatEntity.swift */; };
 		3F0B780950BED104CA13722B /* Pods_TiquiTaca_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BE9660275CF15262D33E074 /* Pods_TiquiTaca_iOS.framework */; };
 		732798BD47A40FA84BC24EEF /* Pods_TiquiTaca_iOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90ED3E866555D3D7D6ABC769 /* Pods_TiquiTaca_iOSTests.framework */; };
 		8601F659281308CB0085F692 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8601F658281308CB0085F692 /* View+Extensions.swift */; };
@@ -93,6 +94,11 @@
 		F2FDA216280BBDAC00B2ED75 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F2FDA215280BBDAC00B2ED75 /* LaunchScreen.storyboard */; };
 		F2FDA21A280BBF8300B2ED75 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FDA219280BBF8300B2ED75 /* AppDelegate.swift */; };
 		F2FDA228280C0EE300B2ED75 /* TermsOfServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2FDA227280C0EE300B2ED75 /* TermsOfServiceView.swift */; };
+		F90F8D502847925D0011EDAC /* QuestionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F90F8D4F2847925D0011EDAC /* QuestionService.swift */; };
+		F90F8D522847BAED0011EDAC /* RoomUserInfoEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F90F8D512847BAED0011EDAC /* RoomUserInfoEntity.swift */; };
+		F914EE19284B1828000FADC9 /* QuestionInputMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F914EE18284B1828000FADC9 /* QuestionInputMessageView.swift */; };
+		F914EE1B284B1836000FADC9 /* QuestionInputMessageCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F914EE1A284B1836000FADC9 /* QuestionInputMessageCore.swift */; };
+		F914EE1D284B32BF000FADC9 /* QuestionCommentEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F914EE1C284B32BF000FADC9 /* QuestionCommentEntity.swift */; };
 		F9322E6D284231BD00EB956E /* ChatLogCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9322E6C284231BD00EB956E /* ChatLogCore.swift */; };
 		F9322E70284242CF00EB956E /* ChatMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9322E6F284242CF00EB956E /* ChatMenuView.swift */; };
 		F9322E72284242DA00EB956E /* ChatMenuCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9322E71284242DA00EB956E /* ChatMenuCore.swift */; };
@@ -126,6 +132,8 @@
 		F9AE9AB128435FE3004A632D /* QuestionDetailCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AE9AB028435FE3004A632D /* QuestionDetailCore.swift */; };
 		F9AE9AB328437A8F004A632D /* CommentItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AE9AB228437A8F004A632D /* CommentItemView.swift */; };
 		F9AE9AB528437A98004A632D /* CommentItemCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AE9AB428437A98004A632D /* CommentItemCore.swift */; };
+		F9AFCD6A2848E8EA009286DE /* QuestionLikeEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AFCD692848E8EA009286DE /* QuestionLikeEntity.swift */; };
+		F9B45A1D282BDA5700948586 /* ProfileEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B45A1C282BDA5700948586 /* ProfileEntity.swift */; };
 		F9B45A1F282BE9DB00948586 /* AppAlarmEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B45A1E282BE9DB00948586 /* AppAlarmEntity.swift */; };
 		F9B90C9C28117DDF003FFEEB /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B90C9B28117DDF003FFEEB /* AuthService.swift */; };
 		F9C4F45F282D61D200ECBF9A /* BlockUserEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C4F45E282D61D200ECBF9A /* BlockUserEntity.swift */; };
@@ -164,6 +172,7 @@
 		0911DA5A28451FAA00FCC470 /* SocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketService.swift; sourceTree = "<group>"; };
 		0927967D28484D3700BA3F18 /* UINavigationController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Extensions.swift"; sourceTree = "<group>"; };
 		0963D1342846F15A005E7B70 /* ChatDetailCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDetailCore.swift; sourceTree = "<group>"; };
+		09F630ED284B608900A2250B /* SendChatEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendChatEntity.swift; sourceTree = "<group>"; };
 		6BE9660275CF15262D33E074 /* Pods_TiquiTaca_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TiquiTaca_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8601F658281308CB0085F692 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		8601F65B281309B10085F692 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
@@ -253,6 +262,11 @@
 		F2FDA219280BBF8300B2ED75 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F2FDA227280C0EE300B2ED75 /* TermsOfServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsOfServiceView.swift; sourceTree = "<group>"; };
 		F5D04B5F76393475F2238F76 /* Pods-TiquiTaca_iOSTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TiquiTaca_iOSTests.release.xcconfig"; path = "Target Support Files/Pods-TiquiTaca_iOSTests/Pods-TiquiTaca_iOSTests.release.xcconfig"; sourceTree = "<group>"; };
+		F90F8D4F2847925D0011EDAC /* QuestionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionService.swift; sourceTree = "<group>"; };
+		F90F8D512847BAED0011EDAC /* RoomUserInfoEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomUserInfoEntity.swift; sourceTree = "<group>"; };
+		F914EE18284B1828000FADC9 /* QuestionInputMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionInputMessageView.swift; sourceTree = "<group>"; };
+		F914EE1A284B1836000FADC9 /* QuestionInputMessageCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionInputMessageCore.swift; sourceTree = "<group>"; };
+		F914EE1C284B32BF000FADC9 /* QuestionCommentEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionCommentEntity.swift; sourceTree = "<group>"; };
 		F9322E6C284231BD00EB956E /* ChatLogCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogCore.swift; sourceTree = "<group>"; };
 		F9322E6F284242CF00EB956E /* ChatMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMenuView.swift; sourceTree = "<group>"; };
 		F9322E71284242DA00EB956E /* ChatMenuCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMenuCore.swift; sourceTree = "<group>"; };
@@ -286,6 +300,8 @@
 		F9AE9AB028435FE3004A632D /* QuestionDetailCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionDetailCore.swift; sourceTree = "<group>"; };
 		F9AE9AB228437A8F004A632D /* CommentItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentItemView.swift; sourceTree = "<group>"; };
 		F9AE9AB428437A98004A632D /* CommentItemCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentItemCore.swift; sourceTree = "<group>"; };
+		F9AFCD692848E8EA009286DE /* QuestionLikeEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionLikeEntity.swift; sourceTree = "<group>"; };
+		F9B45A1C282BDA5700948586 /* ProfileEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileEntity.swift; sourceTree = "<group>"; };
 		F9B45A1E282BE9DB00948586 /* AppAlarmEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAlarmEntity.swift; sourceTree = "<group>"; };
 		F9B90C9B28117DDF003FFEEB /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		F9C4F45E282D61D200ECBF9A /* BlockUserEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockUserEntity.swift; sourceTree = "<group>"; };
@@ -538,6 +554,7 @@
 		F2F1ED79281C3B6000AC4FDD /* Entities */ = {
 			isa = PBXGroup;
 			children = (
+				09F630ED284B608900A2250B /* SendChatEntity.swift */,
 				F25C79BB282D91BC009C60EE /* UserCreationEntity.swift */,
 				F2F1ED7C281C3D6900AC4FDD /* VerificationEntity.swift */,
 				F2F1ED7E281C40BB00AC4FDD /* UserEntity.swift */,
@@ -551,6 +568,9 @@
 				86B296152837862500A981FC /* ChatLogEntity.swift */,
 				F9322E7328424A9600EB956E /* QuestionEntity.swift */,
 				F9322E7528424DA900EB956E /* CommentEntity.swift */,
+				F90F8D512847BAED0011EDAC /* RoomUserInfoEntity.swift */,
+				F9AFCD692848E8EA009286DE /* QuestionLikeEntity.swift */,
+				F914EE1C284B32BF000FADC9 /* QuestionCommentEntity.swift */,
 				F221850E284E560B005CE6C3 /* FCMUpdateRequest.swift */,
 			);
 			path = Entities;
@@ -634,6 +654,7 @@
 				F25C79C5282E96A2009C60EE /* UserService.swift */,
 				86032A25282C22A50061D3F9 /* RoomService.swift */,
 				0911DA5A28451FAA00FCC470 /* SocketService.swift */,
+				F90F8D4F2847925D0011EDAC /* QuestionService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -704,6 +725,8 @@
 				F9AE9AB028435FE3004A632D /* QuestionDetailCore.swift */,
 				F9AE9AB228437A8F004A632D /* CommentItemView.swift */,
 				F9AE9AB428437A98004A632D /* CommentItemCore.swift */,
+				F914EE18284B1828000FADC9 /* QuestionInputMessageView.swift */,
+				F914EE1A284B1836000FADC9 /* QuestionInputMessageCore.swift */,
 			);
 			path = Question;
 			sourceTree = "<group>";
@@ -1019,12 +1042,14 @@
 				F981FA23282653A00000A531 /* BlockListCore.swift in Sources */,
 				0963D1352846F15A005E7B70 /* ChatDetailCore.swift in Sources */,
 				F9AE9AB328437A8F004A632D /* CommentItemView.swift in Sources */,
+				F914EE1D284B32BF000FADC9 /* QuestionCommentEntity.swift in Sources */,
 				F2F1ED7D281C3D6900AC4FDD /* VerificationEntity.swift in Sources */,
 				F9D225ED284303B900ED2689 /* QuestionItemCore.swift in Sources */,
 				F9AE9AAF28435FD6004A632D /* QuestionDetailView.swift in Sources */,
 				86E494892814FDAE00551CCD /* MainMapView.swift in Sources */,
 				86E4948B2814FDBC00551CCD /* MainMapCore.swift in Sources */,
 				86B29612283781CB00A981FC /* ChatDetailView.swift in Sources */,
+				F9AFCD6A2848E8EA009286DE /* QuestionLikeEntity.swift in Sources */,
 				F2F1ED81281C533000AC4FDD /* IssueCodeEntity.swift in Sources */,
 				F2F1ED8E281E632D00AC4FDD /* PhoneVerificationCore.swift in Sources */,
 				86BEED82282F3FD500EA0C5B /* Date+Extensions.swift in Sources */,
@@ -1042,6 +1067,7 @@
 				F971D84728421A1F00E2FAE8 /* ChatMessageCore.swift in Sources */,
 				F981FA21282653940000A531 /* BlockListView.swift in Sources */,
 				F2F1ED91281E636200AC4FDD /* SignUpCore.swift in Sources */,
+				F914EE1B284B1836000FADC9 /* QuestionInputMessageCore.swift in Sources */,
 				F2F1EDA828258E0E00AC4FDD /* AppService.swift in Sources */,
 				F2DEC4E4282F3AF20018F545 /* ChatRoomAnnotationInfo.swift in Sources */,
 				8601F661281393640085F692 /* PageControl.swift in Sources */,
@@ -1057,6 +1083,7 @@
 				F2FDA228280C0EE300B2ED75 /* TermsOfServiceView.swift in Sources */,
 				F2127644281191A800FB568D /* WebView.swift in Sources */,
 				F2F1EDB12829336200AC4FDD /* AppCore.swift in Sources */,
+				09F630EE284B608900A2250B /* SendChatEntity.swift in Sources */,
 				F2127640280FE07500FB568D /* TOSFieldListView.swift in Sources */,
 				F248EB012813240500430C3B /* CreateProfileView.swift in Sources */,
 				86B296142837859C00A981FC /* ChatLogView.swift in Sources */,
@@ -1103,12 +1130,15 @@
 				F2E38EE7283FDB0C007C96F7 /* MyPageItemInfo.swift in Sources */,
 				F2F1ED83281C6B2F00AC4FDD /* OTPFieldView.swift in Sources */,
 				F2F1ED96281E868300AC4FDD /* VerificationNumberCheckView.swift in Sources */,
+				F914EE19284B1828000FADC9 /* QuestionInputMessageView.swift in Sources */,
 				86783243282651A90034EACC /* Color+Extensions.swift in Sources */,
 				86032A26282C22A50061D3F9 /* RoomService.swift in Sources */,
+				F90F8D502847925D0011EDAC /* QuestionService.swift in Sources */,
 				F981FA1F282604AA0000A531 /* CsCenterView.swift in Sources */,
 				F2F1ED89281E612E00AC4FDD /* SignUpView.swift in Sources */,
 				F9322E72284242DA00EB956E /* ChatMenuCore.swift in Sources */,
 				F9B90C9C28117DDF003FFEEB /* AuthService.swift in Sources */,
+				F90F8D522847BAED0011EDAC /* RoomUserInfoEntity.swift in Sources */,
 				F9DB0B3728294F66002F6AD8 /* ChangeProfileCore.swift in Sources */,
 				F9322E7628424DA900EB956E /* CommentEntity.swift in Sources */,
 				F2F1ED87281E612700AC4FDD /* SignInView.swift in Sources */,
@@ -1297,7 +1327,7 @@
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"TiquiTaca_iOS/Resource/Preview Content\"";
-				DEVELOPMENT_TEAM = 75FNRKTJ9S;
+				DEVELOPMENT_TEAM = 35Z5L89946;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = NO;
 				INFOPLIST_FILE = TiquiTaca_iOS/SupportingFile/Info.plist;
@@ -1327,9 +1357,10 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "-";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 75FNRKTJ9S;
+				DEVELOPMENT_TEAM = "";
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;

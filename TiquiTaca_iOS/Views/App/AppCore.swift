@@ -92,6 +92,7 @@ let appCore = Reducer<
     }
     
   case .getMyProfileResponse:
+    environment.appService.authService.deleteTempToken()
     state.mainTabState = .init()
     return Effect(value: .setRoute(.mainTab))
     

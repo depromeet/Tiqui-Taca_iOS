@@ -57,7 +57,8 @@ let mainTabReducer = Reducer<
       environment: {
         ChatEnvironment(
           appService: $0.appService,
-          mainQueue: $0.mainQueue
+          mainQueue: $0.mainQueue,
+          locationManager: $0.locationManager
         )
       }
     ),

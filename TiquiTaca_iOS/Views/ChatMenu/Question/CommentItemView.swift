@@ -14,7 +14,7 @@ struct CommentItemView: View {
   typealias Action = CommentItemAction
   
   let store: Store<State, Action>
-  let viewStore: ViewStore<ViewState, Action>
+  @ObservedObject var viewStore: ViewStore<ViewState, Action>
   
   struct ViewState: Equatable {
     let comment: CommentEntity?
@@ -30,38 +30,41 @@ struct CommentItemView: View {
   }
   
   var body: some View {
-    VStack(alignment: .leading) {
-      HStack(alignment: .top) {
-        Image(viewStore.comment?.user?.profile.imageName ?? "defaultProfile")
-          .resizable()
-          .frame(width: 32, height: 32)
-        
-        VStack(alignment: .leading) {
-          Text(viewStore.comment?.user?.nickname ?? "")
-            .font(.body4)
-            .foregroundColor(.black900)
-          Text("1시간 전")
-            .font(.body8)
-            .foregroundColor(.white800)
+    VStack {
+      VStack(alignment: .leading) {
+        HStack(alignment: .top) {
+          Image(viewStore.comment?.user?.profile.imageName ?? "defaultProfile")
+            .resizable()
+            .frame(width: 32, height: 32)
+          
+          VStack(alignment: .leading) {
+            Text(viewStore.comment?.user?.nickname ?? "")
+              .font(.body4)
+              .foregroundColor(.black900)
+            Text(viewStore.comment?.createdAt.getTimeTodayOrDate() ?? "")
+              .font(.body8)
+              .foregroundColor(.white800)
+          }
+          
+          Spacer()
+          Button {
+            viewStore.send(.moreClickAction(viewStore.comment?.id ?? "", viewStore.state.comment?.user?.id ?? ""))
+          } label: {
+            Image("moreVertical")
+          }
+          .buttonStyle(PlainButtonStyle()) 
         }
         
-        Spacer()
-        Button {
-          viewStore.send(.moreClickAction)
-        } label: {
-          Image("moreVertical")
-        }
+        Text(viewStore.comment?.comment ?? "")
+          .font(.body3)
+          .foregroundColor(.black900)
       }
+      .background(Color.white)
+      .padding(20)
       
-      Text(viewStore.comment?.comment ?? "")
-        .font(.body3)
-        .foregroundColor(.black900)
+      Rectangle().fill(Color.white100)
+        .frame(height: 1)
     }
-    .padding(.top, 10)
-    .padding([.leading, .trailing], 12)
-    .padding(.bottom, 16)
-    .background(Color.white)
-    .cornerRadius(14)
   }
 }
 
@@ -74,8 +77,8 @@ struct CommentItemView_Previews: PreviewProvider {
             reducer: commentItemReducer,
             environment:
               CommentItemEnvironment(
-                appService: AppService(),
-                mainQueue: .main
+//                appService: AppService(),
+//                mainQueue: .main
               )
           )
     )
