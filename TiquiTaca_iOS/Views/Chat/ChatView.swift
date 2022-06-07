@@ -12,6 +12,8 @@ import TTDesignSystemModule
 
 struct ChatView: View {
   var store: Store<ChatState, ChatAction>
+  @State private var moveToChatDetail: Bool = false
+  @State private var showPopup: Bool = false
   
   init(store: Store<ChatState, ChatAction>) {
     self.store = store
@@ -28,7 +30,10 @@ struct ChatView: View {
             .padding(.top, .spacingXL)
             .hLeading()
           
-          EnteredChatView(roomInfo: viewStore.state.enteredRoom)
+          EnteredRoomView(
+            store: store,
+            moveToChatDetail: $moveToChatDetail
+          )
           
           TabKindView(
             currentTab: viewStore.binding(
@@ -37,32 +42,62 @@ struct ChatView: View {
             currentTime: viewStore.state.lastLoadTime
           )
         }
-        .background(Color.black800)
+          .background(Color.black800)
         
-        if viewStore.state.currentTab == .like {
-          LikeRoomListView(store: store)
-            .background(.white)
-        } else {
-          PopularRoomListView(store: store)
-            .background(.white)
-        }
+        RoomListView(
+          store: store,
+          type: viewStore.state.currentTab,
+          showPopup: $showPopup,
+          moveToChatDetail: $moveToChatDetail)
+          .background(.white)
+        
+        NavigationLink(
+          destination: ChatDetailView(
+            store: store.scope(
+              state: \.chatDetailState,
+              action: ChatAction.chatDetailAction),
+            shouldPopToRootView: $moveToChatDetail
+          ),
+          isActive: $moveToChatDetail
+        ) { EmptyView() }
+          .isDetailLink(false)
+          .frame(height: 0)
+          .hidden()
       }
-      .preferredColorScheme(.dark)
-      .listStyle(.plain)
-      .navigationTitle("채팅방")
-      .onAppear(perform: { viewStore.send(.onAppear) })
+        .listStyle(.plain)
+        .navigationTitle("채팅방")
+        .onAppear(perform: { viewStore.send(.onAppear) })
     }
   }
 }
 
 // MARK: Current Chat View
-private struct EnteredChatView: View {
-  let roomInfo: RoomPreviewResponse?
+private struct EnteredRoomView: View {
+  typealias State = ChatState
+  typealias Action = ChatAction
+  
+  private let store: Store<State, Action>
+  @Binding private var moveToChatDetail: Bool
+  @ObservedObject private var viewStore: ViewStore<ViewState, Action>
+  
+  struct ViewState: Equatable {
+    let enteredRoom: RoomInfoEntity.Response?
+    
+    init(state: State) {
+      enteredRoom = state.enteredRoom
+    }
+  }
+  
+  init(store: Store<State, Action>, moveToChatDetail: Binding<Bool>) {
+    self.store = store
+    viewStore = ViewStore(store.scope(state: ViewState.init))
+    self._moveToChatDetail = moveToChatDetail
+  }
   
   var body: some View {
     VStack {
       VStack {
-        if roomInfo == nil {
+        if viewStore.enteredRoom == nil {
           VStack(spacing: 12) {
             Text("현재 참여 중인 채팅방이 없어요")
               .foregroundColor(.white800)
@@ -76,55 +111,71 @@ private struct EnteredChatView: View {
           .hCenter()
           .vCenter()
         } else {
-          Text("현재 참여 중인 채팅방")
-            .hLeading()
-            .foregroundColor(.green500)
-            .font(.subtitle4)
-          
-          Spacer().frame(height: 16)
-          HStack(spacing: 4) {
-            Text(roomInfo?.name ?? "기타")
-              .foregroundColor(.white)
-              .font(.subtitle2)
-            HStack(spacing: 0) {
-              Image("people")
-                .resizable()
-                .frame(width: 24, height: 24)
-              Text("\(roomInfo?.userCount ?? 0)")
-                .foregroundColor(.black100)
-                .font(.body7)
-            }
-            Text("오후 3:15")
-              .foregroundColor(.black100)
-              .font(.body8)
-              .hTrailing()
-          }
-          .hLeading()
-          
-          Spacer().frame(height: 4)
-          HStack {
-            Text("코엑스에서 가장 맛있는 맛집 하나만 알려주실 분 있나요!")
-              .foregroundColor(.white800)
-              .font(.body7)
-              .lineLimit(1)
+          VStack {
+            Text("현재 참여 중인 채팅방")
               .hLeading()
-            VStack {
-              Text("36")
-                .foregroundColor(.black800)
-                .font(.body4)
-                .padding([.leading, .trailing], 6)
-                .padding([.top, .bottom], 2)
+              .foregroundColor(.green500)
+              .font(.subtitle4)
+            
+            Spacer().frame(height: 16)
+            HStack(spacing: 4) {
+              Text(viewStore.enteredRoom?.name ?? "기타")
+                .foregroundColor(.white)
+                .font(.subtitle2)
+              HStack(spacing: 0) {
+                Image("people")
+                  .resizable()
+                  .frame(width: 24, height: 24)
+                Text("\(viewStore.enteredRoom?.userCount ?? 0)")
+                  .foregroundColor(.black100)
+                  .font(.body7)
+              }
+              Text(viewStore.enteredRoom?.lastChatTime?.getTimeStringFromDateString() ?? "00:00")
+                .foregroundColor(.black100)
+                .font(.body8)
+                .hTrailing()
             }
-            .background(Color.green900)
-            .cornerRadius(11)
+            .hLeading()
+            
+            Spacer().frame(height: 4)
+            HStack {
+              Text(
+                (viewStore.enteredRoom?.lastChatMessage ?? "").isEmpty ?
+                  "아직 아무도 채팅을 치지 않았어요" :
+                  (viewStore.enteredRoom?.lastChatMessage ?? "")
+              )
+                .foregroundColor(.white800)
+                .font(.body7)
+                .lineLimit(1)
+                .hLeading()
+              VStack {
+                Text(
+                  (viewStore.enteredRoom?.notReadChatCount ?? 0) >= 100 ?
+                    "+99" :
+                    "\(viewStore.enteredRoom?.notReadChatCount ?? 0)"
+                )
+                  .foregroundColor(viewStore.enteredRoom?.notReadChatCount == 0 ? Color.black600 : .black800)
+                  .font(.body4)
+                  .padding([.leading, .trailing], 6)
+                  .padding([.top, .bottom], 2)
+              }
+              .background(viewStore.enteredRoom?.notReadChatCount == 0 ? Color.black600 : Color.green900)
+              .cornerRadius(11)
+            }
+              .hLeading()
           }
-          .hLeading()
+            .padding(EdgeInsets(top: 16, leading: 16, bottom: 16, trailing: 16))
         }
       }
       .background(Color.black600)
       .cornerRadius(16)
       .padding([.leading, .trailing], 24)
       .frame(height: 116)
+      .onTapGesture {
+        guard let room = viewStore.enteredRoom else { return }
+        viewStore.send(.willEnterRoom(room))
+        moveToChatDetail = true
+      }
     }
   }
 }
@@ -134,6 +185,24 @@ private struct EnteredChatView: View {
 private struct TabKindView: View {
   @Binding var currentTab: RoomListType
   let currentTime: String
+  
+  private struct TabButton: ButtonStyle {
+    @Environment(\.isEnabled) var isEnabled
+    
+    public init() { }
+    public func makeBody(configuration: Configuration) -> some View {
+      return configuration.label
+        .frame(height: 40)
+        .font(.subtitle3)
+        .foregroundColor(isEnabled ? .black100 : .green500)
+        .padding([.leading, .trailing], 14)
+        .overlay(
+          Rectangle()
+            .frame(height: isEnabled ? 0 : 2)
+            .foregroundColor(Color.green500),
+          alignment: .bottom)
+    }
+  }
   
   var body: some View {
     HStack(spacing: 0) {
@@ -160,132 +229,114 @@ private struct TabKindView: View {
   }
 }
 
-private struct TabButton: ButtonStyle {
-  @Environment(\.isEnabled) var isEnabled
-  
-  public init() { }
-  
-  public func makeBody(configuration: Configuration) -> some View {
-    return configuration.label
-      .frame(height: 40)
-      .font(.subtitle3)
-      .foregroundColor(isEnabled ? .black100 : .green500)
-      .padding([.leading, .trailing], 14)
-      .overlay(
-        Rectangle()
-          .frame(height: isEnabled ? 0 : 2)
-          .foregroundColor(Color.green500),
-        alignment: .bottom)
-  }
-}
 
-// MARK: RoomList View
-private struct LikeRoomListView: View {
-  private let store: Store<ChatState, ChatAction>
-  @State var isPopupPresent: Bool = false
-  @State private var moveToChatDetailState: Bool = false
+private struct RoomListView: View {
+  typealias Action = ChatAction
   
-  init(store: Store<ChatState, ChatAction>) {
+  private let store: Store<ChatState, Action>
+  let roomType: RoomListType
+  @Binding private var showPopup: Bool
+  @Binding private var moveToChatDetail: Bool
+  @ObservedObject private var viewStore: ViewStore<ViewState, Action>
+  @State var selectedRoomUserCount: Int = 0
+    
+  struct ViewState: Equatable {
+    let likeRoomList: [RoomInfoEntity.Response]
+    let popularRoomList: [RoomInfoEntity.Response]
+    let enteredRoom: RoomInfoEntity.Response?
+    
+    init(state: ChatState) {
+      likeRoomList = state.likeRoomList
+      popularRoomList = state.popularRoomList
+      enteredRoom = state.enteredRoom
+    }
+  }
+  
+  init(
+    store: Store<ChatState, Action>,
+    type: RoomListType,
+    showPopup: Binding<Bool>,
+    moveToChatDetail: Binding<Bool>
+  ) {
     self.store = store
+    self.viewStore = ViewStore(store.scope(state: ViewState.init))
+    self.roomType = type
+    self._showPopup = showPopup
+    self._moveToChatDetail = moveToChatDetail
   }
   
   var body: some View {
-    WithViewStore(store.scope(state: \.likeRoomList)) { likeListViewStore in
-      List {
-        if likeListViewStore.state.isEmpty {
-          NoDataView(noDataType: .like)
-            .padding(.top, .spacingXXXL * 2)
+    List {
+      if (roomType == .like && viewStore.likeRoomList.isEmpty) ||
+        (roomType == .popular && viewStore.popularRoomList.isEmpty) {
+        NoDataView(noDataType: roomType)
+          .padding(.top, .spacingXXXL * 2)
+          .background(.white)
+      } else {
+        ForEach(
+          (roomType == .like ?
+            viewStore.likeRoomList :
+            viewStore.popularRoomList
+          ).enumerated().map({ $0 }), id: \.element.id
+        ) { index, room in
+          RoomListCell(ranking: index + 1, info: room, type: roomType)
             .background(.white)
-        } else {
-          ForEach(likeListViewStore.state, id: \.id) { room in
-            RoomListCell(
-              info: room,
-              type: .like
-            )
-            .listRowSeparator(.hidden)
-            .listRowInsets(EdgeInsets())
             .swipeActions(edge: .trailing, allowsFullSwipe: false, content: {
-              Button(
-                action: { ViewStore(store).send(.removeFavoriteRoom(room)) },
-                label: { Text("삭제") }
-              ).tint(.red)
+              if roomType == .like {
+                Button(
+                  action: { ViewStore(store).send(.removeFavoriteRoom(room)) },
+                  label: { Text("삭제") }
+                ).tint(.red)
+              }
             })
             .onTapGesture(perform: {
-              ViewStore(store).send(.enterRoomPopup(room))
+              if viewStore.enteredRoom == nil || room.id == viewStore.enteredRoom?.id {
+                viewStore.send(.willEnterRoom(room))
+                moveToChatDetail = true
+              } else {
+                selectedRoomUserCount = room.userCount ?? 0
+                UIView.setAnimationsEnabled(false)
+                viewStore.send(.willEnterRoom(room))
+                showPopup = true
+              }
             })
-          }
+            .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets())
         }
       }
-      .fullScreenCover(isPresented: $isPopupPresent) {
-        AlertView(isPopupPresent: $isPopupPresent, moveToChatDetailState: $moveToChatDetailState)
+    }
+      .fullScreenCover(isPresented: $showPopup) {
+        AlertView(
+          isPopupPresent: $showPopup,
+          moveToChatDetailState: $moveToChatDetail,
+          roomUserCount: selectedRoomUserCount
+        )
           .background(BackgroundTransparentView())
       }
       .refreshable {
-        ViewStore(store).send(.refresh)
+        viewStore.send(.refresh)
       }
-    }
   }
 }
-
-private struct PopularRoomListView: View {
-  private let store: Store<ChatState, ChatAction>
-  @State var isPopupPresent: Bool = false
-  @State private var moveToChatDetailState: Bool = false
-  
-  init(store: Store<ChatState, ChatAction>) {
-    self.store = store
-  }
-  
-  var body: some View {
-    WithViewStore(store.scope(state: \.popularRoomList)) { viewStore in
-      List {
-        if viewStore.state.isEmpty {
-          NoDataView(noDataType: .popular)
-            .padding(.top, .spacingXXXL * 2)
-            .background(.white)
-        } else {
-          ForEach(viewStore.state.enumerated().map { $0 }, id: \.element.id) { index, room in
-            VStack(spacing: 0) {
-              RoomListCell(ranking: index + 1, info: room, type: .popular )
-                .background(.white)
-                .onTapGesture {
-                  UIView.setAnimationsEnabled(false)
-                  isPopupPresent = true
-                  ViewStore(store).send(.enterRoomPopup(room))
-                }
-              NavigationLink(
-                destination: ChatDetailView(),
-                isActive: $moveToChatDetailState
-              ) { EmptyView() }
-                .frame(height: 0)
-                .hidden()
-            }
-              .listRowSeparator(.hidden)
-              .listRowInsets(EdgeInsets())
-          }
-        }
-      }
-      .fullScreenCover(isPresented: $isPopupPresent) {
-        AlertView(isPopupPresent: $isPopupPresent, moveToChatDetailState: $moveToChatDetailState)
-          .background(BackgroundTransparentView())
-      }
-      .refreshable {
-        ViewStore(store).send(.refresh)
-      }
-    }
-  }
-}
-
 
 // MARK: Alert
 private struct AlertView: View {
   @Binding var isPopupPresent: Bool
   @Binding var moveToChatDetailState: Bool
-  
-  // 이미 참여중인 채팅방 or 참여중인 채팅방 없음 -> 바로 Detail로
+  let roomUserCount: Int
+  var maxUserCount = 300
   // 채팅방 인원 풀 -> 경고만
   // 채팅방 교체할 것인지 -> 경고 후 참가
   var body: some View {
+    if roomUserCount < maxUserCount {
+      existEnteredRoom
+        .padding(EdgeInsets(top: 0, leading: 24, bottom: 0, trailing: 24))
+    } else {
+      overCapacity
+    }
+  }
+  
+  var existEnteredRoom: some View {
     TTPopupView.init(
       popUpCase: .oneLineTwoButton,
       title: "이미 참여 중인 채팅방이 있어요",
@@ -294,19 +345,39 @@ private struct AlertView: View {
       rightButtonName: "참여하기",
       confirm: {
         isPopupPresent = false
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
           UIView.setAnimationsEnabled(true)
           moveToChatDetailState = true
         }
       },
       cancel: {
         isPopupPresent = false
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
           UIView.setAnimationsEnabled(true)
         }
       }
     )
-    .padding(EdgeInsets(top: 0, leading: 24, bottom: 0, trailing: 24))
+  }
+  
+  var overCapacity: some View {
+    TTPopupView.init(
+      popUpCase: .oneLineTwoButton,
+      title: "해당 채팅방은 인원이 가득 찼어요",
+      subtitle: "최대 인원수 300명이 차서 입장이 불가능해요",
+      leftButtonName: "닫기",
+      confirm: {
+        isPopupPresent = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+          UIView.setAnimationsEnabled(true)
+        }
+      },
+      cancel: {
+        isPopupPresent = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+          UIView.setAnimationsEnabled(true)
+        }
+      }
+    )
   }
 }
 
@@ -332,13 +403,6 @@ private struct NoDataView: View {
   }
 }
 
-// MARK: Enter Room Alert
-private struct EnterRoomAlertView: View {
-  @Binding var isPresent: Bool
-  var body: some View {
-    VStack { }
-  }
-}
 
 // MARK: Trasnparent Background
 struct BackgroundTransparentView: UIViewRepresentable {
@@ -350,7 +414,8 @@ struct BackgroundTransparentView: UIViewRepresentable {
     return view
   }
 
-  func updateUIView(_ uiView: UIView, context: Context) {}
+  func updateUIView(_ uiView: UIView, context: Context) {
+  }
 }
 
 struct ChatView_Previews: PreviewProvider {
@@ -361,7 +426,8 @@ struct ChatView_Previews: PreviewProvider {
         reducer: chatReducer,
         environment: ChatEnvironment(
           appService: .init(),
-          mainQueue: .main
+          mainQueue: .main,
+          locationManager: .live
         )
       )
     )

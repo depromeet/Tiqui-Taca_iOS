@@ -32,4 +32,24 @@ extension String {
     
     return dateFormatter.string(for: createdDate) ?? ""
   }
+  
+  func getTimeTodayOrDate() -> String {
+    let iso8601Formatter = ISO8601DateFormatter()
+    let createdDate = iso8601Formatter.date(from: self)
+    
+    let dateFormatterExceptTime = DateFormatter()
+    dateFormatterExceptTime.dateFormat = "yyyy-MM-dd"
+    let createdDateExceptTime = dateFormatterExceptTime.string(for: createdDate)
+    let currentDateExceptTime = dateFormatterExceptTime.string(for: Date())
+    
+    if createdDateExceptTime == currentDateExceptTime {
+      let timeFormatter = DateFormatter()
+      timeFormatter.dateFormat = "HH:mm"
+      return timeFormatter.string(for: createdDate) ?? ""
+    } else {
+      let dateFormatter = DateFormatter()
+      dateFormatter.dateFormat = "MM/dd"
+      return dateFormatter.string(for: createdDate) ?? ""
+    }
+  }
 }

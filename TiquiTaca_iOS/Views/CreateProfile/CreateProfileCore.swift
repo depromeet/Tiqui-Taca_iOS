@@ -48,7 +48,7 @@ let createProfileReducer = Reducer<
       nickname: state.nickname,
       profileImageType: state.profileImage.type,
       isAgreed: state.isAgreed,
-      FCMToken: environment.appService.fcmToken ?? ""
+      FCMToken: environment.appService.fcmToken
     )
     return environment.appService.userService
       .createUser(request)

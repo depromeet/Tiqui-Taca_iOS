@@ -6,23 +6,47 @@
 //
 
 import ComposableArchitecture
+import TTNetworkModule
 
 struct ChatMenuState: Equatable {
-  var roomName: String = "한양대"
-  var participantCount: Int = 0
-  var participantList: [UserEntity.Response] = []
-  var questionCount: Int = 0
+  enum Route {
+    case questionDetail
+    case questionList
+  }
+  var route: Route?
+  var roomInfo: RoomInfoEntity.Response?
+  var roomUserList: [UserEntity.Response] = []
   var questionList: [QuestionEntity.Response] = []
+  var selectedQuestionId: String?
   
-  var questionItemViewState: QuestionItemState = .init()
+  var questionDetailViewState: QuestionDetailState = .init(questionId: "")
+  var questionListViewState: QuestionListState = .init()
+  
+  var popupPresented: Bool = false
+  var exitSuccess: Bool = true
 }
 
 enum ChatMenuAction: Equatable {
-  case backButtonAction
+  case setRoute(ChatMenuState.Route?)
   case roomExit
-  case selectQuestionDetail
-  case clickQuestionAll
-  case questionItemView(QuestionItemAction)
+  case questionSelected(String)
+  case questionListButtonClicked
+  case questionDetailView(QuestionDetailAction)
+  case questionListView(QuestionListAction)
+  
+  case getRoomInfo
+  case getRoomInfoResponse(Result<RoomInfoEntity.Response?, HTTPError>)
+  case getRoomInfoRequestSuccess
+  
+  case getRoomUserListInfo
+  case getRoomUserListResponse(Result<RoomUserInfoEntity.Response?, HTTPError>)
+  
+  case getQuestionList
+  case getQuestionListResponse(Result<[QuestionEntity.Response]?, HTTPError>)
+  case roomExitReponse(Result<DefaultResponse?, HTTPError>)
+  
+  case presentPopup
+  case dismissPopup
 }
 
 struct ChatMenuEnvironment {
@@ -35,14 +59,25 @@ let chatMenuReducer = Reducer<
   ChatMenuAction,
   ChatMenuEnvironment
 >.combine([
-  questionItemReducer
+  questionDetailReducer
     .pullback(
-      state: \.questionItemViewState,
-      action: /ChatMenuAction.questionItemView,
-      environment: { _ in
-        QuestionItemEnvironment(
-          appService: AppService(),
-          mainQueue: .main
+      state: \.questionDetailViewState,
+      action: /ChatMenuAction.questionDetailView,
+      environment: {
+        QuestionDetailEnvironment(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
+        )
+      }
+    ),
+  questionListReducer
+    .pullback(
+      state: \.questionListViewState,
+      action: /ChatMenuAction.questionListView,
+      environment: {
+        QuestionListEnvironment(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
         )
       }
     ),
@@ -55,12 +90,89 @@ let chatMenuReducerCore = Reducer<
   ChatMenuEnvironment
 > { state, action, environment in
   switch action {
-  case let .questionItemView(questionItemAction):
-    switch questionItemAction {
-    default:
-      return .none
+    // MARK: 방 정보 API (추후 제거)
+  case .getRoomInfo:
+    return environment.appService.roomService
+      .getMyRoomInfo()
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(ChatMenuAction.getRoomInfoResponse)
+  case let .getRoomInfoResponse(.success(response)):
+    state.roomInfo = response
+    return Effect(value: .getRoomInfoRequestSuccess)
+  case .getRoomInfoRequestSuccess:
+    return .none
+  case .getRoomInfoResponse(.failure):
+    return .none
+    
+    // MARK: 채팅방 참여자 API
+  case .getRoomUserListInfo:
+    return environment.appService.roomService
+      .getRoomUserList(roomId: state.roomInfo?.id ?? "")
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(ChatMenuAction.getRoomUserListResponse)
+  case let .getRoomUserListResponse(.success(response)):
+    state.roomUserList = response?.userList ?? []
+    return .none
+  case .getRoomUserListResponse(.failure):
+    return .none
+    
+    // MARK: 질문 리스트 API
+  case .getQuestionList:
+    let request = QuestionEntity.Request(
+      filter: QuestionSortType.recent.rawValue
+    )
+    return environment.appService.questionService
+      .getQuestionList(request)
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(ChatMenuAction.getQuestionListResponse)
+  case let .getQuestionListResponse(.success(response)):
+    state.questionList = response ?? []
+    return .none
+  case .getQuestionListResponse(.failure):
+    return .none
+    
+    // MARK: 방 나가기 API
+  case .roomExit:
+    return environment.appService.roomService
+      .exitRoom(roomId: state.roomInfo?.id ?? "")
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(ChatMenuAction.roomExitReponse)
+  case let .roomExitReponse(.success(response)):
+    state.exitSuccess = false
+    return .none
+  case .roomExitReponse(.failure):
+    return .none
+    
+  case let .questionDetailView(questionDetailAction):
+    return .none
+  case let .questionListView(questionListAction):
+    return .none
+    
+  case let .setRoute(selectedRoute):
+    if selectedRoute == .questionDetail {
+      state.questionDetailViewState = .init(questionId: state.selectedQuestionId ?? "")
     }
-  default:
+    state.route = selectedRoute
+    return .none
+    
+  case let .questionSelected(questionId):
+    state.selectedQuestionId = questionId
+    state.questionDetailViewState = .init(questionId: state.selectedQuestionId ?? "")
+    state.route = .questionDetail
+    return .none
+  case .questionListButtonClicked:
+    state.route = .questionList
+    return .none
+    
+  case .presentPopup:
+    state.popupPresented = true
+    return .none
+  case .dismissPopup:
+    state.popupPresented = false
     return .none
   }
 }
