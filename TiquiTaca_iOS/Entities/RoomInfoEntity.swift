@@ -16,11 +16,25 @@ enum RoomInfoEntity {
     let category: LocationCategory?
     let userCount: Int?
     
+    let notReadChatCount: Int?
+    let lastChatMessage: String?
+    let lastChatTime: String?
+    
+    var distance: Double?
+    
+    var viewTitle: String {
+      (name ?? "") + " \(userCount ?? 0)"
+    }
+    
     enum CodingKeys: String, CodingKey {
       case id = "_id"
       case name
       case category
       case userCount
+      case notReadChatCount
+      case lastChatMessage
+      case lastChatTime
+      case distance
     }
     
     init() {
@@ -28,6 +42,10 @@ enum RoomInfoEntity {
       name = nil
       category = nil
       userCount = nil
+      
+      notReadChatCount = nil
+      lastChatMessage = nil
+      lastChatTime = nil
     }
     
     init(from decoder: Decoder) throws {
@@ -36,13 +54,10 @@ enum RoomInfoEntity {
       name = (try? container.decode(String.self, forKey: .name)) ?? ""
       category = try? container.decode(LocationCategory.self, forKey: .category)
       userCount = (try? container.decode(Int.self, forKey: .userCount)) ?? 1
+      notReadChatCount = try? container.decode(Int?.self, forKey: .notReadChatCount)
+      lastChatMessage = try? container.decode(String?.self, forKey: .lastChatMessage)
+      lastChatTime = try? container.decode(String?.self, forKey: .lastChatTime)
+      distance = try? container.decode(Double?.self, forKey: .distance)
     }
-  }
-}
-
-enum RoomLikeEntity {
-  struct Request: Codable, JSONConvertible { }
-  struct Response: Codable, Equatable {
-    let iFavoritRoom: Bool?
   }
 }

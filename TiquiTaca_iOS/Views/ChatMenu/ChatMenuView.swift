@@ -14,27 +14,40 @@ struct ChatMenuView: View {
   typealias Action = ChatMenuAction
   
   private let store: Store<State, Action>
+  @Binding var shouldPopToRootView: Bool
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
+  @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
   
   struct ViewState: Equatable {
-    let roomName: String
-    let participantCount: Int
-    let participantList: [UserEntity.Response]
-    let questionCount: Int
+    let route: State.Route?
+    
+    let roomInfo: RoomInfoEntity.Response?
+    let roomUserList: [UserEntity.Response]
     let questionList: [QuestionEntity.Response]
     
+    let popupPresented: Bool
+    let exitSuccess: Bool
+    let questionDetailViewState: QuestionDetailState
+    let questionListViewState: QuestionListState
+    
     init(state: State) {
-      roomName = state.roomName
-      participantCount = state.participantCount
-      participantList = state.participantList
-      questionCount = state.questionCount
+      route = state.route
+      roomInfo = state.roomInfo
+      roomUserList = state.roomUserList
       questionList = state.questionList
+      popupPresented = state.popupPresented
+      
+      exitSuccess = state.exitSuccess
+      questionDetailViewState = state.questionDetailViewState
+      questionListViewState = state.questionListViewState
     }
   }
   
-  init(store: Store<State, Action>) {
+  init(store: Store<State, Action>, shouldPopToRootView: Binding<Bool>) {
+    self._shouldPopToRootView = shouldPopToRootView
     self.store = store
     viewStore = ViewStore.init(store.scope(state: ViewState.init))
+    self.shouldPopToRootView = viewStore.state.exitSuccess
   }
   
   var body: some View {
@@ -57,103 +70,143 @@ struct ChatMenuView: View {
           Text("최근 등록된 질문")
             .font(.heading3)
             .foregroundColor(.black800)
-          Text("총 \(viewStore.questionCount)개의 질문")
+          Text("총 \(viewStore.questionList.count)개의 질문")
             .font(.body7)
             .foregroundColor(.black100)
           
-          List {
-            ForEach(viewStore.questionList.prefix(2)) { question in
-              QuestionItemView(
-                store: .init(
-                  initialState: QuestionItemState(
-                    id: question.id,
-                    user: question.user,
-                    content: question.content,
-                    commentList: question.commentList,
-                    createdAt: question.createdAt,
-                    likesCount: question.likesCount,
-                    commentsCount: question.commentsCount,
-                    ilike: question.ilike
-                  ),
-                  reducer: questionItemReducer,
-                  environment: QuestionItemEnvironment(
-                    appService: AppService(),
-                    mainQueue: .main
-                  )
-                )
-              )
-            }
-            .onTapGesture {
-              viewStore.send(.selectQuestionDetail)
+          ForEach(viewStore.questionList) { question in
+            Button {
+              viewStore.send(.questionSelected(question.id))
+            } label: {
+              QuestionItemView(model: question)
+                .padding([.top, .bottom], 4)
             }
           }
         }
+        
         Button {
-          viewStore.send(.clickQuestionAll)
+          viewStore.send(.questionListButtonClicked)
         } label: {
           Text("질문 전체보기")
         }
+        .frame(height: 48)
         .buttonStyle(TTButtonLargeBlackStyle())
       }
       .padding(15)
-      VStack {
-      }
-      .frame(maxWidth: .infinity, maxHeight: 8)
-      .background(Color.white50)
+      
+      Rectangle().fill(Color.white50)
+        .frame(maxWidth: .infinity, maxHeight: 8)
       
       VStack(alignment: .leading) {
         Text("현재 티키타카 중인 사람들")
           .font(.heading3)
           .foregroundColor(.black800)
         
-        Text("총 \(viewStore.participantCount)명의 참여자")
+        Text("총 \(viewStore.roomUserList.count)명의 참여자")
           .font(.body7)
           .foregroundColor(.black100)
-          List {
-            ForEach(viewStore.participantList) { participant in
-              HStack {
-                ForEach(0..<4) { row in
-                  VStack(alignment: .center) {
-                    Image(participant.profile.imageName)
-                      .resizable()
-                      .frame(width: 64, height: 64)
-
-                    Text(participant.nickname)
-                      .font(.body3)
-                      .foregroundColor(.black100)
-                  }
-                }
-                .frame(maxWidth: .infinity)
+        ScrollView {
+          LazyVGrid(columns: colums, spacing: 20) {
+            ForEach(viewStore.roomUserList) { participant in
+              VStack(alignment: .center) {
+                Image(participant.profile.imageName)
+                  .resizable()
+                  .frame(width: 64, height: 64)
+                
+                Text(participant.nickname)
+                  .font(.body3)
+                  .foregroundColor(.black100)
               }
-              .listRowSeparator(.hidden)
             }
           }
-          .listStyle(.plain)
+        }
+        .background(Color.white)
+        .listStyle(.plain)
       }
+      .background(Color.white)
       .padding(16)
+      
+      NavigationLink(
+        tag: State.Route.questionDetail,
+        selection: viewStore.binding(
+          get: \.route,
+          send: Action.setRoute
+        ),
+        destination: {
+          QuestionDetailView(
+            store: store.scope(
+              state: \.questionDetailViewState,
+              action: ChatMenuAction.questionDetailView
+            )
+          )
+        },
+        label: EmptyView.init
+      )
+      
+      NavigationLink(
+        tag: State.Route.questionList,
+        selection: viewStore.binding(
+          get: \.route,
+          send: Action.setRoute
+        ),
+        destination: {
+          QuestionListView(
+            store: store.scope(
+              state: \.questionListViewState,
+              action: ChatMenuAction.questionListView
+            )
+          )
+        },
+        label: EmptyView.init
+      )
     }
     .background(Color.white)
+    .navigationBarBackButtonHidden(true)
+    .navigationBarHidden(true)
     .ignoresSafeArea()
+    .onAppear(perform: {
+      viewStore.send(.getRoomUserListInfo)
+      viewStore.send(.getQuestionList)
+    })
+    .ttPopup(
+      isShowing: viewStore.binding(
+        get: \.popupPresented,
+        send: ChatMenuAction.dismissPopup
+      )
+    ) {
+      TTPopupView.init(
+        popUpCase: .twoLineTwoButton,
+        title: "해당 채팅방에서\n나가시겠습니까?",
+        leftButtonName: "취소",
+        rightButtonName: "나가기",
+        confirm: {
+          viewStore.send(.roomExit)
+        },
+        cancel: {
+          viewStore.send(.dismissPopup)
+        }
+      )
+    }
   }
   
   var topNavigationView: some View {
     VStack {
       HStack {
         Button {
-          viewStore.send(.backButtonAction)
+          self.presentationMode.wrappedValue.dismiss()
         } label: {
           Image("chat_backButton")
         }
         
-        Text(viewStore.roomName)
+        Text(viewStore.roomInfo?.name ?? "")
           .foregroundColor(Color.white)
-        Text("+ \(viewStore.participantCount)")
+        Text("+ \(viewStore.roomInfo?.userCount ?? 0)")
           .foregroundColor(Color.white)
         
         Spacer()
         
         Button {
-          viewStore.send(.roomExit)
+          viewStore.send(.presentPopup)
         } label: {
           Image("chat_exit")
         }
@@ -165,19 +218,26 @@ struct ChatMenuView: View {
     .background(Color.black800)
     .frame(height: 88)
   }
+  
+  let colums = [
+    GridItem(.flexible()),
+    GridItem(.flexible()),
+    GridItem(.flexible()),
+    GridItem(.flexible())
+  ]
 }
-
-struct ChatMenuView_Previews: PreviewProvider {
-  static var previews: some View {
-    ChatMenuView(
-      store: .init(
-        initialState: ChatMenuState(),
-        reducer: chatMenuReducer,
-        environment: ChatMenuEnvironment(
-          appService: .init(),
-          mainQueue: .main
-        )
-      )
-    )
-  }
-}
+//
+//struct ChatMenuView_Previews: PreviewProvider {
+//  static var previews: some View {
+//    ChatMenuView(
+//      store: .init(
+//        initialState: ChatMenuState(),
+//        reducer: chatMenuReducer,
+//        environment: ChatMenuEnvironment(
+//          appService: .init(),
+//          mainQueue: .main
+//        )
+//      )
+//    )
+//  }
+//}

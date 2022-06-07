@@ -18,6 +18,7 @@ struct AppState: Equatable {
   var route: Route = .splash
   var onboardingState: OnboardingState?
   var mainTabState: MainTabState?
+  var isLoading: Bool = false
 }
 
 enum AppAction: Equatable {
@@ -27,6 +28,7 @@ enum AppAction: Equatable {
   case signOut
   case onboardingAction(OnboardingAction)
   case mainTabAction(MainTabAction)
+  case setLoading(Bool)
   case getMyProfileResponse(Result<UserEntity.Response?, HTTPError>)
 }
 
@@ -79,6 +81,10 @@ let appCore = Reducer<
     state.route = selectedRoute
     return .none
     
+  case let .setLoading(isLoading):
+    state.isLoading = isLoading
+    return .none
+    
   case .onAppear:
     if environment.appService.authService.isLoggedIn {
       return environment.appService.userService
@@ -92,24 +98,43 @@ let appCore = Reducer<
     }
     
   case .getMyProfileResponse:
+    environment.appService.authService.deleteTempToken()
     state.mainTabState = .init()
     return Effect(value: .setRoute(.mainTab))
     
   case .signIn:
     environment.appService.authService.deleteTempToken()
     state.onboardingState = nil
-    return environment.appService.userService
-      .fetchMyProfile()
-      .receive(on: environment.mainQueue)
-      .catchToEffect()
-      .map(AppAction.getMyProfileResponse)
+    let request = FCMUpdateRequest(fcmToken: environment.appService.fcmToken)
+    
+    return .concatenate([
+      environment.appService.userService
+        .updateFCMToken(request)
+        .receive(on: environment.mainQueue)
+        .catchToEffect()
+        .fireAndForget(),
+      environment.appService.userService
+        .fetchMyProfile()
+        .receive(on: environment.mainQueue)
+        .catchToEffect()
+        .map(AppAction.getMyProfileResponse)
+    ])
     
   case .signOut:
-    environment.appService.authService.signOut()
     environment.appService.userService.deleteMyProfile()
     state.mainTabState = nil
     state.onboardingState = .init()
-    return Effect(value: .setRoute(.onboarding))
+    
+    return .concatenate([
+      Effect(value: .setLoading(true)),
+      environment.appService.authService
+        .signOut()
+        .receive(on: environment.mainQueue)
+        .catchToEffect()
+        .fireAndForget(),
+      Effect(value: .setLoading(false)),
+      Effect(value: .setRoute(.onboarding))
+    ])
     
   case .onboardingAction( // 로그인
     .signInAction(

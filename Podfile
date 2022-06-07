@@ -9,6 +9,7 @@ target 'TiquiTaca_iOS' do
   
   # UI
   pod 'BottomSheetSwiftUI', '= 2.7.0'
+  pod 'Map', :git => 'https://github.com/pauljohanneskraft/Map', :branch => 'hit-testing'
   
   # Firebase
   pod 'Firebase/Analytics', '= 8.15.0'
@@ -27,7 +28,7 @@ target 'TiquiTaca_iOS' do
   pod 'LicensePlist', '= 3.22.0'
 
   # Socket
-  pod 'Socket.IO-Client-Swift', '= 15.2.0'
+  pod 'Socket.IO-Client-Swift', '= 16.0.0'
 
   # Tiqui-Taca_iOS_Podspec
   pod 'ComposableArchitecture'

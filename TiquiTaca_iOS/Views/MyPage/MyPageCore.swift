@@ -40,6 +40,7 @@ enum MyPageAction: Equatable {
   case mypageItemView(MyPageItemAction)
   case mypageItem(id: UUID, action: MyPageItemAction)
   case getProfileInfo
+  case getProfileInfoResponse(Result<UserEntity.Response?, HTTPError>)
   case getProfileRequestSuccess
   case logout
 }
@@ -96,7 +97,7 @@ let myPageReducerCore = Reducer<
   case let .myInfoView(myInfoAction):
     switch myInfoAction {
     case let .movingAction(dismissType):
-      if dismissType == .logout {
+      if dismissType == .logout || dismissType == .withdrawal {
         return Effect(value: .logout)
       }
       return .none
@@ -104,13 +105,21 @@ let myPageReducerCore = Reducer<
       return .none
     }
   case .getProfileInfo:
-    let myProfile = environment.appService.userService.myProfile
+    return environment.appService.userService
+      .fetchMyProfile()
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(MyPageAction.getProfileInfoResponse)
+  case let .getProfileInfoResponse(.success(response)):
+    let myProfile = response//environment.appService.userService.myProfile
     state.profileImage.type = myProfile?.profile.type ?? 0
     state.nickname = myProfile?.nickname ?? ""
     state.isAppAlarmOn = myProfile?.appAlarm ?? false
     state.level = myProfile?.level ?? 0
     state.phoneNumber = myProfile?.phoneNumber ?? ""
     state.changeProfileViewState = ChangeProfileState(nickname: state.nickname, profileImage: state.profileImage)
+    state.myPageItemStates.remove(at: 1)
+    state.myPageItemStates.insert(.init(rowInfo: .init(itemType: .alarmSet, toggleVisible: true), isAppAlarmOn: state.isAppAlarmOn), at: 1)
     
     if var phoneNumber = myProfile?.phoneNumber, phoneNumber.count > 9 {
       phoneNumber.insert("-", at: phoneNumber.index(phoneNumber.startIndex, offsetBy: 3))
@@ -132,7 +141,8 @@ let myPageReducerCore = Reducer<
     
     state.myInfoViewState = .init(nickname: state.nickname, phoneNumber: state.phoneNumber, createdAt: state.createdAt)
     return Effect(value: .getProfileRequestSuccess)
-    
+  case .getProfileInfoResponse(.failure):
+    return .none
   case .getProfileRequestSuccess:
     return .none
     

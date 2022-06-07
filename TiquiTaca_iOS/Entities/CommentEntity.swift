@@ -11,7 +11,7 @@ struct CommentEntity: Codable, Equatable, Identifiable {
   let id: String
   let comment: String
   let user: UserEntity.Response?
-  let createdAt: Date
+  let createdAt: String
   
   enum CodingKeys: String, CodingKey {
     case id = "_id"
@@ -25,6 +25,13 @@ struct CommentEntity: Codable, Equatable, Identifiable {
     id = (try? container.decode(String.self, forKey: .id)) ?? ""
     comment = (try? container.decode(String.self, forKey: .comment)) ?? ""
     user = try? container.decode(UserEntity.Response.self, forKey: .user)
-    createdAt = (try? container.decode(Date.self, forKey: .createdAt)) ?? Date()
+    createdAt = (try? container.decode(String.self, forKey: .createdAt)) ?? ""
+  }
+  
+  init(id: String, comment: String, user: UserEntity.Response?, createdAt: String) {
+    self.id = id
+    self.comment = comment
+    self.user = user
+    self.createdAt = createdAt
   }
 }

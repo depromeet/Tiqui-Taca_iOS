@@ -12,7 +12,7 @@ struct ChangeProfileState: Equatable {
   var profileImage: ProfileImage = .init()
   var bottomSheetPosition: TTBottomSheet.MiddlePosition = .hidden
   var nicknameError: NicknameError = .none
-  var isAvailableCompletion: Bool = false
+  var isAvailableCompletion: Bool = true
   
   var validNicknameCheck: Bool = false
   var popupPresented: Bool = false
@@ -84,7 +84,8 @@ let changeProfileReducer = Reducer<
     state.validNicknameCheck = response.canChange
     
     return state.validNicknameCheck ?
-    Effect(value: .changeProfile(state.nickname, ProfileType(type: state.profileImage.type))) : Effect(value: .presentPopup)
+    Effect(value:
+        .changeProfile(state.nickname, ProfileType(type: state.profileImage.type))) : Effect(value: .presentPopup)
     
   case .validNicknameResponse(.failure):
     return .none

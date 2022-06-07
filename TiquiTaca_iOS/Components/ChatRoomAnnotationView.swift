@@ -8,11 +8,12 @@
 import SwiftUI
 
 struct ChatRoomAnnotationView: View {
-  let info: ChatRoomAnnotationInfo
+  let info: RoomFromCategoryResponse
   
   var body: some View {
     ZStack {
       RoundedRectangle(cornerRadius: 18)
+        .fill(Color.black900)
         .frame(width: 69, height: 59)
         .overlay(
           RoundedRectangle(cornerRadius: 18)
@@ -38,17 +39,7 @@ struct ChatRoomAnnotationView: View {
 
 struct ChatRoomAnnotationView_Previews: PreviewProvider {
   static var previews: some View {
-    ChatRoomAnnotationView(
-      info: .init(
-        id: "",
-        name: "여의도한강공원",
-        category: .hanriverpark,
-        radius: 0,
-        userCount: 300,
-        latitude: 0.0,
-        longitude: 0.0
-      )
-    )
+    ChatRoomAnnotationView(info: .init())
     .previewLayout(.sizeThatFits)
   }
 }

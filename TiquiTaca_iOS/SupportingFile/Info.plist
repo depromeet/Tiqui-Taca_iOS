@@ -26,9 +26,14 @@
 	<string>NO</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSLocationAlwaysUsageDescription</key>
-	<string>위치 기반 채팅 기능을 위해 사용자의 현재 위치 권한을 요청합니다.</string>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsArbitraryLoads</key>
+		<true/>
+	</dict>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>위치 기반 채팅 기능을 위해 사용자의 현재 위치 권한을 요청합니다.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
 	<string>위치 기반 채팅 기능을 위해 사용자의 현재 위치 권한을 요청합니다.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>위치 기반 채팅 기능을 위해 사용자의 현재 위치 권한을 요청합니다.</string>

@@ -15,14 +15,19 @@ struct QuestionListView: View {
   
   private let store: Store<State, Action>
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
+  @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
   
   struct ViewState: Equatable {
+    let route: State.Route?
     let questionList: [QuestionEntity.Response]
     let sortType: QuestionSortType
+    let bottomSheetPosition: TTBottomSheet.Position
     
     init(state: State) {
+      route = state.route
       questionList = state.questionList
       sortType = state.sortType
+      bottomSheetPosition = state.bottomSheetPosition
     }
   }
   
@@ -48,44 +53,113 @@ struct QuestionListView: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
       } else {
         List {
-          ForEach(viewStore.questionList.prefix(2)) { question in
-            QuestionItemView(
-              store: .init(
-                initialState: QuestionItemState(
-                  id: question.id,
-                  user: question.user,
-                  content: question.content,
-                  commentList: question.commentList,
-                  createdAt: question.createdAt,
-                  likesCount: question.likesCount,
-                  commentsCount: question.commentsCount,
-                  ilike: question.ilike
-                ),
-                reducer: questionItemReducer,
-                environment: QuestionItemEnvironment(
-                  appService: AppService(),
-                  mainQueue: .main
-                )
-              )
-            )
+          ForEach(viewStore.questionList) { question in
+            Button {
+              viewStore.send(.selectQuestionDetail(question.id))
+            } label: {
+              QuestionItemView(model: question)
+            }
+            .listRowBackground(Color.white)
+            .listRowSeparator(.hidden)
           }
-          .onTapGesture {
-            viewStore.send(.selectQuestionDetail)
-          }
+          .background(Color.white)
         }
+        .listStyle(.plain)
       }
       
       Spacer()
+      NavigationLink(
+        tag: State.Route.questionDetail,
+        selection: viewStore.binding(
+          get: \.route,
+          send: Action.setRoute
+        ),
+        destination: {
+          QuestionDetailView(
+            store: store.scope(
+              state: \.questionDetailViewState,
+              action: QuestionListAction.questionDetailView
+            )
+          )
+        },
+        label: EmptyView.init
+      )
+    }
+    .bottomSheet(
+      bottomSheetPosition: viewStore.binding(
+        get: \.bottomSheetPosition,
+        send: Action.setBottomSheetPosition
+      ),
+      options: TTBottomSheet.Options
+    ) {
+      VStack {
+        Text("필터")
+          .font(.body2)
+          .foregroundColor(.black100)
+          .hCenter()
+          .frame(height: 10)
+          .padding(12)
+        
+        Rectangle().fill(Color.black600)
+          .frame(height: 1)
+          .hCenter()
+        
+        Button {
+          viewStore.send(.selectSortType(.neworder))
+        } label: {
+          Text("모든 질문")
+            .hCenter()
+            .font(.subtitle2)
+            .foregroundColor(.white)
+        }
+        .frame(height: 54)
+        
+        Rectangle().fill(Color.black600)
+          .frame(height: 1)
+          .hCenter()
+        
+        Button {
+          viewStore.send(.selectSortType(.notanswered))
+        } label: {
+          Text("미답변")
+            .hCenter()
+            .font(.subtitle2)
+            .foregroundColor(.white)
+        }
+        .frame(height: 54)
+        
+        Rectangle().fill(Color.black600)
+          .frame(height: 1)
+          .hCenter()
+        
+        Button {
+          viewStore.send(.selectSortType(.oldorder))
+        } label: {
+          Text("오래된 순")
+            .hCenter()
+            .font(.subtitle2)
+            .foregroundColor(.white)
+        }
+        .frame(height: 54)
+        Spacer()
+      }
+      .vCenter()
+      .hCenter()
     }
     .background(Color.white)
+    .navigationBarBackButtonHidden(true)
+    .navigationBarHidden(true)
     .ignoresSafeArea()
+    .onAppear {
+      viewStore.send(.getQuestionListByType)
+    }
   }
   
   var topNavigationView: some View {
     VStack {
       HStack {
         Button {
-          viewStore.send(.backButtonAction)
+          self.presentationMode.wrappedValue.dismiss()
         } label: {
           Image("chat_backButton")
         }
@@ -113,10 +187,11 @@ struct QuestionListView: View {
         Spacer()
         
         Button {
-          viewStore.send(.selectSortType)
+//          viewStore.send(.selectSortType)
+          viewStore.send(.setBottomSheetPosition(.middle))
         } label: {
           HStack {
-            Text("오래된 순")
+            Text(viewStore.sortType.title)
               .font(.cap2)
               .foregroundColor(.white)
             

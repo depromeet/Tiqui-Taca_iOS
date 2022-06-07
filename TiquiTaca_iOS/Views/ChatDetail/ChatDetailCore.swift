@@ -5,111 +5,136 @@
 //  Created by 김록원 on 2022/06/01.
 //
 
-
 import Combine
 import ComposableArchitecture
+import ComposableCoreLocation
 import TTNetworkModule
 import SwiftUI
-//
-//struct ChatDetailState: Equatable {
-//  var currentTab: RoomListType = .like
-//  var isFirstLoad = true
-//  var willEnterRoomInfo: RoomInfoEntity.Response?
-//  
-//  var lastLoadTime: String = Date.current(type: .HHmm)
-//  var enteredRoom: RoomInfoEntity.Response?
-//  var likeRoomList: [RoomInfoEntity.Response] = []
-//  var popularRoomList: [RoomInfoEntity.Response] = []
-//}
-//
-//enum ChatDetailAction: Equatable {
-//  case onAppear
-//  case fetchEnteredRoomInfo
-//  case fetchLikeRoomList
-//  case fetchPopularRoomList
-//  
-//  case responsePopularRoomList(Result<[RoomInfoEntity.Response]?, HTTPError>)
-//  case responseLikeRoomList(Result<[RoomInfoEntity.Response]?, HTTPError>)
-//  case responseEnteredRoom(Result<RoomInfoEntity.Response?, HTTPError>)
-//  
-//  case tabChange(RoomListType)
-//  case removeFavoriteRoom(RoomInfoEntity.Response)
-//  case enterRoomPopup(RoomInfoEntity.Response)
-//  case dismissPopup
-//  case refresh
-//}
-//
-//struct ChatDetailEnvironment {
-//  let appService: AppService
-//  let mainQueue: AnySchedulerOf<DispatchQueue>
-//}
-//
-//let ChatDetailReducer = Reducer<
-//  ChatDetailState,
-//  ChatDetailAction,
-//  ChatDetailEnvironment
-//> { state, action, environment in
-//  switch action {
-//  case .onAppear:
-//    state.lastLoadTime = Date.current(type: .HHmm)
-//    return .merge(
-//      Effect(value: .fetchEnteredRoomInfo)
-//        .eraseToEffect(),
-//      Effect(value: .fetchLikeRoomList)
-//        .eraseToEffect(),
-//      Effect(value: .fetchPopularRoomList)
-//        .eraseToEffect()
-//    )
-//    // MARK: Requeset
-//  case .fetchEnteredRoomInfo:
-//    return environment.appService.roomService
-//      .getEnteredRoom()
-//      .receive(on: environment.mainQueue)
-//      .catchToEffect()
-//      .map(ChatAction.responseEnteredRoom)
-//  case .fetchLikeRoomList:
-//    return environment.appService.roomService
-//      .getLikeRoomList()
-//      .receive(on: environment.mainQueue)
-//      .catchToEffect()
-//      .map(ChatAction.responseLikeRoomList)
-//  case .fetchPopularRoomList:
-//    return environment.appService.roomService
-//      .getPopularRoomList()
-//      .receive(on: environment.mainQueue)
-//      .catchToEffect()
-//      .map(ChatAction.responsePopularRoomList)
-//  case .removeFavoriteRoom(let room):
-//    return .none
-//    // MARK: Response
-//  case let .responseEnteredRoom(.success(res)):
-//    state.enteredRoom = res
-//    return .none
-//  case let .responseLikeRoomList(.success(res)):
-//    state.likeRoomList = res ?? []
-//    return .none
-//  case let .responsePopularRoomList(.success(res)):
-//    state.popularRoomList = res ?? []
-//    return .none
-//  case .responseEnteredRoom(.failure),
-//      .responseLikeRoomList(.failure),
-//      .responsePopularRoomList(.failure):
-//    return .none
-//    // MARK: View Action
-//  case .tabChange(let type):
-//    guard state.currentTab != type else { return .none }
-//    state.currentTab = type
-//    return .none
-//  case .enterRoomPopup(let room):
-//    state.willEnterRoomInfo = room
-//    return .none
-//  case .dismissPopup:
-//    state.willEnterRoomInfo = nil
-//    return .none
-//  case .refresh:
-//    state.lastLoadTime = Date.current(type: .HHmm)
-//    return Effect(value: .onAppear)
-//      .eraseToEffect()
-//  }
-//}
-//
+
+struct ChatDetailState: Equatable {
+  var currentRoom: RoomInfoEntity.Response = .init()
+  var myInfo: UserEntity.Response?
+  
+  var isFirstLoad = true
+  var moveToOtherView = false
+  var chatLogList: [ChatLogEntity.Response] = []
+  var receiveNewChat: Bool = false
+  
+  
+  var chatMenuState: ChatMenuState = .init()
+}
+
+enum ChatDetailAction: Equatable {
+  static func == (lhs: ChatDetailAction, rhs: ChatDetailAction) -> Bool {
+    false
+  }
+  
+  case onAppear
+  case onDisAppear
+  case connectSocket
+  case disconnectSocket
+  
+  
+  case sendMessage(SendChatEntity)
+  case sendResponse(NSError?)
+  case socket(SocketService.Action)
+  
+  case joinRoom
+  case enteredRoom(Result<RoomInfoEntity.Response?, HTTPError>)
+  case moveToOtherView
+  
+  case locationManager(LocationManager.Action)
+  case chatMenuAction(ChatMenuAction)
+}
+
+struct ChatDetailEnvironment {
+  let appService: AppService
+  let mainQueue: AnySchedulerOf<DispatchQueue>
+  let locationManager: LocationManager
+}
+
+let chatDetailReducer = Reducer<
+  ChatDetailState,
+  ChatDetailAction,
+  ChatDetailEnvironment
+>.combine([
+  chatMenuReducer
+    .pullback(
+      state: \.chatMenuState,
+      action: /ChatDetailAction.chatMenuAction,
+      environment: {
+        ChatMenuEnvironment(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
+        )
+      }
+    ),
+  chatDetailCore
+])
+
+struct ChatDetailId: Hashable { }
+
+let chatDetailCore = Reducer<
+  ChatDetailState,
+  ChatDetailAction,
+  ChatDetailEnvironment
+> { state, action, environment in
+  switch action {
+  case .onAppear:
+    state.moveToOtherView = false
+    
+    guard state.isFirstLoad else { return .none }
+    state.myInfo = environment.appService.userService.myProfile
+    state.chatMenuState = ChatMenuState(roomInfo: state.currentRoom)
+    state.isFirstLoad = false
+    return .merge(
+      Effect(value: .joinRoom),
+      environment.appService.socketService
+        .connect(state.currentRoom.id ?? "")
+        .receive(on: environment.mainQueue)
+        .map(ChatDetailAction.socket)
+        .eraseToEffect()
+        .cancellable(id: ChatDetailId()),
+      environment.locationManager
+        .delegate()
+        .map(ChatDetailAction.locationManager)
+    )
+  case .onDisAppear:
+    guard !state.moveToOtherView else { return .none }
+    return environment.appService.socketService
+      .disconnect(state.currentRoom.id ?? "")
+      .eraseToEffect()
+      .fireAndForget()
+  case let .sendMessage(chat):
+    print("send Message")
+    return environment.appService.socketService
+      .send(state.currentRoom.id ?? "", chat)
+      .eraseToEffect()
+      .map(ChatDetailAction.sendResponse)
+  case let .socket(.initialMessages(messages)):
+    state.chatLogList = messages
+    return .none
+  case let .socket(.newMessage(message)):
+    state.chatLogList.append(message)
+    state.receiveNewChat.toggle()
+    return .none
+  case .joinRoom:
+    return environment.appService.roomService
+      .joinRoom(roomId: state.currentRoom.id ?? "")
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(ChatDetailAction.enteredRoom)
+  case let .enteredRoom(.success(res)):
+    return .none
+  case .moveToOtherView:
+    state.moveToOtherView = true
+    return .none
+  case .enteredRoom(.failure):
+    return .none
+  case let .locationManager(.didUpdateLocations(locations)):
+    print("로케이션 받아옴", locations.first?.coordinate.latitude, locations.first?.coordinate.longitude)
+    return .none
+  default:
+    return .none
+  }
+}
