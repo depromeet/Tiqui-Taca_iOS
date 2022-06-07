@@ -16,4 +16,5 @@ enum MyPageItemType: Equatable, Identifiable {
   case myTermsOfServiceView
   case csCenterView
   case versionInfo
+  case levelInfo
 }

@@ -12,7 +12,7 @@ struct ChangeProfileState: Equatable {
   var profileImage: ProfileImage = .init()
   var bottomSheetPosition: TTBottomSheet.MiddlePosition = .hidden
   var nicknameError: NicknameError = .none
-  var isAvailableCompletion: Bool = false
+  var isAvailableCompletion: Bool = true
   
   var validNicknameCheck: Bool = false
   var popupPresented: Bool = false
@@ -30,6 +30,7 @@ enum ChangeProfileAction: Equatable {
   case checkNicknameResponse(Result<CheckNicknameEntity.Response?, HTTPError>)
   case changeProfile(String, ProfileType)
   case changeProfileResponse(Result<ChangeProfileEntity.Response?, HTTPError>)
+  case getMyProfileResponse(Result<UserEntity.Response?, HTTPError>)
 }
 
 struct ChangeProfileEnvironment {
@@ -83,7 +84,8 @@ let changeProfileReducer = Reducer<
     state.validNicknameCheck = response.canChange
     
     return state.validNicknameCheck ?
-    Effect(value: .changeProfile(state.nickname, ProfileType(type: state.profileImage.type))) : .none
+    Effect(value:
+        .changeProfile(state.nickname, ProfileType(type: state.profileImage.type))) : Effect(value: .presentPopup)
     
   case .validNicknameResponse(.failure):
     return .none
@@ -100,6 +102,13 @@ let changeProfileReducer = Reducer<
       .map(ChangeProfileAction.changeProfileResponse)
     
   case let .changeProfileResponse(.success(response)):
+//    state.dismissCurrentPage = true
+    return environment.appService.userService
+      .fetchMyProfile()
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(ChangeProfileAction.getMyProfileResponse)
+  case .getMyProfileResponse:
     state.dismissCurrentPage = true
     return .none
     

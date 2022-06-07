@@ -10,15 +10,17 @@ import ComposableArchitecture
 import TTDesignSystemModule
 
 struct MyPageView: View {
-  typealias State = MyPageState
+  typealias MyState = MyPageState
   typealias Action = MyPageAction
   
-  private let store: Store<State, Action>
+  private let store: Store<MyState, Action>
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
+  @State private var togglePressed = false
   
   struct ViewState: Equatable {
-    let route: State.Route?
+    let route: MyState.Route?
     let myInfoViewState: MyInfoState
+    let myPageItemStates: IdentifiedArrayOf<MyPageItemState>
     let nickname: String
     let phoneNumber: String
     let profileImage: ProfileImage
@@ -26,11 +28,11 @@ struct MyPageView: View {
     let createdAt: String
     let createDday: Int
     let isAppAlarmOn: Bool
-    let rowInfo: [MyPageItemInfo]
     
-    init(state: State) {
+    init(state: MyState) {
       route = state.route
       myInfoViewState = state.myInfoViewState
+      myPageItemStates = state.myPageItemStates
       nickname = state.nickname
       phoneNumber = state.phoneNumber
       profileImage = state.profileImage
@@ -38,11 +40,10 @@ struct MyPageView: View {
       createdAt = state.createdAt
       createDday = state.createDday
       isAppAlarmOn = state.isAppAlarmOn
-      rowInfo = state.rowInfo
     }
   }
   
-  init(store: Store<State, Action>) {
+  init(store: Store<MyState, Action>) {
     self.store = store
     viewStore = ViewStore.init(store.scope(state: ViewState.init))
   }
@@ -59,16 +60,9 @@ struct MyPageView: View {
           NavigationLink(
             destination: {
               ChangeProfileView(
-                store: .init(
-                  initialState: .init(
-                    nickname: viewStore.nickname,
-                    profileImage: viewStore.profileImage
-                  ),
-                  reducer: changeProfileReducer,
-                  environment: .init(
-                    appService: AppService(),
-                    mainQueue: .main
-                  )
+                store: store.scope(
+                  state: \.changeProfileViewState,
+                  action: MyPageAction.changeProfileView
                 )
               )
             }, label: {
@@ -85,7 +79,8 @@ struct MyPageView: View {
           .foregroundColor(.white900)
         
         Button {
-          // popup 띄우기
+          viewStore.send(.setRoute(.levelInfo))
+          UIView.setAnimationsEnabled(false)
         } label: {
           Image("rating\(viewStore.level)")
         }
@@ -94,12 +89,14 @@ struct MyPageView: View {
       .foregroundColor(.white)
       .background(Color.black800)
       
-      ForEach(viewStore.rowInfo) { item in
-        MypageRow(rowInfo: item)
-          .onTapGesture {
-            viewStore.send(.setRoute(item.itemType))
-          }
-      }
+      ForEachStore(
+        store.scope(
+          state: \.myPageItemStates,
+          action: Action.mypageItem(id: action:)
+        ), content: { store in
+          MypageItem.init(store: store)
+        }
+      )
       .padding([.leading, .trailing], .spacingS)
       
       Spacer()
@@ -140,6 +137,9 @@ struct MyPageView: View {
       case .csCenterView:
         CsCenterView()
         
+      case .levelInfo:
+        AlertView(level: viewStore.level)
+        .background(BackgroundTransparentView())
       default:
         EmptyView()
       }
@@ -149,6 +149,124 @@ struct MyPageView: View {
     .onAppear {
       viewStore.send(.getProfileInfo)
     }
+  }
+}
+
+private struct AlertView: View {
+  @Environment(\.presentationMode) var presentationMode
+  @State var level: Int
+  
+  var body: some View {
+    ZStack {
+      VStack {
+        HStack {
+          VStack(spacing: 28) {
+            VStack(alignment: .center, spacing: .spacingXS) {
+              Text("회원 등급 안내")
+                .font(.heading3)
+                .foregroundColor(.white)
+              
+              Text("적극적인 대화와 소통을 통해 아이템을 받을 수 있어요!\n계속 모으다보면 혜택이 있을지도...?")
+                .multilineTextAlignment(.center)
+                .font(.body7)
+                .foregroundColor(.white700)
+                .frame(height: 34)
+
+              Image("LinearRectangle")
+                .overlay {
+                  VStack {
+                    Text("내가 받은 번개 갯수")
+                      .font(.body7)
+                      .foregroundColor(.white700)
+                    HStack {
+                      Image("lightning")
+                        .resizable()
+                        .frame(width: 24, height: 24)
+                      Text("\(level)")
+                        .font(.body4)
+                        .foregroundColor(.green500)
+                    }
+                  }
+                }
+              
+              VStack {
+                HStack {
+                  Image("ratingLv1")
+                  VStack(alignment: .leading) {
+                    Text("미니 부부젤라")
+                      .font(.subtitle2)
+                      .foregroundColor(.white)
+                    Text("누적 5개 이상의 번개")
+                      .font(.body7)
+                      .foregroundColor(.white700)
+                  }
+                  Spacer()
+                  Text("Lv.1")
+                    .font(.body4)
+                    .foregroundColor(.green500)
+                }
+                .padding([.leading, .trailing], 24)
+                
+                HStack {
+                  Image("ratingLv2")
+                  VStack(alignment: .leading) {
+                    Text("근본 확성기")
+                      .font(.subtitle2)
+                      .foregroundColor(.white)
+                    Text("누적 25개 이상의 번개")
+                      .font(.body7)
+                      .foregroundColor(.white700)
+                  }
+                  Spacer()
+                  Text("Lv.2")
+                    .font(.body4)
+                    .foregroundColor(.green500)
+                }
+                .padding([.leading, .trailing], 24)
+                
+                HStack {
+                  Image("ratingLv3")
+                  VStack(alignment: .leading) {
+                    Text("메가 스피커")
+                      .font(.subtitle2)
+                      .foregroundColor(.white)
+                    Text("누적 100개 이상의 번개")
+                      .font(.body7)
+                      .foregroundColor(.white700)
+                  }
+                  Spacer()
+                  Text("Lv.3")
+                    .font(.body4)
+                    .foregroundColor(.green500)
+                }
+                .padding([.leading, .trailing], 24)
+              }
+            }
+            .padding(EdgeInsets(top: 48, leading: .spacingL, bottom: 0, trailing: .spacingL))
+            
+            Button {
+              presentationMode.wrappedValue.dismiss()
+              DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                UIView.setAnimationsEnabled(true)
+              }
+            } label: {
+              Text("닫기")
+                .font(.subtitle1)
+                .padding(17)
+                .frame(maxWidth: .infinity)
+                .background(Color.white100)
+                .cornerRadius(8)
+            }
+            .foregroundColor(.black700)
+            .frame(maxWidth: .infinity)
+            .padding([.leading, .trailing, .bottom], 32)
+          }
+        }
+        .frame(maxWidth: .infinity, minHeight: 500)
+        .background(RoundedRectangle(cornerRadius: 32).fill(Color.black800.opacity(1)))
+      }
+    }
+    .padding(EdgeInsets(top: 0, leading: 24, bottom: 0, trailing: 24))
   }
 }
 
