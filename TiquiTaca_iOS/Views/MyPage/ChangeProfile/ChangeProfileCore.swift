@@ -84,7 +84,7 @@ let changeProfileReducer = Reducer<
     state.validNicknameCheck = response.canChange
     
     return state.validNicknameCheck ?
-    Effect(value: .changeProfile(state.nickname, ProfileType(type: state.profileImage.type))) : .none
+    Effect(value: .changeProfile(state.nickname, ProfileType(type: state.profileImage.type))) : Effect(value: .presentPopup)
     
   case .validNicknameResponse(.failure):
     return .none

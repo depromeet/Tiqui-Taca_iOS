@@ -58,5 +58,8 @@ struct MypageItem: View {
     }
     .background(Color.white)
     .frame(maxWidth: .infinity)
+    .onTapGesture(perform: {
+      viewStore.send(.mypageItemTapped(viewStore.rowInfo.itemType))
+    })
   }
 }

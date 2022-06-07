@@ -19,6 +19,7 @@ enum MyPageItemAction: Equatable {
   case alarmToggle
   case getAlarmRequestResponse(Result<AppAlarmEntity.Response?, HTTPError>)
   case getAlarmRequestSuccess
+  case mypageItemTapped(MyPageItemType)
 }
 
 struct MyPageItemEnvironment {
@@ -33,6 +34,7 @@ let myPageItemReducer = Reducer<
 > { state, action, environment in
   switch action {
   case .alarmToggle:
+    state.isAppAlarmOn.toggle()
     return environment.appService.userService
       .getAppAlarmState()
       .receive(on: environment.mainQueue)
@@ -40,13 +42,19 @@ let myPageItemReducer = Reducer<
       .map(MyPageItemAction.getAlarmRequestResponse)
     
   case let .getAlarmRequestResponse(.success(response)):
-    state.isAppAlarmOn = response?.appAlarm ?? false
+//    state.isAppAlarmOn = response?.appAlarm ?? false
+    if state.isAppAlarmOn != response?.appAlarm {
+      state.isAppAlarmOn = response?.appAlarm ?? false
+    }
     return .none
     
   case .getAlarmRequestResponse(.failure):
     return .none
     
   case .getAlarmRequestSuccess:
+    return .none
+  
+  case let .mypageItemTapped(itemType):
     return .none
   }
 }
