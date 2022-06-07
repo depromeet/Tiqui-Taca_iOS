@@ -178,6 +178,9 @@ struct MainMapView: View {
     .onAppear {
       viewStore.send(.onAppear)
     }
+    .onLoad {
+      viewStore.send(.currentLocationButtonTapped)
+    }
     .navigationTitle("지도")
   }
 }
