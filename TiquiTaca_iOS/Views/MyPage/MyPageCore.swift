@@ -31,15 +31,6 @@ struct MyPageState: Equatable {
   var createdAt: String = ""
   var createDday = 0
   var isAppAlarmOn = false
-//  var rowInfo: [MyPageItemInfo] = [
-//    .init(itemType: .myInfoView),
-//    .init(itemType: .alarmSet, toggleVisible: true),
-//    .init(itemType: .blockHistoryView),
-//    .init(itemType: .noticeView),
-//    .init(itemType: .myTermsOfServiceView),
-//    .init(itemType: .csCenterView),
-//    .init(itemType: .versionInfo, description: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String)
-//  ]
 }
 
 enum MyPageAction: Equatable {
@@ -50,9 +41,6 @@ enum MyPageAction: Equatable {
   case mypageItem(id: UUID, action: MyPageItemAction)
   case getProfileInfo
   case getProfileRequestSuccess
-//  case alarmToggle
-//  case getAlarmRequestResponse(Result<AppAlarmEntity.Response?, HTTPError>)
-//  case getAlarmRequestSuccess
   case logout
 }
 
@@ -85,17 +73,6 @@ let myPageReducer = Reducer<
         MyInfoEnvironment()
       }
     ),
-//  myPageItemReducer
-//    .pullback(
-//      state: \.myPageItemStates,
-//      action: /MyPageAction.mypageItemView,
-//      environment: {
-//        MyPageItemEnvironment(
-//          appService: $0.appService,
-//          mainQueue: $0.mainQueue
-//        )
-//      }
-//    ),
   myPageItemReducer
     .forEach(
       state: \.myPageItemStates,
@@ -159,8 +136,6 @@ let myPageReducerCore = Reducer<
   case .getProfileRequestSuccess:
     return .none
     
-
-    
   case .logout:
     return .none
     
@@ -179,7 +154,12 @@ let myPageReducerCore = Reducer<
     return .none
   case .mypageItemView:
     return .none
-  case .mypageItem(id: let id, action: let action):
-    return .none
+  case let .mypageItem(id: id, action: action):
+    switch action {
+    case let .mypageItemTapped(itemType):
+      return Effect(value: .setRoute(itemType))
+    default:
+      return .none
+    }
   }
 }
