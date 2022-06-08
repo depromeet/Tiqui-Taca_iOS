@@ -8,18 +8,21 @@
 import Combine
 import ComposableArchitecture
 
-struct MsgAndNotiState: Equatable {
-	var dummyState = 0
-  //임시 처리
-  var letterList: [String] = []
-  var noticeList: [String] = []
-  var selectedTab = 0
+enum MsgAndNotiType: Equatable {
+  case letter
+  case notification
 }
 
+struct MsgAndNotiState: Equatable {
+  var selectedType: MsgAndNotiType = .letter
+  var messageState: LetterState = .init()
+  var notificationState: NotificationState = .init()
+}
 
 enum MsgAndNotiAction: Equatable {
-	case dummyAction
-  case selectTab(Int)
+  case setSelectedType(MsgAndNotiType)
+  case messageAction(LetterAction)
+  case notificationAction(NotificationAction)
 }
 
 struct MsgAndNotiEnvironment {
@@ -28,16 +31,47 @@ struct MsgAndNotiEnvironment {
 }
 
 let msgAndNotiReducer = Reducer<
-	MsgAndNotiState,
-	MsgAndNotiAction,
-	MsgAndNotiEnvironment
+  MsgAndNotiState,
+  MsgAndNotiAction,
+  MsgAndNotiEnvironment
+>.combine([
+  letterReducer
+    .pullback(
+      state: \.messageState,
+      action: /MsgAndNotiAction.messageAction,
+      environment: {
+        LetterEnvironment(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
+        )
+      }
+    ),
+  notificationReducer
+    .pullback(
+      state: \.notificationState,
+      action: /MsgAndNotiAction.notificationAction,
+      environment: {
+        NotificationEnvironment(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
+        )
+      }
+    ),
+  msgAndNotiCore
+])
+
+let msgAndNotiCore = Reducer<
+  MsgAndNotiState,
+  MsgAndNotiAction,
+  MsgAndNotiEnvironment
 > { state, action, environment in
   switch action {
-  case .dummyAction:
+  case let .setSelectedType(type):
+    state.selectedType = type
     return .none
-  case let .selectTab(tabIndex):
-    state.selectedTab = tabIndex
+  case .messageAction:
+    return .none
+  case .notificationAction:
     return .none
   }
-	return .none
 }

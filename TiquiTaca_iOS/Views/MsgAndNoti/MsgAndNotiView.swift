@@ -9,72 +9,77 @@ import SwiftUI
 import ComposableArchitecture
 
 struct MsgAndNotiView: View {
-  let store: Store<MsgAndNotiState, MsgAndNotiAction>
+  typealias State = MsgAndNotiState
+  typealias Action = MsgAndNotiAction
+  
+  private let store: Store<State, Action>
+  @ObservedObject private var viewStore: ViewStore<ViewState, Action>
+  
+  struct ViewState: Equatable {
+    let selectedType: MsgAndNotiType
+    
+    init(state: State) {
+      selectedType = state.selectedType
+    }
+  }
+  
+  init(store: Store<State, Action>) {
+    self.store = store
+    viewStore = ViewStore(store.scope(state: ViewState.init))
+  }
   
   var body: some View {
-    WithViewStore(self.store) { viewStore in
-      VStack(alignment: .leading) {
-        HStack {
+    VStack {
+      HStack {
+        Button {
+          viewStore.send(.setSelectedType(.letter))
+        } label: {
+          Text("쪽지함")
+            .font(.heading1)
+            .foregroundColor(viewStore.selectedType == .letter ? .black800 : .white800)
+        }
+        Button {
+          viewStore.send(.setSelectedType(.notification))
+        } label: {
+          Text("알림")
+            .font(.heading1)
+            .foregroundColor(viewStore.selectedType == .notification ? .black800 : .white800)
+        }
+        Spacer()
+        if viewStore.selectedType == .notification {
           Button {
-            viewStore.send(.selectTab(0))
           } label: {
-            Text("쪽지함")
-              .font(.heading1)
-              .foregroundColor(viewStore.selectedTab == 0 ? .black800 : .white800)
-          }
-          
-          Button {
-            viewStore.send(.selectTab(1))
-          } label: {
-            Text("알림")
-              .font(.heading1)
-              .foregroundColor(viewStore.selectedTab == 1 ? .black800 : .white800)
+            Text("모두 읽음")
+              .font(.subtitle4)
+              .foregroundColor(.white800)
           }
         }
-        .padding(EdgeInsets(top: 28, leading: .spacingXL, bottom: 22, trailing: .spacingXL))
-        
-        List(viewStore.letterList, id: \.self) { letter in
-          LetterRow()
-        }
-        .padding(.spacingXL)
-        .listStyle(.plain)
-        .overlay(
-          VStack {
-            Image(viewStore.selectedTab == 0 ? "letter_g" : "noti_g")
-            Text("앗! 아직 다른 사람들과 주고 받은 쪽지가 없어요!")
-              .font(.body2)
-              .foregroundColor(.white900)
-          }
-            .opacity(viewStore.letterList.isEmpty ? 1 : 0)
-        )
       }
-      .navigationTitle("쪽지·알림")
+      .padding(.spacingXL)
+      
+      switch viewStore.selectedType {
+      case .letter:
+        LetterView(store: letterStore)
+      case .notification:
+        NotificationView(store: notificationStore)
+      }
     }
+    .navigationTitle("쪽지·알림")
   }
 }
 
-struct LetterRow: View {
-  //  var notice: Notice
-  
-  var body: some View {
-    VStack(alignment: .leading) {
-      Text("보낸사람")
-        .font(.body1)
-        .foregroundColor(.black900)
-        .padding(.bottom, .spacingXXXS)
-      
-      HStack {
-        Text("보낸날짜")
-          .font(.body7)
-          .foregroundColor(.black100)
-        
-        Spacer()
-        
-        Text("내용")
-          .font(.body7)
-          .foregroundColor(.white800)
-      }
-    }
+extension MsgAndNotiView {
+  private var letterStore: Store<LetterState, LetterAction> {
+    return store.scope(
+      state: \.messageState,
+      action: Action.messageAction
+    )
+  }
+  private var notificationStore: Store<NotificationState, NotificationAction> {
+    return store.scope(
+      state: \.notificationState,
+      action: Action.notificationAction
+    )
   }
 }
 
@@ -82,9 +87,9 @@ struct MsgAndNotiView_Previews: PreviewProvider {
   static var previews: some View {
     MsgAndNotiView(
       store: .init(
-        initialState: MsgAndNotiState(),
+        initialState: .init(),
         reducer: msgAndNotiReducer,
-        environment: MsgAndNotiEnvironment(
+        environment: .init(
           appService: .init(),
           mainQueue: .main
         )
