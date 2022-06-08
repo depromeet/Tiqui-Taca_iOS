@@ -15,6 +15,7 @@ struct ChatDetailState: Equatable {
   enum Route {
     case questionDetail
   }
+  var roomId: String
   var route: Route?
   var currentRoom: RoomInfoEntity.Response = .init()
   var myInfo: UserEntity.Response?
@@ -103,12 +104,12 @@ let chatDetailCore = Reducer<
     guard state.isFirstLoad else { return .none }
     
     state.myInfo = environment.appService.userService.myProfile
-    state.chatMenuState = ChatMenuState(roomInfo: state.currentRoom)
     state.isFirstLoad = false
     return .merge(
-      Effect(value: .joinRoom),
+      Effect(value: .joinRoom)
+        .eraseToEffect(),
       environment.appService.socketService
-        .connect(state.currentRoom.id ?? "")
+        .connect(state.roomId)
         .receive(on: environment.mainQueue)
         .map(ChatDetailAction.socket)
         .eraseToEffect()
@@ -120,14 +121,14 @@ let chatDetailCore = Reducer<
   case .onDisAppear:
     guard !state.moveToOtherView else { return .none }
     return environment.appService.socketService
-      .disconnect(state.currentRoom.id ?? "")
+      .disconnect(state.roomId)
       .eraseToEffect()
       .fireAndForget()
   // MARK: Socket
   case let .sendMessage(chat):
     print("send Message")
     return environment.appService.socketService
-      .send(state.currentRoom.id ?? "", chat)
+      .send(state.roomId, chat)
       .eraseToEffect()
       .map(ChatDetailAction.sendResponse)
   case let .socket(.initialMessages(messages)):
@@ -147,7 +148,7 @@ let chatDetailCore = Reducer<
       .map(ChatDetailAction.questionDetail)
   case .joinRoom:
     return environment.appService.roomService
-      .joinRoom(roomId: state.currentRoom.id ?? "")
+      .joinRoom(roomId: state.roomId)
       .receive(on: environment.mainQueue)
       .catchToEffect()
       .map(ChatDetailAction.enteredRoom)
@@ -155,6 +156,7 @@ let chatDetailCore = Reducer<
   case let .enteredRoom(.success(res)):
     if let res = res {
       state.currentRoom = res
+      state.chatMenuState = ChatMenuState(roomInfo: res)
     }
     return .none
   case let .questionDetail(.success(res)):

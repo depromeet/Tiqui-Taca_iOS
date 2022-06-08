@@ -21,7 +21,7 @@ struct ChatState: Equatable {
   var likeRoomList: [RoomInfoEntity.Response] = []
   var popularRoomList: [RoomInfoEntity.Response] = []
   
-  var chatDetailState: ChatDetailState = .init()
+  var chatDetailState: ChatDetailState = .init(roomId: "")
 }
 
 enum ChatAction: Equatable {
@@ -135,7 +135,8 @@ let chatCore = Reducer<
 		state.currentTab = type
 		return .none
 	case .willEnterRoom(let room):
-    state.chatDetailState = ChatDetailState(currentRoom: room)
+    guard let roomId = room.id else { return .none }
+    state.chatDetailState = ChatDetailState(roomId: roomId)
 		state.willEnterRoom = room
 		return .none
 	case .refresh:
