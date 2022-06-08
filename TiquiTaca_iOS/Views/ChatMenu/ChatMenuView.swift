@@ -53,8 +53,12 @@ struct ChatMenuView: View {
   var body: some View {
     VStack(alignment: .leading) {
       topNavigationView
-      listHeader
       List {
+        Section {
+          listHeader
+            .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets())
+        }
         Section {
           VStack(alignment: .leading, spacing: 0) {
             Text("현재 티키타카 중인 사람들")
@@ -224,8 +228,8 @@ struct ChatMenuView: View {
               QuestionItemView(model: question)
                 .padding([.top, .bottom], 4)
             }
-            .buttonStyle(.plain)
           }
+          .buttonStyle(.plain)
         }
         
         Button {
