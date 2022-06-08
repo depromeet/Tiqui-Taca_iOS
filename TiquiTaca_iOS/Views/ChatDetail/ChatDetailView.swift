@@ -18,6 +18,8 @@ struct ChatDetailView: View {
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
   @Binding var shouldPopToRootView: Bool
   @State var scrollToBottomButtonHidden = false
+  @State var showOtherProfile = false
+  
   var store: Store<CDState, Action>
   var scrollMinY: CGFloat = 750
   
@@ -81,6 +83,7 @@ struct ChatDetailView: View {
                     }
                     .overlay(
                       Button {
+                        showOtherProfile = true
                         print("프로필 탭")
                       } label: {
                         Text("")
@@ -135,6 +138,11 @@ struct ChatDetailView: View {
       .navigationBarTitle("")
       .navigationBarHidden(true)
       .ignoresSafeArea(.all, edges: .top)
+      .overlay(
+        OtherProfileView(showProfile: $showOtherProfile)
+          .opacity(showOtherProfile ? 1 : 0),
+        alignment: .center
+      )
       .onAppear {
         viewStore.send(.onAppear)
       }
