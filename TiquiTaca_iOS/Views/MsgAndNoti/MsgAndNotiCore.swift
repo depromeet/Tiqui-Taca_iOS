@@ -8,18 +8,17 @@
 import Combine
 import ComposableArchitecture
 
-struct MsgAndNotiState: Equatable {
-	var dummyState = 0
-  //임시 처리
-  var letterList: [String] = []
-  var noticeList: [String] = []
-  var selectedTab = 0
+enum MsgAndNotiType: Equatable {
+  case message
+  case notification
 }
 
+struct MsgAndNotiState: Equatable {
+  var selectedType: MsgAndNotiType = .message
+}
 
 enum MsgAndNotiAction: Equatable {
-	case dummyAction
-  case selectTab(Int)
+  case setSelectedType(MsgAndNotiType)
 }
 
 struct MsgAndNotiEnvironment {
@@ -28,16 +27,21 @@ struct MsgAndNotiEnvironment {
 }
 
 let msgAndNotiReducer = Reducer<
-	MsgAndNotiState,
-	MsgAndNotiAction,
-	MsgAndNotiEnvironment
+  MsgAndNotiState,
+  MsgAndNotiAction,
+  MsgAndNotiEnvironment
+>.combine([
+  msgAndNotiCore
+])
+
+let msgAndNotiCore = Reducer<
+  MsgAndNotiState,
+  MsgAndNotiAction,
+  MsgAndNotiEnvironment
 > { state, action, environment in
   switch action {
-  case .dummyAction:
-    return .none
-  case let .selectTab(tabIndex):
-    state.selectedTab = tabIndex
+  case let .setSelectedType(type):
+    state.selectedType = type
     return .none
   }
-	return .none
 }

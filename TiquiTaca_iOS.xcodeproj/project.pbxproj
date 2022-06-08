@@ -442,6 +442,8 @@
 		86E494862814FD6C00551CCD /* MsgAndNoti */ = {
 			isa = PBXGroup;
 			children = (
+				F221851A2850F6FD005CE6C3 /* Message */,
+				F22185192850F6F5005CE6C3 /* Notification */,
 				86E494902814FDE100551CCD /* MsgAndNotiView.swift */,
 				86E494922814FDE900551CCD /* MsgAndNotiCore.swift */,
 			);
@@ -495,6 +497,20 @@
 				F2E38F0A28475FFA007C96F7 /* RoomDefaultInfo.swift */,
 			);
 			path = Protocol;
+			sourceTree = "<group>";
+		};
+		F22185192850F6F5005CE6C3 /* Notification */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Notification;
+			sourceTree = "<group>";
+		};
+		F221851A2850F6FD005CE6C3 /* Message */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Message;
 			sourceTree = "<group>";
 		};
 		F248EAFF281323D100430C3B /* CreateProfile */ = {
