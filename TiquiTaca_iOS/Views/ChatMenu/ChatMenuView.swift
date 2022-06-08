@@ -15,7 +15,7 @@ struct ChatMenuView: View {
   
   private let store: Store<State, Action>
   @Binding var shouldPopToRootView: Bool
-  @ObservedObject private var viewStore: ViewStore<ViewState, Action>
+  @StateObject private var viewStore: ViewStore<ViewState, Action>
   @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
   
   struct ViewState: Equatable {
@@ -26,7 +26,7 @@ struct ChatMenuView: View {
     let questionList: [QuestionEntity.Response]
     
     let popupPresented: Bool
-    let exitSuccess: Bool
+    let isExistRoom: Bool
     let questionDetailViewState: QuestionDetailState
     let questionListViewState: QuestionListState
     
@@ -37,7 +37,7 @@ struct ChatMenuView: View {
       questionList = state.questionList
       popupPresented = state.popupPresented
       
-      exitSuccess = state.exitSuccess
+      isExistRoom = state.isExistRoom
       questionDetailViewState = state.questionDetailViewState
       questionListViewState = state.questionListViewState
     }
@@ -46,8 +46,8 @@ struct ChatMenuView: View {
   init(store: Store<State, Action>, shouldPopToRootView: Binding<Bool>) {
     self._shouldPopToRootView = shouldPopToRootView
     self.store = store
-    viewStore = ViewStore.init(store.scope(state: ViewState.init))
-    self.shouldPopToRootView = viewStore.state.exitSuccess
+    self._viewStore = StateObject(wrappedValue: ViewStore.init(store.scope(state: ViewState.init)))
+    self.shouldPopToRootView = viewStore.state.isExistRoom
   }
   
   var body: some View {

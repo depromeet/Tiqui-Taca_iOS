@@ -13,12 +13,28 @@ struct ChatMessageView: View {
   let chatLog: ChatLogEntity.Response
   
   var body: some View {
-    sentBubble
+    dateBubble
   }
 }
 
 
 extension ChatMessageView {
+  var dateBubble: some View {
+    VStack(alignment: .center) {
+      Spacer()
+      Text("\(chatLog.message ?? "새 시작")")
+        .font(.body4)
+        .padding(.horizontal, 20)
+        .padding(.vertical, 4)
+        .background(Color.black100.opacity(0.5))
+        .foregroundColor(.white)
+        .cornerRadius(16)
+      Spacer()
+    }
+      .padding(.vertical, 4)
+      .frame(maxWidth: .infinity)
+  }
+  
   var sentBubble: some View {
     HStack(alignment: .bottom) {
       Spacer()
@@ -53,7 +69,6 @@ extension ChatMessageView {
           .resizable()
           .frame(width: 32, height: 32)
           .opacity(chatLog.inside == true ? 1 : 0)
-        
         Image(chatLog.sender?.profile.imageName ?? "defaultProfile")
           .resizable()
           .frame(width: 30, height: 30)
@@ -75,39 +90,41 @@ extension ChatMessageView {
             .font(.body7)
             .foregroundColor(.white900)
           
-          HStack(alignment: .top) {
-            if chatLog.type == 1 {
-              Text("질문")
+          HStack(alignment: .bottom) {
+            HStack(alignment: .top) {
+              if chatLog.type == 1 {
+                Text("질문")
+                  .font(.body4)
+                  .foregroundColor(.green500)
+                  .padding(.top, 2)
+              }
+              
+              Text(chatLog.message ?? "")
                 .font(.body4)
-                .foregroundColor(.green500)
+                .foregroundColor(chatLog.type == 1 ? Color.white : Color.black)
                 .padding(.top, 2)
-            }
-            
-            Text(chatLog.message ?? "")
-              .font(.body4)
-              .foregroundColor(chatLog.type == 1 ? Color.white : Color.black)
-              .padding(.top, 2)
-            
-            if chatLog.type == 1 {
-              HStack(alignment: .bottom, spacing: 0) {
-                VStack {
-                  Spacer().frame(maxWidth: 0.1)
+              
+              if chatLog.type == 1 {
+                HStack(alignment: .bottom, spacing: 0) {
+                  VStack {
+                    Spacer().frame(maxWidth: 0.1)
+                  }
+                  Image("reply")
                 }
-                Image("reply")
               }
             }
+              .padding([.top, .bottom], 8)
+              .padding([.leading, .trailing], 14)
+              .background(
+                chatLog.type == 1 ? Color.black : Color.white150
+              )
+              .cornerRadius(14, corners: [.topRight, .bottomLeft, .bottomRight])
+            
+            Text(chatLog.createdAt?.getTimeStringFromDateString() ?? "00:00")
+              .font(.cap2)
+              .foregroundColor(.white900)
           }
-            .padding([.top, .bottom], 8)
-            .padding([.leading, .trailing], 14)
-            .background(
-              chatLog.type == 1 ? Color.black : Color.white150
-            )
-            .cornerRadius(14, corners: [.topRight, .bottomLeft, .bottomRight])
         }
-        
-        Text(chatLog.createdAt?.getTimeStringFromDateString() ?? "00:00")
-          .font(.cap2)
-          .foregroundColor(.white900)
       }
       
       Spacer()
@@ -120,6 +137,6 @@ extension ChatMessageView {
 struct ChatMessageView_Previews: PreviewProvider {
   static var previews: some View {
     ChatMessageView(chatLog: .init())
-      .sentBubble
+      .dateBubble
   }
 }

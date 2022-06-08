@@ -17,15 +17,8 @@ struct ChatDetailView: View {
   @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
   @Binding var shouldPopToRootView: Bool
-  var store: Store<CDState, Action>
-  var logListbottomPadding: Int {
-    if #available(iOS 15.4, *) {
-      return 0
-    } else {
-      return -44
-    }
-  }
   @State var scrollToBottomButtonHidden = false
+  var store: Store<CDState, Action>
   var scrollMinY: CGFloat = 750
   
   struct ViewState: Equatable {
@@ -43,6 +36,7 @@ struct ChatDetailView: View {
   }
   
   init(store: Store<CDState, Action>, shouldPopToRootView: Binding<Bool>) {
+    print("이게 실행된다고333")
     self._shouldPopToRootView = shouldPopToRootView
     self.store = store
     viewStore = ViewStore(store.scope(state: ViewState.init))
@@ -67,14 +61,39 @@ struct ChatDetailView: View {
           LazyVStack(alignment: .leading, spacing: 0) {
             Spacer().frame(height: 4).background(.white).id("listBottom")
             ForEach(viewStore.chatLogList.reversed(), id: \.id) { chatLog in
-              if viewStore.myInfo?.id == chatLog.sender?.id {
+              if chatLog.type == 3 {
+                ChatMessageView(chatLog: chatLog)
+                  .dateBubble
+                  .scaleEffect(x: 1, y: -1, anchor: .center)
+              } else if viewStore.myInfo?.id == chatLog.sender?.id {
                 ChatMessageView(chatLog: chatLog)
                   .sentBubble
                   .scaleEffect(x: 1, y: -1, anchor: .center)
               } else {
-                ChatMessageView(chatLog: chatLog)
-                  .receivedBubble
-                  .scaleEffect(x: 1, y: -1, anchor: .center)
+                ZStack(alignment: .topLeading) {
+                  ChatMessageView(chatLog: chatLog)
+                    .receivedBubble
+                    .scaleEffect(x: 1, y: -1, anchor: .center)
+                    .onTapGesture {
+                      if chatLog.type == 1 {
+                        print("질문 상세로")
+                      }
+                    }
+                    .overlay(
+                      Button {
+                        print("프로필 탭")
+                      } label: {
+                        Text("")
+                          .frame(width: 34, height: 34)
+                          .background(.blue)
+                          .opacity(0)
+                      }
+                        .padding(.bottom, 6)
+                        .padding(.leading, 12)
+                      ,
+                      alignment: .bottomLeading
+                    )
+                }
               }
             }
             Spacer().frame(height: 90).background(.white)
@@ -125,6 +144,7 @@ struct ChatDetailView: View {
   }
 }
 
+// MARK: Message Input View
 private struct InputChatView: View {
   private let store: Store<ChatDetailState, ChatDetailAction>
   @State var typingMessage: String = ""
@@ -224,21 +244,7 @@ extension ChatDetailView {
   }
 }
 
-//struct ChatDetailView_Previews: PreviewProvider {
-//  static var previews: some View {
-//    ChatDetailView(
-//      store: .init(
-//        initialState: .init(),
-//        reducer: chatDetailReducer,
-//        environment: .init(
-//          appService: .init(),
-//          mainQueue: .main
-//        )
-//      )
-//    )
-//  }
-//}
-
+// MARK: Overlay View
 extension ChatDetailView {
   var navigationView: some View {
     VStack {
