@@ -14,6 +14,7 @@ import SwiftUI
 struct ChatDetailState: Equatable {
   enum Route {
     case questionDetail
+    case menu
   }
   var roomId: String
   var route: Route?
@@ -45,6 +46,7 @@ enum ChatDetailAction: Equatable {
   
   case setRoute(ChatDetailState.Route?)
   case selectQuestionDetail(String)
+  case selectMenu
   case joinRoom
   case enteredRoom(Result<RoomInfoEntity.Response?, HTTPError>)
   case questionDetail(Result<QuestionEntity.Response?, HTTPError>)
@@ -106,6 +108,9 @@ let chatDetailCore = Reducer<
     state.myInfo = environment.appService.userService.myProfile
     state.isFirstLoad = false
     return .merge(
+      environment.locationManager
+        .delegate()
+        .map(ChatDetailAction.locationManager),
       Effect(value: .joinRoom)
         .eraseToEffect(),
       environment.appService.socketService
@@ -115,8 +120,8 @@ let chatDetailCore = Reducer<
         .eraseToEffect()
         .cancellable(id: ChatDetailId()),
       environment.locationManager
-        .delegate()
-        .map(ChatDetailAction.locationManager)
+        .startMonitoringSignificantLocationChanges()
+        .fireAndForget()
     )
   case .onDisAppear:
     guard !state.moveToOtherView else { return .none }
@@ -169,7 +174,8 @@ let chatDetailCore = Reducer<
     state.moveToOtherView = true
     return .none
   case let .setRoute(route):
-    state.route = .questionDetail
+    state.moveToOtherView = true
+    state.route = route
     return .none
   case .enteredRoom(.failure), .questionDetail(.failure):
     return .none

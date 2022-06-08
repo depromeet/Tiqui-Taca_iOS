@@ -307,15 +307,31 @@ extension ChatDetailView {
               .resizable()
               .frame(width: 24, height: 24)
           }
+          
           NavigationLink(
-            destination: ChatMenuView(store: chatMenuStore, shouldPopToRootView: $shouldPopToRootView)
-          ) {
-            Image("menu")
-              .resizable()
-              .frame(width: 24, height: 24)
-          }
-            .isDetailLink(false)
-            .simultaneousGesture(TapGesture().onEnded { viewStore.send(.moveToOtherView) })
+            tag: CDState.Route.menu,
+            selection: viewStore.binding(
+              get: \.route,
+              send: Action.setRoute
+            ),
+            destination: {
+              ChatMenuView(store: chatMenuStore, shouldPopToRootView: $shouldPopToRootView)
+            },
+            label: {
+              Image("menu")
+                .resizable()
+                .frame(width: 24, height: 24)
+            }
+          )
+          .isDetailLink(false)
+          
+//          NavigationLink(
+//            destination: ChatMenuView(store: chatMenuStore, shouldPopToRootView: $shouldPopToRootView)
+//          ) {
+//            
+//          }
+//            
+//            .simultaneousGesture(TapGesture().onEnded { viewStore.send(.moveToOtherView) })
         }
       }
       .padding([.leading, .trailing], 10)
