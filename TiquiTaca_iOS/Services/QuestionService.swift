@@ -11,6 +11,7 @@ import Combine
 protocol QuestionServiceType {
   func getQuestionList(_ request: QuestionEntity.Request) -> AnyPublisher<[QuestionEntity.Response]?, HTTPError>
   func getQuestionDetail(questionId: String) -> AnyPublisher<QuestionEntity.Response?, HTTPError>
+  func getQuestionDetailAtChat(chatId: String) -> AnyPublisher<QuestionEntity.Response?, HTTPError>
   func likeQuestion(questionId: String) -> AnyPublisher<QuestionLikeEntity.Response?, HTTPError>
   func postComment(questionId: String, _ request: QuestionCommentEntity.Request) -> AnyPublisher<[QuestionCommentEntity.Response]?, HTTPError>
   func deleteMyQuestion(questionId: String) -> AnyPublisher<QuestionEntity.Response?, HTTPError>
@@ -30,6 +31,10 @@ final class QuestionService: QuestionServiceType {
   
   func getQuestionDetail(questionId: String) -> AnyPublisher<QuestionEntity.Response?, HTTPError> {
     network.request(.questionDetail(questionId: questionId), responseType: QuestionEntity.Response.self)
+  }
+  
+  func getQuestionDetailAtChat(chatId: String) -> AnyPublisher<QuestionEntity.Response?, HTTPError> {
+    network.request(.questionDetailAtChat(chatId: chatId), responseType: QuestionEntity.Response.self)
   }
   
   func likeQuestion(questionId: String) -> AnyPublisher<QuestionLikeEntity.Response?, HTTPError> {

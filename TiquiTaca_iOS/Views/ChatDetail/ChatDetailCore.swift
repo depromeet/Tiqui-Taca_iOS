@@ -38,14 +38,15 @@ enum ChatDetailAction: Equatable {
   case connectSocket
   case disconnectSocket
   
-  case selectQuestionDetail(String)
   case sendMessage(SendChatEntity)
   case sendResponse(NSError?)
   case socket(SocketService.Action)
   
   case setRoute(ChatDetailState.Route?)
+  case selectQuestionDetail(String)
   case joinRoom
   case enteredRoom(Result<RoomInfoEntity.Response?, HTTPError>)
+  case questionDetail(Result<QuestionEntity.Response?, HTTPError>)
   case moveToOtherView
   
   case locationManager(LocationManager.Action)
@@ -79,7 +80,7 @@ let chatDetailReducer = Reducer<
     .pullback(
       state: \.questionDetailViewState,
       action: /ChatDetailAction.questionDetailView,
-      environment:{
+      environment: {
         QuestionDetailEnvironment.init(
           appService: $0.appService,
           mainQueue: $0.mainQueue
@@ -99,8 +100,8 @@ let chatDetailCore = Reducer<
   switch action {
   case .onAppear:
     state.moveToOtherView = false
-    
     guard state.isFirstLoad else { return .none }
+    
     state.myInfo = environment.appService.userService.myProfile
     state.chatMenuState = ChatMenuState(roomInfo: state.currentRoom)
     state.isFirstLoad = false
@@ -122,12 +123,7 @@ let chatDetailCore = Reducer<
       .disconnect(state.currentRoom.id ?? "")
       .eraseToEffect()
       .fireAndForget()
-  case let .selectQuestionDetail(questionId):
-    state.moveToOtherView = true
-    state.questionDetailViewState = .init(questionId: questionId)
-    print("와이 no click", questionId)
-    state.route = .questionDetail
-    return .none
+  // MARK: Socket
   case let .sendMessage(chat):
     print("send Message")
     return environment.appService.socketService
@@ -141,24 +137,39 @@ let chatDetailCore = Reducer<
     state.chatLogList.append(message)
     state.receiveNewChat.toggle()
     return .none
+  // MARK: API
+  case let .selectQuestionDetail(chatId):
+    state.route = nil
+    return environment.appService.questionService
+      .getQuestionDetailAtChat(chatId: chatId)
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(ChatDetailAction.questionDetail)
   case .joinRoom:
     return environment.appService.roomService
       .joinRoom(roomId: state.currentRoom.id ?? "")
       .receive(on: environment.mainQueue)
       .catchToEffect()
       .map(ChatDetailAction.enteredRoom)
+  // MARK: API Result
   case let .enteredRoom(.success(res)):
     if let res = res {
       state.currentRoom = res
     }
     return .none
+  case let .questionDetail(.success(res)):
+    guard let questionId = res?.id else { return .none }
+    state.moveToOtherView = true
+    state.questionDetailViewState = .init(questionId: questionId)
+    print("와이 no click", questionId)
+    state.route = .questionDetail
   case .moveToOtherView:
     state.moveToOtherView = true
     return .none
   case let .setRoute(route):
     state.route = .questionDetail
     return .none
-  case .enteredRoom(.failure):
+  case .enteredRoom(.failure), .questionDetail(.failure):
     return .none
   case let .locationManager(.didUpdateLocations(locations)):
     print("로케이션 받아옴", locations.first?.coordinate.latitude, locations.first?.coordinate.longitude)
@@ -166,4 +177,6 @@ let chatDetailCore = Reducer<
   default:
     return .none
   }
+  
+  return .none
 }
