@@ -17,11 +17,9 @@ struct MsgAndNotiView: View {
   
   struct ViewState: Equatable {
     let selectedType: MsgAndNotiType
-    let messageState: MessageState
     
     init(state: State) {
       selectedType = state.selectedType
-      messageState = state.messageState
     }
   }
   
@@ -48,11 +46,13 @@ struct MsgAndNotiView: View {
             .foregroundColor(viewStore.selectedType == .notification ? .black800 : .white800)
         }
         Spacer()
-        Button {
-        } label: {
-          Text("모두 읽음")
-            .font(.subtitle4)
-            .foregroundColor(.white800)
+        if viewStore.selectedType == .notification {
+          Button {
+          } label: {
+            Text("모두 읽음")
+              .font(.subtitle4)
+              .foregroundColor(.white800)
+          }
         }
       }
       .padding(.spacingXL)
@@ -61,7 +61,7 @@ struct MsgAndNotiView: View {
       case .message:
         MessageView(store: messageStore)
       case .notification:
-        EmptyView()
+        NotificationView(store: notificationStore)
       }
     }
     .navigationTitle("쪽지·알림")
@@ -73,6 +73,12 @@ extension MsgAndNotiView {
     return store.scope(
       state: \.messageState,
       action: Action.messageAction
+    )
+  }
+  private var notificationStore: Store<NotificationState, NotificationAction> {
+    return store.scope(
+      state: \.notificationState,
+      action: Action.notificationAction
     )
   }
 }

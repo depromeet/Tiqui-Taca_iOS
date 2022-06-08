@@ -54,6 +54,8 @@
 		F2218517284F7E3D005CE6C3 /* RoomInfoEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2218516284F7E3D005CE6C3 /* RoomInfoEntity.swift */; };
 		F221851C2850FB6E005CE6C3 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F221851B2850FB6D005CE6C3 /* MessageView.swift */; };
 		F22185222850FBA7005CE6C3 /* MessageCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22185212850FBA7005CE6C3 /* MessageCore.swift */; };
+		F22185242850FF3C005CE6C3 /* NotificationCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22185232850FF3C005CE6C3 /* NotificationCore.swift */; };
+		F22185262850FF4A005CE6C3 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22185252850FF4A005CE6C3 /* NotificationView.swift */; };
 		F248EB012813240500430C3B /* CreateProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F248EB002813240500430C3B /* CreateProfileView.swift */; };
 		F248EB032813273A00430C3B /* CreateProfileCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F248EB022813273A00430C3B /* CreateProfileCore.swift */; };
 		F24B1EEF28086CA0003D4E1D /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = F24B1EEE28086CA0003D4E1D /* .swiftlint.yml */; };
@@ -239,6 +241,8 @@
 		F2218516284F7E3D005CE6C3 /* RoomInfoEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomInfoEntity.swift; sourceTree = "<group>"; };
 		F221851B2850FB6D005CE6C3 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
 		F22185212850FBA7005CE6C3 /* MessageCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCore.swift; sourceTree = "<group>"; };
+		F22185232850FF3C005CE6C3 /* NotificationCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationCore.swift; sourceTree = "<group>"; };
+		F22185252850FF4A005CE6C3 /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
 		F248EB002813240500430C3B /* CreateProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProfileView.swift; sourceTree = "<group>"; };
 		F248EB022813273A00430C3B /* CreateProfileCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProfileCore.swift; sourceTree = "<group>"; };
 		F24B1EEE28086CA0003D4E1D /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
@@ -506,6 +510,8 @@
 		F22185192850F6F5005CE6C3 /* Notification */ = {
 			isa = PBXGroup;
 			children = (
+				F22185252850FF4A005CE6C3 /* NotificationView.swift */,
+				F22185232850FF3C005CE6C3 /* NotificationCore.swift */,
 			);
 			path = Notification;
 			sourceTree = "<group>";
@@ -1193,6 +1199,7 @@
 				F2F1ED98281E869D00AC4FDD /* VerificationNumberCheckCore.swift in Sources */,
 				F221850F284E560B005CE6C3 /* FCMUpdateRequest.swift in Sources */,
 				F22184EA284B3D7B005CE6C3 /* Array+Extensions.swift in Sources */,
+				F22185262850FF4A005CE6C3 /* NotificationView.swift in Sources */,
 				F2B268BD283AAF090011EA43 /* LocationCategoryListView.swift in Sources */,
 				86E4948D2814FDC700551CCD /* ChatView.swift in Sources */,
 				86E494952814FDF300551CCD /* MyPageView.swift in Sources */,
@@ -1259,6 +1266,7 @@
 				F9322E6D284231BD00EB956E /* ChatLogCore.swift in Sources */,
 				8601F6642813AD400085F692 /* MainTabView.swift in Sources */,
 				86E494912814FDE100551CCD /* MsgAndNotiView.swift in Sources */,
+				F22185242850FF3C005CE6C3 /* NotificationCore.swift in Sources */,
 				F2218508284D34C1005CE6C3 /* ChatRoomDetailView.swift in Sources */,
 				F2B268CA283BE1210011EA43 /* OTPField.swift in Sources */,
 				F9DB0B3528294F56002F6AD8 /* ChangeProfileView.swift in Sources */,
