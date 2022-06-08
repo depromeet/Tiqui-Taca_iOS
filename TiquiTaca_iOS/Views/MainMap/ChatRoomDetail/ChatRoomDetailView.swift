@@ -15,7 +15,7 @@ struct ChatRoomDetailView: View {
   typealias Action = ChatRoomDetailAction
   
   private let store: Store<State, Action>
-  private var viewStore: ViewStore<ViewState, Action>
+  @ObservedObject private var viewStore: ViewStore<ViewState, Action>
   
   private var distanceString: String {
     if viewStore.isWithinRadius {

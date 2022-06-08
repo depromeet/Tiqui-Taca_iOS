@@ -26,15 +26,14 @@ struct LocationCategoryListView: View {
               }
               Text(category.locationName)
             }
-            .padding(.leading, .spacingXS)
-            .padding(.trailing, .spacingM)
+            .padding(.horizontal, .spacingM)
           }
           .buttonStyle(TTButtonChipStyle(isSelected: category == selectedCategory))
           .disabled(category == selectedCategory)
-          .frame(height: 33)
         }
       }
       .padding(.horizontal, .spacingXL)
+      .frame(height: 33)
     }
   }
 }

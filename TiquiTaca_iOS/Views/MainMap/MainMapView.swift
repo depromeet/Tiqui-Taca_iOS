@@ -124,35 +124,35 @@ struct MainMapView: View {
           }
         }
         Spacer()
-        VStack {
-          HStack(spacing: .spacingM) {
-            Button {
-              viewStore.send(.popularChatRoomButtonTapped)
-            } label: {
-              HStack(spacing: .spacingM) {
-                Text("지금 인기있는 채팅방 알아보기")
-                  .font(.body2)
-                Image("popular")
-              }
-              .frame(width: 265, height: 48)
-              .background(Color.black800)
-              .cornerRadius(16)
-              .foregroundColor(.white)
-            }
-            
-            Button {
-              viewStore.send(.currentLocationButtonTapped)
-            } label: {
-              Image("locationPolygon")
+        HStack(spacing: .spacingM) {
+          Button {
+            viewStore.send(.popularChatRoomButtonTapped)
+          } label: {
+            HStack(spacing: .spacingM) {
+              Text("지금 인기있는 채팅방 알아보기")
+                .font(.body2)
+                .foregroundColor(.white)
+              Image("bxPopular")
+                .resizable()
                 .frame(width: 48, height: 48)
-                .background(Color.black800)
-                .cornerRadius(24)
             }
+            .frame(maxWidth: .infinity)
+            .frame(height: 48)
+            .background(Color.black800)
+            .cornerRadius(16)
           }
-          .hCenter()
-          .padding(.bottom, .spacingL)
+          
+          Button {
+            viewStore.send(.currentLocationButtonTapped)
+          } label: {
+            Image("locationPolygon")
+              .frame(width: 48, height: 48)
+              .background(Color.black800)
+              .cornerRadius(24)
+          }
         }
         .padding(.horizontal, .spacingXL)
+        .padding(.bottom, .spacingL)
       }
     }
     .bottomSheet(
@@ -177,6 +177,9 @@ struct MainMapView: View {
     )
     .onAppear {
       viewStore.send(.onAppear)
+    }
+    .onLoad {
+      viewStore.send(.onLoad)
     }
     .navigationTitle("지도")
   }
