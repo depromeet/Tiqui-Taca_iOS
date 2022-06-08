@@ -1,47 +1,18 @@
-//
-//  OtherProfileCore.swift
-//  TiquiTaca_iOS
-//
-//  Created by 김록원 on 2022/06/07.
-//
+////
+////  OtherProfileCore.swift
+////  TiquiTaca_iOS
+////
+////  Created by 김록원 on 2022/06/07.
+////
 //
 //import Combine
 //import ComposableArchitecture
 //import TTNetworkModule
 //
 //struct OtherProfileState: Equatable {
-//  var currentRoom: RoomInfoEntity.Response = .init()
-//  var myInfo: UserEntity.Response?
-//  
-//  var isFirstLoad = true
-//  var moveToOtherView = false
-//  var chatLogList: [ChatLogEntity.Response] = []
-//  var receiveNewChat: Bool = false
-//  
-//  
-//  var chatMenuState: ChatMenuState = .init()
 //}
 //
 //enum OtherProfileAction: Equatable {
-//  static func == (lhs: ChatDetailAction, rhs: ChatDetailAction) -> Bool {
-//    false
-//  }
-//  
-//  case onAppear
-//  case onDisAppear
-//  case connectSocket
-//  case disconnectSocket
-//  
-//  
-//  case sendMessage(SendChatEntity)
-//  case sendResponse(NSError?)
-//  case socket(SocketService.Action)
-//  
-//  case joinRoom
-//  case enteredRoom(Result<RoomInfoEntity.Response?, HTTPError>)
-//  case moveToOtherView
-//  
-//  case chatMenuAction(ChatMenuAction)
 //}
 //
 //struct OtherProfileEnvironment {

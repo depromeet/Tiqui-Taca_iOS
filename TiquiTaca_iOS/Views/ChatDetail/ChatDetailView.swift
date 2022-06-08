@@ -24,12 +24,14 @@ struct ChatDetailView: View {
   var scrollMinY: CGFloat = 750
   
   struct ViewState: Equatable {
+    let route: CDState.Route?
     let currentRoom: RoomInfoEntity.Response
     let chatLogList: [ChatLogEntity.Response]
     let chatMenuState: ChatMenuState
     let myInfo: UserEntity.Response?
     
     init(state: CDState) {
+      route = state.route
       currentRoom = state.currentRoom
       chatLogList = state.chatLogList
       chatMenuState = state.chatMenuState
@@ -71,6 +73,11 @@ struct ChatDetailView: View {
                 ChatMessageView(chatLog: chatLog)
                   .sentBubble
                   .scaleEffect(x: 1, y: -1, anchor: .center)
+                  .onTapGesture {
+                    if chatLog.type == 1 {
+                      viewStore.send(.selectQuestionDetail(chatLog.id ?? ""))
+                    }
+                  }
               } else {
                 ZStack(alignment: .topLeading) {
                   ChatMessageView(chatLog: chatLog)
@@ -78,7 +85,7 @@ struct ChatDetailView: View {
                     .scaleEffect(x: 1, y: -1, anchor: .center)
                     .onTapGesture {
                       if chatLog.type == 1 {
-                        print("질문 상세로")
+                        viewStore.send(.selectQuestionDetail(chatLog.id ?? ""))
                       }
                     }
                     .overlay(
@@ -131,6 +138,23 @@ struct ChatDetailView: View {
           )
       }
       
+      NavigationLink(
+        tag: CDState.Route.questionDetail,
+        selection: viewStore.binding(
+          get: \.route,
+          send: Action.setRoute
+        ),
+        destination: {
+          QuestionDetailView(
+            store: store.scope(
+              state: \.questionDetailViewState,
+              action: ChatDetailAction.questionDetailView
+            )
+          )
+        },
+        label: EmptyView.init
+      )
+        .frame(height: 0)
       
       InputChatView(store: store)
     }
@@ -147,6 +171,7 @@ struct ChatDetailView: View {
         viewStore.send(.onAppear)
       }
       .onDisappear {
+        print("설마???")
         viewStore.send(.onDisAppear)
       }
   }
@@ -282,8 +307,8 @@ extension ChatDetailView {
               .resizable()
               .frame(width: 24, height: 24)
           }
-          NavigationLink(destination:
-            ChatMenuView(store: chatMenuStore, shouldPopToRootView: $shouldPopToRootView)
+          NavigationLink(
+            destination: ChatMenuView(store: chatMenuStore, shouldPopToRootView: $shouldPopToRootView)
           ) {
             Image("menu")
               .resizable()

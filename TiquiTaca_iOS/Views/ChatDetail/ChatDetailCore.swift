@@ -12,6 +12,10 @@ import TTNetworkModule
 import SwiftUI
 
 struct ChatDetailState: Equatable {
+  enum Route {
+    case questionDetail
+  }
+  var route: Route?
   var currentRoom: RoomInfoEntity.Response = .init()
   var myInfo: UserEntity.Response?
   
@@ -20,8 +24,8 @@ struct ChatDetailState: Equatable {
   var chatLogList: [ChatLogEntity.Response] = []
   var receiveNewChat: Bool = false
   
-  
   var chatMenuState: ChatMenuState = .init()
+  var questionDetailViewState: QuestionDetailState = .init(questionId: "")
 }
 
 enum ChatDetailAction: Equatable {
@@ -34,17 +38,19 @@ enum ChatDetailAction: Equatable {
   case connectSocket
   case disconnectSocket
   
-  
+  case selectQuestionDetail(String)
   case sendMessage(SendChatEntity)
   case sendResponse(NSError?)
   case socket(SocketService.Action)
   
+  case setRoute(ChatDetailState.Route?)
   case joinRoom
   case enteredRoom(Result<RoomInfoEntity.Response?, HTTPError>)
   case moveToOtherView
   
   case locationManager(LocationManager.Action)
   case chatMenuAction(ChatMenuAction)
+  case questionDetailView(QuestionDetailAction)
 }
 
 struct ChatDetailEnvironment {
@@ -64,6 +70,17 @@ let chatDetailReducer = Reducer<
       action: /ChatDetailAction.chatMenuAction,
       environment: {
         ChatMenuEnvironment(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
+        )
+      }
+    ),
+  questionDetailReducer
+    .pullback(
+      state: \.questionDetailViewState,
+      action: /ChatDetailAction.questionDetailView,
+      environment:{
+        QuestionDetailEnvironment.init(
           appService: $0.appService,
           mainQueue: $0.mainQueue
         )
@@ -105,6 +122,12 @@ let chatDetailCore = Reducer<
       .disconnect(state.currentRoom.id ?? "")
       .eraseToEffect()
       .fireAndForget()
+  case let .selectQuestionDetail(questionId):
+    state.moveToOtherView = true
+    state.questionDetailViewState = .init(questionId: questionId)
+    print("와이 no click", questionId)
+    state.route = .questionDetail
+    return .none
   case let .sendMessage(chat):
     print("send Message")
     return environment.appService.socketService
@@ -125,9 +148,15 @@ let chatDetailCore = Reducer<
       .catchToEffect()
       .map(ChatDetailAction.enteredRoom)
   case let .enteredRoom(.success(res)):
+    if let res = res {
+      state.currentRoom = res
+    }
     return .none
   case .moveToOtherView:
     state.moveToOtherView = true
+    return .none
+  case let .setRoute(route):
+    state.route = .questionDetail
     return .none
   case .enteredRoom(.failure):
     return .none
