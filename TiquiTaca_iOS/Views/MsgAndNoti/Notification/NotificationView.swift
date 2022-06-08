@@ -6,8 +6,6 @@
 //
 
 import SwiftUI
-
-import SwiftUI
 import ComposableArchitecture
 
 struct NotificationView: View {
@@ -31,7 +29,7 @@ struct NotificationView: View {
   var body: some View {
     List(selection: .constant(1)) {
       ForEach(0...10, id: \.self) { index in
-        Text("Notification \(index)")
+        NotificationItem(notification: .init())
       }
     }
     .listStyle(.plain)
