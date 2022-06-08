@@ -166,6 +166,8 @@ let questionDetailCore = Reducer<
       .map(QuestionDetailAction.reportQuestionWriterResponse)
     
   case let .blockCommentWriter(userId):
+    state.commentItemStates = state.commentItemStates.filter { $0.comment?.user?.id != userId }
+    
     return environment.appService.userService
       .blockUser(userId: userId)
       .receive(on: environment.mainQueue)

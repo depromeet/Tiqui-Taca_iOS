@@ -252,9 +252,9 @@ struct QuestionDetailView: View {
       .padding([.leading, .trailing], 10)
       .padding(.top, 10)
       .padding(.bottom, 10)
-      .frame(height: 44)
     }
     .background(Color.black800)
+    .frame(height: 38)
   }
   
   var listHeader: some View {
