@@ -53,78 +53,47 @@ struct ChatMenuView: View {
   var body: some View {
     VStack(alignment: .leading) {
       topNavigationView
-      
-      VStack(alignment: .leading) {
-        if viewStore.questionList.isEmpty {
-          VStack(alignment: .center) {
-            Image("bxNoAnswer")
-              .resizable()
-              .frame(width: 108, height: 108)
-              .padding(16)
-            Text("아직 사용자들이 남긴 질문이 없어요!\n처음으로 질문을 남겨보세요!")
-              .font(.body2)
-              .foregroundColor(.white900)
-          }
-          .frame(maxWidth: .infinity, maxHeight: 336)
-        } else {
-          Text("최근 등록된 질문")
-            .font(.heading3)
-            .foregroundColor(.black800)
-          Text("총 \(viewStore.questionList.count)개의 질문")
-            .font(.body7)
-            .foregroundColor(.black100)
-          
-          ForEach(viewStore.questionList) { question in
-            Button {
-              viewStore.send(.questionSelected(question.id))
-            } label: {
-              QuestionItemView(model: question)
-                .padding([.top, .bottom], 4)
-            }
-          }
-        }
-        
-        Button {
-          viewStore.send(.questionListButtonClicked)
-        } label: {
-          Text("질문 전체보기")
-        }
-        .frame(height: 48)
-        .buttonStyle(TTButtonLargeBlackStyle())
-      }
-      .padding(15)
-      
-      Rectangle().fill(Color.white50)
-        .frame(maxWidth: .infinity, maxHeight: 8)
-      
-      VStack(alignment: .leading) {
-        Text("현재 티키타카 중인 사람들")
-          .font(.heading3)
-          .foregroundColor(.black800)
-        
-        Text("총 \(viewStore.roomUserList.count)명의 참여자")
-          .font(.body7)
-          .foregroundColor(.black100)
-        ScrollView {
-          LazyVGrid(columns: colums, spacing: 20) {
-            ForEach(viewStore.roomUserList) { participant in
-              VStack(alignment: .center) {
-                Image(participant.profile.imageName)
-                  .resizable()
-                  .frame(width: 64, height: 64)
-                
-                Text(participant.nickname)
-                  .font(.body3)
-                  .foregroundColor(.black100)
+      listHeader
+      List {
+        Section {
+          VStack(alignment: .leading, spacing: 0) {
+            Text("현재 티키타카 중인 사람들")
+              .font(.heading3)
+              .foregroundColor(.black800)
+              .padding(.bottom, .spacingXXS)
+              .padding(.top, 16)
+            
+            Text("총 \(viewStore.roomUserList.count)명의 참여자")
+              .font(.body7)
+              .foregroundColor(.black100)
+            
+            ScrollView {
+              LazyVGrid(columns: colums, spacing: 20) {
+                ForEach(viewStore.roomUserList) { participant in
+                  VStack(alignment: .center) {
+                    Image(participant.profile.imageName)
+                      .resizable()
+                      .frame(width: 64, height: 64)
+                    
+                    Text(participant.nickname)
+                      .font(.body3)
+                      .foregroundColor(.black100)
+                  }
+                  .frame(width: 79, height: 88)
+                }
               }
             }
+            .background(Color.white)
+            .listStyle(.plain)
+            .padding()
           }
+          .listRowInsets(EdgeInsets(top: 4, leading: 15, bottom: 4, trailing: 15))
+          .listRowSeparator(.hidden)
+          .background(Color.white)
         }
-        .background(Color.white)
-        .listStyle(.plain)
       }
-      .background(Color.white)
-      .padding(16)
+      .listStyle(.plain)
+      .frame(maxHeight: .infinity)
       
       NavigationLink(
         tag: State.Route.questionDetail,
@@ -219,6 +188,62 @@ struct ChatMenuView: View {
     .frame(height: 88)
   }
   
+  var listHeader: some View {
+    VStack(spacing: 0) {
+      VStack(alignment: .leading, spacing: 0) {
+        if viewStore.questionList.isEmpty {
+          VStack(alignment: .center, spacing: 0) {
+            Spacer()
+              .padding(.top, 78)
+            Image("bxNoAnswer")
+              .resizable()
+              .frame(width: 108, height: 108)
+              .padding(16)
+            Text("아직 사용자들이 남긴 질문이 없어요!\n처음으로 질문을 남겨보세요!")
+              .multilineTextAlignment(.center)
+              .font(.body2)
+              .foregroundColor(.white900)
+            Spacer()
+              .padding(.bottom, 90)
+          }
+          .frame(maxWidth: .infinity, maxHeight: 336)
+        } else {
+          Text("최근 등록된 질문")
+            .font(.heading3)
+            .foregroundColor(.black800)
+            .padding(.bottom, .spacingXXS)
+          Text("총 \(viewStore.questionList.count)개의 질문")
+            .font(.body7)
+            .foregroundColor(.black100)
+            .padding(.bottom, 20)
+          
+          ForEach(viewStore.questionList) { question in
+            Button {
+              viewStore.send(.questionSelected(question.id))
+            } label: {
+              QuestionItemView(model: question)
+                .padding([.top, .bottom], 4)
+            }
+            .buttonStyle(.plain)
+          }
+        }
+        
+        Button {
+          viewStore.send(.questionListButtonClicked)
+        } label: {
+          Text("질문 전체보기")
+        }
+        .frame(height: 48)
+        .buttonStyle(TTButtonLargeBlackStyle())
+        .padding(.top, 16)
+      }
+      .padding(15)
+      
+      Rectangle().fill(Color.white50)
+        .frame(maxWidth: .infinity, maxHeight: 8)
+    }
+  }
+  
   let colums = [
     GridItem(.flexible()),
     GridItem(.flexible()),
@@ -226,18 +251,18 @@ struct ChatMenuView: View {
     GridItem(.flexible())
   ]
 }
-//
-//struct ChatMenuView_Previews: PreviewProvider {
-//  static var previews: some View {
-//    ChatMenuView(
-//      store: .init(
-//        initialState: ChatMenuState(),
-//        reducer: chatMenuReducer,
-//        environment: ChatMenuEnvironment(
-//          appService: .init(),
-//          mainQueue: .main
-//        )
-//      )
-//    )
-//  }
-//}
+
+struct ChatMenuView_Previews: PreviewProvider {
+  static var previews: some View {
+    ChatMenuView(
+      store: .init(
+        initialState: ChatMenuState(),
+        reducer: chatMenuReducer,
+        environment: ChatMenuEnvironment(
+          appService: .init(),
+          mainQueue: .main
+        )
+      ), shouldPopToRootView: .constant(true)
+    )
+  }
+}

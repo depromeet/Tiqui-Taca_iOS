@@ -61,6 +61,7 @@ struct QuestionListView: View {
             }
             .listRowBackground(Color.white)
             .listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets(top: 4, leading: 15, bottom: 4, trailing: 15))
           }
           .background(Color.white)
         }
@@ -92,7 +93,7 @@ struct QuestionListView: View {
       ),
       options: TTBottomSheet.Options
     ) {
-      VStack {
+      VStack(spacing: 0) {
         Text("필터")
           .font(.body2)
           .foregroundColor(.black100)
@@ -187,7 +188,6 @@ struct QuestionListView: View {
         Spacer()
         
         Button {
-//          viewStore.send(.selectSortType)
           viewStore.send(.setBottomSheetPosition(.middle))
         } label: {
           HStack {
