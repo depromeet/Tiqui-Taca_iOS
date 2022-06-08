@@ -15,7 +15,7 @@ struct PopularChatRoomListView: View {
   typealias Action = PopularChatRoomListAction
   
   private let store: Store<State, Action>
-  @ObservedObject var viewStore: ViewStore<ViewState, Action>
+  @ObservedObject private var viewStore: ViewStore<ViewState, Action>
   
   struct ViewState: Equatable {
     let popularList: [RoomFromCategoryResponse]

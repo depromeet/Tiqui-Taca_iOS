@@ -53,7 +53,7 @@ let popularChatRoomListCore = Reducer<
       latitude: state.currentLocation.coordinate.latitude,
       longitude: state.currentLocation.coordinate.longitude,
       filter: .all,
-      radius: 10000
+      radius: 1000000
     )
     return .concatenate([
       .init(value: .setLoading(true)),

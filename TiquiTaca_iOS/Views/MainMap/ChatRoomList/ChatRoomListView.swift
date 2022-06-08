@@ -15,7 +15,7 @@ struct ChatRoomListView: View {
   typealias Action = ChatRoomListAction
   
   private let store: Store<State, Action>
-  private var viewStore: ViewStore<ViewState, Action>
+  @ObservedObject private var viewStore: ViewStore<ViewState, Action>
   
   var distanceColor: Color {
     if viewStore.listSortType == .distance {
