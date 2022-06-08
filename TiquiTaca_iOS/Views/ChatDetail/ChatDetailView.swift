@@ -40,7 +40,6 @@ struct ChatDetailView: View {
   }
   
   init(store: Store<CDState, Action>, shouldPopToRootView: Binding<Bool>) {
-    print("이게 실행된다고333")
     self._shouldPopToRootView = shouldPopToRootView
     self.store = store
     viewStore = ViewStore(store.scope(state: ViewState.init))
@@ -90,8 +89,8 @@ struct ChatDetailView: View {
                     }
                     .overlay(
                       Button {
+                        viewStore.send(.selectProfile(chatLog.sender))
                         showOtherProfile = true
-                        print("프로필 탭")
                       } label: {
                         Text("")
                           .frame(width: 34, height: 34)
@@ -148,7 +147,7 @@ struct ChatDetailView: View {
           QuestionDetailView(
             store: store.scope(
               state: \.questionDetailViewState,
-              action: ChatDetailAction.questionDetailView
+              action: ChatDetailAction.questionDetailAction
             )
           )
         },
@@ -163,7 +162,13 @@ struct ChatDetailView: View {
       .navigationBarHidden(true)
       .ignoresSafeArea(.all, edges: .top)
       .overlay(
-        OtherProfileView(showProfile: $showOtherProfile)
+        OtherProfileView(
+          store: store.scope(
+            state: \.otherProfileState,
+            action: ChatDetailAction.otherProfileAction
+          ),
+          showView: $showOtherProfile
+        )
           .opacity(showOtherProfile ? 1 : 0),
         alignment: .center
       )
@@ -328,9 +333,9 @@ extension ChatDetailView {
 //          NavigationLink(
 //            destination: ChatMenuView(store: chatMenuStore, shouldPopToRootView: $shouldPopToRootView)
 //          ) {
-//            
+//
 //          }
-//            
+//
 //            .simultaneousGesture(TapGesture().onEnded { viewStore.send(.moveToOtherView) })
         }
       }

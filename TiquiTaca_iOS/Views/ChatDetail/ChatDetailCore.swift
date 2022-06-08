@@ -24,8 +24,8 @@ struct ChatDetailState: Equatable {
   var isFirstLoad = true
   var moveToOtherView = false
   var chatLogList: [ChatLogEntity.Response] = []
-  var receiveNewChat: Bool = false
   
+  var otherProfileState: OtherProfileState = .init()
   var chatMenuState: ChatMenuState = .init()
   var questionDetailViewState: QuestionDetailState = .init(questionId: "")
 }
@@ -45,6 +45,7 @@ enum ChatDetailAction: Equatable {
   case socket(SocketService.Action)
   
   case setRoute(ChatDetailState.Route?)
+  case selectProfile(UserEntity.Response?)
   case selectQuestionDetail(String)
   case selectMenu
   case joinRoom
@@ -53,8 +54,9 @@ enum ChatDetailAction: Equatable {
   case moveToOtherView
   
   case locationManager(LocationManager.Action)
+  case otherProfileAction(OtherProfileAction)
   case chatMenuAction(ChatMenuAction)
-  case questionDetailView(QuestionDetailAction)
+  case questionDetailAction(QuestionDetailAction)
 }
 
 struct ChatDetailEnvironment {
@@ -82,9 +84,20 @@ let chatDetailReducer = Reducer<
   questionDetailReducer
     .pullback(
       state: \.questionDetailViewState,
-      action: /ChatDetailAction.questionDetailView,
+      action: /ChatDetailAction.questionDetailAction,
       environment: {
         QuestionDetailEnvironment.init(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
+        )
+      }
+    ),
+  otherProfileReducer
+    .pullback(
+      state: \.otherProfileState,
+      action: /ChatDetailAction.otherProfileAction,
+      environment: {
+        OtherProfileEnvironment.init(
           appService: $0.appService,
           mainQueue: $0.mainQueue
         )
@@ -141,9 +154,10 @@ let chatDetailCore = Reducer<
     return .none
   case let .socket(.newMessage(message)):
     state.chatLogList.append(message)
-    state.receiveNewChat.toggle()
     return .none
-  // MARK: API
+  case let .selectProfile(user):
+    state.otherProfileState = OtherProfileState(otherUser: user)
+    return .none
   case let .selectQuestionDetail(chatId):
     state.route = nil
     return environment.appService.questionService

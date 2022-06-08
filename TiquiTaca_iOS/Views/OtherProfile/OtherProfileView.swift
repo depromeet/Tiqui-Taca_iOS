@@ -5,16 +5,41 @@
 //  Created by 김록원 on 2022/06/07.
 //
 
+import Combine
 import SwiftUI
+import ComposableArchitecture
 import TTDesignSystemModule
 
 struct OtherProfileView: View {
-  @Binding var showProfile: Bool
+  typealias OPState = OtherProfileState
+  typealias OPAction = OtherProfileAction
+  
+  var store: Store<OPState, OPAction>
+  @ObservedObject private var viewStore: ViewStore<ViewState, OPAction>
+  @Binding var showView: Bool
+  @State var showProfile: Bool = false
   @State var showPopup: Bool = false
+  
+  struct ViewState: Equatable {
+    let otherUser: UserEntity.Response?
+    init(state: OPState) {
+      otherUser = state.otherUser
+    }
+  }
+  
+  init(store: Store<OPState, OPAction>, showView: Binding<Bool>) {
+    self.store = store
+    self._showView = showView
+    viewStore = ViewStore(store.scope(state: ViewState.init))
+  }
+  
   
   var body: some View {
     ZStack(alignment: .bottom) {
       Color.black800.opacity(0.7)
+    }
+    .onReceive(Just(showView)) { value in
+      showProfile = value
     }
     .edgesIgnoringSafeArea(.all)
     .fullScreenCover(isPresented: $showProfile) {
@@ -23,6 +48,8 @@ struct OtherProfileView: View {
         VStack(spacing: 0) {
           HStack(spacing: 32) {
             Button {
+              showPopup = true
+              showProfile = false
             } label: {
               VStack(alignment: .center) {
                 Image("profileBlock")
@@ -39,7 +66,7 @@ struct OtherProfileView: View {
                 Image("report")
                   .resizable()
                   .frame(width: 48, height: 48)
-                Text("차단")
+                Text("신고")
                   .font(.body2)
                   .foregroundColor(.white50)
               }
@@ -50,7 +77,7 @@ struct OtherProfileView: View {
                 Image("note")
                   .resizable()
                   .frame(width: 48, height: 48)
-                Text("차단")
+                Text("쪽지")
                   .font(.body2)
                   .foregroundColor(.white50)
               }
@@ -86,7 +113,7 @@ struct OtherProfileView: View {
               Image("profileRectangle")
                 .resizable()
                 .frame(width: 110, height: 110)
-              Image("character18")
+              Image(viewStore.otherUser?.profile.imageName ?? "character18")
                 .resizable()
                 .frame(width: 104, height: 104)
                 .padding(.leading, 1)
@@ -97,24 +124,40 @@ struct OtherProfileView: View {
               Image("bxLoudspeaker3")
                 .resizable()
                 .frame(width: 32, height: 32)
-              Text("디폴트")
+              Text("\(viewStore.otherUser?.nickname ?? "")")
                 .font(.heading2)
                 .foregroundColor(.white)
             }
           }
             .padding(.top, -32)
-          ,
-          alignment: .top
+          , alignment: .top
         )
       }
       
       .edgesIgnoringSafeArea(.all)
       .background(BackgroundClearView().onTapGesture {
-        showProfile = false
+        print("???")
+        showView = false
       })
     }
     .fullScreenCover(isPresented: $showPopup) {
-      Text("팝업")
+      TTPopupView.init(
+        popUpCase: .oneLineTwoButton,
+        title: "해당 사용자를\n차단 하시겠습니까?",
+        subtitle: "",
+        leftButtonName: "취소",
+        rightButtonName: "차단하기",
+        confirm: {
+          showPopup = false
+          showView = false
+        },
+        cancel: {
+          showPopup = false
+          showView = false
+        }
+      )
+        .padding(.horizontal, 24)
+        .background(BackgroundClearView())
     }
   }
 }
