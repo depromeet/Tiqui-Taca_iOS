@@ -226,6 +226,7 @@ struct QuestionDetailView: View {
       viewStore.send(.getQuestionDetail)
     }
     .navigationBarHidden(true)
+    .ignoresSafeArea()
     .background(Color.white)
     .hideKeyboardWhenTappedAround()
   }
@@ -250,11 +251,11 @@ struct QuestionDetailView: View {
         Spacer()
       }
       .padding([.leading, .trailing], 10)
-      .padding(.top, 10)
+      .padding(.top, 54)
       .padding(.bottom, 10)
-      .frame(height: 44)
     }
     .background(Color.black800)
+    .frame(height: 88)
   }
   
   var listHeader: some View {
