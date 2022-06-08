@@ -52,6 +52,8 @@
 		F221850F284E560B005CE6C3 /* FCMUpdateRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F221850E284E560B005CE6C3 /* FCMUpdateRequest.swift */; };
 		F2218515284F1766005CE6C3 /* ComposableArchitecture+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2218514284F1765005CE6C3 /* ComposableArchitecture+Extensions.swift */; };
 		F2218517284F7E3D005CE6C3 /* RoomInfoEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2218516284F7E3D005CE6C3 /* RoomInfoEntity.swift */; };
+		F221851C2850FB6E005CE6C3 /* MessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F221851B2850FB6D005CE6C3 /* MessageView.swift */; };
+		F22185222850FBA7005CE6C3 /* MessageCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F22185212850FBA7005CE6C3 /* MessageCore.swift */; };
 		F248EB012813240500430C3B /* CreateProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F248EB002813240500430C3B /* CreateProfileView.swift */; };
 		F248EB032813273A00430C3B /* CreateProfileCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F248EB022813273A00430C3B /* CreateProfileCore.swift */; };
 		F24B1EEF28086CA0003D4E1D /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = F24B1EEE28086CA0003D4E1D /* .swiftlint.yml */; };
@@ -235,6 +237,8 @@
 		F221850E284E560B005CE6C3 /* FCMUpdateRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FCMUpdateRequest.swift; sourceTree = "<group>"; };
 		F2218514284F1765005CE6C3 /* ComposableArchitecture+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ComposableArchitecture+Extensions.swift"; sourceTree = "<group>"; };
 		F2218516284F7E3D005CE6C3 /* RoomInfoEntity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomInfoEntity.swift; sourceTree = "<group>"; };
+		F221851B2850FB6D005CE6C3 /* MessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageView.swift; sourceTree = "<group>"; };
+		F22185212850FBA7005CE6C3 /* MessageCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessageCore.swift; sourceTree = "<group>"; };
 		F248EB002813240500430C3B /* CreateProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProfileView.swift; sourceTree = "<group>"; };
 		F248EB022813273A00430C3B /* CreateProfileCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProfileCore.swift; sourceTree = "<group>"; };
 		F24B1EEE28086CA0003D4E1D /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
@@ -509,6 +513,8 @@
 		F221851A2850F6FD005CE6C3 /* Message */ = {
 			isa = PBXGroup;
 			children = (
+				F221851B2850FB6D005CE6C3 /* MessageView.swift */,
+				F22185212850FBA7005CE6C3 /* MessageCore.swift */,
 			);
 			path = Message;
 			sourceTree = "<group>";
@@ -1164,6 +1170,7 @@
 				F9AE9AAB2843532E004A632D /* QuestionListView.swift in Sources */,
 				F981FA23282653A00000A531 /* BlockListCore.swift in Sources */,
 				0963D1352846F15A005E7B70 /* ChatDetailCore.swift in Sources */,
+				F22185222850FBA7005CE6C3 /* MessageCore.swift in Sources */,
 				F9AE9AB328437A8F004A632D /* CommentItemView.swift in Sources */,
 				F914EE1D284B32BF000FADC9 /* QuestionCommentEntity.swift in Sources */,
 				F2F1ED7D281C3D6900AC4FDD /* VerificationEntity.swift in Sources */,
@@ -1276,6 +1283,7 @@
 				F981FA1F282604AA0000A531 /* CsCenterView.swift in Sources */,
 				F2F1ED89281E612E00AC4FDD /* SignUpView.swift in Sources */,
 				F9322E72284242DA00EB956E /* ChatMenuCore.swift in Sources */,
+				F221851C2850FB6E005CE6C3 /* MessageView.swift in Sources */,
 				F9B90C9C28117DDF003FFEEB /* AuthService.swift in Sources */,
 				F90F8D522847BAED0011EDAC /* RoomUserInfoEntity.swift in Sources */,
 				F9DB0B3728294F66002F6AD8 /* ChangeProfileCore.swift in Sources */,

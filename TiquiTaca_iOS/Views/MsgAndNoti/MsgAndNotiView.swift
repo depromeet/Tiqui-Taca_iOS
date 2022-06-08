@@ -17,9 +17,11 @@ struct MsgAndNotiView: View {
   
   struct ViewState: Equatable {
     let selectedType: MsgAndNotiType
+    let messageState: MessageState
     
     init(state: State) {
       selectedType = state.selectedType
+      messageState = state.messageState
     }
   }
   
@@ -55,15 +57,23 @@ struct MsgAndNotiView: View {
       }
       .padding(.spacingXL)
       
-      Spacer()
-//      switch viewStore.selectedType {
-//      case .message:
-//
-//      case .notification:
-//
-//      }
+      switch viewStore.selectedType {
+      case .message:
+        MessageView(store: messageStore)
+      case .notification:
+        EmptyView()
+      }
     }
     .navigationTitle("쪽지·알림")
+  }
+}
+
+extension MsgAndNotiView {
+  private var messageStore: Store<MessageState, MessageAction> {
+    return store.scope(
+      state: \.messageState,
+      action: Action.messageAction
+    )
   }
 }
 
