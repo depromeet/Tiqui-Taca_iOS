@@ -21,6 +21,7 @@ struct MainMapState: Equatable {
   var isRequestingCurrentLocation: Bool = false
   var selectedAnnotationOverlay: [MKCircle] = []
   var userTrackingMode: MapUserTrackingModeType = .none
+  var isFirstLoad: Bool = false
   
   var chatRoomListState: ChatRoomListState = .init()
   var popularChatRoomListState: PopularChatRoomListState = .init()
@@ -30,6 +31,7 @@ struct MainMapState: Equatable {
 enum MainMapAction: Equatable {
   case locationManager(LocationManager.Action)
   case onAppear
+  case onLoad
   case setBottomSheetPosition(TTBottomSheet.Position)
   case setBottomSheetType(MainMapBottomSheetType)
   case annotationTapped(RoomFromCategoryResponse)
@@ -119,6 +121,10 @@ private let mainMapCore = Reducer<
         .fireAndForget()
     ])
     
+  case .onLoad:
+    state.isFirstLoad = true
+    return .init(value: .currentLocationButtonTapped)
+    
   case .currentLocationButtonTapped:
     guard environment.locationManager.locationServicesEnabled() else {
       state.alert = .init(title: TextState("설정에서 위치 권한 사용을 허용해주세요."))
@@ -157,6 +163,15 @@ private let mainMapCore = Reducer<
     state.chatRoomListState.currentLocation = location.rawValue
     state.popularChatRoomListState.currentLocation = location.rawValue
     state.chatRoomDetailState.currentLocation = location.rawValue
+    
+    if state.isFirstLoad {
+      state.isFirstLoad = false
+      return .merge([
+        .init(value: .popularChatRoomListAction(.requestChatRoomList)),
+        .init(value: .chatRoomDetailAction(.checkCurrentLocationWithinRadius))
+      ])
+    }
+    
     return .init(value: .chatRoomDetailAction(.checkCurrentLocationWithinRadius))
     
   case .locationManager:
