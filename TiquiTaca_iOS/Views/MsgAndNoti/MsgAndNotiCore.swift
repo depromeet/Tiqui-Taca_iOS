@@ -9,19 +9,19 @@ import Combine
 import ComposableArchitecture
 
 enum MsgAndNotiType: Equatable {
-  case message
+  case letter
   case notification
 }
 
 struct MsgAndNotiState: Equatable {
-  var selectedType: MsgAndNotiType = .message
-  var messageState: MessageState = .init()
+  var selectedType: MsgAndNotiType = .letter
+  var messageState: LetterState = .init()
   var notificationState: NotificationState = .init()
 }
 
 enum MsgAndNotiAction: Equatable {
   case setSelectedType(MsgAndNotiType)
-  case messageAction(MessageAction)
+  case messageAction(LetterAction)
   case notificationAction(NotificationAction)
 }
 
@@ -35,12 +35,12 @@ let msgAndNotiReducer = Reducer<
   MsgAndNotiAction,
   MsgAndNotiEnvironment
 >.combine([
-  messageReducer
+  letterReducer
     .pullback(
       state: \.messageState,
       action: /MsgAndNotiAction.messageAction,
       environment: {
-        MessageEnvironment(
+        LetterEnvironment(
           appService: $0.appService,
           mainQueue: $0.mainQueue
         )

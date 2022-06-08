@@ -1,5 +1,5 @@
 //
-//  MessageView.swift
+//  LetterView.swift
 //  TiquiTaca_iOS
 //
 //  Created by 강민석 on 2022/06/09.
@@ -8,9 +8,9 @@
 import SwiftUI
 import ComposableArchitecture
 
-struct MessageView: View {
-  typealias State = MessageState
-  typealias Action = MessageAction
+struct LetterView: View {
+  typealias State = LetterState
+  typealias Action = LetterAction
   
   private let store: Store<State, Action>
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
@@ -36,12 +36,12 @@ struct MessageView: View {
   }
 }
 
-struct MessageView_Previews: PreviewProvider {
+struct LetterView_Previews: PreviewProvider {
   static var previews: some View {
-    MessageView(
+    LetterView(
       store: .init(
         initialState: .init(),
-        reducer: messageReducer,
+        reducer: letterReducer,
         environment: .init(
           appService: .init(),
           mainQueue: .main

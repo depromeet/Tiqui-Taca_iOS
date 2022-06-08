@@ -32,11 +32,11 @@ struct MsgAndNotiView: View {
     VStack {
       HStack {
         Button {
-          viewStore.send(.setSelectedType(.message))
+          viewStore.send(.setSelectedType(.letter))
         } label: {
           Text("쪽지함")
             .font(.heading1)
-            .foregroundColor(viewStore.selectedType == .message ? .black800 : .white800)
+            .foregroundColor(viewStore.selectedType == .letter ? .black800 : .white800)
         }
         Button {
           viewStore.send(.setSelectedType(.notification))
@@ -58,8 +58,8 @@ struct MsgAndNotiView: View {
       .padding(.spacingXL)
       
       switch viewStore.selectedType {
-      case .message:
-        MessageView(store: messageStore)
+      case .letter:
+        LetterView(store: letterStore)
       case .notification:
         NotificationView(store: notificationStore)
       }
@@ -69,7 +69,7 @@ struct MsgAndNotiView: View {
 }
 
 extension MsgAndNotiView {
-  private var messageStore: Store<MessageState, MessageAction> {
+  private var letterStore: Store<LetterState, LetterAction> {
     return store.scope(
       state: \.messageState,
       action: Action.messageAction
