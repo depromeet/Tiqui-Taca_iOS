@@ -17,22 +17,26 @@ struct OtherProfileView: View {
   var store: Store<OPState, OPAction>
   @ObservedObject private var viewStore: ViewStore<ViewState, OPAction>
   @Binding var showView: Bool
+  var sendLetter: (() -> Void)?
   
   struct ViewState: Equatable {
     let userInfo: UserEntity.Response?
     let currentAction: OtherProfileState.Action
     let showProfile: Bool
+    let showAction: Bool
     
     init(state: OPState) {
       userInfo = state.userInfo
       currentAction = state.currentAction
       showProfile = state.showProfile
+      showAction = state.showAction
     }
   }
   
-  init(store: Store<OPState, OPAction>, showView: Binding<Bool>) {
+  init(store: Store<OPState, OPAction>, showView: Binding<Bool>, sendLetter: @escaping (() -> Void)) {
     self.store = store
     self._showView = showView
+    self.sendLetter = sendLetter
     viewStore = ViewStore(store.scope(state: ViewState.init))
   }
   
@@ -43,6 +47,7 @@ struct OtherProfileView: View {
         .onTapGesture {
           removeView()
         }
+      
     }
     .onReceive(Just(showView)) { value in
       if value { viewStore.send(.fetchUserInfo) }
@@ -101,6 +106,7 @@ struct OtherProfileView: View {
           .padding(.bottom, 24)
           
           Button {
+            viewStore.send(.setShowProfile(false))
             viewStore.send(.setAction(.lightning))
           } label: {
             HStack(spacing: 0) {
@@ -152,6 +158,7 @@ struct OtherProfileView: View {
         removeView()
       })
     }
+    //.ttpopup
 //    .fullScreenCover(isPresented: $showPopup) {
 //      TTPopupView.init(
 //        popUpCase: .oneLineTwoButton,
@@ -172,8 +179,8 @@ struct OtherProfileView: View {
   }
   
   private func removeView() {
-    viewStore.send(.setShowProfile(false))
     viewStore.send(.setAction(.none))
+    viewStore.send(.setShowProfile(false))
     showView = false
   }
 }

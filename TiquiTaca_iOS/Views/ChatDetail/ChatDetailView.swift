@@ -167,7 +167,10 @@ struct ChatDetailView: View {
             state: \.otherProfileState,
             action: ChatDetailAction.otherProfileAction
           ),
-          showView: $showOtherProfile
+          showView: $showOtherProfile,
+          sendLetter: {
+            print("쪽지보내기 터치")
+          }
         )
           .opacity(showOtherProfile ? 1 : 0),
         alignment: .center
