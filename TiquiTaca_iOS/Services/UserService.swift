@@ -14,6 +14,7 @@ protocol UserServiceType {
   func fetchMyProfile() -> AnyPublisher<UserEntity.Response?, HTTPError>
   func deleteMyProfile()
   func updateFCMToken(_ request: FCMUpdateRequest) -> AnyPublisher<Void, HTTPError>
+  func getOtherUserProfile(userId: String) -> AnyPublisher<UserEntity.Response?, HTTPError>
   func getAppAlarmState() -> AnyPublisher<AppAlarmEntity.Response?, HTTPError>
   func getBlockUserList() -> AnyPublisher<[BlockUserEntity.Response]?, HTTPError>
   func unBlockUser(userId: String) -> AnyPublisher<BlockUserEntity.Response?, HTTPError>
@@ -48,6 +49,10 @@ final class UserService: UserServiceType {
   func updateFCMToken(_ request: FCMUpdateRequest) -> AnyPublisher<Void, HTTPError> {
     return network
       .request(.fcmPatch(request))
+  }
+  
+  func getOtherUserProfile(userId: String) -> AnyPublisher<UserEntity.Response?, HTTPError> {
+    return network.request(.getUserProfile(userId: userId), responseType: UserEntity.Response.self)
   }
   
   func getAppAlarmState() -> AnyPublisher<AppAlarmEntity.Response?, HTTPError> {

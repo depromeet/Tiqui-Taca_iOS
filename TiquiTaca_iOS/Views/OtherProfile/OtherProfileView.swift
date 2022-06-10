@@ -17,13 +17,16 @@ struct OtherProfileView: View {
   var store: Store<OPState, OPAction>
   @ObservedObject private var viewStore: ViewStore<ViewState, OPAction>
   @Binding var showView: Bool
-  @State var showProfile: Bool = false
-  @State var showPopup: Bool = false
   
   struct ViewState: Equatable {
-    let otherUser: UserEntity.Response?
+    let userInfo: UserEntity.Response?
+    let currentAction: OtherProfileState.Action
+    let showProfile: Bool
+    
     init(state: OPState) {
-      otherUser = state.otherUser
+      userInfo = state.userInfo
+      currentAction = state.currentAction
+      showProfile = state.showProfile
     }
   }
   
@@ -37,19 +40,25 @@ struct OtherProfileView: View {
   var body: some View {
     ZStack(alignment: .bottom) {
       Color.black800.opacity(0.7)
+        .onTapGesture {
+          removeView()
+        }
     }
     .onReceive(Just(showView)) { value in
-      showProfile = value
+      if value { viewStore.send(.fetchUserInfo) }
     }
     .edgesIgnoringSafeArea(.all)
-    .fullScreenCover(isPresented: $showProfile) {
+    .fullScreenCover(isPresented: viewStore.binding(
+      get: \.showProfile,
+      send: OtherProfileAction.setShowProfile
+    )) {
       ZStack(alignment: .bottom) {
         Color.clear
         VStack(spacing: 0) {
           HStack(spacing: 32) {
             Button {
-              showPopup = true
-              showProfile = false
+              viewStore.send(.setShowProfile(false))
+              viewStore.send(.setAction(.block))
             } label: {
               VStack(alignment: .center) {
                 Image("profileBlock")
@@ -61,6 +70,8 @@ struct OtherProfileView: View {
               }
             }
             Button {
+              viewStore.send(.setShowProfile(false))
+              viewStore.send(.setAction(.report))
             } label: {
               VStack(alignment: .center) {
                 Image("report")
@@ -72,6 +83,8 @@ struct OtherProfileView: View {
               }
             }
             Button {
+              viewStore.send(.setShowProfile(false))
+              viewStore.send(.setAction(.letter))
             } label: {
               VStack(alignment: .center) {
                 Image("note")
@@ -88,6 +101,7 @@ struct OtherProfileView: View {
           .padding(.bottom, 24)
           
           Button {
+            viewStore.send(.setAction(.lightning))
           } label: {
             HStack(spacing: 0) {
               Text("해당 유저에게 번개 주기")
@@ -113,7 +127,7 @@ struct OtherProfileView: View {
               Image("profileRectangle")
                 .resizable()
                 .frame(width: 110, height: 110)
-              Image(viewStore.otherUser?.profile.imageName ?? "character18")
+              Image(viewStore.userInfo?.profile.imageName ?? "character18")
                 .resizable()
                 .frame(width: 104, height: 104)
                 .padding(.leading, 1)
@@ -124,41 +138,43 @@ struct OtherProfileView: View {
               Image("bxLoudspeaker3")
                 .resizable()
                 .frame(width: 32, height: 32)
-              Text("\(viewStore.otherUser?.nickname ?? "")")
+              Text("\(viewStore.userInfo?.nickname ?? "")")
                 .font(.heading2)
                 .foregroundColor(.white)
             }
           }
-            .padding(.top, -32)
-          , alignment: .top
+          .padding(.top, -32),
+          alignment: .top
         )
       }
-      
       .edgesIgnoringSafeArea(.all)
       .background(BackgroundClearView().onTapGesture {
-        print("???")
-        showView = false
+        removeView()
       })
     }
-    .fullScreenCover(isPresented: $showPopup) {
-      TTPopupView.init(
-        popUpCase: .oneLineTwoButton,
-        title: "해당 사용자를\n차단 하시겠습니까?",
-        subtitle: "",
-        leftButtonName: "취소",
-        rightButtonName: "차단하기",
-        confirm: {
-          showPopup = false
-          showView = false
-        },
-        cancel: {
-          showPopup = false
-          showView = false
-        }
-      )
-        .padding(.horizontal, 24)
-        .background(BackgroundClearView())
-    }
+//    .fullScreenCover(isPresented: $showPopup) {
+//      TTPopupView.init(
+//        popUpCase: .oneLineTwoButton,
+//        title: "해당 사용자를\n차단 하시겠습니까?",
+//        subtitle: "",
+//        leftButtonName: "취소",
+//        rightButtonName: "차단하기",
+//        confirm: {
+//          clearView()
+//        },
+//        cancel: {
+//          clearView()
+//        }
+//      )
+//        .padding(.horizontal, 24)
+//        .background(BackgroundClearView())
+//    }
+  }
+  
+  private func removeView() {
+    viewStore.send(.setShowProfile(false))
+    viewStore.send(.setAction(.none))
+    showView = false
   }
 }
 

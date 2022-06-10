@@ -25,7 +25,7 @@ struct ChatDetailState: Equatable {
   var moveToOtherView = false
   var chatLogList: [ChatLogEntity.Response] = []
   
-  var otherProfileState: OtherProfileState = .init()
+  var otherProfileState: OtherProfileState = OtherProfileState(userId: "")
   var chatMenuState: ChatMenuState = .init()
   var questionDetailViewState: QuestionDetailState = .init(questionId: "")
 }
@@ -156,7 +156,8 @@ let chatDetailCore = Reducer<
     state.chatLogList.append(message)
     return .none
   case let .selectProfile(user):
-    state.otherProfileState = OtherProfileState(otherUser: user)
+    guard let userId = user?.id else { return .none }
+    state.otherProfileState = OtherProfileState(userId: userId)
     return .none
   case let .selectQuestionDetail(chatId):
     state.route = nil

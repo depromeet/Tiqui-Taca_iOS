@@ -10,12 +10,33 @@ import ComposableArchitecture
 import TTNetworkModule
 
 struct OtherProfileState: Equatable {
-  var otherUser: UserEntity.Response?
+  enum Action {
+    case block
+    case report
+    case letter
+    case lightning
+    case none
+  }
+  
+  var userId: String
+  var userInfo: UserEntity.Response?
+  
+  var showProfile: Bool = false
+  var isFirstLoad: Bool = true
+  var currentAction: Action = .none
 }
 
 enum OtherProfileAction: Equatable {
-  case onAppear
+  case setShowProfile(Bool)
+  case setAction(OtherProfileState.Action)
+  // MARK: Action API
+  case fetchUserInfo
+  case userBlock
+  case userReport
+  case userGiveLightning
   
+  // MARK: Action Response
+  case responseUserInfo(Result<UserEntity.Response?, HTTPError>)
 }
 
 struct OtherProfileEnvironment {
@@ -29,6 +50,28 @@ let otherProfileReducer = Reducer<
   OtherProfileEnvironment
 > { state, action, environment in
   switch action {
+  case let .setShowProfile(isShow):
+    state.showProfile = isShow
+    print("왜자꾸 실힝되는가", isShow)
+    return .none
+  case let .setAction(action):
+    //state.showProfile = action == .none
+    state.currentAction = action
+    return .none
+  case .fetchUserInfo:
+    guard !state.userId.isEmpty && state.isFirstLoad else { return .none }
+    state.isFirstLoad = false
+    return environment.appService.userService
+      .getOtherUserProfile(userId: state.userId)
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(OtherProfileAction.responseUserInfo)
+  case let .responseUserInfo(.success(userInfo)):
+    state.userInfo = userInfo
+    state.showProfile = true
+    return .none
+  case .responseUserInfo(.failure):
+    return .none
   default:
     return .none
   }
