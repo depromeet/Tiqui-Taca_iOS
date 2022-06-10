@@ -60,6 +60,8 @@
 		F221852C285114F1005CE6C3 /* NotificationResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F221852B285114F1005CE6C3 /* NotificationResponse.swift */; };
 		F221853028511DF4005CE6C3 /* NotificationItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F221852F28511DF4005CE6C3 /* NotificationItem.swift */; };
 		F221853228512EC6005CE6C3 /* NotificationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = F221853128512EC6005CE6C3 /* NotificationType.swift */; };
+		F2218534285397A2005CE6C3 /* NotificationRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2218533285397A2005CE6C3 /* NotificationRequest.swift */; };
+		F221853628539955005CE6C3 /* InfiniteList.swift in Sources */ = {isa = PBXBuildFile; fileRef = F221853528539955005CE6C3 /* InfiniteList.swift */; };
 		F248EB012813240500430C3B /* CreateProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F248EB002813240500430C3B /* CreateProfileView.swift */; };
 		F248EB032813273A00430C3B /* CreateProfileCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F248EB022813273A00430C3B /* CreateProfileCore.swift */; };
 		F24B1EEF28086CA0003D4E1D /* .swiftlint.yml in Resources */ = {isa = PBXBuildFile; fileRef = F24B1EEE28086CA0003D4E1D /* .swiftlint.yml */; };
@@ -251,6 +253,8 @@
 		F221852B285114F1005CE6C3 /* NotificationResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationResponse.swift; sourceTree = "<group>"; };
 		F221852F28511DF4005CE6C3 /* NotificationItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationItem.swift; sourceTree = "<group>"; };
 		F221853128512EC6005CE6C3 /* NotificationType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationType.swift; sourceTree = "<group>"; };
+		F2218533285397A2005CE6C3 /* NotificationRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationRequest.swift; sourceTree = "<group>"; };
+		F221853528539955005CE6C3 /* InfiniteList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfiniteList.swift; sourceTree = "<group>"; };
 		F248EB002813240500430C3B /* CreateProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProfileView.swift; sourceTree = "<group>"; };
 		F248EB022813273A00430C3B /* CreateProfileCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateProfileCore.swift; sourceTree = "<group>"; };
 		F24B1EEE28086CA0003D4E1D /* .swiftlint.yml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.yaml; path = .swiftlint.yml; sourceTree = SOURCE_ROOT; };
@@ -674,6 +678,7 @@
 		F2E38F1028478286007C96F7 /* Response */ = {
 			isa = PBXGroup;
 			children = (
+				F221853528539955005CE6C3 /* InfiniteList.swift */,
 				F2E38F0E28477F1B007C96F7 /* RoomFromCategoryResponse.swift */,
 				F2E38F0C28477C88007C96F7 /* RoomPreviewResponse.swift */,
 				F221852B285114F1005CE6C3 /* NotificationResponse.swift */,
@@ -685,6 +690,8 @@
 			isa = PBXGroup;
 			children = (
 				F2E38F12284788B0007C96F7 /* RoomFromCategoryRequest.swift */,
+				F221850E284E560B005CE6C3 /* FCMUpdateRequest.swift */,
+				F2218533285397A2005CE6C3 /* NotificationRequest.swift */,
 			);
 			path = Request;
 			sourceTree = "<group>";
@@ -712,7 +719,6 @@
 				F90F8D512847BAED0011EDAC /* RoomUserInfoEntity.swift */,
 				F9AFCD692848E8EA009286DE /* QuestionLikeEntity.swift */,
 				F914EE1C284B32BF000FADC9 /* QuestionCommentEntity.swift */,
-				F221850E284E560B005CE6C3 /* FCMUpdateRequest.swift */,
 				F2E38EFE28451CE5007C96F7 /* RoomLikeEntity.swift */,
 			);
 			path = Entities;
@@ -1244,6 +1250,7 @@
 				F2127640280FE07500FB568D /* TOSFieldListView.swift in Sources */,
 				F248EB012813240500430C3B /* CreateProfileView.swift in Sources */,
 				86B296142837859C00A981FC /* ChatLogView.swift in Sources */,
+				F2218534285397A2005CE6C3 /* NotificationRequest.swift in Sources */,
 				F25C79B6282C1FC0009C60EE /* ProfileImageListView.swift in Sources */,
 				F9322E70284242CF00EB956E /* ChatMenuView.swift in Sources */,
 				F2218515284F1766005CE6C3 /* ComposableArchitecture+Extensions.swift in Sources */,
@@ -1313,6 +1320,7 @@
 				F9DB0B3728294F66002F6AD8 /* ChangeProfileCore.swift in Sources */,
 				F2218500284CB884005CE6C3 /* ChatRoomListItem.swift in Sources */,
 				F9322E7628424DA900EB956E /* CommentEntity.swift in Sources */,
+				F221853628539955005CE6C3 /* InfiniteList.swift in Sources */,
 				F2E38F0B28475FFA007C96F7 /* RoomDefaultInfo.swift in Sources */,
 				F22184F7284C8D45005CE6C3 /* UserEntity.swift in Sources */,
 				F2F1ED87281E612700AC4FDD /* SignInView.swift in Sources */,

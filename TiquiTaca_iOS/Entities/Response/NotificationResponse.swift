@@ -7,25 +7,6 @@
 
 import Foundation
 
-struct NotificationListResponse: Codable {
-  let list: [NotificationListResponse]
-  let isLast: Bool
-  let lastId: String
-  
-  enum CodingKeys: String, CodingKey {
-    case list = "noti_list"
-    case isLast
-    case lastId
-  }
-  
-  init(from decoder: Decoder) throws {
-    let container = try decoder.container(keyedBy: CodingKeys.self)
-    list = (try? container.decode([NotificationListResponse].self, forKey: .list)) ?? []
-    isLast = (try? container.decode(Bool.self, forKey: .list)) ?? false
-    lastId = (try? container.decode(String.self, forKey: .list)) ?? ""
-  }
-}
-
 struct NotificationResponse: Codable {
   let id: String
   let deepLink: String
@@ -66,3 +47,5 @@ struct NotificationResponse: Codable {
     isRead = (try? container.decode(Bool.self, forKey: .isRead)) ?? false
   }
 }
+
+extension NotificationResponse: Equatable, Identifiable {}
