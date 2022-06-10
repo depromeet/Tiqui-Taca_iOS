@@ -23,13 +23,13 @@ struct OtherProfileView: View {
     let userInfo: UserEntity.Response?
     let currentAction: OtherProfileState.Action
     let showProfile: Bool
-    let showAction: Bool
+    let showPopup: Bool
     
     init(state: OPState) {
       userInfo = state.userInfo
       currentAction = state.currentAction
       showProfile = state.showProfile
-      showAction = state.showAction
+      showPopup = state.showPopup
     }
   }
   
@@ -42,12 +42,35 @@ struct OtherProfileView: View {
   
   
   var body: some View {
-    ZStack(alignment: .bottom) {
+    ZStack(alignment: .center) {
       Color.black800.opacity(0.7)
         .onTapGesture {
           removeView()
         }
-      
+      if viewStore.showPopup {
+        TTPopupView.init(
+          popUpCase: .oneLineTwoButton,
+          title: getPopupTitle(),
+          subtitle: "",
+          leftButtonName: "취소",
+          rightButtonName: getPopupRightBtnTitle(),
+          confirm: {
+            removeView()
+          },
+          cancel: {
+            removeView()
+          }
+        )
+          .padding(.horizontal, 24)
+          .overlay(
+            Image("bxOnboarding3")
+              .resizable()
+              .frame(width: 128, height: 128)
+              .offset(x: 0, y: -80)
+              .opacity(viewStore.currentAction == .lightning ? 1 : 0),
+            alignment: .top
+          )
+      }
     }
     .onReceive(Just(showView)) { value in
       if value { viewStore.send(.fetchUserInfo) }
@@ -88,8 +111,8 @@ struct OtherProfileView: View {
               }
             }
             Button {
-              viewStore.send(.setShowProfile(false))
-              viewStore.send(.setAction(.letter))
+              sendLetter?()
+              removeView()
             } label: {
               VStack(alignment: .center) {
                 Image("note")
@@ -158,24 +181,6 @@ struct OtherProfileView: View {
         removeView()
       })
     }
-    //.ttpopup
-//    .fullScreenCover(isPresented: $showPopup) {
-//      TTPopupView.init(
-//        popUpCase: .oneLineTwoButton,
-//        title: "해당 사용자를\n차단 하시겠습니까?",
-//        subtitle: "",
-//        leftButtonName: "취소",
-//        rightButtonName: "차단하기",
-//        confirm: {
-//          clearView()
-//        },
-//        cancel: {
-//          clearView()
-//        }
-//      )
-//        .padding(.horizontal, 24)
-//        .background(BackgroundClearView())
-//    }
   }
   
   private func removeView() {
@@ -183,10 +188,31 @@ struct OtherProfileView: View {
     viewStore.send(.setShowProfile(false))
     showView = false
   }
+  
+  private func getPopupTitle() -> String {
+    switch viewStore.currentAction {
+    case .block:
+      return "해당 사용자를\n차단 하시겠습니까?"
+    case .report:
+      return "해당 사용자를\n신고 하시겠습니까?"
+    case .lightning:
+      return "\(viewStore.userInfo?.nickname ?? "사용자")님과의 티키타카가\n즐거웠나요?"
+    default:
+      return ""
+    }
+  }
+  
+  private func getPopupRightBtnTitle() -> String {
+    switch viewStore.currentAction {
+    case .block:
+      return "차단하기"
+    case .report:
+      return "신고하기"
+    case .lightning:
+      return "즐거웠어요!"
+    default:
+      return ""
+    }
+  }
 }
 
-//struct OtherProfileView_Previews: PreviewProvider {
-//  static var previews: some View {
-//    OtherProfileView(showProfile: Binding<Bool>(true))
-//  }
-//}

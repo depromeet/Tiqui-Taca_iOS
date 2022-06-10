@@ -21,7 +21,7 @@ struct OtherProfileState: Equatable {
   var userId: String
   var userInfo: UserEntity.Response?
   
-  var showAction: Bool = false
+  var showPopup: Bool = false
   var showProfile: Bool = false
   var isFirstLoad: Bool = true
   var currentAction: Action = .none
@@ -56,7 +56,7 @@ let otherProfileReducer = Reducer<
     return .none
   case let .setAction(action):
     state.currentAction = action
-    state.showAction = action != .none
+    state.showPopup = action != .none
     return .none
   case .fetchUserInfo:
     guard !state.userId.isEmpty && state.isFirstLoad else { return .none }

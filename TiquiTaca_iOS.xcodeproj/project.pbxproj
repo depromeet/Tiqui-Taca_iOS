@@ -10,8 +10,6 @@
 		0911DA5B28451FAA00FCC470 /* SocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0911DA5A28451FAA00FCC470 /* SocketService.swift */; };
 		0927967E28484D3700BA3F18 /* UINavigationController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0927967D28484D3700BA3F18 /* UINavigationController+Extensions.swift */; };
 		0963D1352846F15A005E7B70 /* ChatDetailCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0963D1342846F15A005E7B70 /* ChatDetailCore.swift */; };
-		0989256828534937000A37EA /* SendLetterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0989256728534937000A37EA /* SendLetterView.swift */; };
-		0989256A285349E4000A37EA /* SendLetterCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09892569285349E4000A37EA /* SendLetterCore.swift */; };
 		09AFA054284F7962007E56BB /* OtherProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AFA053284F7962007E56BB /* OtherProfileView.swift */; };
 		09AFA056284F7972007E56BB /* OtherProfileCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AFA055284F7972007E56BB /* OtherProfileCore.swift */; };
 		09F630EE284B608900A2250B /* SendChatEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F630ED284B608900A2250B /* SendChatEntity.swift */; };
@@ -176,8 +174,6 @@
 		0911DA5A28451FAA00FCC470 /* SocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketService.swift; sourceTree = "<group>"; };
 		0927967D28484D3700BA3F18 /* UINavigationController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Extensions.swift"; sourceTree = "<group>"; };
 		0963D1342846F15A005E7B70 /* ChatDetailCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDetailCore.swift; sourceTree = "<group>"; };
-		0989256728534937000A37EA /* SendLetterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendLetterView.swift; sourceTree = "<group>"; };
-		09892569285349E4000A37EA /* SendLetterCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendLetterCore.swift; sourceTree = "<group>"; };
 		09AFA053284F7962007E56BB /* OtherProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherProfileView.swift; sourceTree = "<group>"; };
 		09AFA055284F7972007E56BB /* OtherProfileCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherProfileCore.swift; sourceTree = "<group>"; };
 		09F630ED284B608900A2250B /* SendChatEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendChatEntity.swift; sourceTree = "<group>"; };
@@ -340,15 +336,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		098925662853491A000A37EA /* SendLetter */ = {
-			isa = PBXGroup;
-			children = (
-				0989256728534937000A37EA /* SendLetterView.swift */,
-				09892569285349E4000A37EA /* SendLetterCore.swift */,
-			);
-			path = SendLetter;
-			sourceTree = "<group>";
-		};
 		09AFA052284F7948007E56BB /* OtherProfile */ = {
 			isa = PBXGroup;
 			children = (
@@ -688,7 +675,6 @@
 		F2FDA213280BAF3100B2ED75 /* Views */ = {
 			isa = PBXGroup;
 			children = (
-				098925662853491A000A37EA /* SendLetter */,
 				09AFA052284F7948007E56BB /* OtherProfile */,
 				F9322E6E284242B900EB956E /* ChatMenu */,
 				86B29610283781A600A981FC /* ChatDetail */,
@@ -1125,7 +1111,6 @@
 				F248EB032813273A00430C3B /* CreateProfileCore.swift in Sources */,
 				F2B268CE283BE18D0011EA43 /* ProfileImage.swift in Sources */,
 				F9322E7428424A9600EB956E /* QuestionEntity.swift in Sources */,
-				0989256A285349E4000A37EA /* SendLetterCore.swift in Sources */,
 				F9B45A1F282BE9DB00948586 /* AppAlarmEntity.swift in Sources */,
 				F971D85028421DBB00E2FAE8 /* Message.swift in Sources */,
 				F2127642281021C700FB568D /* TermsOfServiceCore.swift in Sources */,
@@ -1162,7 +1147,6 @@
 				F993ADC92816C79C00718E9F /* OTPFieldCore.swift in Sources */,
 				F2E38EE7283FDB0C007C96F7 /* MyPageItemInfo.swift in Sources */,
 				F2F1ED83281C6B2F00AC4FDD /* OTPFieldView.swift in Sources */,
-				0989256828534937000A37EA /* SendLetterView.swift in Sources */,
 				F2F1ED96281E868300AC4FDD /* VerificationNumberCheckView.swift in Sources */,
 				F914EE19284B1828000FADC9 /* QuestionInputMessageView.swift in Sources */,
 				86783243282651A90034EACC /* Color+Extensions.swift in Sources */,
