@@ -159,6 +159,13 @@
 		F9AFCD6A2848E8EA009286DE /* QuestionLikeEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9AFCD692848E8EA009286DE /* QuestionLikeEntity.swift */; };
 		F9B45A1F282BE9DB00948586 /* AppAlarmEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B45A1E282BE9DB00948586 /* AppAlarmEntity.swift */; };
 		F9B90C9C28117DDF003FFEEB /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9B90C9B28117DDF003FFEEB /* AuthService.swift */; };
+		F9BEA1C32853728E00EF35BA /* LetterService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BEA1C22853728E00EF35BA /* LetterService.swift */; };
+		F9BEA1C5285372A300EF35BA /* LetterEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BEA1C4285372A300EF35BA /* LetterEntity.swift */; };
+		F9BEA1C7285372B800EF35BA /* LetterSummaryEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BEA1C6285372B800EF35BA /* LetterSummaryEntity.swift */; };
+		F9BEA1C92853750F00EF35BA /* LetterDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BEA1C82853750F00EF35BA /* LetterDetailView.swift */; };
+		F9BEA1CB2853751900EF35BA /* LetterDetailCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BEA1CA2853751900EF35BA /* LetterDetailCore.swift */; };
+		F9BEA1CD2853752A00EF35BA /* LetterSendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BEA1CC2853752A00EF35BA /* LetterSendView.swift */; };
+		F9BEA1CF2853753300EF35BA /* LetterSendCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BEA1CE2853753300EF35BA /* LetterSendCore.swift */; };
 		F9C4F45F282D61D200ECBF9A /* BlockUserEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9C4F45E282D61D200ECBF9A /* BlockUserEntity.swift */; };
 		F9D225ED284303B900ED2689 /* QuestionItemCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9D225EC284303B900ED2689 /* QuestionItemCore.swift */; };
 		F9DB0B3528294F56002F6AD8 /* ChangeProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9DB0B3428294F56002F6AD8 /* ChangeProfileView.swift */; };
@@ -350,6 +357,13 @@
 		F9AFCD692848E8EA009286DE /* QuestionLikeEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionLikeEntity.swift; sourceTree = "<group>"; };
 		F9B45A1E282BE9DB00948586 /* AppAlarmEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppAlarmEntity.swift; sourceTree = "<group>"; };
 		F9B90C9B28117DDF003FFEEB /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
+		F9BEA1C22853728E00EF35BA /* LetterService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterService.swift; sourceTree = "<group>"; };
+		F9BEA1C4285372A300EF35BA /* LetterEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterEntity.swift; sourceTree = "<group>"; };
+		F9BEA1C6285372B800EF35BA /* LetterSummaryEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterSummaryEntity.swift; sourceTree = "<group>"; };
+		F9BEA1C82853750F00EF35BA /* LetterDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterDetailView.swift; sourceTree = "<group>"; };
+		F9BEA1CA2853751900EF35BA /* LetterDetailCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterDetailCore.swift; sourceTree = "<group>"; };
+		F9BEA1CC2853752A00EF35BA /* LetterSendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterSendView.swift; sourceTree = "<group>"; };
+		F9BEA1CE2853753300EF35BA /* LetterSendCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LetterSendCore.swift; sourceTree = "<group>"; };
 		F9C4F45E282D61D200ECBF9A /* BlockUserEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockUserEntity.swift; sourceTree = "<group>"; };
 		F9D225EC284303B900ED2689 /* QuestionItemCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionItemCore.swift; sourceTree = "<group>"; };
 		F9DB0B3428294F56002F6AD8 /* ChangeProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChangeProfileView.swift; sourceTree = "<group>"; };
@@ -521,6 +535,10 @@
 			children = (
 				F221851B2850FB6D005CE6C3 /* LetterView.swift */,
 				F22185212850FBA7005CE6C3 /* LetterCore.swift */,
+				F9BEA1C82853750F00EF35BA /* LetterDetailView.swift */,
+				F9BEA1CA2853751900EF35BA /* LetterDetailCore.swift */,
+				F9BEA1CC2853752A00EF35BA /* LetterSendView.swift */,
+				F9BEA1CE2853753300EF35BA /* LetterSendCore.swift */,
 			);
 			path = Letter;
 			sourceTree = "<group>";
@@ -703,6 +721,8 @@
 				F914EE1C284B32BF000FADC9 /* QuestionCommentEntity.swift */,
 				F221850E284E560B005CE6C3 /* FCMUpdateRequest.swift */,
 				F2E38EFE28451CE5007C96F7 /* RoomLikeEntity.swift */,
+				F9BEA1C4285372A300EF35BA /* LetterEntity.swift */,
+				F9BEA1C6285372B800EF35BA /* LetterSummaryEntity.swift */,
 			);
 			path = Entities;
 			sourceTree = "<group>";
@@ -786,6 +806,7 @@
 				86032A25282C22A50061D3F9 /* RoomService.swift */,
 				0911DA5A28451FAA00FCC470 /* SocketService.swift */,
 				F90F8D4F2847925D0011EDAC /* QuestionService.swift */,
+				F9BEA1C22853728E00EF35BA /* LetterService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1167,6 +1188,7 @@
 				F2B268CC283BE1530011EA43 /* TermsOfService.swift in Sources */,
 				F2F1ED7228182D1400AC4FDD /* SceneDelegate.swift in Sources */,
 				F96C0DE8282EAFBE004BF1C7 /* ChangeProfileEntity.swift in Sources */,
+				F9BEA1C32853728E00EF35BA /* LetterService.swift in Sources */,
 				F9AE9AB528437A98004A632D /* CommentItemCore.swift in Sources */,
 				F2218502284CBB44005CE6C3 /* Double+Extensions.swift in Sources */,
 				F2F1ED8C281E632500AC4FDD /* PhoneVerificationView.swift in Sources */,
@@ -1188,6 +1210,7 @@
 				86B29612283781CB00A981FC /* ChatDetailView.swift in Sources */,
 				F9AFCD6A2848E8EA009286DE /* QuestionLikeEntity.swift in Sources */,
 				F2F1ED81281C533000AC4FDD /* IssueCodeEntity.swift in Sources */,
+				F9BEA1C7285372B800EF35BA /* LetterSummaryEntity.swift in Sources */,
 				F2F1ED8E281E632D00AC4FDD /* PhoneVerificationCore.swift in Sources */,
 				86BEED82282F3FD500EA0C5B /* Date+Extensions.swift in Sources */,
 				F2DEC4E0282F34510018F545 /* ChatRoomAnnotationView.swift in Sources */,
@@ -1201,6 +1224,7 @@
 				F22184EA284B3D7B005CE6C3 /* Array+Extensions.swift in Sources */,
 				F22185262850FF4A005CE6C3 /* NotificationView.swift in Sources */,
 				F2B268BD283AAF090011EA43 /* LocationCategoryListView.swift in Sources */,
+				F9BEA1C5285372A300EF35BA /* LetterEntity.swift in Sources */,
 				86E4948D2814FDC700551CCD /* ChatView.swift in Sources */,
 				86E494952814FDF300551CCD /* MyPageView.swift in Sources */,
 				F9669F6628251E6F004624F8 /* MyBlockHistoryCore.swift in Sources */,
@@ -1254,6 +1278,7 @@
 				F981FA1A282600B50000A531 /* MyTermsOfServiceView.swift in Sources */,
 				F2E38EEE28420C75007C96F7 /* PopularChatRoomListView.swift in Sources */,
 				F9719845284DF0E6005AB9BA /* MyPageItemCore.swift in Sources */,
+				F9BEA1CB2853751900EF35BA /* LetterDetailCore.swift in Sources */,
 				86E494832814F05D00551CCD /* MainTabCore.swift in Sources */,
 				F2E38EFB2843D43D007C96F7 /* TabViewType.swift in Sources */,
 				86E494932814FDE900551CCD /* MsgAndNotiCore.swift in Sources */,
@@ -1286,6 +1311,7 @@
 				86783243282651A90034EACC /* Color+Extensions.swift in Sources */,
 				F22184EC284B5DD7005CE6C3 /* MainMapBottomSheetType.swift in Sources */,
 				86032A26282C22A50061D3F9 /* RoomService.swift in Sources */,
+				F9BEA1CF2853753300EF35BA /* LetterSendCore.swift in Sources */,
 				F90F8D502847925D0011EDAC /* QuestionService.swift in Sources */,
 				F2E38EF028420C90007C96F7 /* PopularChatRoomListCore.swift in Sources */,
 				F981FA1F282604AA0000A531 /* CsCenterView.swift in Sources */,
@@ -1295,11 +1321,13 @@
 				F9B90C9C28117DDF003FFEEB /* AuthService.swift in Sources */,
 				F90F8D522847BAED0011EDAC /* RoomUserInfoEntity.swift in Sources */,
 				F9DB0B3728294F66002F6AD8 /* ChangeProfileCore.swift in Sources */,
+				F9BEA1C92853750F00EF35BA /* LetterDetailView.swift in Sources */,
 				F2218500284CB884005CE6C3 /* ChatRoomListItem.swift in Sources */,
 				F9322E7628424DA900EB956E /* CommentEntity.swift in Sources */,
 				F2E38F0B28475FFA007C96F7 /* RoomDefaultInfo.swift in Sources */,
 				F22184F7284C8D45005CE6C3 /* UserEntity.swift in Sources */,
 				F2F1ED87281E612700AC4FDD /* SignInView.swift in Sources */,
+				F9BEA1CD2853752A00EF35BA /* LetterSendView.swift in Sources */,
 				F2B268B62839FF1A0011EA43 /* MapKit+Extensions.swift in Sources */,
 				F25C79C6282E96A2009C60EE /* UserService.swift in Sources */,
 				F9C4F45F282D61D200ECBF9A /* BlockUserEntity.swift in Sources */,
