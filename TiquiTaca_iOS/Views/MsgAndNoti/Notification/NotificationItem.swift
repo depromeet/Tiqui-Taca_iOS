@@ -18,24 +18,24 @@ struct NotificationItem: View {
         .padding(.top, .spacingXS)
       
       VStack(alignment: .leading, spacing: .spacingXXS) {
-        Text("닉네임4ㄴ이;럼;ㅣ넝리;먼ㅇ리;ㅓㅏㄴㅇㄹ;ㅣㅏㅓsdjfl;ksajdflkjsdf;lksjdf;lksjdf;lkasjdfsd;lfjsdl;fkjs;ldfjka;lskdfj")
+        Text(notification.title)
           .font(.body1)
           .foregroundColor(.black900)
           .lineLimit(2)
         HStack {
-          Text("국민대학교")
+          Text(notification.subTitle)
             .font(.body7)
             .foregroundColor(.black100)
           Spacer()
-          Text("12시간 전")
-            .font(.body2)
+          Text(notification.createdAt.relativeTimeAbbreviated)
+            .font(.body5)
             .foregroundColor(.white800)
         }
       }
     }
     .padding(.vertical, .spacingXL)
     .padding(.horizontal, .spacingM)
-    .background(.white)
+    .background(notification.isRead ? Color.white100 : Color.white)
   }
 }
 

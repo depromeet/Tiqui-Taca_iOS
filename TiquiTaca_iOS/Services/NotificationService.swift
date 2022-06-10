@@ -9,7 +9,7 @@ import Combine
 import TTNetworkModule
 
 protocol NotificationServiceType {
-  func getNotifications(lastId: String) -> AnyPublisher<NotificationListResponse?, HTTPError>
+  func getNotifications(_ request: JSONConvertible?) -> AnyPublisher<InfiniteList<NotificationResponse>?, HTTPError>
   func readAllNotification() -> AnyPublisher<Void, HTTPError>
   func readNotification(id: String) -> AnyPublisher<Void, HTTPError>
 }
@@ -21,8 +21,11 @@ final class NotificationService: NotificationServiceType {
     network = .init()
   }
   
-  func getNotifications(lastId: String) -> AnyPublisher<NotificationListResponse?, HTTPError> {
-    return network.request(.getNotifications(lastId: lastId), responseType: NotificationListResponse.self)
+  func getNotifications(_ request: JSONConvertible?) -> AnyPublisher<InfiniteList<NotificationResponse>?, HTTPError> {
+    return network.request(
+      .getNotifications(request),
+      responseType: InfiniteList<NotificationResponse>.self
+    )
   }
   
   func readAllNotification() -> AnyPublisher<Void, HTTPError> {

@@ -7,7 +7,7 @@
 
 import Foundation
 
-enum NotificationType: Codable {
+enum NotificationType: String, Codable {
   case comment
   case lightning
   case official
@@ -15,11 +15,11 @@ enum NotificationType: Codable {
   var imageName: String {
     switch self {
     case .comment:
-      return ""
+      return "alarmReply"
     case .lightning:
-      return ""
+      return "alarmSpark"
     case .official:
-      return ""
+      return "alarmOfficial"
     }
   }
 }

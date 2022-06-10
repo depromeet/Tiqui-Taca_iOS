@@ -6,11 +6,24 @@
 //
 
 import ComposableArchitecture
+import TTNetworkModule
 
 struct NotificationState: Equatable {
+  var notifications: [NotificationResponse] = []
+  var lastId: String?
+  var isLast: Bool = true
+  var isLoading: Bool = false
+  var isInfiniteScrollLoading: Bool = false
 }
 
-struct NotificationAction: Equatable {
+enum NotificationAction: Equatable {
+  case setIsLoading(Bool)
+  case setIsInfiniteScrollLoading(Bool)
+  case getNotifications
+  case loadMoreNotifications
+  case getNotificationsResponse(Result<InfiniteList<NotificationResponse>?, HTTPError>)
+  case loadMoreNotificationsResponse(Result<InfiniteList<NotificationResponse>?, HTTPError>)
+  case notificationTapped(NotificationResponse)
 }
 
 struct NotificationEnvironment {
@@ -32,7 +45,56 @@ let notificationCore = Reducer<
   NotificationEnvironment
 > { state, action, environment in
   switch action {
-  default:
+  case let .setIsLoading(isLoading):
+    state.isLoading = isLoading
+    return .none
+    
+  case let .setIsInfiniteScrollLoading(isInfiniteScrollLoading):
+    state.isInfiniteScrollLoading = isInfiniteScrollLoading
+    return .none
+    
+  case .getNotifications:
+    return .concatenate([
+      .init(value: .setIsLoading(true)),
+      environment.appService.notificationService
+        .getNotifications(nil)
+        .receive(on: environment.mainQueue)
+        .catchToEffect()
+        .map(NotificationAction.getNotificationsResponse)
+    ])
+    
+  case .loadMoreNotifications:
+    let request = NotificationRequest(lastId: state.lastId)
+    return .concatenate([
+      .init(value: .setIsInfiniteScrollLoading(true)),
+      environment.appService.notificationService
+        .getNotifications(request)
+        .receive(on: environment.mainQueue)
+        .catchToEffect()
+        .map(NotificationAction.loadMoreNotificationsResponse)
+    ])
+    
+  case let .getNotificationsResponse(.success(response)):
+    guard let response = response else { return .none }
+    state.notifications = response.list
+    state.isLast = response.isLast
+    state.lastId = response.lastId
+    return .init(value: .setIsLoading(false))
+    
+  case .getNotificationsResponse(.failure):
+    return .none
+    
+  case let .loadMoreNotificationsResponse(.success(response)):
+    guard let response = response else { return .none }
+    state.notifications += response.list
+    state.isLast = response.isLast
+    state.lastId = response.lastId
+    return .init(value: .setIsInfiniteScrollLoading(false))
+    
+  case .loadMoreNotificationsResponse(.failure):
+    return .none
+    
+  case let .notificationTapped(item):
     return .none
   }
 }
