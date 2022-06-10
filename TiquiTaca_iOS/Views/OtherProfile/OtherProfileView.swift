@@ -22,14 +22,18 @@ struct OtherProfileView: View {
   struct ViewState: Equatable {
     let userInfo: UserEntity.Response?
     let currentAction: OtherProfileState.Action
+    let completeAction: OtherProfileState.Action
     let showProfile: Bool
     let showPopup: Bool
+    let showAlreadySendLightning: Bool
     
     init(state: OPState) {
       userInfo = state.userInfo
       currentAction = state.currentAction
+      completeAction = state.completeAction
       showProfile = state.showProfile
       showPopup = state.showPopup
+      showAlreadySendLightning = state.showAlreadySendLightning
     }
   }
   
@@ -55,7 +59,16 @@ struct OtherProfileView: View {
           leftButtonName: "취소",
           rightButtonName: getPopupRightBtnTitle(),
           confirm: {
-            removeView()
+            switch viewStore.currentAction {
+            case .block:
+              viewStore.send(.userBlock)
+            case .report:
+              viewStore.send(.userReport)
+            case .lightning:
+              viewStore.send(.userSendLightning)
+            default:
+              break
+            }
           },
           cancel: {
             removeView()
@@ -71,9 +84,40 @@ struct OtherProfileView: View {
             alignment: .top
           )
       }
+      
+      if viewStore.showAlreadySendLightning {
+        TTPopupView.init(
+          popUpCase: .oneLineTwoButton,
+          title: "이미 해당 유저에게 번개를 줬어요.",
+          subtitle: "다시 번개를 주려면 최소 1일 뒤에 줄 수 있어요!",
+          leftButtonName: "닫기",
+          confirm: {
+            removeView()
+          },
+          cancel: {
+            removeView()
+          }
+        )
+        .padding(.horizontal, 24)
+        .overlay(
+          Image("bxOnboarding3")
+            .resizable()
+            .frame(width: 128, height: 128)
+            .offset(x: 0, y: -80)
+            .opacity(viewStore.currentAction == .lightning ? 1 : 0),
+          alignment: .top
+        )
+      }
     }
     .onReceive(Just(showView)) { value in
       if value { viewStore.send(.fetchUserInfo) }
+    }
+    .onReceive(Just(viewStore.completeAction)) { value in
+      if value != .none {
+        print("complete", value)
+        // 이전 뷰에 어떤 것을 했는지 noti?
+        removeView()
+      }
     }
     .edgesIgnoringSafeArea(.all)
     .fullScreenCover(isPresented: viewStore.binding(

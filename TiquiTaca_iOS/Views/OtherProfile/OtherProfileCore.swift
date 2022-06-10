@@ -21,23 +21,32 @@ struct OtherProfileState: Equatable {
   var userId: String
   var userInfo: UserEntity.Response?
   
-  var showPopup: Bool = false
   var showProfile: Bool = false
+  var showPopup: Bool = false
+  var showAlreadySendLightning = false
   var isFirstLoad: Bool = true
   var currentAction: Action = .none
+  var completeAction: Action = .none
 }
 
 enum OtherProfileAction: Equatable {
+  static func == (lhs: OtherProfileAction, rhs: OtherProfileAction) -> Bool {
+    false
+  }
+  
   case setShowProfile(Bool)
   case setAction(OtherProfileState.Action)
   // MARK: Action API
   case fetchUserInfo
   case userBlock
   case userReport
-  case userGiveLightning
+  case userSendLightning
   
   // MARK: Action Response
   case responseUserInfo(Result<UserEntity.Response?, HTTPError>)
+  case responseUserBlock(Result<[BlockUserEntity.Response]?, HTTPError>)
+  case responseUserReport(Result<ReportEntity.Response?, HTTPError>)
+  case responseSendLightning(Result<SendLightningResponse?, HTTPError>)
 }
 
 struct OtherProfileEnvironment {
@@ -66,11 +75,49 @@ let otherProfileReducer = Reducer<
       .receive(on: environment.mainQueue)
       .catchToEffect()
       .map(OtherProfileAction.responseUserInfo)
+  case .userBlock:
+    return environment.appService.userService
+      .blockUser(userId: state.userId)
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(OtherProfileAction.responseUserBlock)
+  case .userReport:
+    return environment.appService.userService
+      .reportUser(userId: state.userId)
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(OtherProfileAction.responseUserReport)
+  case .userSendLightning:
+    return environment.appService.userService
+      .sendLightning(userId: state.userId)
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(OtherProfileAction.responseSendLightning)
   case let .responseUserInfo(.success(userInfo)):
     state.userInfo = userInfo
     state.showProfile = true
     return .none
+  case let .responseUserBlock(.success(blockList)):
+    state.completeAction = .block
+    return .none
+  case let .responseUserReport(.success(report)):
+    if report?.reportSuccess == true {
+      state.completeAction = .report
+    }
+    return .none
+  case let .responseSendLightning(.success(lightning)):
+    if lightning?.sendLightningSuccess == true {
+      state.completeAction = .lightning
+    } else {
+      state.showPopup = false
+      state.showAlreadySendLightning = true
+    }
+    return .none
   case .responseUserInfo(.failure):
+    return .none
+  case .responseUserBlock(.failure),
+      .responseUserReport(.failure),
+      .responseSendLightning(.failure):
     return .none
   default:
     return .none

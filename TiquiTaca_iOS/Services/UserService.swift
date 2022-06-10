@@ -23,6 +23,7 @@ protocol UserServiceType {
   func createUser(_ request: UserCreationEntity.Request) -> AnyPublisher<UserCreationEntity.Response?, HTTPError>
   func reportUser(userId: String) -> AnyPublisher<ReportEntity.Response?, HTTPError>
   func blockUser(userId: String) -> AnyPublisher<[BlockUserEntity.Response]?, HTTPError>
+  func sendLightning(userId: String) -> AnyPublisher<SendLightningResponse?, HTTPError>
 }
 
 final class UserService: UserServiceType {
@@ -86,5 +87,9 @@ final class UserService: UserServiceType {
   
   func blockUser(userId: String) -> AnyPublisher<[BlockUserEntity.Response]?, HTTPError> {
     return network.request(.blockUser(userId: userId), responseType: [BlockUserEntity.Response].self)
+  }
+  
+  func sendLightning(userId: String) -> AnyPublisher<SendLightningResponse?, HTTPError> {
+    return network.request(.sendLightning(userId: userId), responseType: SendLightningResponse.self)
   }
 }
