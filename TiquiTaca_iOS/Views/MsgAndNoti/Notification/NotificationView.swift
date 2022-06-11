@@ -62,6 +62,16 @@ struct NotificationView: View {
       .refreshable {
         viewStore.send(.getNotifications)
       }
+      if viewStore.notifications.isEmpty {
+        VStack(spacing: .spacingXL) {
+          Image("bxNoAlarm")
+            .resizable()
+            .frame(width: 196, height: 196)
+          Text("앗! 아직 알림이 없어요!")
+            .font(.body2)
+            .foregroundColor(.white900)
+        }
+      }
       TTIndicator(
         style: .medium,
         color: .black,
