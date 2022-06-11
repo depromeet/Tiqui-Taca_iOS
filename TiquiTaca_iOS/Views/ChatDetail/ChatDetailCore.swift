@@ -21,6 +21,7 @@ struct ChatDetailState: Equatable {
   var currentRoom: RoomInfoEntity.Response = .init()
   var myInfo: UserEntity.Response?
   
+  var isAlarmOn = false
   var isFirstLoad = true
   var moveToOtherView = false
   var chatLogList: [ChatLogEntity.Response] = []
@@ -44,14 +45,18 @@ enum ChatDetailAction: Equatable {
   case sendResponse(NSError?)
   case socket(SocketService.Action)
   
-  case setRoute(ChatDetailState.Route?)
+  
   case selectProfile(UserEntity.Response?)
   case selectQuestionDetail(String)
   case selectMenu
+  case selectAlarm
   case joinRoom
-  case enteredRoom(Result<RoomInfoEntity.Response?, HTTPError>)
-  case questionDetail(Result<QuestionEntity.Response?, HTTPError>)
+  case responseJoinRoom(Result<RoomInfoEntity.Response?, HTTPError>)
+  case responseQuestionDetail(Result<QuestionEntity.Response?, HTTPError>)
+  case responseAlarm(Result<RoomAlarmResponse?, HTTPError>)
+  
   case moveToOtherView
+  case setRoute(ChatDetailState.Route?)
   
   case locationManager(LocationManager.Action)
   case otherProfileAction(OtherProfileAction)
@@ -144,7 +149,6 @@ let chatDetailCore = Reducer<
       .fireAndForget()
   // MARK: Socket
   case let .sendMessage(chat):
-    print("send Message")
     return environment.appService.socketService
       .send(state.roomId, chat)
       .eraseToEffect()
@@ -159,32 +163,46 @@ let chatDetailCore = Reducer<
     guard let userId = user?.id else { return .none }
     state.otherProfileState = OtherProfileState(userId: userId)
     return .none
+  // MARK: API Request
   case let .selectQuestionDetail(chatId):
     state.route = nil
     return environment.appService.questionService
       .getQuestionDetailAtChat(chatId: chatId)
       .receive(on: environment.mainQueue)
       .catchToEffect()
-      .map(ChatDetailAction.questionDetail)
+      .map(ChatDetailAction.responseQuestionDetail)
   case .joinRoom:
     return environment.appService.roomService
       .joinRoom(roomId: state.roomId)
       .receive(on: environment.mainQueue)
       .catchToEffect()
-      .map(ChatDetailAction.enteredRoom)
+      .map(ChatDetailAction.responseJoinRoom)
+  case .selectAlarm:
+    return environment.appService.roomService
+      .roomAlarm(roomId: state.roomId)
+      .throttle(for: 1, scheduler: environment.mainQueue, latest: true)
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(ChatDetailAction.responseAlarm)
   // MARK: API Result
-  case let .enteredRoom(.success(res)):
+  case let .responseJoinRoom(.success(res)):
     if let res = res {
+      state.isAlarmOn = res.iAlarm ?? false
       state.currentRoom = res
-      state.chatMenuState = ChatMenuState(roomInfo: res)
+      state.chatMenuState.roomInfo = res
+      state.chatMenuState.isFavorite = res.iFavorite ?? false
     }
     return .none
-  case let .questionDetail(.success(res)):
+  case let .responseQuestionDetail(.success(res)):
     guard let questionId = res?.id else { return .none }
     state.moveToOtherView = true
     state.questionDetailViewState = .init(questionId: questionId)
-    print("와이 no click", questionId)
     state.route = .questionDetail
+  case let .responseAlarm(.success(res)):
+    guard let alarmOn = res?.isChatAlarmOn, state.isAlarmOn != alarmOn else { return .none }
+    state.isAlarmOn = alarmOn
+    return .none
+  // MARK: Route
   case .moveToOtherView:
     state.moveToOtherView = true
     return .none
@@ -192,7 +210,9 @@ let chatDetailCore = Reducer<
     state.moveToOtherView = true
     state.route = route
     return .none
-  case .enteredRoom(.failure), .questionDetail(.failure):
+  case .responseJoinRoom(.failure),
+      .responseQuestionDetail(.failure),
+      .responseAlarm(.failure):
     return .none
   case let .locationManager(.didUpdateLocations(locations)):
     print("로케이션 받아옴", locations.first?.coordinate.latitude, locations.first?.coordinate.longitude)

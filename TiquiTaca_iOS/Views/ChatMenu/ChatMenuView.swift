@@ -27,6 +27,7 @@ struct ChatMenuView: View {
     
     let popupPresented: Bool
     let isExistRoom: Bool
+    let isFavorite: Bool
     let questionDetailViewState: QuestionDetailState
     let questionListViewState: QuestionListState
     
@@ -36,6 +37,7 @@ struct ChatMenuView: View {
       roomUserList = state.roomUserList
       questionList = state.questionList
       popupPresented = state.popupPresented
+      isFavorite = state.isFavorite
       
       isExistRoom = state.isExistRoom
       questionDetailViewState = state.questionDetailViewState
@@ -178,10 +180,17 @@ struct ChatMenuView: View {
         
         Spacer()
         
-        Button {
-          viewStore.send(.presentPopup)
-        } label: {
-          Image("chat_exit")
+        HStack(spacing: 4) {
+          Button {
+            viewStore.send(.roomFavoriteSelect)
+          } label: {
+            Image(viewStore.isFavorite ? "chatFavorite" : "chatFavoriteDisabled")
+          }
+          Button {
+            viewStore.send(.presentPopup)
+          } label: {
+            Image("chat_exit")
+          }
         }
       }
       .padding([.leading, .trailing], 10)

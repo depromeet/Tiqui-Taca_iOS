@@ -10,6 +10,6 @@ import TTNetworkModule
 enum RoomLikeEntity {
   struct Request: Codable, JSONConvertible { }
   struct Response: Codable, Equatable {
-    let iFavoritRoom: Bool?
+    let iFavoritRoom: Bool
   }
 }
