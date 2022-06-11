@@ -19,7 +19,6 @@ struct VerificationNumberCheckState: Equatable {
   var isAvailable: Bool = true
   var otpFieldState: OTPFieldState = .init()
   var termsOfServiceState: TermsOfServiceState?
-  var verificationCode: String = "" // 인증번호 테스트용
 }
 
 enum VerificationNumberCheckAction: Equatable {
@@ -126,7 +125,6 @@ let verificationNumberCheckCore = Reducer<
     
   case let .issuePhoneCodeResponse(.success(response)):
     guard let response = response else { return .none }
-    state.verificationCode = response.verficiationCode
     state.expireSeconds = response.expire * 60
     return .merge([
       .cancel(id: TimerId()),

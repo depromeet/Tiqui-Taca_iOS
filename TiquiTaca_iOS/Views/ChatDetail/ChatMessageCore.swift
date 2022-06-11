@@ -21,7 +21,6 @@ struct ChatMessageState: Equatable {
 }
 
 enum ChatMessageAction: Equatable {
-  
 }
 
 struct ChatMessageEnvironment {
@@ -33,7 +32,5 @@ let chatMessageReducer = Reducer<
   ChatMessageEnvironment
 > { state, action, environment in
   switch action {
-  default:
-    return .none
   }
 }

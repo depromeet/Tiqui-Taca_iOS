@@ -119,7 +119,5 @@ let otherProfileReducer = Reducer<
       .responseUserReport(.failure),
       .responseSendLightning(.failure):
     return .none
-  default:
-    return .none
   }
 }

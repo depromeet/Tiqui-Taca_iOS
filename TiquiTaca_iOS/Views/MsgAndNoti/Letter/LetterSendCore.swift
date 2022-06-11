@@ -56,7 +56,7 @@ let letterSendReducer = Reducer<
   case let .sendLetterResponse(.success(response)):
     state.sendLetterSuccess = true
     return Effect(value: .dismissPopup)
-  case let .sendLetterResponse(.failure):
+  case .sendLetterResponse(.failure):
     return .none
   case .presentPopup:
     state.popupPresented = true
