@@ -35,7 +35,7 @@ struct NotificationItem: View {
     }
     .padding(.vertical, .spacingXL)
     .padding(.horizontal, .spacingM)
-    .background(notification.isRead ? Color.white100 : Color.white)
+    .background(notification.isRead ? Color.white : Color.green10)
   }
 }
 
