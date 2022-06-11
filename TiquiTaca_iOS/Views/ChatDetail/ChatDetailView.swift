@@ -42,7 +42,11 @@ struct ChatDetailView: View {
     }
   }
   
-  init(store: Store<CDState, Action>, shouldPopToRootView: Binding<Bool>) {
+  init(store: Store<ChatDetailState, ChatDetailAction>) {
+    self.init(store: store, shouldPopToRootView: .constant(false))
+  }
+  
+  init(store: Store<ChatDetailState, ChatDetailAction>, shouldPopToRootView: Binding<Bool>) {
     self._shouldPopToRootView = shouldPopToRootView
     self.store = store
     viewStore = ViewStore(store.scope(state: ViewState.init))

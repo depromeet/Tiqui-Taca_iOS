@@ -24,6 +24,8 @@ struct MainMapView: View {
   }
   
   struct ViewState: Equatable {
+    let isShowPopup: Bool
+    let isMoveToChatDetail: Bool
     let bottomSheetPosition: TTBottomSheet.Position
     let bottomSheetType: MainMapBottomSheetType
     let chatRoomAnnotationInfos: [RoomFromCategoryResponse]
@@ -36,6 +38,8 @@ struct MainMapView: View {
     let userTrackingMode: State.MapUserTrackingModeType
     
     init(state: State) {
+      isShowPopup = state.isShowPopup
+      isMoveToChatDetail = state.isMoveToChatDetail
       bottomSheetPosition = state.bottomSheetPosition
       bottomSheetType = state.bottomSheetType
       chatRoomAnnotationInfos = state.chatRoomAnnotationInfos
@@ -56,6 +60,20 @@ struct MainMapView: View {
   
   var body: some View {
     ZStack {
+      NavigationLink(
+        isActive: viewStore.binding(
+          get: \.isMoveToChatDetail,
+          send: Action.setIsMoveToChatDetail
+        ),
+        destination: {
+          IfLetStore(
+            chatDetailStore,
+            then: ChatDetailView.init
+          )
+        },
+        label: EmptyView.init
+      )
+      
       Map(
         coordinateRegion: viewStore.binding(
           get: \.region,
@@ -182,6 +200,25 @@ struct MainMapView: View {
       viewStore.send(.onLoad)
     }
     .navigationTitle("지도")
+    .fullScreenCover(
+      isPresented: viewStore.binding(
+        get: \.isShowPopup,
+        send: Action.setIsShowPopup
+      )
+    ) {
+      AlertView(
+        isPopupPresent: viewStore.binding(
+          get: \.isShowPopup,
+          send: Action.setIsShowPopup
+        ),
+        moveToChatDetailState: viewStore.binding(
+          get: \.isMoveToChatDetail,
+          send: Action.setIsMoveToChatDetail
+        ),
+        roomUserCount: viewStore.chatRoomDetailState.chatRoom.userCount
+      )
+      .background(BackgroundTransparentView())
+    }
   }
 }
 
@@ -207,6 +244,13 @@ extension MainMapView {
       action: Action.popularChatRoomListAction
     )
   }
+  
+  private var chatDetailStore: Store<ChatDetailState?, ChatDetailAction> {
+    return store.scope(
+      state: \.chatDetailState,
+      action: Action.chatDetailAction
+    )
+  }
 }
 
 struct MainMapView_Previews: PreviewProvider {
@@ -221,6 +265,69 @@ struct MainMapView_Previews: PreviewProvider {
           locationManager: .live
         )
       )
+    )
+  }
+}
+
+
+// MARK: Alert
+private struct AlertView: View {
+  @Binding var isPopupPresent: Bool
+  @Binding var moveToChatDetailState: Bool
+  let roomUserCount: Int
+  var maxUserCount = 300
+  // 채팅방 인원 풀 -> 경고만
+  // 채팅방 교체할 것인지 -> 경고 후 참가
+  var body: some View {
+    if roomUserCount < maxUserCount {
+      existEnteredRoom
+        .padding(EdgeInsets(top: 0, leading: 24, bottom: 0, trailing: 24))
+    } else {
+      overCapacity
+    }
+  }
+  
+  var existEnteredRoom: some View {
+    TTPopupView.init(
+      popUpCase: .oneLineTwoButton,
+      title: "이미 참여 중인 채팅방이 있어요",
+      subtitle: "해당 채팅방을 참가할 경우 이전 채팅방에선 나가게 됩니다",
+      leftButtonName: "취소",
+      rightButtonName: "참여하기",
+      confirm: {
+        isPopupPresent = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+          UIView.setAnimationsEnabled(true)
+          moveToChatDetailState = true
+        }
+      },
+      cancel: {
+        isPopupPresent = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+          UIView.setAnimationsEnabled(true)
+        }
+      }
+    )
+  }
+  
+  var overCapacity: some View {
+    TTPopupView.init(
+      popUpCase: .oneLineTwoButton,
+      title: "해당 채팅방은 인원이 가득 찼어요",
+      subtitle: "최대 인원수 300명이 차서 입장이 불가능해요",
+      leftButtonName: "닫기",
+      confirm: {
+        isPopupPresent = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+          UIView.setAnimationsEnabled(true)
+        }
+      },
+      cancel: {
+        isPopupPresent = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+          UIView.setAnimationsEnabled(true)
+        }
+      }
     )
   }
 }
