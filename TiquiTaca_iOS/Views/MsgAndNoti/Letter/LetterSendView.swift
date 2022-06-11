@@ -16,16 +16,19 @@ struct LetterSendView: View {
   private let store: Store<State, Action>
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
   @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+  @FocusState private var focusedField: Bool
   
   struct ViewState: Equatable {
     let sendingUser: UserEntity.Response?
     let inputLetterString: String
     let popupPresented: Bool
+    let sendLetterSuccess: Bool
     
     init(state: State) {
       sendingUser = state.sendingUser
       inputLetterString = state.inputLetterString
       popupPresented = state.popupPresented
+      sendLetterSuccess = state.sendLetterSuccess
     }
   }
   
@@ -46,6 +49,7 @@ struct LetterSendView: View {
           )
         )
         .font(.body4)
+        .focused($focusedField)
         
         VStack {
           Text(
@@ -83,6 +87,11 @@ struct LetterSendView: View {
         }
       )
     }
+    .onChange(of: viewStore.sendLetterSuccess) { sendLetterSuccess in
+      if sendLetterSuccess {
+        self.presentationMode.wrappedValue.dismiss()
+      }
+    }
     .navigationBarHidden(true)
     .ignoresSafeArea(.all, edges: .top)
     .hideKeyboardWhenTappedAround()
@@ -114,6 +123,7 @@ struct LetterSendView: View {
         
         Button {
           //          presentationMode.wrappedValue.dismiss()
+          focusedField = false
           viewStore.send(.presentPopup)
         } label: {
           Text("보내기")
