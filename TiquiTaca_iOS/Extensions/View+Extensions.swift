@@ -105,3 +105,31 @@ private struct RoundedCorner: Shape {
     return Path(path.cgPath)
   }
 }
+
+// MARK: Trasnparent Background
+struct BackgroundTransparentView: UIViewRepresentable {
+  func makeUIView(context: Context) -> UIView {
+    let view = UIView()
+    DispatchQueue.main.async {
+      view.superview?.superview?.backgroundColor = Color.black900.opacity(0.7).uiColor
+    }
+    return view
+  }
+  
+  func updateUIView(_ uiView: UIView, context: Context) {
+  }
+}
+
+
+struct BackgroundClearView: UIViewRepresentable {
+  func makeUIView(context: Context) -> UIView {
+    let view = UIView()
+    DispatchQueue.main.async {
+      view.superview?.superview?.backgroundColor = .clear
+    }
+    return view
+  }
+  
+  func updateUIView(_ uiView: UIView, context: Context) {
+  }
+}

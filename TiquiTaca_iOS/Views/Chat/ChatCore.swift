@@ -21,7 +21,7 @@ struct ChatState: Equatable {
   var likeRoomList: [RoomInfoEntity.Response] = []
   var popularRoomList: [RoomInfoEntity.Response] = []
   
-  var chatDetailState: ChatDetailState = .init()
+  var chatDetailState: ChatDetailState = .init(roomId: "")
 }
 
 enum ChatAction: Equatable {
@@ -96,6 +96,51 @@ let chatCore = Reducer<
     )
     // MARK: Requeset
   case .fetchEnteredRoomInfo:
+		return environment.appService.roomService
+			.getEnteredRoom()
+			.receive(on: environment.mainQueue)
+			.catchToEffect()
+			.map(ChatAction.responseEnteredRoom)
+	case .fetchLikeRoomList:
+		return environment.appService.roomService
+			.getLikeRoomList()
+			.receive(on: environment.mainQueue)
+			.catchToEffect()
+			.map(ChatAction.responseLikeRoomList)
+	case .fetchPopularRoomList:
+		return environment.appService.roomService
+			.getPopularRoomList()
+			.receive(on: environment.mainQueue)
+			.catchToEffect()
+			.map(ChatAction.responsePopularRoomList)
+	case .removeFavoriteRoom(let room):
+		return .none
+	// MARK: Response
+	case let .responseEnteredRoom(.success(res)):
+		state.enteredRoom = res
+		return .none
+	case let .responseLikeRoomList(.success(res)):
+		state.likeRoomList = res ?? []
+		return .none
+	case let .responsePopularRoomList(.success(res)):
+		state.popularRoomList = res ?? []
+		return .none
+	case .responseEnteredRoom(.failure),
+		.responseLikeRoomList(.failure),
+		.responsePopularRoomList(.failure):
+		return .none
+	// MARK: View Action
+	case .tabChange(let type):
+		guard state.currentTab != type else { return .none }
+		state.currentTab = type
+		return .none
+	case .willEnterRoom(let room):
+    guard let roomId = room.id else { return .none }
+    state.chatDetailState = ChatDetailState(roomId: roomId)
+		state.willEnterRoom = room
+		return .none
+	case .refresh:
+		state.lastLoadTime = Date.current(type: .HHmm)
     return environment.appService.roomService
       .getEnteredRoom()
       .receive(on: environment.mainQueue)
@@ -135,7 +180,8 @@ let chatCore = Reducer<
     state.currentTab = type
     return .none
   case .willEnterRoom(let room):
-    state.chatDetailState = ChatDetailState(currentRoom: room)
+    guard let roomId = room.id else { return .none }
+    state.chatDetailState = ChatDetailState(roomId: roomId)
     state.willEnterRoom = room
     return .none
   case .refresh:
