@@ -302,7 +302,10 @@ private struct RoomListView: View {
             .swipeActions(edge: .trailing, allowsFullSwipe: false, content: {
               if roomType == .like {
                 Button(
-                  action: { ViewStore(store).send(.removeFavoriteRoom(room)) },
+                  action: {
+                    ViewStore(store).send(.removeFavoriteRoom(room))
+                    
+                  },
                   label: { Text("삭제") }
                 ).tint(.red)
               }
