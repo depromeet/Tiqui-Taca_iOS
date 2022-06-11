@@ -22,13 +22,19 @@ struct ChatMenuState: Equatable {
   var questionDetailViewState: QuestionDetailState = .init(questionId: "")
   var questionListViewState: QuestionListState = .init()
   
+  
   var popupPresented: Bool = false
+  var isFavorite = false
   var isExistRoom: Bool = true
 }
 
 enum ChatMenuAction: Equatable {
   case setRoute(ChatMenuState.Route?)
   case roomExit
+  
+  case roomFavoriteSelect
+  case roomFavoriteResponse(Result<RoomLikeEntity.Response?, HTTPError>)
+  
   case questionSelected(String)
   case questionListButtonClicked
   case questionDetailView(QuestionDetailAction)
@@ -105,6 +111,20 @@ let chatMenuReducerCore = Reducer<
   case .getRoomInfoResponse(.failure):
     return .none
     
+    // MARK: 방 즐겨찾기 API
+  case .roomFavoriteSelect:
+    return environment.appService.roomService
+      .registLikeRoom(roomId: state.roomInfo?.id ?? "")
+      .throttle(for: 1, scheduler: environment.mainQueue, latest: true)
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(ChatMenuAction.roomFavoriteResponse)
+  case let .roomFavoriteResponse(.success(res)):
+    guard let favorite = res?.iFavoritRoom, state.isFavorite != favorite else { return .none }
+    state.isFavorite = favorite
+    return .none
+  case .roomFavoriteResponse(.failure):
+    return .none
     // MARK: 채팅방 참여자 API
   case .getRoomUserListInfo:
     return environment.appService.roomService

@@ -16,6 +16,13 @@ enum RoomInfoEntity {
     let category: LocationCategory?
     let userCount: Int?
     
+    let iFavorite: Bool?
+    let iAlarm: Bool?
+    let iJoin: Bool?
+    let lat: Double?
+    let lng: Double?
+    
+    // EnteredRoom
     let notReadChatCount: Int?
     let lastChatMessage: String?
     let lastChatTime: String?
@@ -35,6 +42,11 @@ enum RoomInfoEntity {
       case lastChatMessage
       case lastChatTime
       case distance
+      case iFavorite
+      case iAlarm
+      case iJoin
+      case lat
+      case lng
     }
     
     init() {
@@ -46,6 +58,11 @@ enum RoomInfoEntity {
       notReadChatCount = nil
       lastChatMessage = nil
       lastChatTime = nil
+      iFavorite = true
+      iAlarm = true
+      iJoin = true
+      lat = 0.0
+      lng = 0.0
     }
     
     init(from decoder: Decoder) throws {
@@ -58,6 +75,11 @@ enum RoomInfoEntity {
       lastChatMessage = try? container.decode(String?.self, forKey: .lastChatMessage)
       lastChatTime = try? container.decode(String?.self, forKey: .lastChatTime)
       distance = try? container.decode(Double?.self, forKey: .distance)
+      iFavorite = try? container.decode(Bool?.self, forKey: .iFavorite)
+      iAlarm = try? container.decode(Bool?.self, forKey: .iAlarm)
+      iJoin = try? container.decode(Bool?.self, forKey: .iJoin)
+      lat = try? container.decode(Double?.self, forKey: .lat)
+      lng = try? container.decode(Double?.self, forKey: .lng)
     }
   }
 }

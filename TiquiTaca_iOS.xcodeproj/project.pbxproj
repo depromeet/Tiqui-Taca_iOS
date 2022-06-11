@@ -10,6 +10,7 @@
 		0911DA5B28451FAA00FCC470 /* SocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0911DA5A28451FAA00FCC470 /* SocketService.swift */; };
 		0927967E28484D3700BA3F18 /* UINavigationController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0927967D28484D3700BA3F18 /* UINavigationController+Extensions.swift */; };
 		0963D1352846F15A005E7B70 /* ChatDetailCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0963D1342846F15A005E7B70 /* ChatDetailCore.swift */; };
+		098D3C3A28543A8600F6C326 /* RoomAlarmResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 098D3C3928543A8600F6C326 /* RoomAlarmResponse.swift */; };
 		09AFA054284F7962007E56BB /* OtherProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AFA053284F7962007E56BB /* OtherProfileView.swift */; };
 		09AFA056284F7972007E56BB /* OtherProfileCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AFA055284F7972007E56BB /* OtherProfileCore.swift */; };
 		09F4ECC32853ACE9005B424D /* SendLightningResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F4ECC22853ACE9005B424D /* SendLightningResponse.swift */; };
@@ -205,6 +206,7 @@
 		0911DA5A28451FAA00FCC470 /* SocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketService.swift; sourceTree = "<group>"; };
 		0927967D28484D3700BA3F18 /* UINavigationController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Extensions.swift"; sourceTree = "<group>"; };
 		0963D1342846F15A005E7B70 /* ChatDetailCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDetailCore.swift; sourceTree = "<group>"; };
+		098D3C3928543A8600F6C326 /* RoomAlarmResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomAlarmResponse.swift; sourceTree = "<group>"; };
 		09AFA053284F7962007E56BB /* OtherProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherProfileView.swift; sourceTree = "<group>"; };
 		09AFA055284F7972007E56BB /* OtherProfileCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherProfileCore.swift; sourceTree = "<group>"; };
 		09F4ECC22853ACE9005B424D /* SendLightningResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendLightningResponse.swift; sourceTree = "<group>"; };
@@ -697,8 +699,10 @@
 		F2E38F1028478286007C96F7 /* Response */ = {
 			isa = PBXGroup;
 			children = (
+				F2E38EFE28451CE5007C96F7 /* RoomLikeEntity.swift */,
 				F2E38F0E28477F1B007C96F7 /* RoomFromCategoryResponse.swift */,
 				F2E38F0C28477C88007C96F7 /* RoomPreviewResponse.swift */,
+				098D3C3928543A8600F6C326 /* RoomAlarmResponse.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -736,7 +740,6 @@
 				F914EE1C284B32BF000FADC9 /* QuestionCommentEntity.swift */,
 				F221850E284E560B005CE6C3 /* FCMUpdateRequest.swift */,
 				09F4ECC22853ACE9005B424D /* SendLightningResponse.swift */,
-				F2E38EFE28451CE5007C96F7 /* RoomLikeEntity.swift */,
 				F9BEA1C4285372A300EF35BA /* LetterEntity.swift */,
 				F9BEA1C6285372B800EF35BA /* LetterSummaryEntity.swift */,
 			);
@@ -1283,6 +1286,7 @@
 				F9322E7428424A9600EB956E /* QuestionEntity.swift in Sources */,
 				F9B45A1F282BE9DB00948586 /* AppAlarmEntity.swift in Sources */,
 				F2218517284F7E3D005CE6C3 /* RoomInfoEntity.swift in Sources */,
+				098D3C3A28543A8600F6C326 /* RoomAlarmResponse.swift in Sources */,
 				F971D85028421DBB00E2FAE8 /* Message.swift in Sources */,
 				F2E38F13284788B0007C96F7 /* RoomFromCategoryRequest.swift in Sources */,
 				F2127642281021C700FB568D /* TermsOfServiceCore.swift in Sources */,

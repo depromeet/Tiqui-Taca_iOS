@@ -7,6 +7,7 @@
 
 
 import SwiftUI
+import Combine
 import ComposableArchitecture
 import TTDesignSystemModule
 
@@ -29,6 +30,7 @@ struct ChatDetailView: View {
     let chatLogList: [ChatLogEntity.Response]
     let chatMenuState: ChatMenuState
     let myInfo: UserEntity.Response?
+    let isAlarmOn: Bool
     
     init(state: CDState) {
       route = state.route
@@ -36,6 +38,7 @@ struct ChatDetailView: View {
       chatLogList = state.chatLogList
       chatMenuState = state.chatMenuState
       myInfo = state.myInfo
+      isAlarmOn = state.isAlarmOn
     }
   }
   
@@ -313,8 +316,9 @@ extension ChatDetailView {
         
         HStack(spacing: 4) {
           Button {
+            viewStore.send(.selectAlarm)
           } label: {
-            Image("alarmOn")
+            Image(viewStore.isAlarmOn ? "alarmOn" : "alarmOff")
               .resizable()
               .frame(width: 24, height: 24)
           }
@@ -408,10 +412,3 @@ private struct OffsetPreferenceKey: PreferenceKey {
   static var defaultValue: CGFloat = .zero
   static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {}
 }
-
-
-//struct ChatDetailView_Previews: PreviewProvider {
-//	static var previews: some View {
-//		ChatDetailView()
-//	}
-//}
