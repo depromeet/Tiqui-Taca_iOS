@@ -24,6 +24,9 @@ enum NotificationAction: Equatable {
   case getNotificationsResponse(Result<InfiniteList<NotificationResponse>?, HTTPError>)
   case loadMoreNotificationsResponse(Result<InfiniteList<NotificationResponse>?, HTTPError>)
   case notificationTapped(NotificationResponse)
+  case setReadAllNotification
+  case readAllNotificationResponse(Result<Box<Void>, HTTPError>)
+  case readNotificationResponse(Result<Box<Void>, HTTPError>)
 }
 
 struct NotificationEnvironment {
@@ -95,6 +98,39 @@ let notificationCore = Reducer<
     return .none
     
   case let .notificationTapped(item):
+    state.notifications.indices.filter { state.notifications[$0].id == item.id }
+      .forEach { state.notifications[$0].isRead = true }
+    return .concatenate([
+      .init(value: .setIsLoading(true)),
+      environment.appService.notificationService
+        .readNotification(id: item.id)
+        .receive(on: environment.mainQueue)
+        .catchToEffect()
+        .map(NotificationAction.readNotificationResponse)
+    ])
+    
+  case .setReadAllNotification:
+    state.notifications.indices.filter { !state.notifications[$0].isRead }
+      .forEach { state.notifications[$0].isRead = true }
+    return .concatenate([
+      .init(value: .setIsLoading(true)),
+      environment.appService.notificationService
+        .readAllNotification()
+        .receive(on: environment.mainQueue)
+        .catchToEffect()
+        .map(NotificationAction.readAllNotificationResponse)
+    ])
+    
+  case .readAllNotificationResponse(.success):
+    return .init(value: .setIsLoading(false))
+    
+  case .readAllNotificationResponse(.failure):
+    return .none
+    
+  case .readNotificationResponse(.success):
+    return .init(value: .setIsLoading(false))
+    
+  case .readNotificationResponse(.failure):
     return .none
   }
 }

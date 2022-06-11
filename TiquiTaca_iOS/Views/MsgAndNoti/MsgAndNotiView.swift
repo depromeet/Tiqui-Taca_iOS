@@ -48,6 +48,7 @@ struct MsgAndNotiView: View {
         Spacer()
         if viewStore.selectedType == .notification {
           Button {
+            viewStore.send(.notificationAction(.setReadAllNotification))
           } label: {
             Text("모두 읽음")
               .font(.subtitle4)

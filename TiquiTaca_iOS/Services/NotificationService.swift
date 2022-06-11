@@ -10,8 +10,8 @@ import TTNetworkModule
 
 protocol NotificationServiceType {
   func getNotifications(_ request: JSONConvertible?) -> AnyPublisher<InfiniteList<NotificationResponse>?, HTTPError>
-  func readAllNotification() -> AnyPublisher<Void, HTTPError>
-  func readNotification(id: String) -> AnyPublisher<Void, HTTPError>
+  func readAllNotification() -> AnyPublisher<Box<Void>, HTTPError>
+  func readNotification(id: String) -> AnyPublisher<Box<Void>, HTTPError>
 }
 
 final class NotificationService: NotificationServiceType {
@@ -28,11 +28,15 @@ final class NotificationService: NotificationServiceType {
     )
   }
   
-  func readAllNotification() -> AnyPublisher<Void, HTTPError> {
+  func readAllNotification() -> AnyPublisher<Box<Void>, HTTPError> {
     return network.request(.readAllNotification)
+      .map { _ in Box<Void>() }
+      .eraseToAnyPublisher()
   }
   
-  func readNotification(id: String) -> AnyPublisher<Void, HTTPError> {
+  func readNotification(id: String) -> AnyPublisher<Box<Void>, HTTPError> {
     return network.request(.readNotification(id: id))
+      .map { _ in Box<Void>() }
+      .eraseToAnyPublisher()
   }
 }

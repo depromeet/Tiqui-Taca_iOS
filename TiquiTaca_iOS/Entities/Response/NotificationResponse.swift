@@ -14,7 +14,7 @@ struct NotificationResponse: Codable {
   let subTitle: String
   let type: NotificationType?
   let createdAt: Date
-  let isRead: Bool
+  var isRead: Bool
   
   enum CodingKeys: String, CodingKey {
     case id = "_id"
