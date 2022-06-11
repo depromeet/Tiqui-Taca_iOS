@@ -304,7 +304,6 @@ private struct RoomListView: View {
                 Button(
                   action: {
                     ViewStore(store).send(.removeFavoriteRoom(room))
-                    
                   },
                   label: { Text("삭제") }
                 ).tint(.red)
