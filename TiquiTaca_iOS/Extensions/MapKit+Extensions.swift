@@ -22,3 +22,5 @@ extension CLLocationCoordinate2D: Equatable {
     && lhs.longitude == rhs.longitude
   }
 }
+
+extension MKCircle: Identifiable { }

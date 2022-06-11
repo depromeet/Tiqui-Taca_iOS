@@ -95,67 +95,89 @@ struct ChangeProfileView: View {
       }
       .padding(.horizontal, .spacingXL)
       .padding(.top, 120)
-      
-      TTPopupView.init(
-        popUpCase: .twoLineOneButton,
-        title: "앗, 닉네임을 바꿀 수 없어요!",
-        subtitle: "현재 참여중인 채팅방을 나오면 닉네임을 바꿀 수 있어요.",
-        leftButtonName: "닫기",
-        cancel: {
-          viewStore.send(.dismissPopup)
-        }
-      )
-      .opacity(viewStore.popupPresented ? 1 : 0)
     }
-    .vCenter()
-    .hCenter()
-    .background(Color.black800)
-    .ignoresSafeArea(.keyboard)
-    .navigationBarBackButtonHidden(true)
-    .bottomSheet(
-      bottomSheetPosition: viewStore.binding(
-        get: \.bottomSheetPosition,
-        send: Action.setBottomSheetPosition
-      ),
-      options: TTBottomSheet.Options
+    .fullScreenCover(isPresented: viewStore.binding(
+      get: \.popupPresented,
+      send: ChangeProfileAction.dismissPopup)
     ) {
-      ProfileImageListView(
-        selectedProfile: viewStore.binding(
-          get: \.profileImage,
-          send: ChangeProfileAction.setProfileImage
-        )
-      ).padding(.top, .spacingXXL)
+      AlertView(isPopupPresent: viewStore.binding(
+        get: \.popupPresented,
+        send: ChangeProfileAction.dismissPopup))
+      .background(BackgroundTransparentView())
     }
-    .toolbar {
-      ToolbarItem(placement: .navigationBarLeading) {
-        Button {
-          presentationMode.wrappedValue.dismiss()
-        } label: {
-          Image("leftArrow")
+      .vCenter()
+      .hCenter()
+      .background(Color.black800)
+      .ignoresSafeArea(.keyboard)
+      .navigationBarBackButtonHidden(true)
+      .bottomSheet(
+        bottomSheetPosition: viewStore.binding(
+          get: \.bottomSheetPosition,
+          send: Action.setBottomSheetPosition
+        ),
+        options: TTBottomSheet.Options
+      ) {
+        ProfileImageListView(
+          selectedProfile: viewStore.binding(
+            get: \.profileImage,
+            send: ChangeProfileAction.setProfileImage
+          )
+        ).padding(.top, .spacingXXL)
+      }
+      .toolbar {
+        ToolbarItem(placement: .navigationBarLeading) {
+          Button {
+            presentationMode.wrappedValue.dismiss()
+          } label: {
+            Image("leftArrow")
+          }
+        }
+        ToolbarItem(placement: .principal) {
+          Text("프로필 수정하기")
+            .font(.subtitle2)
+            .foregroundColor(.white200)
+        }
+        ToolbarItem(placement: .navigationBarTrailing) {
+          Button {
+            viewStore.send(.doneButtonTapped)
+            UIView.setAnimationsEnabled(false)
+          } label: {
+            Text("완료")
+              .foregroundColor(.green500)
+              .font(.subtitle1)
+          }
+          .onChange(of: viewStore.dismissCurrentPage) { isDismissCurrentView in
+            if isDismissCurrentView {
+              presentationMode.wrappedValue.dismiss()
+            }
+          }
+          .disabled(!viewStore.isAvailableCompletion)
         }
       }
-      ToolbarItem(placement: .principal) {
-        Text("프로필 수정하기")
-          .font(.subtitle2)
-          .foregroundColor(.white200)
+      .onTapGesture {
+        focusField = false
+        viewStore.send(.setBottomSheetPosition(.hidden))
       }
-      ToolbarItem(placement: .navigationBarTrailing) {
-        Button {
-          viewStore.send(.doneButtonTapped)
-        } label: {
-          Text("완료")
-            .foregroundColor(.green500)
-            .font(.subtitle1)
+  }
+}
+
+private struct AlertView: View {
+  @Binding var isPopupPresent: Bool
+  
+  var body: some View {
+    TTPopupView.init(
+      popUpCase: .twoLineOneButton,
+      title: "앗, 닉네임을 바꿀 수 없어요!",
+      subtitle: "현재 참여중인 채팅방을 나오면 닉네임을 바꿀 수 있어요.",
+      leftButtonName: "닫기",
+      cancel: {
+        isPopupPresent = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+          UIView.setAnimationsEnabled(true)
         }
-        .onChange(of: viewStore.dismissCurrentPage) { isDismissCurrentView in
-          if isDismissCurrentView { self.presentationMode.wrappedValue.dismiss() }
-        }
-        .disabled(!viewStore.isAvailableCompletion)
       }
-    }
-    .onTapGesture {
-      focusField = false
-    }
+    )
+    .padding(EdgeInsets(top: 0, leading: 24, bottom: 0, trailing: 24))
   }
 }
 

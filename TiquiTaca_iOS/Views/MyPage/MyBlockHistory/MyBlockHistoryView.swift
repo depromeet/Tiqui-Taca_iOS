@@ -53,7 +53,13 @@ struct MyBlockHistoryView: View {
           Spacer()
         }
         .background(Color.white)
-        
+      }
+      .ttPopup(
+        isShowing:viewStore.binding(
+          get: \.popupPresented,
+          send: MyBlockHistoryAction.dismissPopup
+        )
+      ) {
         TTPopupView.init(
           popUpCase: .twoLineTwoButton,
           title: "'\(viewStore.unBlockUser?.nickname ?? "")' 님을 차단 해제하시겠어요?",
@@ -67,12 +73,12 @@ struct MyBlockHistoryView: View {
             viewStore.send(.dismissPopup)
           }
         )
-        .opacity(viewStore.popupPresented ? 1 : 0)
       }
       .onAppear(
         perform: {
           viewStore.send(.getBlockUserList)
-        })
+        }
+      )
     }
   }
 }

@@ -13,11 +13,12 @@ struct QuestionItemView: View {
   var model: QuestionEntity.Response
 
   var body: some View {
-    VStack(alignment: .leading) {
-      HStack(alignment: .top) {
+    VStack(alignment: .leading, spacing: 0) {
+      HStack(alignment: .top, spacing: 0) {
         Image(model.user.profile.imageName)
           .resizable()
           .frame(width: 32, height: 32)
+          .padding(.trailing, 8)
         
         VStack(alignment: .leading) {
           Text(model.user.nickname)
@@ -27,23 +28,25 @@ struct QuestionItemView: View {
             .font(.body8)
             .foregroundColor(.white800)
         }
-        
         Spacer()
         Image("arrowForward")
           .resizable()
           .frame(width: 24, height: 24)
       }
       
-      VStack(alignment: .leading) {
+      VStack(alignment: .leading, spacing: 4) {
         Text(model.content)
           .font(.body3)
           .foregroundColor(.black900)
+          .frame(maxWidth: .infinity, maxHeight: 44, alignment: .leading)
         
-        HStack {
+        HStack(spacing: 0) {
           Image(model.ilike ? "replyGoodOn" : "replyGoodOff")
           Text("\(model.likesCount)")
             .font(.body7)
             .foregroundColor(.white800)
+            .padding(.leading, 2)
+            .padding(.trailing, 10)
           
           Image("comments")
             .resizable()
@@ -51,8 +54,10 @@ struct QuestionItemView: View {
           Text("\(model.commentsCount)")
             .font(.body7)
             .foregroundColor(.white800)
+            .padding(.leading, 2)
         }
       }
+      .padding(.top, 8)
     }
     .padding(.top, 10)
     .padding([.leading, .trailing], 12)
@@ -64,6 +69,7 @@ struct QuestionItemView: View {
 
 //struct QuestionItemView_Previews: PreviewProvider {
 //  static var previews: some View {
-////    QuestionItemView(model: QuestionEntity.Response.)
+//    QuestionItemView(model: QuestionEntity)
+//    QuestionItemView()
 //  }
 //}

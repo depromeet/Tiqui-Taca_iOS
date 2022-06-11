@@ -28,6 +28,8 @@ struct MyPageItemInfo: Equatable, Identifiable {
       return "alarm"
     case .versionInfo:
       return "version"
+    case .levelInfo:
+      return ""
     }
   }
   var title: String {
@@ -46,6 +48,8 @@ struct MyPageItemInfo: Equatable, Identifiable {
       return "고객센터"
     case .versionInfo:
       return "버전정보"
+    case .levelInfo:
+      return ""
     }
   }
 }

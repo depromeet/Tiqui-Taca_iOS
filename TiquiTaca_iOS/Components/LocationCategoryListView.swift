@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import TTDesignSystemModule
 
 struct LocationCategoryListView: View {
   @Binding var selectedCategory: LocationCategory
@@ -15,6 +16,7 @@ struct LocationCategoryListView: View {
       HStack(spacing: .spacingXS) {
         ForEach(LocationCategory.allCases) { category in
           Button {
+            selectedCategory = category
           } label: {
             HStack(spacing: .spacingXXS) {
               if !category.imageName.isEmpty {
@@ -23,18 +25,15 @@ struct LocationCategoryListView: View {
                   .frame(width: 24, height: 24)
               }
               Text(category.locationName)
-                .font(.body6)
-                .foregroundColor(.white)
             }
-            .padding(.leading, .spacingXS)
-            .padding(.trailing, .spacingM)
-            .frame(height: 32)
-            .background(Color.black800)
-            .cornerRadius(20)
+            .padding(.horizontal, .spacingM)
           }
+          .buttonStyle(TTButtonChipStyle(isSelected: category == selectedCategory))
+          .disabled(category == selectedCategory)
         }
       }
       .padding(.horizontal, .spacingXL)
+      .frame(height: 33)
     }
   }
 }
@@ -42,5 +41,6 @@ struct LocationCategoryListView: View {
 struct LocationCategoryListView_Previews: PreviewProvider {
   static var previews: some View {
     LocationCategoryListView(selectedCategory: .constant(.all))
+      .previewLayout(.sizeThatFits)
   }
 }

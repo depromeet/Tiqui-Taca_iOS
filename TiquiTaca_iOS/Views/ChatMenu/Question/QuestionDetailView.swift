@@ -24,7 +24,7 @@ struct QuestionDetailView: View {
     let likeActivated: Bool
     
     let bottomSheetPresented: Bool
-    let bottomSheetPosition: TTBottomSheet.Position
+    let bottomSheetPosition: TTBottomSheet.ActionSheetPosition
     let popupPresented: Bool
     let bottomSheetActionType: QuestionBottomActionType?
     let bottomType: QuestionBottomType?
@@ -252,9 +252,9 @@ struct QuestionDetailView: View {
       .padding([.leading, .trailing], 10)
       .padding(.top, 10)
       .padding(.bottom, 10)
-      .frame(height: 44)
     }
     .background(Color.black800)
+    .frame(height: 38)
   }
   
   var listHeader: some View {

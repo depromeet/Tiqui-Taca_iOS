@@ -52,4 +52,14 @@ extension String {
       return dateFormatter.string(for: createdDate) ?? ""
     }
   }
+  
+  func getYearAndDate() -> String {
+    let iso8601Formatter = ISO8601DateFormatter()
+    let createdDate = iso8601Formatter.date(from: self)
+    
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "yy/MM/dd"
+    
+    return dateFormatter.string(for: createdDate) ?? ""
+  }
 }
