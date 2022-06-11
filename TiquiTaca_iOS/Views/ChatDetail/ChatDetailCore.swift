@@ -21,6 +21,7 @@ struct ChatDetailState: Equatable {
   var route: Route?
   var currentRoom: RoomInfoEntity.Response = .init()
   var myInfo: UserEntity.Response?
+  var blockUserList: [BlockUserEntity.Response]?
   
   var isAlarmOn = false
   var isFirstLoad = true
@@ -54,9 +55,11 @@ enum ChatDetailAction: Equatable {
   case selectSendLetter(UserEntity.Response?)
   case selectAlarm
   case joinRoom
+  case getBlockUserList
   case responseJoinRoom(Result<RoomInfoEntity.Response?, HTTPError>)
   case responseQuestionDetail(Result<QuestionEntity.Response?, HTTPError>)
   case responseAlarm(Result<RoomAlarmResponse?, HTTPError>)
+  case responseBlockUserList(Result<[BlockUserEntity.Response]?, HTTPError>)
   
   case moveToOtherView
   case setRoute(ChatDetailState.Route?)
@@ -139,12 +142,15 @@ let chatDetailCore = Reducer<
     guard state.isFirstLoad else { return .none }
     
     state.myInfo = environment.appService.userService.myProfile
+    state.blockUserList = environment.appService.userService.blockUserList
     state.isFirstLoad = false
     return .merge(
       environment.locationManager
         .delegate()
         .map(ChatDetailAction.locationManager),
       Effect(value: .joinRoom)
+        .eraseToEffect(),
+      Effect(value: .getBlockUserList)
         .eraseToEffect(),
       environment.appService.socketService
         .connect(state.roomId)
@@ -179,6 +185,12 @@ let chatDetailCore = Reducer<
     state.otherProfileState = OtherProfileState(userId: userId)
     return .none
   // MARK: API Request
+  case .getBlockUserList:
+    return environment.appService.userService
+      .getBlockUserList()
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(ChatDetailAction.responseBlockUserList)
   case let .selectQuestionDetail(chatId):
     state.route = nil
     return environment.appService.questionService
@@ -222,6 +234,9 @@ let chatDetailCore = Reducer<
     guard let alarmOn = res?.isChatAlarmOn, state.isAlarmOn != alarmOn else { return .none }
     state.isAlarmOn = alarmOn
     return .none
+  case let .responseBlockUserList(.success(res)):
+    state.blockUserList = res ?? []
+    return .none
   // MARK: Route
   case .moveToOtherView:
     state.moveToOtherView = true
@@ -232,7 +247,8 @@ let chatDetailCore = Reducer<
     return .none
   case .responseJoinRoom(.failure),
       .responseQuestionDetail(.failure),
-      .responseAlarm(.failure):
+      .responseAlarm(.failure),
+      .responseBlockUserList(.failure):
     return .none
   case let .locationManager(.didUpdateLocations(locations)):
     print("로케이션 받아옴", locations.first?.coordinate.latitude, locations.first?.coordinate.longitude)

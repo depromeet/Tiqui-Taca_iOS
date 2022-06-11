@@ -15,7 +15,7 @@ struct ChatMenuView: View {
   
   private let store: Store<State, Action>
   @Binding var shouldPopToRootView: Bool
-  @StateObject private var viewStore: ViewStore<ViewState, Action>
+  @ObservedObject private var viewStore: ViewStore<ViewState, Action>
   @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
   
   struct ViewState: Equatable {
@@ -48,7 +48,7 @@ struct ChatMenuView: View {
   init(store: Store<State, Action>, shouldPopToRootView: Binding<Bool>) {
     self._shouldPopToRootView = shouldPopToRootView
     self.store = store
-    self._viewStore = StateObject(wrappedValue: ViewStore.init(store.scope(state: ViewState.init)))
+    self.viewStore = ViewStore.init(store.scope(state: ViewState.init))
     self.shouldPopToRootView = viewStore.state.isExistRoom
   }
   
@@ -86,6 +86,9 @@ struct ChatMenuView: View {
                       .foregroundColor(.black100)
                   }
                   .frame(width: 79, height: 88)
+                  .onTapGesture{
+                    print("참여자 확인")
+                  }
                 }
               }
             }
@@ -139,6 +142,20 @@ struct ChatMenuView: View {
     .navigationBarBackButtonHidden(true)
     .navigationBarHidden(true)
     .ignoresSafeArea()
+//    .overlay(
+//      OtherProfileView(
+//        store: store.scope(
+//          state: \.otherProfileState,
+//          action: ChatMenuAction.otherProfileAction
+//        ),
+//        showView: $showOtherProfile,
+//        sendLetter: { userInfo in
+//          viewStore.send(.selectSendLetter(userInfo))
+//        }
+//      )
+//      .opacity(showOtherProfile ? 1 : 0),
+//      alignment: .center
+//    )
     .onAppear(perform: {
       viewStore.send(.getRoomUserListInfo)
       viewStore.send(.getQuestionList)
