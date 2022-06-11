@@ -21,7 +21,7 @@ struct ChatState: Equatable {
   var likeRoomList: [RoomInfoEntity.Response] = []
   var popularRoomList: [RoomInfoEntity.Response] = []
   
-  var chatDetailState: ChatDetailState = .init()
+  var chatDetailState: ChatDetailState = .init(roomId: "")
 }
 
 enum ChatAction: Equatable {
@@ -33,6 +33,7 @@ enum ChatAction: Equatable {
   case responsePopularRoomList(Result<[RoomInfoEntity.Response]?, HTTPError>)
   case responseLikeRoomList(Result<[RoomInfoEntity.Response]?, HTTPError>)
   case responseEnteredRoom(Result<RoomInfoEntity.Response?, HTTPError>)
+  case responseRoomFavorite(Result<RoomLikeEntity.Response?, HTTPError>)
   
   case tabChange(RoomListType)
   case removeFavoriteRoom(RoomInfoEntity.Response)
@@ -96,26 +97,33 @@ let chatCore = Reducer<
     )
     // MARK: Requeset
   case .fetchEnteredRoomInfo:
-    return environment.appService.roomService
-      .getEnteredRoom()
-      .receive(on: environment.mainQueue)
-      .catchToEffect()
-      .map(ChatAction.responseEnteredRoom)
-  case .fetchLikeRoomList:
-    return environment.appService.roomService
-      .getLikeRoomList()
-      .receive(on: environment.mainQueue)
-      .catchToEffect()
-      .map(ChatAction.responseLikeRoomList)
-  case .fetchPopularRoomList:
-    return environment.appService.roomService
-      .getPopularRoomList()
-      .receive(on: environment.mainQueue)
-      .catchToEffect()
-      .map(ChatAction.responsePopularRoomList)
+		return environment.appService.roomService
+			.getEnteredRoom()
+			.receive(on: environment.mainQueue)
+			.catchToEffect()
+			.map(ChatAction.responseEnteredRoom)
+	case .fetchLikeRoomList:
+		return environment.appService.roomService
+			.getLikeRoomList()
+			.receive(on: environment.mainQueue)
+			.catchToEffect()
+			.map(ChatAction.responseLikeRoomList)
+	case .fetchPopularRoomList:
+		return environment.appService.roomService
+			.getPopularRoomList()
+			.receive(on: environment.mainQueue)
+			.catchToEffect()
+			.map(ChatAction.responsePopularRoomList)
   case .removeFavoriteRoom(let room):
-    return .none
+    return environment.appService.roomService
+      .registLikeRoom(roomId: room.id ?? "")
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(ChatAction.responseRoomFavorite)
     // MARK: Response
+  case let .responseRoomFavorite(.success(res)):
+    return Effect(value: .fetchLikeRoomList)
+      .eraseToEffect()
   case let .responseEnteredRoom(.success(res)):
     state.enteredRoom = res
     return .none
@@ -127,7 +135,8 @@ let chatCore = Reducer<
     return .none
   case .responseEnteredRoom(.failure),
       .responseLikeRoomList(.failure),
-      .responsePopularRoomList(.failure):
+      .responsePopularRoomList(.failure),
+      .responseRoomFavorite(.failure):
     return .none
     // MARK: View Action
   case .tabChange(let type):
@@ -135,7 +144,8 @@ let chatCore = Reducer<
     state.currentTab = type
     return .none
   case .willEnterRoom(let room):
-    state.chatDetailState = ChatDetailState(currentRoom: room)
+    guard let roomId = room.id else { return .none }
+    state.chatDetailState = ChatDetailState(roomId: roomId)
     state.willEnterRoom = room
     return .none
   case .refresh:

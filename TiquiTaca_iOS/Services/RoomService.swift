@@ -18,6 +18,7 @@ protocol RoomServiceType {
   func exitRoom(roomId: String) -> AnyPublisher<DefaultResponse?, HTTPError>
   func joinRoom(roomId: String) -> AnyPublisher<RoomInfoEntity.Response?, HTTPError>
   func getRoomUserList(roomId: String) -> AnyPublisher<RoomUserInfoEntity.Response?, HTTPError>
+  func roomAlarm(roomId: String) -> AnyPublisher<RoomAlarmResponse?, HTTPError>
 }
 
 final class RoomService: RoomServiceType {
@@ -61,6 +62,9 @@ final class RoomService: RoomServiceType {
   
   func joinRoom(roomId: String) -> AnyPublisher<RoomInfoEntity.Response?, HTTPError> {
     network.request(.joinRoom(roomId: roomId), responseType: RoomInfoEntity.Response.self)
+  }
+  func roomAlarm(roomId: String) -> AnyPublisher<RoomAlarmResponse?, HTTPError> {
+    network.request(.alarmRoom(roomId: roomId), responseType: RoomAlarmResponse.self)
   }
 }
 

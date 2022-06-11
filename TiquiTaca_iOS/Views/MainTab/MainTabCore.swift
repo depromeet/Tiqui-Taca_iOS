@@ -96,12 +96,22 @@ let mainTabCore = Reducer<
   case let .setSelectedTab(selectedTab):
     state.selectedTab = selectedTab
     return .none
+    
+  case let .mainMapAction(.setIsMoveToChatDetail(isMoveToChatDetail)):
+    if isMoveToChatDetail {
+      state.selectedTab = .chat
+    }
+    return .none
+    
   case .mainMapAction:
     return .none
+    
   case .chatAction:
     return .none
+    
   case .msgAndNotiAction:
     return .none
+    
   case .myPageAction:
     return .none
   }

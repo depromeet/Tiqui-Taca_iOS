@@ -35,6 +35,20 @@ enum UserEntity {
       case level
     }
     
+    init() {
+      id = ""
+      nickname = ""
+      profile = ProfileImage.init()
+      phoneNumber = ""
+      fcmToken = ""
+      appAlarm = false
+      chatAlarm = false
+      iBlockUsers = []
+      createdAt = ""
+      lightningScore = 0
+      level = 0
+    }
+    
     init(from decoder: Decoder) throws {
       let container = try decoder.container(keyedBy: CodingKeys.self)
       id = (try? container.decode(String.self, forKey: .id)) ?? ""

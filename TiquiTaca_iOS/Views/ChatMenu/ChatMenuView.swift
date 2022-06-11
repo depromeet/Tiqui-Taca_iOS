@@ -15,7 +15,7 @@ struct ChatMenuView: View {
   
   private let store: Store<State, Action>
   @Binding var shouldPopToRootView: Bool
-  @ObservedObject private var viewStore: ViewStore<ViewState, Action>
+  @StateObject private var viewStore: ViewStore<ViewState, Action>
   @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
   
   struct ViewState: Equatable {
@@ -26,7 +26,8 @@ struct ChatMenuView: View {
     let questionList: [QuestionEntity.Response]
     
     let popupPresented: Bool
-    let exitSuccess: Bool
+    let isExistRoom: Bool
+    let isFavorite: Bool
     let questionDetailViewState: QuestionDetailState
     let questionListViewState: QuestionListState
     
@@ -36,8 +37,9 @@ struct ChatMenuView: View {
       roomUserList = state.roomUserList
       questionList = state.questionList
       popupPresented = state.popupPresented
+      isFavorite = state.isFavorite
       
-      exitSuccess = state.exitSuccess
+      isExistRoom = state.isExistRoom
       questionDetailViewState = state.questionDetailViewState
       questionListViewState = state.questionListViewState
     }
@@ -46,8 +48,8 @@ struct ChatMenuView: View {
   init(store: Store<State, Action>, shouldPopToRootView: Binding<Bool>) {
     self._shouldPopToRootView = shouldPopToRootView
     self.store = store
-    viewStore = ViewStore.init(store.scope(state: ViewState.init))
-    self.shouldPopToRootView = viewStore.state.exitSuccess
+    self._viewStore = StateObject(wrappedValue: ViewStore.init(store.scope(state: ViewState.init)))
+    self.shouldPopToRootView = viewStore.state.isExistRoom
   }
   
   var body: some View {
@@ -178,10 +180,17 @@ struct ChatMenuView: View {
         
         Spacer()
         
-        Button {
-          viewStore.send(.presentPopup)
-        } label: {
-          Image("chat_exit")
+        HStack(spacing: 4) {
+          Button {
+            viewStore.send(.roomFavoriteSelect)
+          } label: {
+            Image(viewStore.isFavorite ? "chatFavorite" : "chatFavoriteDisabled")
+          }
+          Button {
+            viewStore.send(.presentPopup)
+          } label: {
+            Image("chat_exit")
+          }
         }
       }
       .padding([.leading, .trailing], 10)

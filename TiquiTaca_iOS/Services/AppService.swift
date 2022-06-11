@@ -19,6 +19,7 @@ struct AppService {
   let roomService: RoomServiceType
   let socketService: SocketService
   let notificationService: NotificationServiceType
+  let letterService: LetterService
   
   init() {
     authService = AuthService()
@@ -27,5 +28,6 @@ struct AppService {
     roomService = RoomService()
     socketService = .live
     notificationService = NotificationService()
+    letterService = LetterService()
   }
 }

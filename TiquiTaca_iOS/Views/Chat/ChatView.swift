@@ -11,63 +11,81 @@ import ComposableArchitecture
 import TTDesignSystemModule
 
 struct ChatView: View {
-  var store: Store<ChatState, ChatAction>
   @State private var moveToChatDetail: Bool = false
   @State private var showPopup: Bool = false
+  var store: Store<ChatState, ChatAction>
+  @StateObject private var viewStore: ViewStore<ViewState, ChatAction>
+  
+  struct ViewState: Equatable {
+    let currentTab: RoomListType
+    let lastLoadTime: String
+    let enteredRoom: RoomInfoEntity.Response?
+    let likeRoomList: [RoomInfoEntity.Response]
+    let popularRoomList: [RoomInfoEntity.Response]
+    
+    init(state: ChatState) {
+      currentTab = state.currentTab
+      lastLoadTime = state.lastLoadTime
+      enteredRoom = state.enteredRoom
+      likeRoomList = state.likeRoomList
+      popularRoomList = state.popularRoomList
+    }
+  }
   
   init(store: Store<ChatState, ChatAction>) {
     self.store = store
+    self._viewStore = StateObject(wrappedValue: ViewStore(store.scope(state: ViewState.init)))
   }
   
   var body: some View {
-    WithViewStore(self.store) { viewStore in
-      VStack(spacing: 0) {
-        VStack(spacing: .spacingM) {
-          Text("채팅방")
-            .font(.heading1)
-            .foregroundColor(.white)
-            .padding(.horizontal, .spacingXL)
-            .padding(.top, .spacingXL)
-            .hLeading()
-          
-          EnteredRoomView(
-            store: store,
-            moveToChatDetail: $moveToChatDetail
-          )
-          
-          TabKindView(
-            currentTab: viewStore.binding(
-              get: \.currentTab,
-              send: ChatAction.tabChange),
-            currentTime: viewStore.state.lastLoadTime
-          )
-        }
-          .background(Color.black800)
+    VStack(spacing: 0) {
+      VStack(spacing: .spacingM) {
+        Text("채팅방")
+          .font(.heading1)
+          .foregroundColor(.white)
+          .padding(.horizontal, .spacingXL)
+          .padding(.top, .spacingXL)
+          .hLeading()
         
-        RoomListView(
+        EnteredRoomView(
           store: store,
-          type: viewStore.state.currentTab,
-          showPopup: $showPopup,
-          moveToChatDetail: $moveToChatDetail)
-          .background(.white)
+          moveToChatDetail: $moveToChatDetail
+        )
         
-        NavigationLink(
-          destination: ChatDetailView(
+        TabKindView(
+          currentTab: viewStore.binding(
+            get: \.currentTab,
+            send: ChatAction.tabChange),
+          currentTime: viewStore.lastLoadTime
+        )
+      }
+        .background(Color.black800)
+      
+      RoomListView(
+        store: store,
+        type: viewStore.currentTab,
+        showPopup: $showPopup,
+        moveToChatDetail: $moveToChatDetail)
+        .background(.white)
+      
+      NavigationLink(
+        destination: ChatDetailView(
             store: store.scope(
               state: \.chatDetailState,
               action: ChatAction.chatDetailAction),
             shouldPopToRootView: $moveToChatDetail
           ),
-          isActive: $moveToChatDetail
-        ) { EmptyView() }
-          .isDetailLink(false)
-          .frame(height: 0)
-          .hidden()
-      }
-        .listStyle(.plain)
-        .navigationTitle("채팅방")
-        .onAppear(perform: { viewStore.send(.onAppear) })
+        isActive: $moveToChatDetail
+      ) { EmptyView() }
+        .isDetailLink(false)
+        .frame(height: 0)
+        .hidden()
     }
+      .listStyle(.plain)
+      .navigationTitle("채팅방")
+      .onAppear {
+        viewStore.send(.onAppear)
+      }
   }
 }
 
@@ -284,7 +302,9 @@ private struct RoomListView: View {
             .swipeActions(edge: .trailing, allowsFullSwipe: false, content: {
               if roomType == .like {
                 Button(
-                  action: { ViewStore(store).send(.removeFavoriteRoom(room)) },
+                  action: {
+                    ViewStore(store).send(.removeFavoriteRoom(room))
+                  },
                   label: { Text("삭제") }
                 ).tint(.red)
               }
@@ -400,21 +420,6 @@ private struct NoDataView: View {
     .listRowInsets(EdgeInsets())
     .vCenter()
     .hCenter()
-  }
-}
-
-
-// MARK: Trasnparent Background
-struct BackgroundTransparentView: UIViewRepresentable {
-  func makeUIView(context: Context) -> UIView {
-    let view = UIView()
-    DispatchQueue.main.async {
-      view.superview?.superview?.backgroundColor = Color.black900.opacity(0.7).uiColor
-    }
-    return view
-  }
-
-  func updateUIView(_ uiView: UIView, context: Context) {
   }
 }
 
