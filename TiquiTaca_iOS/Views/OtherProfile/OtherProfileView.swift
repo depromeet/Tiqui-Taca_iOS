@@ -17,7 +17,7 @@ struct OtherProfileView: View {
   var store: Store<OPState, OPAction>
   @ObservedObject private var viewStore: ViewStore<ViewState, OPAction>
   @Binding var showView: Bool
-  var sendLetter: (() -> Void)?
+  var sendLetter: ((UserEntity.Response?) -> Void)?
   
   struct ViewState: Equatable {
     let userInfo: UserEntity.Response?
@@ -37,7 +37,7 @@ struct OtherProfileView: View {
     }
   }
   
-  init(store: Store<OPState, OPAction>, showView: Binding<Bool>, sendLetter: @escaping (() -> Void)) {
+  init(store: Store<OPState, OPAction>, showView: Binding<Bool>, sendLetter: @escaping ((UserEntity.Response?) -> Void)) {
     self.store = store
     self._showView = showView
     self.sendLetter = sendLetter
@@ -155,7 +155,7 @@ struct OtherProfileView: View {
               }
             }
             Button {
-              sendLetter?()
+              sendLetter?(viewStore.userInfo)
               removeView()
             } label: {
               VStack(alignment: .center) {

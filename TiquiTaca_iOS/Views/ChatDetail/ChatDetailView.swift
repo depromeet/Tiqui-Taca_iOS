@@ -161,6 +161,24 @@ struct ChatDetailView: View {
       )
         .frame(height: 0)
       
+      NavigationLink(
+        tag: CDState.Route.sendLetter,
+        selection: viewStore.binding(
+          get: \.route,
+          send: Action.setRoute
+        ),
+        destination: {
+          LetterSendView(
+            store: store.scope(
+              state: \.letterSendState,
+              action: ChatDetailAction.letterSendAction
+            )
+          )
+        },
+        label: EmptyView.init
+      )
+      .frame(height: 0)
+      
       InputChatView(store: store)
     }
       .navigationBarBackButtonHidden(true)
@@ -174,7 +192,8 @@ struct ChatDetailView: View {
             action: ChatDetailAction.otherProfileAction
           ),
           showView: $showOtherProfile,
-          sendLetter: {
+          sendLetter: { userInfo in
+            viewStore.send(.selectSendLetter(userInfo))
             print("쪽지보내기 터치")
           }
         )

@@ -15,6 +15,7 @@ struct ChatDetailState: Equatable {
   enum Route {
     case questionDetail
     case menu
+    case sendLetter
   }
   var roomId: String
   var route: Route?
@@ -29,6 +30,7 @@ struct ChatDetailState: Equatable {
   var otherProfileState: OtherProfileState = OtherProfileState(userId: "")
   var chatMenuState: ChatMenuState = .init()
   var questionDetailViewState: QuestionDetailState = .init(questionId: "")
+  var letterSendState: LetterSendState = .init( )
 }
 
 enum ChatDetailAction: Equatable {
@@ -49,6 +51,7 @@ enum ChatDetailAction: Equatable {
   case selectProfile(UserEntity.Response?)
   case selectQuestionDetail(String)
   case selectMenu
+  case selectSendLetter(UserEntity.Response?)
   case selectAlarm
   case joinRoom
   case responseJoinRoom(Result<RoomInfoEntity.Response?, HTTPError>)
@@ -62,6 +65,7 @@ enum ChatDetailAction: Equatable {
   case otherProfileAction(OtherProfileAction)
   case chatMenuAction(ChatMenuAction)
   case questionDetailAction(QuestionDetailAction)
+  case letterSendAction(LetterSendAction)
 }
 
 struct ChatDetailEnvironment {
@@ -103,6 +107,17 @@ let chatDetailReducer = Reducer<
       action: /ChatDetailAction.otherProfileAction,
       environment: {
         OtherProfileEnvironment.init(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
+        )
+      }
+    ),
+  letterSendReducer
+    .pullback(
+      state: \.letterSendState,
+      action: /ChatDetailAction.letterSendAction,
+      environment: {
+        LetterSendEnvironment.init(
           appService: $0.appService,
           mainQueue: $0.mainQueue
         )
@@ -171,6 +186,11 @@ let chatDetailCore = Reducer<
       .receive(on: environment.mainQueue)
       .catchToEffect()
       .map(ChatDetailAction.responseQuestionDetail)
+  case let .selectSendLetter(user):
+    state.moveToOtherView = true
+    state.letterSendState = LetterSendState(sendingUser: user)
+    state.route = .sendLetter
+    return .none
   case .joinRoom:
     return environment.appService.roomService
       .joinRoom(roomId: state.roomId)
