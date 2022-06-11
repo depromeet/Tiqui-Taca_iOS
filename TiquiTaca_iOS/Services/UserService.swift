@@ -10,6 +10,7 @@ import Combine
 
 protocol UserServiceType {
   var myProfile: UserEntity.Response? { get set }
+  var blockUserList: [BlockUserEntity.Response]? { get set }
   
   func fetchMyProfile() -> AnyPublisher<UserEntity.Response?, HTTPError>
   func deleteMyProfile()
@@ -17,7 +18,7 @@ protocol UserServiceType {
   func getOtherUserProfile(userId: String) -> AnyPublisher<UserEntity.Response?, HTTPError>
   func getAppAlarmState() -> AnyPublisher<AppAlarmEntity.Response?, HTTPError>
   func getBlockUserList() -> AnyPublisher<[BlockUserEntity.Response]?, HTTPError>
-  func unBlockUser(userId: String) -> AnyPublisher<BlockUserEntity.Response?, HTTPError>
+  func unBlockUser(userId: String) -> AnyPublisher<[BlockUserEntity.Response]?, HTTPError>
   func checkValidNickname(nickname: String) -> AnyPublisher<ValidNicknameEntity.Response?, HTTPError>
   func changeProfile(_ request: ChangeProfileEntity.Request) -> AnyPublisher<ChangeProfileEntity.Response?, HTTPError>
   func createUser(_ request: UserCreationEntity.Request) -> AnyPublisher<UserCreationEntity.Response?, HTTPError>
@@ -34,6 +35,7 @@ final class UserService: UserServiceType {
   }
   
   var myProfile: UserEntity.Response?
+  var blockUserList: [BlockUserEntity.Response]?
   
   func deleteMyProfile() {
     myProfile = nil
@@ -62,10 +64,26 @@ final class UserService: UserServiceType {
   
   func getBlockUserList() -> AnyPublisher<[BlockUserEntity.Response]?, HTTPError> {
     return network.request(.getBlockUserList, responseType: [BlockUserEntity.Response].self)
+      .handleEvents(receiveOutput: { [weak self] response in
+        self?.blockUserList = response
+      })
+      .eraseToAnyPublisher()
   }
   
-  func unBlockUser(userId: String) -> AnyPublisher<BlockUserEntity.Response?, HTTPError> {
-    return network.request(.unblockUser(userId: userId), responseType: BlockUserEntity.Response.self)
+  func blockUser(userId: String) -> AnyPublisher<[BlockUserEntity.Response]?, HTTPError> {
+    return network.request(.blockUser(userId: userId), responseType: [BlockUserEntity.Response].self)
+      .handleEvents(receiveOutput: { [weak self] response in
+        self?.blockUserList = response
+      })
+      .eraseToAnyPublisher()
+  }
+  
+  func unBlockUser(userId: String) -> AnyPublisher<[BlockUserEntity.Response]?, HTTPError> {
+    return network.request(.unblockUser(userId: userId), responseType: [BlockUserEntity.Response].self)
+      .handleEvents(receiveOutput: { [weak self] response in
+        self?.blockUserList = response
+      })
+      .eraseToAnyPublisher()
   }
   
   func checkValidNickname(nickname: String) -> AnyPublisher<ValidNicknameEntity.Response?, HTTPError> {
@@ -83,10 +101,6 @@ final class UserService: UserServiceType {
   
   func reportUser(userId: String) -> AnyPublisher<ReportEntity.Response?, HTTPError> {
     return network.request(.reportUser(userId: userId), responseType: ReportEntity.Response.self)
-  }
-  
-  func blockUser(userId: String) -> AnyPublisher<[BlockUserEntity.Response]?, HTTPError> {
-    return network.request(.blockUser(userId: userId), responseType: [BlockUserEntity.Response].self)
   }
   
   func sendLightning(userId: String) -> AnyPublisher<SendLightningResponse?, HTTPError> {
