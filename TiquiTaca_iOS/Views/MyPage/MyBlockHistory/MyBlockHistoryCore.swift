@@ -27,7 +27,7 @@ enum MyBlockHistoryAction: Equatable {
   case getBlockUserRequestSuccess
   
   case unblockUser(String)
-  case unblockUserResponse(Result<BlockUserEntity.Response?, HTTPError>)
+  case unblockUserResponse(Result<[BlockUserEntity.Response]?, HTTPError>)
   case unblockUserRequestSuccess
 }
 
@@ -96,7 +96,9 @@ let myBlockHistoryReducerCore = Reducer<
       .catchToEffect()
       .map(MyBlockHistoryAction.unblockUserResponse)
   case let .unblockUserResponse(.success(response)):
-    return Effect(value: .unblockUserRequestSuccess)
+    state.popupPresented = false
+    state.blockListView = .init(blockUsers: response ?? [])
+    return .none
   case .unblockUserResponse(.failure):
     return .none
   case .unblockUserRequestSuccess:
