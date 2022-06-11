@@ -11,6 +11,7 @@ import ComposableArchitecture
 
 struct ChatMessageView: View {
   let chatLog: ChatLogEntity.Response
+  let diff: Bool = true
   
   var body: some View {
     dateBubble
@@ -83,6 +84,7 @@ extension ChatMessageView {
           .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
           .opacity(chatLog.inside == true ? 1 : 0)
       )
+      .opacity(diff ? 1 : 0)
       
       HStack(alignment: .bottom) {
         VStack(alignment: .leading, spacing: 4) {

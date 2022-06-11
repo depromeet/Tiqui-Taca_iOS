@@ -63,7 +63,10 @@ struct ChatDetailView: View {
             .frame(height: 0)
           LazyVStack(alignment: .leading, spacing: 0) {
             Spacer().frame(height: 4).background(.white).id("listBottom")
-            ForEach(viewStore.chatLogList.reversed(), id: \.id) { chatLog in
+            ForEach(
+              viewStore.chatLogList.reversed().enumerated().map({ $0 }),
+              id: \.element.id
+            ) { index, chatLog in
               if chatLog.type == 3 {
                 ChatMessageView(chatLog: chatLog)
                   .dateBubble
