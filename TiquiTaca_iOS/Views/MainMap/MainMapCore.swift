@@ -26,6 +26,10 @@ struct MainMapState: Equatable {
   var chatRoomListState: ChatRoomListState = .init()
   var popularChatRoomListState: PopularChatRoomListState = .init()
   var chatRoomDetailState: ChatRoomDetailState = .init()
+  
+  var isShowPopup: Bool = false
+  var isMoveToChatDetail: Bool = false
+  var chatDetailState: ChatDetailState?
 }
 
 enum MainMapAction: Equatable {
@@ -45,6 +49,10 @@ enum MainMapAction: Equatable {
   case chatRoomListAction(ChatRoomListAction)
   case popularChatRoomListAction(PopularChatRoomListAction)
   case chatRoomDetailAction(ChatRoomDetailAction)
+  
+  case setIsShowPopup(Bool)
+  case setIsMoveToChatDetail(Bool)
+  case chatDetailAction(ChatDetailAction)
 }
 
 struct MainMapEnvironment {
@@ -94,6 +102,19 @@ let mainMapReducer = Reducer<
         PopularChatRoomListEnvironment(
           appService: $0.appService,
           mainQueue: $0.mainQueue
+        )
+      }
+    ),
+  chatDetailReducer
+    .optional()
+    .pullback(
+      state: \.chatDetailState,
+      action: /MainMapAction.chatDetailAction,
+      environment: {
+        ChatDetailEnvironment(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue,
+          locationManager: $0.locationManager
         )
       }
     ),
@@ -238,6 +259,10 @@ private let mainMapCore = Reducer<
     state.userTrackingMode = mode
     return .none
     
+  case .chatRoomDetailAction(.joinChatRoomButtonTapped):
+    state.chatDetailState = .init(roomId: state.chatRoomDetailState.chatRoom.id)
+    return .init(value: .setIsShowPopup(true))
+    
   case .chatRoomDetailAction:
     return .none
     
@@ -255,6 +280,17 @@ private let mainMapCore = Reducer<
     return .none
     
   case .chatRoomListAction:
+    return .none
+    
+  case .chatDetailAction:
+    return .none
+    
+  case let .setIsMoveToChatDetail(isMoveToChatDetail):
+    state.isMoveToChatDetail = isMoveToChatDetail
+    return .none
+    
+  case let .setIsShowPopup(isShowPopup):
+    state.isShowPopup = isShowPopup
     return .none
   }
 }

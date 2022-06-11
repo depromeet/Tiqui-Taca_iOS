@@ -95,6 +95,7 @@ struct ChatRoomDetailView: View {
         }
       }
       Button {
+        UIView.setAnimationsEnabled(false)
         viewStore.send(.joinChatRoomButtonTapped)
       } label: {
         Text(viewStore.chatRoom.isJoin ? "현재 채팅방으로 돌아가기" : "새로운 채팅방 참여하기")
