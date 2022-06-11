@@ -28,6 +28,7 @@ struct ChatDetailView: View {
     let route: CDState.Route?
     let currentRoom: RoomInfoEntity.Response
     let chatLogList: [ChatLogEntity.Response]
+    let blockUserList: [BlockUserEntity.Response]?
     let chatMenuState: ChatMenuState
     let myInfo: UserEntity.Response?
     let isAlarmOn: Bool
@@ -36,6 +37,7 @@ struct ChatDetailView: View {
       route = state.route
       currentRoom = state.currentRoom
       chatLogList = state.chatLogList
+      blockUserList = state.blockUserList
       chatMenuState = state.chatMenuState
       myInfo = state.myInfo
       isAlarmOn = state.isAlarmOn
