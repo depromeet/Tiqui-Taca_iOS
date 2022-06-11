@@ -22,7 +22,7 @@ struct ChatMenuState: Equatable {
   var questionDetailViewState: QuestionDetailState = .init(questionId: "")
   var questionListViewState: QuestionListState = .init()
   
-  
+  var showOtherProfile: Bool = false
   var popupPresented: Bool = false
   var isFavorite = false
   var isExistRoom: Bool = true

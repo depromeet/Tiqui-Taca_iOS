@@ -16,9 +16,9 @@ struct SocketService {
     case newMessage(ChatLogEntity.Response)
   }
   
-  static let socketURL = URL(string: "ws://52.78.64.242:8081")!
+  static let socketURL = URL(string: "http://chat.tiki-taka.world")!
   static var connectedSockets: [AnyHashable: (SocketIOClient, Effect<SocketService.Action, Never>.Subscriber)] = [:]
-  static var socketManager = SocketManager(socketURL: URL(string: "ws://52.78.64.242:8081")!)
+  static var socketManager = SocketManager(socketURL: URL(string: "http://chat.tiki-taka.world")!)
   
   var connect: (String) -> Effect<Action, Never>
   var disconnect: (String) -> Effect<Never, Never>
