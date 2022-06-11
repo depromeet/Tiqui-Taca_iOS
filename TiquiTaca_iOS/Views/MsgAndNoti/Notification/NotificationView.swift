@@ -6,9 +6,8 @@
 //
 
 import SwiftUI
-
-import SwiftUI
 import ComposableArchitecture
+import TTDesignSystemModule
 
 struct NotificationView: View {
   typealias State = NotificationState
@@ -18,8 +17,18 @@ struct NotificationView: View {
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
   
   struct ViewState: Equatable {
+    let isLoading: Bool
+    let isInfiniteScrollLoading: Bool
+    let notifications: [NotificationResponse]
+    let lastId: String?
+    let isLast: Bool
     
     init(state: State) {
+      isLoading = state.isLoading
+      isInfiniteScrollLoading = state.isInfiniteScrollLoading
+      notifications = state.notifications
+      lastId = state.lastId
+      isLast = state.isLast
     }
   }
   
@@ -29,12 +38,52 @@ struct NotificationView: View {
   }
   
   var body: some View {
-    List(selection: .constant(1)) {
-      ForEach(0...10, id: \.self) { index in
-        Text("Notification \(index)")
+    ZStack {
+      List {
+        ForEach(viewStore.notifications) { item in
+          Button {
+            viewStore.send(.notificationTapped(item))
+          } label: {
+            NotificationItem(notification: item)
+          }
+          .listRowSeparator(.hidden)
+          .listRowInsets(.init())
+          .onAppear {
+            if item.id == viewStore.lastId && !viewStore.isLast {
+              viewStore.send(.loadMoreNotifications)
+            }
+          }
+        }
+        if viewStore.isInfiniteScrollLoading {
+          ProgressView()
+        }
       }
+      .listStyle(.plain)
+      .refreshable {
+        viewStore.send(.getNotifications)
+      }
+      if viewStore.notifications.isEmpty {
+        VStack(spacing: .spacingXL) {
+          Image("bxNoAlarm")
+            .resizable()
+            .frame(width: 196, height: 196)
+          Text("앗! 아직 알림이 없어요!")
+            .font(.body2)
+            .foregroundColor(.white900)
+        }
+      }
+      TTIndicator(
+        style: .medium,
+        color: .black,
+        isAnimating: viewStore.binding(
+          get: \.isLoading,
+          send: Action.setIsLoading
+        )
+      )
     }
-    .listStyle(.plain)
+    .onLoad {
+      viewStore.send(.getNotifications)
+    }
   }
 }
 

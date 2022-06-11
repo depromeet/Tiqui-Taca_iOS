@@ -27,4 +27,10 @@ extension Date {
     
     return dateFormatter.string(for: self) ?? ""
   }
+  
+  var relativeTimeAbbreviated: String {
+    let formatter = RelativeDateTimeFormatter()
+    formatter.unitsStyle = .full
+    return formatter.localizedString(for: self, relativeTo: Date.now)
+  }
 }
