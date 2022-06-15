@@ -19,7 +19,7 @@ struct AppService {
   let roomService: RoomServiceType
   let socketService: SocketService
   let notificationService: NotificationServiceType
-  let letterService: LetterService
+  let letterService: LetterServiceType
   
   init() {
     authService = AuthService()
