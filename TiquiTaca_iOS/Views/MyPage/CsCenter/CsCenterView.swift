@@ -11,6 +11,7 @@ import TTDesignSystemModule
 
 struct CsCenterView: View {
   @Environment(\.presentationMode) var presentationMode
+  @State var result: Result<MFMailComposeResult, Error>? = nil
   
   @State private var isShowingMailView = false
   
@@ -71,6 +72,9 @@ struct CsCenterView: View {
       .frame(maxWidth: .infinity)
     }
     .sheet(isPresented: $isShowingMailView) {
+      if MFMailComposeViewController.canSendMail() {
+        MailView(isShowing: self.$isShowingMailView, result: self.$result)
+      }
     }
     .padding(.spacingXL)
     .background(Color.white)

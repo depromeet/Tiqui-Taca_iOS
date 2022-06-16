@@ -17,6 +17,7 @@
 		09F630EE284B608900A2250B /* SendChatEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F630ED284B608900A2250B /* SendChatEntity.swift */; };
 		3F0B780950BED104CA13722B /* Pods_TiquiTaca_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BE9660275CF15262D33E074 /* Pods_TiquiTaca_iOS.framework */; };
 		732798BD47A40FA84BC24EEF /* Pods_TiquiTaca_iOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90ED3E866555D3D7D6ABC769 /* Pods_TiquiTaca_iOSTests.framework */; };
+		75E01B03285AA52A00BB2B97 /* MailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E01B02285AA52A00BB2B97 /* MailView.swift */; };
 		8601F659281308CB0085F692 /* View+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8601F658281308CB0085F692 /* View+Extensions.swift */; };
 		8601F65C281309B10085F692 /* SplashView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8601F65B281309B10085F692 /* SplashView.swift */; };
 		8601F65F281393550085F692 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8601F65E281393550085F692 /* OnboardingView.swift */; };
@@ -219,6 +220,7 @@
 		09F4ECC22853ACE9005B424D /* SendLightningResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendLightningResponse.swift; sourceTree = "<group>"; };
 		09F630ED284B608900A2250B /* SendChatEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendChatEntity.swift; sourceTree = "<group>"; };
 		6BE9660275CF15262D33E074 /* Pods_TiquiTaca_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TiquiTaca_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		75E01B02285AA52A00BB2B97 /* MailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailView.swift; sourceTree = "<group>"; };
 		8601F658281308CB0085F692 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
 		8601F65B281309B10085F692 /* SplashView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashView.swift; sourceTree = "<group>"; };
 		8601F65E281393550085F692 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
@@ -978,6 +980,7 @@
 			isa = PBXGroup;
 			children = (
 				F981FA1E282604AA0000A531 /* CsCenterView.swift */,
+				75E01B02285AA52A00BB2B97 /* MailView.swift */,
 			);
 			path = CsCenter;
 			sourceTree = "<group>";
@@ -1333,6 +1336,7 @@
 				86E494972814FE0300551CCD /* MyPageCore.swift in Sources */,
 				86E4948F2814FDD000551CCD /* ChatCore.swift in Sources */,
 				F981FA172825FB0A0000A531 /* NoticeView.swift in Sources */,
+				75E01B03285AA52A00BB2B97 /* MailView.swift in Sources */,
 				0927967E28484D3700BA3F18 /* UINavigationController+Extensions.swift in Sources */,
 				8601F666281404D40085F692 /* OnboardingCore.swift in Sources */,
 				F9322E6D284231BD00EB956E /* ChatLogCore.swift in Sources */,
