@@ -11,6 +11,7 @@ import TTNetworkModule
 
 struct OtherProfileState: Equatable {
   enum Action {
+    case unblock
     case block
     case report
     case letter
@@ -36,8 +37,10 @@ enum OtherProfileAction: Equatable {
   
   case setShowProfile(Bool)
   case setAction(OtherProfileState.Action)
-  // MARK: Action API
   case fetchUserInfo
+  
+  // MARK: Action API
+  case userUnblock
   case userBlock
   case userReport
   case userSendLightning
@@ -45,6 +48,7 @@ enum OtherProfileAction: Equatable {
   // MARK: Action Response
   case responseUserInfo(Result<UserEntity.Response?, HTTPError>)
   case responseUserBlock(Result<[BlockUserEntity.Response]?, HTTPError>)
+  case responseUserUnblock(Result<[BlockUserEntity.Response]?, HTTPError>)
   case responseUserReport(Result<ReportEntity.Response?, HTTPError>)
   case responseSendLightning(Result<SendLightningResponse?, HTTPError>)
 }
@@ -81,6 +85,12 @@ let otherProfileReducer = Reducer<
       .receive(on: environment.mainQueue)
       .catchToEffect()
       .map(OtherProfileAction.responseUserBlock)
+  case .userUnblock:
+    return environment.appService.userService
+      .unBlockUser(userId: state.userId)
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(OtherProfileAction.responseUserUnblock)
   case .userReport:
     return environment.appService.userService
       .reportUser(userId: state.userId)
@@ -100,6 +110,9 @@ let otherProfileReducer = Reducer<
   case let .responseUserBlock(.success(blockList)):
     state.completeAction = .block
     return .none
+  case let .responseUserUnblock(.success(blockList)):
+    state.completeAction = .unblock
+    return .none
   case let .responseUserReport(.success(report)):
     if report?.reportSuccess == true {
       state.completeAction = .report
@@ -116,6 +129,7 @@ let otherProfileReducer = Reducer<
   case .responseUserInfo(.failure):
     return .none
   case .responseUserBlock(.failure),
+      .responseUserUnblock(.failure),
       .responseUserReport(.failure),
       .responseSendLightning(.failure):
     return .none

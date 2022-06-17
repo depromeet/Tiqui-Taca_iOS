@@ -28,6 +28,7 @@ struct ChatMenuView: View {
     let popupPresented: Bool
     let isExistRoom: Bool
     let isFavorite: Bool
+    let showOtherProfile: Bool
     let questionDetailViewState: QuestionDetailState
     let questionListViewState: QuestionListState
     
@@ -40,6 +41,7 @@ struct ChatMenuView: View {
       isFavorite = state.isFavorite
       
       isExistRoom = state.isExistRoom
+      showOtherProfile = state.showOtherProfile
       questionDetailViewState = state.questionDetailViewState
       questionListViewState = state.questionListViewState
     }
@@ -86,8 +88,8 @@ struct ChatMenuView: View {
                       .foregroundColor(.black100)
                   }
                   .frame(width: 79, height: 88)
-                  .onTapGesture{
-                    print("참여자 확인")
+                  .onTapGesture {
+                    viewStore.send(.profileSelected(participant))
                   }
                 }
               }
@@ -137,6 +139,23 @@ struct ChatMenuView: View {
         },
         label: EmptyView.init
       )
+      
+      NavigationLink(
+        tag: State.Route.sendLetter,
+        selection: viewStore.binding(
+          get: \.route,
+          send: Action.setRoute
+        ),
+        destination: {
+          LetterSendView(
+            store: store.scope(
+              state: \.letterSendState,
+              action: ChatMenuAction.letterSendAction
+            )
+          )
+        },
+        label: EmptyView.init
+      )
     }
     .background(Color.white)
     .navigationBarBackButtonHidden(true)
@@ -156,6 +175,26 @@ struct ChatMenuView: View {
 //      .opacity(showOtherProfile ? 1 : 0),
 //      alignment: .center
 //    )
+    .overlay(
+      OtherProfileView(
+        store: store.scope(
+          state: \.otherProfileState,
+          action: ChatMenuAction.otherProfileAction
+        ),
+        showView: viewStore.binding(
+          get: \.showOtherProfile,
+          send: ChatMenuAction.setShowOtherProfile
+        ),
+        sendLetter: { userInfo in
+          viewStore.send(.letterSendSelected(userInfo))
+        },
+        actionHandler: { action in
+          
+        }
+      )
+      .opacity(viewStore.showOtherProfile ? 1 : 0),
+      alignment: .center
+    )
     .onAppear(perform: {
       viewStore.send(.getRoomUserListInfo)
       viewStore.send(.getQuestionList)

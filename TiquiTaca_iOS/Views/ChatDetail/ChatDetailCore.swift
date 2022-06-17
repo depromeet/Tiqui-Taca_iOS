@@ -65,9 +65,9 @@ enum ChatDetailAction: Equatable {
   case setRoute(ChatDetailState.Route?)
   
   case locationManager(LocationManager.Action)
-  case otherProfileAction(OtherProfileAction)
   case chatMenuAction(ChatMenuAction)
   case questionDetailAction(QuestionDetailAction)
+  case otherProfileAction(OtherProfileAction)
   case letterSendAction(LetterSendAction)
 }
 

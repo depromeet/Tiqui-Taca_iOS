@@ -137,10 +137,10 @@ let verificationNumberCheckCore = Reducer<
   case .issuePhoneCodeResponse(.failure):
     return .none
     
-  case .otpFieldAction(.lastFieldTrigger):
+  case let .otpFieldAction(.lastFieldTrigger(code)):
     let request = VerificationEntity.Request(
       phoneNumber: state.phoneNumber,
-      verificationCode: state.otpFieldState.result
+      verificationCode: code
     )
     return environment.appService.authService
       .verification(request)

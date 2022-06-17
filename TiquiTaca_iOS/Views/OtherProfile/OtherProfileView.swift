@@ -18,6 +18,7 @@ struct OtherProfileView: View {
   @ObservedObject private var viewStore: ViewStore<ViewState, OPAction>
   @Binding var showView: Bool
   var sendLetter: ((UserEntity.Response?) -> Void)?
+  var actionHandler: ((OtherProfileState.Action) -> Void)? // 파라미터로 어떤 행동을 했는지 추가
   
   struct ViewState: Equatable {
     let userInfo: UserEntity.Response?
@@ -37,10 +38,16 @@ struct OtherProfileView: View {
     }
   }
   
-  init(store: Store<OPState, OPAction>, showView: Binding<Bool>, sendLetter: @escaping ((UserEntity.Response?) -> Void)) {
+  init(
+    store: Store<OPState, OPAction>,
+    showView: Binding<Bool>,
+    sendLetter: @escaping ((UserEntity.Response?) -> Void),
+    actionHandler: @escaping ((OtherProfileState.Action) -> Void)
+  ) {
     self.store = store
     self._showView = showView
     self.sendLetter = sendLetter
+    self.actionHandler = actionHandler
     viewStore = ViewStore(store.scope(state: ViewState.init))
   }
   
@@ -62,6 +69,8 @@ struct OtherProfileView: View {
             switch viewStore.currentAction {
             case .block:
               viewStore.send(.userBlock)
+            case .unblock:
+              viewStore.send(.userUnblock)
             case .report:
               viewStore.send(.userReport)
             case .lightning:
@@ -114,8 +123,7 @@ struct OtherProfileView: View {
     }
     .onReceive(Just(viewStore.completeAction)) { value in
       if value != .none {
-        print("complete", value)
-        // 이전 뷰에 어떤 것을 했는지 noti?
+        actionHandler?(value)
         removeView()
       }
     }
@@ -128,44 +136,38 @@ struct OtherProfileView: View {
         Color.clear
         VStack(spacing: 0) {
           HStack(spacing: 32) {
-            Button {
-              viewStore.send(.setShowProfile(false))
-              viewStore.send(.setAction(.block))
-            } label: {
-              VStack(alignment: .center) {
-                Image("profileBlock")
-                  .resizable()
-                  .frame(width: 48, height: 48)
-                Text("차단")
-                  .font(.body2)
-                  .foregroundColor(.white50)
+            if viewStore.userInfo?.iBlock == true {
+              OtherProfileButton(
+                type: .unblock,
+                isEnabled: viewStore.userInfo?.status == .normal
+              ) {
+                viewStore.send(.setShowProfile(false))
+                viewStore.send(.setAction(.unblock))
+              }
+            } else {
+              OtherProfileButton(
+                type: .block,
+                isEnabled: viewStore.userInfo?.canUseFeature ?? true
+              ) {
+                viewStore.send(.setShowProfile(false))
+                viewStore.send(.setAction(.block))
               }
             }
-            Button {
+            
+            OtherProfileButton(
+              type: .report,
+              isEnabled: viewStore.userInfo?.canUseFeature ?? true
+            ) {
               viewStore.send(.setShowProfile(false))
               viewStore.send(.setAction(.report))
-            } label: {
-              VStack(alignment: .center) {
-                Image("report")
-                  .resizable()
-                  .frame(width: 48, height: 48)
-                Text("신고")
-                  .font(.body2)
-                  .foregroundColor(.white50)
-              }
             }
-            Button {
+            
+            OtherProfileButton(
+              type: .letter,
+              isEnabled: viewStore.userInfo?.canUseFeature ?? true
+            ) {
               sendLetter?(viewStore.userInfo)
               removeView()
-            } label: {
-              VStack(alignment: .center) {
-                Image("note")
-                  .resizable()
-                  .frame(width: 48, height: 48)
-                Text("쪽지")
-                  .font(.body2)
-                  .foregroundColor(.white50)
-              }
             }
           }
           .hCenter()
@@ -179,13 +181,15 @@ struct OtherProfileView: View {
             HStack(spacing: 0) {
               Text("해당 유저에게 번개 주기")
                 .font(.subtitle1)
-                .foregroundColor(.black900)
-              Image("profileSpark")
-                .resizable()
-                .frame(width: 28, height: 28)
+              if viewStore.userInfo?.canUseFeature == true {
+                Image("profileSpark")
+                  .resizable()
+                  .frame(width: 28, height: 28)
+              }
             }
           }
           .buttonStyle(TTButtonLargeGreenStyle())
+          .disabled(viewStore.userInfo?.canUseFeature == false)
           .padding(.horizontal, 24)
           
           VStack { }
@@ -208,12 +212,21 @@ struct OtherProfileView: View {
             }
             
             HStack(alignment: .center, spacing: 4) {
-              Image("bxLoudspeaker3")
-                .resizable()
-                .frame(width: 32, height: 32)
-              Text("\(viewStore.userInfo?.nickname ?? "")")
-                .font(.heading2)
-                .foregroundColor(.white)
+              if viewStore.userInfo?.canUseFeature == true {
+                Image("bxLoudspeaker3")
+                  .resizable()
+                  .frame(width: 32, height: 32)
+              }
+              VStack(spacing: 2) {
+                Text("\(viewStore.userInfo?.nickname ?? "")")
+                  .font(.heading2)
+                  .foregroundColor(viewStore.userInfo?.canUseFeature == true ? .white : .black50)
+                if viewStore.userInfo?.canUseFeature == false {
+                  Text( getSubProfileName() )
+                    .font(.body8)
+                    .foregroundColor(.white)
+                }
+              }
             }
           }
           .padding(.top, -32),
@@ -233,10 +246,23 @@ struct OtherProfileView: View {
     showView = false
   }
   
+  private func getSubProfileName() -> String {
+    switch viewStore.userInfo?.status {
+    case .forbidden:
+      return "(이용제한된 사용자)"
+    case .signOut:
+      return "(탈퇴 사용자)"
+    default:
+      return "(차단된 사용자)"
+    }
+  }
+  
   private func getPopupTitle() -> String {
     switch viewStore.currentAction {
     case .block:
       return "해당 사용자를\n차단 하시겠습니까?"
+    case .unblock:
+      return "해당 사용자를\n차단 해제 하시겠습니까?"
     case .report:
       return "해당 사용자를\n신고 하시겠습니까?"
     case .lightning:
@@ -250,6 +276,8 @@ struct OtherProfileView: View {
     switch viewStore.currentAction {
     case .block:
       return "차단하기"
+    case .unblock:
+      return "차단 해제하기"
     case .report:
       return "신고하기"
     case .lightning:
@@ -260,3 +288,54 @@ struct OtherProfileView: View {
   }
 }
 
+struct OtherProfileButton: View {
+  var type: OtherProfileState.Action
+  var isEnabled: Bool
+  var action: (() -> Void)
+  
+  var body: some View {
+    Button {
+      action()
+    } label: {
+      VStack(alignment: .center) {
+        Image(getImageName())
+          .resizable()
+          .frame(width: 48, height: 48)
+        Text(getTitleName())
+          .font(.body2)
+          .foregroundColor(isEnabled ? .white50 : .white900)
+      }
+    }
+    .disabled(!isEnabled)
+  }
+  
+  func getImageName() -> String {
+    switch type {
+    case .block:
+      return isEnabled ? "profileBlock" : "profileBlockDisabled"
+    case .unblock:
+      return isEnabled ? "profileUnblock" : "profileBlockDisabled"
+    case .report:
+      return isEnabled ? "report" : "reportDisabled"
+    case .letter:
+      return isEnabled ? "note" : "noteDisabled"
+    default:
+      return ""
+    }
+  }
+  
+  func getTitleName() -> String {
+    switch type {
+    case .block:
+      return "차단"
+    case .unblock:
+      return "차단 해제"
+    case .report:
+      return "신고"
+    case .letter:
+      return "쪽지"
+    default:
+      return ""
+    }
+  }
+}

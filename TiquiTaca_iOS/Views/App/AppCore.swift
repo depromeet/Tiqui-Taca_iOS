@@ -187,10 +187,10 @@ let appCore = Reducer<
   case .mainTabAction(.myPageAction(.withdrawal)):
     state.mainTabState = nil
     state.onboardingState = .init()
-    
+  
     state.toastPresented = true
     state.fromMyPageType = .withdrawal
-    
+
     return Effect(value: .setRoute(.onboarding))
     
   case .onboardingAction:

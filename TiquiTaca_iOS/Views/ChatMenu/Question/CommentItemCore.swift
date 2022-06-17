@@ -15,6 +15,7 @@ struct CommentItemState: Equatable, Identifiable {
 
 enum CommentItemAction: Equatable {
   case moreClickAction(String, String)
+  case profileSelected(UserEntity.Response?)
 }
 
 struct CommentItemEnvironment {
@@ -27,6 +28,8 @@ let commentItemReducer = Reducer<
 > { state, action, environment in
   switch action {
   case let .moreClickAction(commentId, commentUser):
+    return .none
+  case let .profileSelected(user):
     return .none
   }
 }
