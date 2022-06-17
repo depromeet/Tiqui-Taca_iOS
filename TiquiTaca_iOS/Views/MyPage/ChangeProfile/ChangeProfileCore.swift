@@ -9,6 +9,7 @@ import ComposableArchitecture
 
 struct ChangeProfileState: Equatable {
   var nickname: String = ""
+  var changedNickname: String = ""
   var profileImage: ProfileImage = .init()
   var bottomSheetPosition: TTBottomSheet.MiddlePosition = .hidden
   var nicknameError: NicknameError = .none
@@ -47,17 +48,21 @@ let changeProfileReducer = Reducer<
   
   switch action {
   case .doneButtonTapped:
+    if state.nickname == state.changedNickname {
+      return Effect(value: .changeProfile(state.changedNickname, ProfileType(type: state.profileImage.type)))
+    }
+    
     return environment.appService.userService
-      .checkValidNickname(nickname: state.nickname)
+      .checkValidNickname(nickname: state.changedNickname)
       .receive(on: environment.mainQueue)
       .catchToEffect()
       .map(ChangeProfileAction.validNicknameResponse)
     
-  case let .nicknameChanged(nickname):
-    if state.nickname == nickname {
+  case let .nicknameChanged(changedNickname):
+    if state.nickname == changedNickname {
       return .none
     }
-    state.nickname = nickname
+    state.changedNickname = changedNickname
     
     if state.nickname.isEmpty {
       state.nicknameError = .none
@@ -65,13 +70,13 @@ let changeProfileReducer = Reducer<
       return .none
     }
     
-    if !nickname.checkNickname() {
+    if !changedNickname.checkNickname() {
       state.nicknameError = .validation
       state.isAvailableCompletion = false
       return .none
     }
-    
-    let request = CheckNicknameEntity.Request(nickname: nickname)
+ 
+    let request = CheckNicknameEntity.Request(nickname: changedNickname)
     return environment.appService.authService
       .checkNickname(request)
       .receive(on: environment.mainQueue)
@@ -85,7 +90,7 @@ let changeProfileReducer = Reducer<
     
     return state.validNicknameCheck ?
     Effect(value:
-        .changeProfile(state.nickname, ProfileType(type: state.profileImage.type))) : Effect(value: .presentPopup)
+        .changeProfile(state.changedNickname, ProfileType(type: state.profileImage.type))) : Effect(value: .presentPopup)
     
   case .validNicknameResponse(.failure):
     return .none

@@ -29,6 +29,7 @@ struct ChangeProfileView: View {
   
   struct ViewState: Equatable {
     let nickname: String
+    let changedNickname: String
     let profileImage: ProfileImage
     let bottomSheetPosition: TTBottomSheet.MiddlePosition
     let nicknameError: NicknameError
@@ -38,6 +39,7 @@ struct ChangeProfileView: View {
     
     init(state: State) {
       nickname = state.nickname
+      changedNickname = state.changedNickname
       profileImage = state.profileImage
       bottomSheetPosition = state.bottomSheetPosition
       nicknameError = state.nicknameError
@@ -70,7 +72,7 @@ struct ChangeProfileView: View {
             TextField(
               "닉네임을 입력해주세요.",
               text: viewStore.binding(
-                get: \.nickname,
+                get: \.changedNickname,
                 send: ChangeProfileAction.nicknameChanged
               )
             )

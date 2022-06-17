@@ -21,10 +21,12 @@ struct MyPageView: View {
     let route: MyState.Route?
     let myInfoViewState: MyInfoState
     let myPageItemStates: IdentifiedArrayOf<MyPageItemState>
+    let noticeViewState: NoticeState
     let nickname: String
     let phoneNumber: String
     let profileImage: ProfileImage
     let level: Int
+    let lightningScore: Int
     let createdAt: String
     let createDday: Int
     let isAppAlarmOn: Bool
@@ -33,10 +35,12 @@ struct MyPageView: View {
       route = state.route
       myInfoViewState = state.myInfoViewState
       myPageItemStates = state.myPageItemStates
+      noticeViewState = state.noticeViewState
       nickname = state.nickname
       phoneNumber = state.phoneNumber
       profileImage = state.profileImage
       level = state.level
+      lightningScore = state.lightningScore
       createdAt = state.createdAt
       createDday = state.createDday
       isAppAlarmOn = state.isAppAlarmOn
@@ -123,22 +127,17 @@ struct MyPageView: View {
           ))
         )
       case .noticeView:
-        NoticeView(store: .init(
-          initialState: NoticeState(),
-          reducer: noticeReducer,
-          environment: NoticeEnvironment()))
-        
+        NoticeView(store: store.scope(
+          state: \.noticeViewState,
+          action: MyPageAction.noticeView
+        ))
       case .myTermsOfServiceView:
-        MyTermsOfServiceView(store: .init(
-          initialState: MyTermsOfServiceState(),
-          reducer: myTermsOfServiceReducer,
-          environment: MyTermsOfServiceEnvironment()))
-        
+        MyTermsOfServiceView()
       case .csCenterView:
         CsCenterView()
         
       case .levelInfo:
-        AlertView(level: viewStore.level)
+        AlertView(lightningScore: viewStore.lightningScore)
         .background(BackgroundTransparentView())
       default:
         EmptyView()
@@ -154,7 +153,7 @@ struct MyPageView: View {
 
 private struct AlertView: View {
   @Environment(\.presentationMode) var presentationMode
-  @State var level: Int
+  @State var lightningScore: Int
   
   var body: some View {
     ZStack {
@@ -182,7 +181,7 @@ private struct AlertView: View {
                       Image("lightning")
                         .resizable()
                         .frame(width: 24, height: 24)
-                      Text("\(level)")
+                      Text("\(lightningScore)")
                         .font(.body4)
                         .foregroundColor(.green500)
                     }
