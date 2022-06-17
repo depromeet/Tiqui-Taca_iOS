@@ -10,45 +10,61 @@ import ComposableArchitecture
 import TTDesignSystemModule
 
 struct MyTermsOfServiceView: View {
-  let store: Store<MyTermsOfServiceState, MyTermsOfServiceAction>
   @Environment(\.presentationMode) var presentationMode
+  @State var sheetPresented = false
+  
+  let termsOfServiceUrl = "https://easy-carpenter-187.notion.site/3373d58a140d4c2580a434d2146d175b"
+  let privacyPolicyUrl = "https://easy-carpenter-187.notion.site/6775def4caab4230a0d9b71a352b95c3"
+  @State var selectedUrl = ""
   
   var body: some View {
-    WithViewStore(self.store) { viewStore in
-      VStack(alignment: .leading) {
-        HStack {
-          Text("이용약관")
-            .font(.heading1)
-            .foregroundColor(.black800)
-          
-          Spacer()
-          
-          Button {
-            presentationMode.wrappedValue.dismiss()
-          } label: {
-            Image("idelete")
-              .resizable()
-              .frame(width: 24, height: 24)
-          }
-        }
-        .padding(EdgeInsets(top: 28, leading: .spacingXL, bottom: 22, trailing: .spacingXL))
+    VStack(alignment: .leading, spacing: 0) {
+      HStack {
+        Text("이용약관")
+          .font(.heading1)
+          .foregroundColor(.black800)
         
-        Text("티키타카 서비스 이용을 위한 약관 모음")
-          .font(.body2)
-          .foregroundColor(.white800)
-          .padding(.leading, .spacingXL)
+        Spacer()
         
-        List {
-          ForEach(0..<4) {
-            MyTermsRow(title: "티키타카 이용약관 \($0 + 1)")
-              .listRowSeparator(.hidden)
-          }
-          .listRowBackground(Color.white50)
+        Button {
+          presentationMode.wrappedValue.dismiss()
+        } label: {
+          Image("idelete")
+            .resizable()
+            .frame(width: 24, height: 24)
         }
-        .listStyle(.plain)
       }
-      .background(Color.white)
+      .padding(EdgeInsets(top: 28, leading: .spacingXL, bottom: 22, trailing: .spacingXL))
+      
+      Text("티키타카 서비스 이용을 위한 약관 모음")
+        .font(.body2)
+        .foregroundColor(.white800)
+        .padding([.leading, .trailing], .spacingXL)
+        .padding([.bottom], 22)
+      
+      Button {
+        selectedUrl = termsOfServiceUrl
+        sheetPresented = true
+      } label: {
+        MyTermsRow(title: "이용약관")
+      }
+      
+      Button {
+        selectedUrl = privacyPolicyUrl
+        sheetPresented = true
+      } label: {
+        MyTermsRow(title: "개인정보 처리방침")
+      }
+      
+      Spacer()
     }
+    .background(Color.white)
+    .sheet(
+      isPresented: $sheetPresented,
+      content: {
+        WebView(url: URL(string: selectedUrl))
+      }
+    )
   }
 }
 
@@ -63,16 +79,14 @@ struct MyTermsRow: View {
       Spacer()
       Image("arrow")
     }
+    .padding(.spacingXL)
+    .frame(height: 48)
     .background(Color.white50)
   }
 }
 
 struct MyTermsOfServiceView_Previews: PreviewProvider {
   static var previews: some View {
-    MyTermsOfServiceView(store: .init(
-      initialState: MyTermsOfServiceState(),
-      reducer: myTermsOfServiceReducer,
-      environment: MyTermsOfServiceEnvironment())
-    )
+    MyTermsOfServiceView()
   }
 }

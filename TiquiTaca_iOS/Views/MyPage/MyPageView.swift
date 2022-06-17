@@ -132,11 +132,7 @@ struct MyPageView: View {
           action: MyPageAction.noticeView
         ))
       case .myTermsOfServiceView:
-        MyTermsOfServiceView(store: .init(
-          initialState: MyTermsOfServiceState(),
-          reducer: myTermsOfServiceReducer,
-          environment: MyTermsOfServiceEnvironment()))
-        
+        MyTermsOfServiceView()
       case .csCenterView:
         CsCenterView()
         
