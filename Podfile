@@ -10,6 +10,7 @@ target 'TiquiTaca_iOS' do
   # UI
   pod 'BottomSheetSwiftUI', '= 2.7.0'
   pod 'Map', :git => 'https://github.com/pauljohanneskraft/Map', :branch => 'hit-testing'
+  pod 'ExytePopupView'
   
   # Firebase
   pod 'Firebase/Analytics', '= 8.15.0'
