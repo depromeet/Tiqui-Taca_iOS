@@ -37,8 +37,9 @@ enum OtherProfileAction: Equatable {
   
   case setShowProfile(Bool)
   case setAction(OtherProfileState.Action)
-  // MARK: Action API
   case fetchUserInfo
+  
+  // MARK: Action API
   case userUnblock
   case userBlock
   case userReport

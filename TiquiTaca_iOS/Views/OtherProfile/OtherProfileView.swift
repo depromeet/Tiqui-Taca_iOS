@@ -18,7 +18,7 @@ struct OtherProfileView: View {
   @ObservedObject private var viewStore: ViewStore<ViewState, OPAction>
   @Binding var showView: Bool
   var sendLetter: ((UserEntity.Response?) -> Void)?
-  // var completionHandler: (() -> Void)? = nil // 파라미터로 어떤 행동을 했는지 추가
+  var actionHandler: ((OtherProfileState.Action) -> Void)? // 파라미터로 어떤 행동을 했는지 추가
   
   struct ViewState: Equatable {
     let userInfo: UserEntity.Response?
@@ -38,10 +38,16 @@ struct OtherProfileView: View {
     }
   }
   
-  init(store: Store<OPState, OPAction>, showView: Binding<Bool>, sendLetter: @escaping ((UserEntity.Response?) -> Void)) {
+  init(
+    store: Store<OPState, OPAction>,
+    showView: Binding<Bool>,
+    sendLetter: @escaping ((UserEntity.Response?) -> Void),
+    actionHandler: @escaping ((OtherProfileState.Action) -> Void)
+  ) {
     self.store = store
     self._showView = showView
     self.sendLetter = sendLetter
+    self.actionHandler = actionHandler
     viewStore = ViewStore(store.scope(state: ViewState.init))
   }
   
@@ -117,8 +123,7 @@ struct OtherProfileView: View {
     }
     .onReceive(Just(viewStore.completeAction)) { value in
       if value != .none {
-        print("complete", value)
-        // 이전 뷰에 어떤 것을 했는지 noti?
+        actionHandler?(value)
         removeView()
       }
     }
