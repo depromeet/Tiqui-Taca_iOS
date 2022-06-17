@@ -134,6 +134,7 @@
 		F914EE19284B1828000FADC9 /* QuestionInputMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F914EE18284B1828000FADC9 /* QuestionInputMessageView.swift */; };
 		F914EE1B284B1836000FADC9 /* QuestionInputMessageCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F914EE1A284B1836000FADC9 /* QuestionInputMessageCore.swift */; };
 		F914EE1D284B32BF000FADC9 /* QuestionCommentEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F914EE1C284B32BF000FADC9 /* QuestionCommentEntity.swift */; };
+		F921B27B285CB6B00093C6CA /* OfficialNotiResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = F921B27A285CB6B00093C6CA /* OfficialNotiResponse.swift */; };
 		F9322E6D284231BD00EB956E /* ChatLogCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9322E6C284231BD00EB956E /* ChatLogCore.swift */; };
 		F9322E70284242CF00EB956E /* ChatMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9322E6F284242CF00EB956E /* ChatMenuView.swift */; };
 		F9322E72284242DA00EB956E /* ChatMenuCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9322E71284242DA00EB956E /* ChatMenuCore.swift */; };
@@ -154,7 +155,6 @@
 		F981FA152825FB000000A531 /* NoticeCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F981FA142825FB000000A531 /* NoticeCore.swift */; };
 		F981FA172825FB0A0000A531 /* NoticeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F981FA162825FB0A0000A531 /* NoticeView.swift */; };
 		F981FA1A282600B50000A531 /* MyTermsOfServiceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F981FA19282600B50000A531 /* MyTermsOfServiceView.swift */; };
-		F981FA1C282600C40000A531 /* MyTermsOfServiceCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F981FA1B282600C40000A531 /* MyTermsOfServiceCore.swift */; };
 		F981FA1F282604AA0000A531 /* CsCenterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F981FA1E282604AA0000A531 /* CsCenterView.swift */; };
 		F981FA21282653940000A531 /* BlockListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F981FA20282653940000A531 /* BlockListView.swift */; };
 		F981FA23282653A00000A531 /* BlockListCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F981FA22282653A00000A531 /* BlockListCore.swift */; };
@@ -344,6 +344,7 @@
 		F914EE18284B1828000FADC9 /* QuestionInputMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionInputMessageView.swift; sourceTree = "<group>"; };
 		F914EE1A284B1836000FADC9 /* QuestionInputMessageCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionInputMessageCore.swift; sourceTree = "<group>"; };
 		F914EE1C284B32BF000FADC9 /* QuestionCommentEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionCommentEntity.swift; sourceTree = "<group>"; };
+		F921B27A285CB6B00093C6CA /* OfficialNotiResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OfficialNotiResponse.swift; sourceTree = "<group>"; };
 		F9322E6C284231BD00EB956E /* ChatLogCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatLogCore.swift; sourceTree = "<group>"; };
 		F9322E6F284242CF00EB956E /* ChatMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMenuView.swift; sourceTree = "<group>"; };
 		F9322E71284242DA00EB956E /* ChatMenuCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatMenuCore.swift; sourceTree = "<group>"; };
@@ -364,7 +365,6 @@
 		F981FA142825FB000000A531 /* NoticeCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeCore.swift; sourceTree = "<group>"; };
 		F981FA162825FB0A0000A531 /* NoticeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NoticeView.swift; sourceTree = "<group>"; };
 		F981FA19282600B50000A531 /* MyTermsOfServiceView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTermsOfServiceView.swift; sourceTree = "<group>"; };
-		F981FA1B282600C40000A531 /* MyTermsOfServiceCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyTermsOfServiceCore.swift; sourceTree = "<group>"; };
 		F981FA1E282604AA0000A531 /* CsCenterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CsCenterView.swift; sourceTree = "<group>"; };
 		F981FA20282653940000A531 /* BlockListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockListView.swift; sourceTree = "<group>"; };
 		F981FA22282653A00000A531 /* BlockListCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockListCore.swift; sourceTree = "<group>"; };
@@ -724,6 +724,7 @@
 				098D3C3928543A8600F6C326 /* RoomAlarmResponse.swift */,
 				F221853528539955005CE6C3 /* InfiniteList.swift */,
 				F221852B285114F1005CE6C3 /* NotificationResponse.swift */,
+				F921B27A285CB6B00093C6CA /* OfficialNotiResponse.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -971,7 +972,6 @@
 			isa = PBXGroup;
 			children = (
 				F981FA19282600B50000A531 /* MyTermsOfServiceView.swift */,
-				F981FA1B282600C40000A531 /* MyTermsOfServiceCore.swift */,
 			);
 			path = MyTermsOfService;
 			sourceTree = "<group>";
@@ -1244,6 +1244,7 @@
 				0963D1352846F15A005E7B70 /* ChatDetailCore.swift in Sources */,
 				F22185222850FBA7005CE6C3 /* LetterCore.swift in Sources */,
 				F9AE9AB328437A8F004A632D /* CommentItemView.swift in Sources */,
+				F921B27B285CB6B00093C6CA /* OfficialNotiResponse.swift in Sources */,
 				F914EE1D284B32BF000FADC9 /* QuestionCommentEntity.swift in Sources */,
 				09AFA056284F7972007E56BB /* OtherProfileCore.swift in Sources */,
 				F2F1ED7D281C3D6900AC4FDD /* VerificationEntity.swift in Sources */,
@@ -1322,7 +1323,6 @@
 				F21276462811C6D500FB568D /* TOSFieldListViewCore.swift in Sources */,
 				F2FA365C2808897C00A24789 /* R.generated.swift in Sources */,
 				F22184FD284C9EED005CE6C3 /* ChatRoomListSortType.swift in Sources */,
-				F981FA1C282600C40000A531 /* MyTermsOfServiceCore.swift in Sources */,
 				8601F65C281309B10085F692 /* SplashView.swift in Sources */,
 				F25C79BA282D7524009C60EE /* String+Extensions.swift in Sources */,
 				F981FA1A282600B50000A531 /* MyTermsOfServiceView.swift in Sources */,
