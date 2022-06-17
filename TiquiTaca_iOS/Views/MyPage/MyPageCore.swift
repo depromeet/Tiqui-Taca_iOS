@@ -44,6 +44,7 @@ enum MyPageAction: Equatable {
   case getProfileInfoResponse(Result<UserEntity.Response?, HTTPError>)
   case getProfileRequestSuccess
   case logout
+  case withdrawal
 }
 
 struct MyPageEnvironment {
@@ -169,11 +170,17 @@ let myPageReducerCore = Reducer<
       if dismissType == .logout {
         return Effect(value: .logout)
       } else if dismissType == .withdrawal {
-        return Effect(value: .logout)
+        return Effect(value: .withdrawal)
       }
       return .none
     default:
       return .none
     }
+  case .withdrawal:
+    return environment.appService.userService
+      .deleteUser()
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .fireAndForget()
   }
 }

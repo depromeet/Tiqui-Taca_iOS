@@ -97,7 +97,7 @@ struct MyInfoView: View {
             TTPopupView.init(
               popUpCase: viewStore.popupType == .logout ? .oneLineTwoButton : .twoLineOneButton,
               title: viewStore.popupType == .logout ? "로그아웃 하시겠어요?" : "정말 티키타카를 탈퇴하시겠어요?",
-              subtitle: viewStore.popupType == .logout ? "" : "검토 후 2~3일 내 탈퇴처리 됩니다.",//"탈퇴하면 회원정보와 앱 활동 내역이 모두 삭제돼요.",
+              subtitle: viewStore.popupType == .logout ? "" : "탈퇴하면 회원정보와 앱 활동 내역이 모두 삭제돼요.",
               leftButtonName: "취소",
               rightButtonName: viewStore.popupType == .logout ? "로그아웃" : "탈퇴하기",
               confirm: {

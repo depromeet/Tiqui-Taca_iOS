@@ -175,6 +175,12 @@ let appCore = Reducer<
   case .mainTabAction(.myPageAction(.logout)):
     return Effect(value: .signOut)
     
+  case .mainTabAction(.myPageAction(.withdrawal)):
+    state.mainTabState = nil
+    state.onboardingState = .init()
+    
+    return Effect(value: .setRoute(.onboarding))
+    
   case .onboardingAction:
     return .none
     
