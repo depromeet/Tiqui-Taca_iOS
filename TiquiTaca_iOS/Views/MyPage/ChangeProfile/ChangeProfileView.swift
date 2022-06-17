@@ -8,6 +8,7 @@
 import SwiftUI
 import ComposableArchitecture
 import TTDesignSystemModule
+import ExytePopupView
 
 struct ChangeProfileView: View {
   typealias State = ChangeProfileState
@@ -36,6 +37,7 @@ struct ChangeProfileView: View {
     let isAvailableCompletion: Bool
     let popupPresented: Bool
     let dismissCurrentPage: Bool
+    let toastPresented: Bool
     
     init(state: State) {
       nickname = state.nickname
@@ -46,6 +48,7 @@ struct ChangeProfileView: View {
       isAvailableCompletion = state.isAvailableCompletion
       popupPresented = state.popupPresented
       dismissCurrentPage = state.dismissCurrentPage
+      toastPresented = state.toastPresented
     }
   }
   
@@ -159,6 +162,24 @@ struct ChangeProfileView: View {
       .onTapGesture {
         focusField = false
         viewStore.send(.setBottomSheetPosition(.hidden))
+      }
+      .popup(
+        isPresented: viewStore.binding(
+          get: \.toastPresented,
+          send: Action.dismissToast
+        ),
+        type: .floater(
+          verticalPadding: 16,
+          useSafeAreaInset: true
+        ),
+        position: .top,
+        animation: .easeIn,
+        autohideIn: 2
+      ) {
+        TTToastView(
+          title: "프로필을 수정했어요!",
+          type: .success
+        )
       }
   }
 }

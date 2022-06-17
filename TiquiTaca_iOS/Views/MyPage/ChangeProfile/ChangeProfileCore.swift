@@ -14,6 +14,7 @@ struct ChangeProfileState: Equatable {
   var bottomSheetPosition: TTBottomSheet.MiddlePosition = .hidden
   var nicknameError: NicknameError = .none
   var isAvailableCompletion: Bool = true
+  var toastPresented: Bool = false
   
   var validNicknameCheck: Bool = false
   var popupPresented: Bool = false
@@ -32,6 +33,8 @@ enum ChangeProfileAction: Equatable {
   case changeProfile(String, ProfileType)
   case changeProfileResponse(Result<ChangeProfileEntity.Response?, HTTPError>)
   case getMyProfileResponse(Result<UserEntity.Response?, HTTPError>)
+  case presentToast
+  case dismissToast
 }
 
 struct ChangeProfileEnvironment {
@@ -107,13 +110,13 @@ let changeProfileReducer = Reducer<
       .map(ChangeProfileAction.changeProfileResponse)
     
   case let .changeProfileResponse(.success(response)):
-//    state.dismissCurrentPage = true
     return environment.appService.userService
       .fetchMyProfile()
       .receive(on: environment.mainQueue)
       .catchToEffect()
       .map(ChangeProfileAction.getMyProfileResponse)
   case .getMyProfileResponse:
+    state.toastPresented = true
     state.dismissCurrentPage = true
     return .none
     
@@ -146,6 +149,14 @@ let changeProfileReducer = Reducer<
     
   case .presentPopup:
     state.popupPresented = true
+    return .none
+  
+  case .presentToast:
+    state.toastPresented = true
+    return .none
+    
+  case .dismissToast:
+    state.toastPresented = false
     return .none
   }
 }
