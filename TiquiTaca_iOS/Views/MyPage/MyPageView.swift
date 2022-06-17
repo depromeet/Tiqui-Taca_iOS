@@ -21,6 +21,7 @@ struct MyPageView: View {
     let route: MyState.Route?
     let myInfoViewState: MyInfoState
     let myPageItemStates: IdentifiedArrayOf<MyPageItemState>
+    let noticeViewState: NoticeState
     let nickname: String
     let phoneNumber: String
     let profileImage: ProfileImage
@@ -34,6 +35,7 @@ struct MyPageView: View {
       route = state.route
       myInfoViewState = state.myInfoViewState
       myPageItemStates = state.myPageItemStates
+      noticeViewState = state.noticeViewState
       nickname = state.nickname
       phoneNumber = state.phoneNumber
       profileImage = state.profileImage
@@ -125,11 +127,10 @@ struct MyPageView: View {
           ))
         )
       case .noticeView:
-        NoticeView(store: .init(
-          initialState: NoticeState(),
-          reducer: noticeReducer,
-          environment: NoticeEnvironment()))
-        
+        NoticeView(store: store.scope(
+          state: \.noticeViewState,
+          action: MyPageAction.noticeView
+        ))
       case .myTermsOfServiceView:
         MyTermsOfServiceView(store: .init(
           initialState: MyTermsOfServiceState(),
