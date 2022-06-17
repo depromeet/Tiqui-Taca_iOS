@@ -7,6 +7,12 @@
 
 import TTNetworkModule
 
+enum UserStatus: String, Codable {
+  case normal
+  case forbidden
+  case signOut
+}
+
 enum UserEntity {
   struct Response: Codable, Equatable, Identifiable {
     let id: String
@@ -21,6 +27,10 @@ enum UserEntity {
     let lightningScore: Int
     let level: Int
     
+    // 다른 사람 프로필
+    let status: UserStatus
+    let iBlock: Bool
+    
     enum CodingKeys: String, CodingKey {
       case id = "_id"
       case nickname
@@ -33,6 +43,8 @@ enum UserEntity {
       case createdAt
       case lightningScore
       case level
+      case status
+      case iBlock
     }
     
     init() {
@@ -47,6 +59,8 @@ enum UserEntity {
       createdAt = ""
       lightningScore = 0
       level = 0
+      status = .normal
+      iBlock = false
     }
     
     init(from decoder: Decoder) throws {
@@ -62,6 +76,9 @@ enum UserEntity {
       createdAt = (try? container.decode(String.self, forKey: .createdAt)) ?? ""
       lightningScore = (try? container.decode(Int.self, forKey: .lightningScore)) ?? 0
       level = (try? container.decode(Int.self, forKey: .level)) ?? 0
+      
+      status = (try? container.decode(UserStatus.self, forKey: .status)) ?? .normal
+      iBlock = (try? container.decode(Bool.self, forKey: .iBlock)) ?? false
     }
   }
 }
@@ -73,5 +90,11 @@ struct ProfileType: Codable, Equatable {
 enum ReportEntity {
   struct Response: Codable, Equatable, JSONConvertible {
     let reportSuccess: Bool
+  }
+}
+
+extension UserEntity.Response {
+  var canUseFeature: Bool {
+    status == .normal && iBlock == false
   }
 }
