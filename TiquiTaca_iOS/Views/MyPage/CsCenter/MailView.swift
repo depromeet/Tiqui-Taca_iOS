@@ -49,6 +49,6 @@ struct MailView: UIViewControllerRepresentable {
   
   func updateUIViewController(_ uiViewController: MFMailComposeViewController,
                               context: UIViewControllerRepresentableContext<MailView>) {
-    uiViewController.setToRecipients(["hakyung_song1@kolon.com"])
+    uiViewController.setToRecipients(["tikitakachat@gmail.com"])
   }
 }

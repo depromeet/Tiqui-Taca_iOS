@@ -12,8 +12,8 @@ import TTDesignSystemModule
 struct CsCenterView: View {
   @Environment(\.presentationMode) var presentationMode
   @State var result: Result<MFMailComposeResult, Error>? = nil
-  
   @State private var isShowingMailView = false
+  @State var popupPresented = false
   
   let string = """
     안녕하세요, 티키타카 고객센터입니다.\n궁금한 점, 개선점 등 문의사항이 있으신 경우\n아래의 '문의하기' 버튼을 눌러 메일을 보내주세요.\n
@@ -62,7 +62,11 @@ struct CsCenterView: View {
       
       Button {
         print("pressed")
-        isShowingMailView.toggle()
+        if MFMailComposeViewController.canSendMail() {
+          isShowingMailView.toggle()
+        } else {
+          self.popupPresented = true
+        }
       } label: {
         Text("문의하기")
           .font(.subtitle1)
@@ -72,12 +76,25 @@ struct CsCenterView: View {
       .frame(maxWidth: .infinity)
     }
     .sheet(isPresented: $isShowingMailView) {
-      if MFMailComposeViewController.canSendMail() {
-        MailView(isShowing: self.$isShowingMailView, result: self.$result)
-      }
+      MailView(isShowing: self.$isShowingMailView, result: self.$result)
     }
     .padding(.spacingXL)
     .background(Color.white)
+    .ttPopup(
+      isShowing: $popupPresented,
+      popupContent: {
+        TTPopupView.init(
+          popUpCase: .oneLineOneButton,
+          title: "메일 전송 실패",
+          subtitle: "아이폰 이메일 설정을 확인하고 다시 시도해주세요.",
+          leftButtonName: "닫기",
+          cancel: {
+            self.popupPresented = false
+          }
+        )
+        .padding(.horizontal, 24)
+      }
+    )
   }
 }
 
