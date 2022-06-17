@@ -28,6 +28,7 @@ struct MyPageState: Equatable {
   var phoneNumber = ""
   var profileImage: ProfileImage = .init()
   var level = 1
+  var lightningScore = 0
   var createdAt: String = ""
   var createDday = 0
   var isAppAlarmOn = false
@@ -94,16 +95,6 @@ let myPageReducerCore = Reducer<
   MyPageEnvironment
 > { state, action, environment in
   switch action {
-  case let .myInfoView(myInfoAction):
-    switch myInfoAction {
-    case let .movingAction(dismissType):
-      if dismissType == .logout || dismissType == .withdrawal {
-        return Effect(value: .logout)
-      }
-      return .none
-    default:
-      return .none
-    }
   case .getProfileInfo:
     return environment.appService.userService
       .fetchMyProfile()
@@ -116,8 +107,9 @@ let myPageReducerCore = Reducer<
     state.nickname = myProfile?.nickname ?? ""
     state.isAppAlarmOn = myProfile?.appAlarm ?? false
     state.level = myProfile?.level ?? 0
+    state.lightningScore = myProfile?.lightningScore ?? 0
     state.phoneNumber = myProfile?.phoneNumber ?? ""
-    state.changeProfileViewState = ChangeProfileState(nickname: state.nickname, profileImage: state.profileImage)
+    state.changeProfileViewState = ChangeProfileState(nickname: state.nickname,changedNickname: state.nickname, profileImage: state.profileImage)
     state.myPageItemStates.remove(at: 1)
     state.myPageItemStates.insert(.init(rowInfo: .init(itemType: .alarmSet, toggleVisible: true), isAppAlarmOn: state.isAppAlarmOn), at: 1)
     
@@ -168,6 +160,18 @@ let myPageReducerCore = Reducer<
     switch action {
     case let .mypageItemTapped(itemType):
       return Effect(value: .setRoute(itemType))
+    default:
+      return .none
+    }
+  case let .myInfoView(myInfoAction):
+    switch myInfoAction {
+    case let .movingAction(dismissType):
+      if dismissType == .logout {
+        return Effect(value: .logout)
+      } else if dismissType == .withdrawal {
+        return Effect(value: .logout)
+      }
+      return .none
     default:
       return .none
     }
