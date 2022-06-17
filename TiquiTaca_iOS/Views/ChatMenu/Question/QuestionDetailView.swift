@@ -19,10 +19,12 @@ struct QuestionDetailView: View {
   @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
   
   struct ViewState: Equatable {
+    let route: QuestionDetailState.Route?
     let question: QuestionEntity.Response?
     let likesCount: Int
     let likeActivated: Bool
     
+    let showOtherProfile: Bool
     let bottomSheetPresented: Bool
     let bottomSheetPosition: TTBottomSheet.ActionSheetPosition
     let popupPresented: Bool
@@ -35,10 +37,12 @@ struct QuestionDetailView: View {
     let commentItemStates: IdentifiedArrayOf<CommentItemState>
     
     init(state: State) {
+      route = state.route
       question = state.question
       likesCount = state.likesCount
       likeActivated = state.likeActivated
       
+      showOtherProfile = state.showOtherProfile
       bottomSheetPresented = state.bottomSheetPresented
       bottomSheetPosition = state.bottomSheetPosition
       popupPresented = state.popupPresented
@@ -60,6 +64,22 @@ struct QuestionDetailView: View {
   var body: some View {
     VStack(alignment: .leading) {
       topNavigationView
+      NavigationLink(
+        tag: State.Route.sendLetter,
+        selection: viewStore.binding(
+          get: \.route,
+          send: Action.setRoute
+        ),
+        destination: {
+          LetterSendView(
+            store: store.scope(
+              state: \.letterSendState,
+              action: QuestionDetailAction.letterSendAction
+            )
+          )
+        },
+        label: EmptyView.init
+      )
       List {
         listHeader
           .listRowSeparator(.hidden)
@@ -222,6 +242,26 @@ struct QuestionDetailView: View {
         }
       )
     }
+    .overlay(
+      OtherProfileView(
+        store: store.scope(
+          state: \.otherProfileState,
+          action: QuestionDetailAction.otherProfileAction
+        ),
+        showView: viewStore.binding(
+          get: \.showOtherProfile,
+          send: QuestionDetailAction.setShowOtherProfile
+        ),
+        sendLetter: { userInfo in
+          viewStore.send(.letterSendSelected(userInfo))
+        },
+        actionHandler: { action in
+          
+        }
+      )
+      .opacity(viewStore.showOtherProfile ? 1 : 0),
+      alignment: .center
+    )
     .onAppear {
       viewStore.send(.getQuestionDetail)
     }
@@ -264,6 +304,9 @@ struct QuestionDetailView: View {
           Image(viewStore.question?.user.profile.imageName ?? "defaultProfile")
             .resizable()
             .frame(width: 32, height: 32)
+            .onTapGesture {
+              viewStore.send(.profileSelected(viewStore.question?.user))
+            }
           
           VStack(alignment: .leading) {
             Text(viewStore.question?.user.nickname ?? "")

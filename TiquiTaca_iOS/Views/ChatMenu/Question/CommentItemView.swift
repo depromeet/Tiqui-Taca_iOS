@@ -36,6 +36,9 @@ struct CommentItemView: View {
           Image(viewStore.comment?.user?.profile.imageName ?? "defaultProfile")
             .resizable()
             .frame(width: 32, height: 32)
+            .onTapGesture {
+              viewStore.send(.profileSelected(viewStore.comment?.user))
+            }
           
           VStack(alignment: .leading) {
             Text(viewStore.comment?.user?.nickname ?? "")
