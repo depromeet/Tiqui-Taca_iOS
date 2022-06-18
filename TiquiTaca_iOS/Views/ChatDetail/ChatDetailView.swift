@@ -20,6 +20,7 @@ struct ChatDetailView: View {
   @Binding var shouldPopToRootView: Bool
   @State var scrollToBottomButtonHidden = false
   @State var showOtherProfile = false
+  @State var inRadiusOpacity: Double = 1.0
   
   var store: Store<CDState, Action>
   var scrollMinY: CGFloat = 750
@@ -31,6 +32,7 @@ struct ChatDetailView: View {
     let blockUserList: [BlockUserEntity.Response]?
     let chatMenuState: ChatMenuState
     let myInfo: UserEntity.Response?
+    let isWithinRadius: Bool
     let isAlarmOn: Bool
     
     init(state: CDState) {
@@ -40,6 +42,7 @@ struct ChatDetailView: View {
       blockUserList = state.blockUserList
       chatMenuState = state.chatMenuState
       myInfo = state.myInfo
+      isWithinRadius = state.isWithinRadius
       isAlarmOn = state.isAlarmOn
     }
   }
@@ -336,6 +339,17 @@ extension ChatDetailView {
             Text( viewStore.state.currentRoom.viewTitle )
               .font(.subtitle2)
               .foregroundColor(.white)
+            if viewStore.state.isWithinRadius {
+              Circle()
+                .frame(width: 8, height: 8, alignment: .center)
+                .foregroundColor(.green800)
+                .opacity(inRadiusOpacity)
+                .onAppear {
+                  withAnimation(Animation.easeIn(duration: 0.5).repeatForever()) {
+                    inRadiusOpacity = inRadiusOpacity == 1.0 ? 0 : 1
+                  }
+                }
+            }
           }
         }
         
@@ -366,14 +380,6 @@ extension ChatDetailView {
             }
           )
           .isDetailLink(false)
-          
-//          NavigationLink(
-//            destination: ChatMenuView(store: chatMenuStore, shouldPopToRootView: $shouldPopToRootView)
-//          ) {
-//
-//          }
-//
-//            .simultaneousGesture(TapGesture().onEnded { viewStore.send(.moveToOtherView) })
         }
       }
       .padding([.leading, .trailing], 10)

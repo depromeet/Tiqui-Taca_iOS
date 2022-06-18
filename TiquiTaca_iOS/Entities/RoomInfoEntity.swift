@@ -6,6 +6,7 @@
 //
 
 import TTNetworkModule
+import CoreLocation
 
 enum RoomInfoEntity {
   struct Request: Codable, JSONConvertible { }
@@ -28,9 +29,10 @@ enum RoomInfoEntity {
     let lastChatTime: String?
     
     var distance: Double?
+    var radius: Double
     
     var viewTitle: String {
-      (name ?? "") + " \(userCount ?? 0)"
+      (name ?? "") + " + \(userCount ?? 0)"
     }
     
     enum CodingKeys: String, CodingKey {
@@ -47,6 +49,7 @@ enum RoomInfoEntity {
       case iJoin
       case lat
       case lng
+      case radius
     }
     
     init() {
@@ -63,6 +66,7 @@ enum RoomInfoEntity {
       iJoin = true
       lat = 0.0
       lng = 0.0
+      radius = 0
     }
     
     init(from decoder: Decoder) throws {
@@ -80,6 +84,21 @@ enum RoomInfoEntity {
       iJoin = try? container.decode(Bool?.self, forKey: .iJoin)
       lat = try? container.decode(Double?.self, forKey: .lat)
       lng = try? container.decode(Double?.self, forKey: .lng)
+      radius = (try? container.decode(Double.self, forKey: .radius)) ?? 0
     }
+  }
+}
+
+extension RoomInfoEntity.Response {
+  var geofenceRegion: CLCircularRegion {
+    return .init(
+      center: self.coordinate,
+      radius: self.radius,
+      identifier: self.id ?? ""
+    )
+  }
+  
+  var coordinate: CLLocationCoordinate2D {
+    return .init(latitude: self.lat ?? 0.0, longitude: self.lng ?? 0.0)
   }
 }

@@ -19,10 +19,12 @@ struct ChatDetailState: Equatable {
   }
   var roomId: String
   var route: Route?
+  var currentLocation: CLLocationCoordinate2D?
   var currentRoom: RoomInfoEntity.Response = .init()
   var myInfo: UserEntity.Response?
   var blockUserList: [BlockUserEntity.Response]?
   
+  var isWithinRadius = false
   var isAlarmOn = false
   var isFirstLoad = true
   var moveToOtherView = false
@@ -48,7 +50,7 @@ enum ChatDetailAction: Equatable {
   case sendResponse(NSError?)
   case socket(SocketService.Action)
   
-  
+  case checkLocationWithinRadius(CLLocationCoordinate2D)
   case selectProfile(UserEntity.Response?)
   case selectQuestionDetail(String)
   case selectMenu
@@ -148,6 +150,12 @@ let chatDetailCore = Reducer<
       environment.locationManager
         .delegate()
         .map(ChatDetailAction.locationManager),
+      environment.locationManager
+        .startMonitoringSignificantLocationChanges()
+        .fireAndForget(),
+      environment.locationManager
+        .requestLocation()
+        .fireAndForget(),
       Effect(value: .joinRoom)
         .eraseToEffect(),
       Effect(value: .getBlockUserList)
@@ -157,10 +165,7 @@ let chatDetailCore = Reducer<
         .receive(on: environment.mainQueue)
         .map(ChatDetailAction.socket)
         .eraseToEffect()
-        .cancellable(id: ChatDetailId()),
-      environment.locationManager
-        .startMonitoringSignificantLocationChanges()
-        .fireAndForget()
+        .cancellable(id: ChatDetailId())
     )
   case .onDisAppear:
     guard !state.moveToOtherView else { return .none }
@@ -224,6 +229,12 @@ let chatDetailCore = Reducer<
       state.chatMenuState.roomInfo = res
       state.chatMenuState.isFavorite = res.iFavorite ?? false
     }
+    
+    if let loc = state.currentLocation, environment.locationManager.locationServicesEnabled() {
+      return environment.locationManager
+        .requestLocation()
+        .fireAndForget()
+    }
     return .none
   case let .responseQuestionDetail(.success(res)):
     guard let questionId = res?.id else { return .none }
@@ -251,7 +262,14 @@ let chatDetailCore = Reducer<
       .responseBlockUserList(.failure):
     return .none
   case let .locationManager(.didUpdateLocations(locations)):
-    print("로케이션 받아옴", locations.first?.coordinate.latitude, locations.first?.coordinate.longitude)
+    guard let loc = locations.first?.rawValue.coordinate else { return .none }
+    state.currentLocation = loc
+    
+    return Effect(value: .checkLocationWithinRadius(loc))
+      .eraseToEffect()
+  case let .checkLocationWithinRadius(loc):
+    let isWithinRadius = state.currentRoom.geofenceRegion.contains(loc)
+    state.isWithinRadius = isWithinRadius
     return .none
   default:
     return .none
