@@ -41,9 +41,13 @@ struct CommentItemView: View {
             }
           
           VStack(alignment: .leading) {
-            Text(viewStore.comment?.user?.nickname ?? "")
+            Text(
+              viewStore.comment?.user?.status == UserStatus.forbidden ? "(이용제한 사용자)" : viewStore.comment?.user?.nickname ?? ""
+            )
               .font(.body4)
-              .foregroundColor(.black900)
+              .foregroundColor(
+                viewStore.comment?.user?.status == UserStatus.normal ? .black900 :.black50
+              )
             Text(viewStore.comment?.createdAt.getTimeTodayOrDate() ?? "")
               .font(.body8)
               .foregroundColor(.white800)
@@ -55,10 +59,12 @@ struct CommentItemView: View {
           } label: {
             Image("moreVertical")
           }
-          .buttonStyle(PlainButtonStyle()) 
+          .buttonStyle(PlainButtonStyle())
         }
         
         Text(viewStore.comment?.comment ?? "")
+          .fixedSize(horizontal: false, vertical: true)
+          .multilineTextAlignment(.leading)
           .font(.body3)
           .foregroundColor(.black900)
       }

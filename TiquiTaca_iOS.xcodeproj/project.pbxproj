@@ -141,6 +141,7 @@
 		F9322E7428424A9600EB956E /* QuestionEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9322E7328424A9600EB956E /* QuestionEntity.swift */; };
 		F9322E7628424DA900EB956E /* CommentEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9322E7528424DA900EB956E /* CommentEntity.swift */; };
 		F9322E79284253F800EB956E /* QuestionItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9322E78284253F800EB956E /* QuestionItemView.swift */; };
+		F9565382285DB4A400540906 /* QuestionListEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9565381285DB4A400540906 /* QuestionListEntity.swift */; };
 		F9669F6428251E59004624F8 /* MyBlockHistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9669F6328251E59004624F8 /* MyBlockHistoryView.swift */; };
 		F9669F6628251E6F004624F8 /* MyBlockHistoryCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9669F6528251E6F004624F8 /* MyBlockHistoryCore.swift */; };
 		F96C0DE6282EA83D004BF1C7 /* ValidNicknameEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = F96C0DE5282EA83D004BF1C7 /* ValidNicknameEntity.swift */; };
@@ -351,6 +352,7 @@
 		F9322E7328424A9600EB956E /* QuestionEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionEntity.swift; sourceTree = "<group>"; };
 		F9322E7528424DA900EB956E /* CommentEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentEntity.swift; sourceTree = "<group>"; };
 		F9322E78284253F800EB956E /* QuestionItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionItemView.swift; sourceTree = "<group>"; };
+		F9565381285DB4A400540906 /* QuestionListEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuestionListEntity.swift; sourceTree = "<group>"; };
 		F9669F6328251E59004624F8 /* MyBlockHistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBlockHistoryView.swift; sourceTree = "<group>"; };
 		F9669F6528251E6F004624F8 /* MyBlockHistoryCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyBlockHistoryCore.swift; sourceTree = "<group>"; };
 		F96C0DE5282EA83D004BF1C7 /* ValidNicknameEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ValidNicknameEntity.swift; sourceTree = "<group>"; };
@@ -758,6 +760,7 @@
 				F96C0DE7282EAFBE004BF1C7 /* ChangeProfileEntity.swift */,
 				86B296152837862500A981FC /* ChatLogEntity.swift */,
 				F9322E7328424A9600EB956E /* QuestionEntity.swift */,
+				F9565381285DB4A400540906 /* QuestionListEntity.swift */,
 				F9322E7528424DA900EB956E /* CommentEntity.swift */,
 				F90F8D512847BAED0011EDAC /* RoomUserInfoEntity.swift */,
 				F9AFCD692848E8EA009286DE /* QuestionLikeEntity.swift */,
@@ -1305,6 +1308,7 @@
 				86B296142837859C00A981FC /* ChatLogView.swift in Sources */,
 				F2218534285397A2005CE6C3 /* NotificationRequest.swift in Sources */,
 				F25C79B6282C1FC0009C60EE /* ProfileImageListView.swift in Sources */,
+				F9565382285DB4A400540906 /* QuestionListEntity.swift in Sources */,
 				F9322E70284242CF00EB956E /* ChatMenuView.swift in Sources */,
 				F2218515284F1766005CE6C3 /* ComposableArchitecture+Extensions.swift in Sources */,
 				F25C79BC282D91BC009C60EE /* UserCreationEntity.swift in Sources */,

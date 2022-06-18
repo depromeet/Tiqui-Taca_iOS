@@ -9,7 +9,7 @@ import TTNetworkModule
 import Combine
 
 protocol QuestionServiceType {
-  func getQuestionList(_ request: QuestionEntity.Request) -> AnyPublisher<[QuestionEntity.Response]?, HTTPError>
+  func getQuestionList(_ request: QuestionEntity.Request) -> AnyPublisher<QuestionListEntity.Response?, HTTPError>
   func getQuestionDetail(questionId: String) -> AnyPublisher<QuestionEntity.Response?, HTTPError>
   func getQuestionDetailAtChat(chatId: String) -> AnyPublisher<QuestionEntity.Response?, HTTPError>
   func likeQuestion(questionId: String) -> AnyPublisher<QuestionLikeEntity.Response?, HTTPError>
@@ -25,8 +25,8 @@ final class QuestionService: QuestionServiceType {
     network = .init()
   }
   
-  func getQuestionList(_ request: QuestionEntity.Request) -> AnyPublisher<[QuestionEntity.Response]?, HTTPError> {
-    network.request(.questionList(request), responseType: [QuestionEntity.Response].self)
+  func getQuestionList(_ request: QuestionEntity.Request) -> AnyPublisher<QuestionListEntity.Response?, HTTPError> {
+    network.request(.questionList(request), responseType: QuestionListEntity.Response.self)
   }
   
   func getQuestionDetail(questionId: String) -> AnyPublisher<QuestionEntity.Response?, HTTPError> {

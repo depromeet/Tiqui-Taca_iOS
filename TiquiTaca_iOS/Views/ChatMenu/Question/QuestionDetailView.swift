@@ -115,6 +115,8 @@ struct QuestionDetailView: View {
                 .frame(width: 160, height: 160)
                 .padding(.spacingM)
               Text("아직 사용자들이 남긴 답변이 없어요!\n처음으로 질문에 답변해보세요!")
+                .multilineTextAlignment(.center)
+                .lineSpacing(14 * 0.32)
                 .font(.body2)
                 .foregroundColor(.white900)
               Spacer()
@@ -281,7 +283,8 @@ struct QuestionDetailView: View {
         
         Text(viewStore.question?.user.nickname ?? "")
           .font(.subtitle2)
-          .foregroundColor(.white)
+          .foregroundColor(
+            viewStore.question?.user.status == UserStatus.signOut ? .black50: .white)
         
         Text("님의 질문")
           .font(.subtitle2)
@@ -311,7 +314,7 @@ struct QuestionDetailView: View {
           VStack(alignment: .leading) {
             Text(viewStore.question?.user.nickname ?? "")
               .font(.body4)
-              .foregroundColor(.black900)
+              .foregroundColor(viewStore.question?.user.status == UserStatus.signOut ? .black50: .black900)
             Text(viewStore.question?.createdAt.getTimeTodayOrDate() ?? "")
               .font(.body8)
               .foregroundColor(.white800)
