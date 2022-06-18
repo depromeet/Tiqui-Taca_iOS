@@ -55,10 +55,12 @@ struct CommentItemView: View {
           } label: {
             Image("moreVertical")
           }
-          .buttonStyle(PlainButtonStyle()) 
+          .buttonStyle(PlainButtonStyle())
         }
         
         Text(viewStore.comment?.comment ?? "")
+          .fixedSize(horizontal: false, vertical: true)
+          .multilineTextAlignment(.leading)
           .font(.body3)
           .foregroundColor(.black900)
       }

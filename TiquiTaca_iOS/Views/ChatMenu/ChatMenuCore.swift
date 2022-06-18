@@ -208,6 +208,7 @@ let chatMenuReducerCore = Reducer<
     return .none
   case let .profileSelected(user):
     guard let userId = user?.id else { return .none }
+    if userId == environment.appService.userService.myProfile?.id { return .none }
     state.otherProfileState = OtherProfileState(userId: userId)
     state.showOtherProfile = true
     return .none
