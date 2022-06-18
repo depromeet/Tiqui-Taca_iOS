@@ -78,17 +78,19 @@ struct ChatDetailView: View {
               )
           }
             .frame(height: 0)
+          
           LazyVStack(alignment: .leading, spacing: 0) {
             Spacer().frame(height: 4).background(.white).id("listBottom")
             ForEach(
               viewStore.chatLogList.reversed().enumerated().map({ $0 }),
               id: \.element.id
-            ) { index, chatLog in
-              if chatLog.type == 3 {
+            ) { _, chatLog in
+              switch chatLog.getChatMessageType(myId: viewStore.myInfo?.id) {
+              case .date:
                 ChatMessageView(chatLog: chatLog)
                   .dateBubble
                   .scaleEffect(x: 1, y: -1, anchor: .center)
-              } else if viewStore.myInfo?.id == chatLog.sender?.id {
+              case .sent:
                 ChatMessageView(chatLog: chatLog)
                   .sentBubble
                   .scaleEffect(x: 1, y: -1, anchor: .center)
@@ -97,32 +99,22 @@ struct ChatDetailView: View {
                       viewStore.send(.selectQuestionDetail(chatLog.id ?? ""))
                     }
                   }
-              } else {
-                ZStack(alignment: .topLeading) {
-                  ChatMessageView(chatLog: chatLog)
-                    .receivedBubble
-                    .scaleEffect(x: 1, y: -1, anchor: .center)
-                    .onTapGesture {
-                      if chatLog.type == 1 {
-                        viewStore.send(.selectQuestionDetail(chatLog.id ?? ""))
-                      }
+              case .receive:
+                ChatMessageView(
+                  chatLog: chatLog,
+                  isBlind: chatLog.isBlind(blockList: viewStore.blockUserList),
+                  profileTapped: { log in
+                    viewStore.send(.selectProfile(log.sender))
+                    showOtherProfile = true
+                  }
+                )
+                  .receivedBubble
+                  .scaleEffect(x: 1, y: -1, anchor: .center)
+                  .onTapGesture {
+                    if chatLog.type == 1 && !chatLog.isBlind(blockList: viewStore.blockUserList) {
+                      viewStore.send(.selectQuestionDetail(chatLog.id ?? ""))
                     }
-                    .overlay(
-                      Button {
-                        viewStore.send(.selectProfile(chatLog.sender))
-                        showOtherProfile = true
-                      } label: {
-                        Text("")
-                          .frame(width: 34, height: 34)
-                          .background(.blue)
-                          .opacity(0)
-                      }
-                        .padding(.bottom, 6)
-                        .padding(.leading, 12)
-                      ,
-                      alignment: .bottomLeading
-                    )
-                }
+                  }
               }
             }
             Spacer().frame(height: 90).background(.white)
@@ -166,12 +158,13 @@ struct ChatDetailView: View {
             autohideIn: 3,
             dragToDismiss: true,
             closeOnTap: true,
-            closeOnTapOutside: true
+            closeOnTapOutside: true,
+            backgroundColor: .clear
           ) {
             if viewStore.isWithinRadius {
               TTToastView(title: "현재 해당 스팟 위치에 들어와있습니다", type: .success)
             } else {
-              TTToastView(title: "현재 해당 스팟 위치에서 벗어나있습니다", type: .error)
+              TTToastView(title: "현재 해당 스팟 위치에서 벗어나있습니다", type: .blur)
             }
           }
       }
@@ -229,7 +222,7 @@ struct ChatDetailView: View {
             viewStore.send(.selectSendLetter(userInfo))
           },
           actionHandler: { action in
-            
+            viewStore.send(.setOtherProfileAction(action))
           }
         )
           .opacity(showOtherProfile ? 1 : 0),
@@ -393,7 +386,7 @@ extension ChatDetailView {
                 .foregroundColor(.green800)
                 .opacity(inRadiusOpacity)
                 .onAppear {
-                  withAnimation(Animation.easeIn(duration: 0.5).repeatForever()) {
+                  withAnimation(Animation.easeIn(duration: 0.7).repeatForever()) {
                     inRadiusOpacity = inRadiusOpacity == 1.0 ? 0 : 1
                   }
                 }

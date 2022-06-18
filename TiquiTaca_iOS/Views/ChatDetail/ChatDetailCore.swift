@@ -66,6 +66,7 @@ enum ChatDetailAction: Equatable {
   case responseBlockUserList(Result<[BlockUserEntity.Response]?, HTTPError>)
   
   case setLocationToast(Bool)
+  case setOtherProfileAction(OtherProfileState.Action)
   case moveToOtherView
   case setRoute(ChatDetailState.Route?)
   
@@ -153,9 +154,6 @@ let chatDetailCore = Reducer<
       environment.locationManager
         .delegate()
         .map(ChatDetailAction.locationManager),
-//      environment.locationManager
-//        .startMonitoringSignificantLocationChanges()
-//        .fireAndForget(),
       environment.locationManager
         .requestLocation()
         .fireAndForget(),
@@ -281,6 +279,17 @@ let chatDetailCore = Reducer<
       state.isWithinRadius = isWithinRadius
       print("무엇이 문제지", isWithinRadius)
       state.showLocationToast = true
+    }
+    return .none
+  // MARK: OtherProfile Completion
+  case let .setOtherProfileAction(completionAction):
+    switch completionAction {
+    case .block, .unblock:
+      state.blockUserList = environment.appService
+        .userService
+        .blockUserList
+    default:
+      break
     }
     
     return .none
