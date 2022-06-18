@@ -20,6 +20,7 @@ struct ChatDetailView: View {
   @Binding var shouldPopToRootView: Bool
   @State var scrollToBottomButtonHidden = false
   @State var showOtherProfile = false
+  @State var showGuideView: Bool = false
   @State var inRadiusOpacity: Double = 1.0
   
   var store: Store<CDState, Action>
@@ -32,6 +33,7 @@ struct ChatDetailView: View {
     let blockUserList: [BlockUserEntity.Response]?
     let chatMenuState: ChatMenuState
     let myInfo: UserEntity.Response?
+    let isFirstLoad: Bool
     let isWithinRadius: Bool
     let isAlarmOn: Bool
     
@@ -42,6 +44,7 @@ struct ChatDetailView: View {
       blockUserList = state.blockUserList
       chatMenuState = state.chatMenuState
       myInfo = state.myInfo
+      isFirstLoad = state.isFirstLoad
       isWithinRadius = state.isWithinRadius
       isAlarmOn = state.isAlarmOn
     }
@@ -211,7 +214,19 @@ struct ChatDetailView: View {
           .opacity(showOtherProfile ? 1 : 0),
         alignment: .center
       )
+      .overlay(
+        ChatGuideView(showGuideView: $showGuideView)
+          .opacity(showGuideView ? 1 : 0)
+        ,
+        alignment: .center
+      )
       .onAppear {
+        if viewStore.isFirstLoad && !UserDefaults.standard.bool(forKey: "hideGuidView") {
+          DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            showGuideView = true
+          }
+        }
+        
         viewStore.send(.onAppear)
       }
       .onDisappear {
