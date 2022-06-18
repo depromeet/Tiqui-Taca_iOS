@@ -25,6 +25,7 @@ enum MainTabAction: Equatable {
   case chatAction(ChatAction)
   case msgAndNotiAction(MsgAndNotiAction)
   case myPageAction(MyPageAction)
+  case onLoad
 }
 
 struct MainTabEnvironment {
@@ -113,6 +114,10 @@ let mainTabCore = Reducer<
     return .none
     
   case .myPageAction:
+    return .none
+    
+  case .onLoad:
+    DeeplinkManager.shared.isFirstLaunch = false
     return .none
   }
 }

@@ -20,7 +20,8 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         environment: .init(
           appService: appService,
           mainQueue: .main,
-          locationManager: .live
+          locationManager: .live,
+          deeplinkManager: .shared
         )
       )
     )

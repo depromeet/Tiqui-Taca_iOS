@@ -38,7 +38,7 @@ struct AppEnvironment {
   let appService: AppService
   let mainQueue: AnySchedulerOf<DispatchQueue>
   var locationManager: LocationManager
-  var deeplinkManager: DeeplinkManager
+  let deeplinkManager: DeeplinkManager
 }
 
 let appReducer = Reducer<
@@ -206,6 +206,10 @@ private let deeplinkReducer = Reducer<
   AppEnvironment
 > { state, action, environment in
   switch action {
+  case let .didChangeNavigation(type, queryItems):
+    state.isLoading = true
     
+    
+    return .none
   }
 }

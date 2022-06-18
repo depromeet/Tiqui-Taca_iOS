@@ -80,6 +80,9 @@ struct MainTabView: View {
       .navigationBarHidden(true)
     }
     .navigationViewStyle(.stack)
+    .onLoad {
+      viewStore.send(.onLoad)
+    }
   }
 }
 
