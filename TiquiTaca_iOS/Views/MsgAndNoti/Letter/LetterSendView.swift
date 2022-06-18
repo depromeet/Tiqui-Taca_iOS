@@ -23,12 +23,14 @@ struct LetterSendView: View {
     let inputLetterString: String
     let popupPresented: Bool
     let sendLetterSuccess: Bool
+    let toastPresented: Bool
     
     init(state: State) {
       sendingUser = state.sendingUser
       inputLetterString = state.inputLetterString
       popupPresented = state.popupPresented
       sendLetterSuccess = state.sendLetterSuccess
+      toastPresented = state.toastPresented
     }
   }
   
@@ -86,6 +88,25 @@ struct LetterSendView: View {
           viewStore.send(.dismissPopup)
         }
       )
+    }
+    .popup(
+      isPresented: viewStore.binding(
+        get: \.toastPresented,
+        send: LetterSendAction.dismissToast
+      ),
+      type: .floater(
+        verticalPadding: 16,
+        useSafeAreaInset: true
+      ),
+      position: .top,
+      animation: .easeIn,
+      autohideIn: 2
+    ) {
+      TTToastView(
+        title: "쪽지를 보낼 수 없는 사용자에요.",
+        type: .error
+      )
+      .padding(.top, .spacingS)
     }
     .onChange(of: viewStore.sendLetterSuccess) { sendLetterSuccess in
       if sendLetterSuccess {

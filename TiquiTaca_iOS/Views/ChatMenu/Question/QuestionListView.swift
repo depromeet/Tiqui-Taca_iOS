@@ -20,14 +20,16 @@ struct QuestionListView: View {
   struct ViewState: Equatable {
     let route: State.Route?
     let questionList: [QuestionEntity.Response]
+    let totalQuestionListCount: Int
     let sortType: QuestionSortType
-    let bottomSheetPosition: TTBottomSheet.Position
+    let sheetPresented: Bool
     
     init(state: State) {
       route = state.route
       questionList = state.questionList
+      totalQuestionListCount = state.totalQuestionListCount
       sortType = state.sortType
-      bottomSheetPosition = state.bottomSheetPosition
+      sheetPresented = state.sheetPresented
     }
   }
   
@@ -47,6 +49,8 @@ struct QuestionListView: View {
             .frame(width: 160, height: 160)
             .padding(.spacingM)
           Text("아직 사용자들이 남긴 질문이 없어요!\n처음으로 질문을 남겨보세요!")
+            .multilineTextAlignment(.center)
+            .lineSpacing(14 * 0.32)
             .font(.body2)
             .foregroundColor(.white900)
         }
@@ -86,66 +90,27 @@ struct QuestionListView: View {
         label: EmptyView.init
       )
     }
-    .bottomSheet(
-      bottomSheetPosition: viewStore.binding(
-        get: \.bottomSheetPosition,
-        send: Action.setBottomSheetPosition
-      ),
-      options: TTBottomSheet.Options
+    .actionSheet(
+      isPresented: viewStore.binding(
+        get: \.sheetPresented,
+        send: QuestionListAction.sheetDismissed
+      )
     ) {
-      VStack(spacing: 0) {
-        Text("필터")
-          .font(.body2)
-          .foregroundColor(.black100)
-          .hCenter()
-          .frame(height: 10)
-          .padding(12)
-        
-        Rectangle().fill(Color.black600)
-          .frame(height: 1)
-          .hCenter()
-        
-        Button {
-          viewStore.send(.selectSortType(.neworder))
-        } label: {
-          Text("모든 질문")
-            .hCenter()
-            .font(.subtitle2)
-            .foregroundColor(.white)
-        }
-        .frame(height: 54)
-        
-        Rectangle().fill(Color.black600)
-          .frame(height: 1)
-          .hCenter()
-        
-        Button {
-          viewStore.send(.selectSortType(.notanswered))
-        } label: {
-          Text("미답변")
-            .hCenter()
-            .font(.subtitle2)
-            .foregroundColor(.white)
-        }
-        .frame(height: 54)
-        
-        Rectangle().fill(Color.black600)
-          .frame(height: 1)
-          .hCenter()
-        
-        Button {
-          viewStore.send(.selectSortType(.oldorder))
-        } label: {
-          Text("오래된 순")
-            .hCenter()
-            .font(.subtitle2)
-            .foregroundColor(.white)
-        }
-        .frame(height: 54)
-        Spacer()
-      }
-      .vCenter()
-      .hCenter()
+      return ActionSheet(
+        title: Text("필터"),
+        buttons: [
+          .default(Text("모든 질문")) {
+            viewStore.send(.selectSortType(.neworder))
+          },
+          .default(Text("미답변")) {
+            viewStore.send(.selectSortType(.notanswered))
+          },
+          .default(Text("오래된 순")) {
+            viewStore.send(.selectSortType(.oldorder))
+          },
+          .cancel(Text("취소"))
+        ]
+      )
     }
     .background(Color.white)
     .navigationBarBackButtonHidden(true)
@@ -180,7 +145,7 @@ struct QuestionListView: View {
             .font(.heading2)
             .foregroundColor(.white)
           
-          Text("총 \(viewStore.questionList.count)개의 질문")
+          Text("총 \(viewStore.totalQuestionListCount)개의 질문")
             .font(.body7)
             .foregroundColor(.white900)
         }
@@ -188,7 +153,8 @@ struct QuestionListView: View {
         Spacer()
         
         Button {
-          viewStore.send(.setBottomSheetPosition(.middle))
+//          viewStore.send(.setBottomSheetPosition(.middle))
+          viewStore.send(.sheetPresented)
         } label: {
           HStack {
             Text(viewStore.sortType.title)

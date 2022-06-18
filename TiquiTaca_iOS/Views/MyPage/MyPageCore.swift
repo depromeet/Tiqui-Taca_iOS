@@ -33,6 +33,7 @@ struct MyPageState: Equatable {
   var createdAt: String = ""
   var createDday = 0
   var isAppAlarmOn = false
+  var toastPresented = false
 }
 
 enum MyPageAction: Equatable {
@@ -47,6 +48,7 @@ enum MyPageAction: Equatable {
   case getProfileRequestSuccess
   case logout
   case withdrawal
+  case dismissToast
 }
 
 struct MyPageEnvironment {
@@ -167,8 +169,14 @@ let myPageReducerCore = Reducer<
       return .none
     }
     
-  case .changeProfileView:
-    return .none
+  case let .changeProfileView(changeProfileAction):
+    switch changeProfileAction {
+    case .getMyProfileResponse:
+      state.toastPresented = true
+      return .none
+    default:
+      return .none
+    }
     
   case .mypageItemView:
     return .none
@@ -200,5 +208,8 @@ let myPageReducerCore = Reducer<
       .receive(on: environment.mainQueue)
       .catchToEffect()
       .fireAndForget()
+  case .dismissToast:
+    state.toastPresented = false
+    return .none
   }
 }

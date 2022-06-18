@@ -19,6 +19,7 @@ struct LetterDetailState: Equatable {
   var loginUserId: String = ""
   
   var letterList: [LetterEntity.Response] = []
+  var toastPresented: Bool = false
 }
 
 enum LetterDetailAction: Equatable {
@@ -28,6 +29,7 @@ enum LetterDetailAction: Equatable {
   
   case getLetterList
   case getLetterListResponse(Result<[LetterEntity.Response]?, HTTPError>)
+  case dismissToast
 }
 
 struct LetterDetailEnvironment {
@@ -60,7 +62,13 @@ private let letterDetailCore = Reducer<
   LetterDetailEnvironment
 > { state, action, environment in
   switch action {
-  case .letterSendView(_):
+  case let .letterSendView(sendAction):
+    switch sendAction {
+    case .sendLetterResponse(.success):
+      state.toastPresented = true
+    default:
+      return .none
+    }
     return .none
   case .onAppear:
     state.loginUserId = environment.appService.userService.myProfile?.id ?? ""
@@ -87,6 +95,9 @@ private let letterDetailCore = Reducer<
     return .none
   case let .setRoute(route):
     state.route = route
+    return .none
+  case .dismissToast:
+    state.toastPresented = false
     return .none
   }
 }

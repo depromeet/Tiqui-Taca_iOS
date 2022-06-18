@@ -55,7 +55,7 @@ struct MyBlockHistoryView: View {
         .background(Color.white)
       }
       .ttPopup(
-        isShowing:viewStore.binding(
+        isShowing: viewStore.binding(
           get: \.popupPresented,
           send: MyBlockHistoryAction.dismissPopup
         )
@@ -72,6 +72,24 @@ struct MyBlockHistoryView: View {
           cancel: {
             viewStore.send(.dismissPopup)
           }
+        )
+      }
+      .popup(
+        isPresented: viewStore.binding(
+          get: \.toastPresented,
+          send: MyBlockHistoryAction.dismissToast
+        ),
+        type: .floater(
+          verticalPadding: 16,
+          useSafeAreaInset: true
+        ),
+        position: .top,
+        animation: .easeIn,
+        autohideIn: 2
+      ) {
+        TTToastView(
+          title: "'\(viewStore.unBlockUser?.nickname ?? "")'님을 차단 해제했어요!",
+          type: .success
         )
       }
       .onAppear(

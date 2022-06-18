@@ -18,6 +18,7 @@ struct ChatMenuState: Equatable {
   var roomInfo: RoomInfoEntity.Response?
   var roomUserList: [UserEntity.Response] = []
   var questionList: [QuestionEntity.Response] = []
+  var totalQuestionCount: Int = 0
   var selectedQuestionId: String?
   
   var questionDetailViewState: QuestionDetailState = .init(questionId: "")
@@ -55,7 +56,7 @@ enum ChatMenuAction: Equatable {
   case getRoomUserListResponse(Result<RoomUserInfoEntity.Response?, HTTPError>)
   
   case getQuestionList
-  case getQuestionListResponse(Result<[QuestionEntity.Response]?, HTTPError>)
+  case getQuestionListResponse(Result<QuestionListEntity.Response?, HTTPError>)
   case roomExitReponse(Result<DefaultResponse?, HTTPError>)
   
   case presentPopup
@@ -181,7 +182,8 @@ let chatMenuReducerCore = Reducer<
       .catchToEffect()
       .map(ChatMenuAction.getQuestionListResponse)
   case let .getQuestionListResponse(.success(response)):
-    state.questionList = response ?? []
+    state.questionList = response?.list ?? []
+    state.totalQuestionCount = response?.totalCount ?? 0
     return .none
   case .getQuestionListResponse(.failure):
     return .none
@@ -208,6 +210,7 @@ let chatMenuReducerCore = Reducer<
     return .none
   case let .profileSelected(user):
     guard let userId = user?.id else { return .none }
+    if userId == environment.appService.userService.myProfile?.id { return .none }
     state.otherProfileState = OtherProfileState(userId: userId)
     state.showOtherProfile = true
     return .none
