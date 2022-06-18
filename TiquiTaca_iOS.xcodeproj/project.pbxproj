@@ -1544,7 +1544,7 @@
 				CODE_SIGN_ENTITLEMENTS = TiquiTaca_iOS/TiquiTaca_iOSDebug.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_ASSET_PATHS = "\"TiquiTaca_iOS/Resource/Preview Content\"";
 				DEVELOPMENT_TEAM = 75FNRKTJ9S;
 				ENABLE_PREVIEWS = YES;
@@ -1579,7 +1579,7 @@
 				CODE_SIGN_ENTITLEMENTS = TiquiTaca_iOS/TiquiTaca_iOS.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Minseok Kang (75FNRKTJ9S)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_ASSET_PATHS = "\"TiquiTaca_iOS/Resource/Preview Content\"";
 				DEVELOPMENT_TEAM = 75FNRKTJ9S;
 				ENABLE_PREVIEWS = YES;
