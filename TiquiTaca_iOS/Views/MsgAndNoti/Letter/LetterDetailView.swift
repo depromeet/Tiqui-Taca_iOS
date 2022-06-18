@@ -24,6 +24,7 @@ struct LetterDetailView: View {
     let letterList: [LetterEntity.Response]
     let letterSendViewState: LetterSendState
     let loginUserId: String
+    let toastPresented: Bool
     
     init(state: State) {
       route = state.route
@@ -32,6 +33,7 @@ struct LetterDetailView: View {
       letterList = state.letterList
       letterSendViewState = state.letterSendViewState
       loginUserId = state.loginUserId
+      toastPresented = state.toastPresented
     }
   }
   
@@ -46,7 +48,7 @@ struct LetterDetailView: View {
       
       List {
         ForEach(viewStore.letterList) { letter in
-          HStack {
+          HStack(alignment: .top) {
             Image(letter.sender?.profile.imageName ?? "defaultProfile")
               .resizable()
               .frame(width: 48, height: 48)
@@ -99,6 +101,24 @@ struct LetterDetailView: View {
           )
         },
         label: EmptyView.init
+      )
+    }
+    .popup(
+      isPresented: viewStore.binding(
+        get: \.toastPresented,
+        send: LetterDetailAction.dismissToast
+      ),
+      type: .floater(
+        verticalPadding: 16,
+        useSafeAreaInset: true
+      ),
+      position: .top,
+      animation: .easeIn,
+      autohideIn: 2
+    ) {
+      TTToastView(
+        title: "쪽지를 보냈어요!",
+        type: .success
       )
     }
     .navigationBarHidden(true)
