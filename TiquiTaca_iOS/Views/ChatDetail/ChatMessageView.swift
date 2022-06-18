@@ -11,7 +11,6 @@ import ComposableArchitecture
 
 struct ChatMessageView: View {
   let chatLog: ChatLogEntity.Response
-  let diff: Bool = true
   
   var body: some View {
     dateBubble
@@ -23,11 +22,11 @@ extension ChatMessageView {
   var dateBubble: some View {
     VStack(alignment: .center) {
       Spacer()
-      Text("\(chatLog.message ?? "새 시작")")
+      Text(chatLog.getMessage())
         .font(.body4)
         .padding(.horizontal, 20)
         .padding(.vertical, 4)
-        .background(Color.black100.opacity(0.5))
+        .background(Color.black100.opacity(0.2))
         .foregroundColor(.white)
         .cornerRadius(16)
       Spacer()
@@ -103,7 +102,6 @@ extension ChatMessageView {
           .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
           .opacity(chatLog.inside == true ? 1 : 0)
       )
-      .opacity(diff ? 1 : 0)
       
       HStack(alignment: .bottom) {
         VStack(alignment: .leading, spacing: 4) {

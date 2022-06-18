@@ -48,6 +48,15 @@ enum ChatLogEntity {
 
 extension ChatLogEntity.Response {
   func getMessage() -> String {
+    // date
+    if type == 3 {
+      if Date().getDateString(format: .yyyyMMdd) == message {
+        return "오늘"
+      } else {
+        return message ?? "새 시작"
+      }
+    }
+    
     switch sender?.status {
     case .forbidden:
       return ""
