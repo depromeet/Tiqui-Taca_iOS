@@ -30,6 +30,7 @@ struct MyPageView: View {
     let createdAt: String
     let createDday: Int
     let isAppAlarmOn: Bool
+    let toastPresented: Bool
     
     init(state: MyState) {
       route = state.route
@@ -44,6 +45,7 @@ struct MyPageView: View {
       createdAt = state.createdAt
       createDday = state.createDday
       isAppAlarmOn = state.isAppAlarmOn
+      toastPresented = state.toastPresented
     }
   }
   
@@ -53,11 +55,13 @@ struct MyPageView: View {
   }
   
   var body: some View {
-    VStack {
-      VStack {
+    VStack(spacing: 0) {
+      VStack(spacing: 0) {
         Text("마이페이지")
           .font(.heading1)
           .frame(maxWidth: .infinity, alignment: .leading)
+          .padding(.bottom, .spacingM)
+          .padding(.top, .spacingXS)
         
         ZStack(alignment: .bottomTrailing) {
           Image(viewStore.profileImage.imageName)
@@ -74,13 +78,16 @@ struct MyPageView: View {
             }
           )
         }
+        .padding(.bottom, .spacingM)
         
         Text(viewStore.nickname)
           .font(.heading2)
+          .padding(.bottom, .spacingXS)
         
         Text("최초가입일 \(viewStore.createdAt) / 티키타카와 +\(String(viewStore.createDday))일 째")
           .font(.body7)
           .foregroundColor(.white900)
+          .padding(.bottom, 9)
         
         Button {
           viewStore.send(.setRoute(.levelInfo))
@@ -93,6 +100,9 @@ struct MyPageView: View {
       .foregroundColor(.white)
       .background(Color.black800)
       
+      Rectangle().fill(Color.white)
+        .frame(height: 12)
+      
       ForEachStore(
         store.scope(
           state: \.myPageItemStates,
@@ -101,7 +111,6 @@ struct MyPageView: View {
           MypageItem.init(store: store)
         }
       )
-      .padding([.leading, .trailing], .spacingS)
       
       Spacer()
     }
@@ -142,6 +151,24 @@ struct MyPageView: View {
       default:
         EmptyView()
       }
+    }
+    .popup(
+      isPresented: viewStore.binding(
+        get: \.toastPresented,
+        send: MyPageAction.dismissToast
+      ),
+      type: .floater(
+        verticalPadding: 16,
+        useSafeAreaInset: true
+      ),
+      position: .top,
+      animation: .easeIn,
+      autohideIn: 2
+    ) {
+      TTToastView(
+        title: "프로필을 수정했어요!",
+        type: .success
+      )
     }
     .navigationTitle("마이페이지")
     .background(Color.white)
