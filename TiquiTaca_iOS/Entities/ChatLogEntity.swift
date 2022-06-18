@@ -45,3 +45,18 @@ enum ChatLogEntity {
     }
   }
 }
+
+extension ChatLogEntity.Response {
+  func getMessage() -> String {
+    switch sender?.status {
+    case .forbidden:
+      return ""
+    case .signOut:
+      return ""
+    case .normal:
+      return ""
+    default:
+      return ""
+    }
+  }
+}

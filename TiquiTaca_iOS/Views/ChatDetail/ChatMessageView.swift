@@ -43,20 +43,39 @@ extension ChatMessageView {
         .font(.cap2)
         .foregroundColor(.white900)
       
-      HStack(alignment: .top) {
-        if chatLog.type == 1 {
-          Text("질문")
+      if chatLog.type == 0 {
+        HStack(alignment: .top) {
+          Text(chatLog.message ?? "잘못된 메세지 입니다")
             .font(.body4)
-            .foregroundColor(.blue900)
         }
-        
-        Text(chatLog.message ?? "잘못된 메세지 입니다")
-          .font(.body4)
-      }
         .padding([.top, .bottom], 9)
         .padding([.leading, .trailing], 14)
         .background(Color.green500)
         .cornerRadius(14, corners: [.topLeft, .bottomLeft, .bottomRight])
+      } else {
+        HStack(alignment: .top) {
+          Text("질문")
+            .font(.body4)
+            .foregroundColor(.green500)
+            .padding(.top, 2)
+          
+          Text(chatLog.message ?? "")
+            .font(.body4)
+            .foregroundColor(Color.white)
+            .padding(.top, 2)
+          
+          HStack(alignment: .bottom, spacing: 0) {
+            VStack {
+              Spacer().frame(maxWidth: 0.1)
+            }
+            Image("reply")
+          }
+        }
+          .padding([.top, .bottom], 8)
+          .padding([.leading, .trailing], 14)
+          .background(Color.black)
+          .cornerRadius(14, corners: [.topLeft, .bottomLeft, .bottomRight])
+      }
     }
       .padding(.trailing, 10)
       .padding(.leading, 20)
