@@ -19,6 +19,8 @@ struct ChatView: View {
   struct ViewState: Equatable {
     let currentTab: RoomListType
     let lastLoadTime: String
+    let unReadChatCount: Int
+    
     let enteredRoom: RoomInfoEntity.Response?
     let likeRoomList: [RoomInfoEntity.Response]
     let popularRoomList: [RoomInfoEntity.Response]
@@ -26,6 +28,8 @@ struct ChatView: View {
     init(state: ChatState) {
       currentTab = state.currentTab
       lastLoadTime = state.lastLoadTime
+      unReadChatCount = state.unReadChatCount
+      
       enteredRoom = state.enteredRoom
       likeRoomList = state.likeRoomList
       popularRoomList = state.popularRoomList
@@ -100,9 +104,13 @@ private struct EnteredRoomView: View {
   
   struct ViewState: Equatable {
     let enteredRoom: RoomInfoEntity.Response?
+    let lastChatLog: ChatLogEntity.Response?
+    let unReadChatCount: Int
     
     init(state: State) {
       enteredRoom = state.enteredRoom
+      lastChatLog = state.lastChatLog
+      unReadChatCount = state.unReadChatCount
     }
   }
   
@@ -148,7 +156,7 @@ private struct EnteredRoomView: View {
                   .foregroundColor(.black100)
                   .font(.body7)
               }
-              Text(viewStore.enteredRoom?.lastChatTime?.getTimeStringFromDateString() ?? "00:00")
+              Text(viewStore.lastChatLog?.createdAt?.getTimeStringFromDateString() ?? "00:00")
                 .foregroundColor(.black100)
                 .font(.body8)
                 .hTrailing()
@@ -158,9 +166,9 @@ private struct EnteredRoomView: View {
             Spacer().frame(height: 4)
             HStack {
               Text(
-                (viewStore.enteredRoom?.lastChatMessage ?? "").isEmpty ?
+                viewStore.lastChatLog == nil ?
                   "아직 아무도 채팅을 치지 않았어요" :
-                  (viewStore.enteredRoom?.lastChatMessage ?? "")
+                  (viewStore.lastChatLog?.message ?? "")
               )
                 .foregroundColor(.white800)
                 .font(.body7)
@@ -168,16 +176,16 @@ private struct EnteredRoomView: View {
                 .hLeading()
               VStack {
                 Text(
-                  (viewStore.enteredRoom?.notReadChatCount ?? 0) >= 100 ?
+                  viewStore.unReadChatCount >= 100 ?
                     "+99" :
-                    "\(viewStore.enteredRoom?.notReadChatCount ?? 0)"
+                    "\(viewStore.unReadChatCount)"
                 )
-                  .foregroundColor(viewStore.enteredRoom?.notReadChatCount == 0 ? Color.black600 : .black800)
+                  .foregroundColor(viewStore.unReadChatCount == 0 ? Color.black600 : .black800)
                   .font(.body4)
                   .padding([.leading, .trailing], 6)
                   .padding([.top, .bottom], 2)
               }
-              .background(viewStore.enteredRoom?.notReadChatCount == 0 ? Color.black600 : Color.green900)
+              .background(viewStore.unReadChatCount == 0 ? Color.black600 : Color.green900)
               .cornerRadius(11)
             }
               .hLeading()

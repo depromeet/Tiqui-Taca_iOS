@@ -14,6 +14,7 @@
 		098D3C3A28543A8600F6C326 /* RoomAlarmResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 098D3C3928543A8600F6C326 /* RoomAlarmResponse.swift */; };
 		09AFA054284F7962007E56BB /* OtherProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AFA053284F7962007E56BB /* OtherProfileView.swift */; };
 		09AFA056284F7972007E56BB /* OtherProfileCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AFA055284F7972007E56BB /* OtherProfileCore.swift */; };
+		09B04E90285DF1A300AD5598 /* SocketBannerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B04E8F285DF1A300AD5598 /* SocketBannerService.swift */; };
 		09F4ECC32853ACE9005B424D /* SendLightningResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F4ECC22853ACE9005B424D /* SendLightningResponse.swift */; };
 		09F630EE284B608900A2250B /* SendChatEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F630ED284B608900A2250B /* SendChatEntity.swift */; };
 		3F0B780950BED104CA13722B /* Pods_TiquiTaca_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BE9660275CF15262D33E074 /* Pods_TiquiTaca_iOS.framework */; };
@@ -219,6 +220,7 @@
 		098D3C3928543A8600F6C326 /* RoomAlarmResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomAlarmResponse.swift; sourceTree = "<group>"; };
 		09AFA053284F7962007E56BB /* OtherProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherProfileView.swift; sourceTree = "<group>"; };
 		09AFA055284F7972007E56BB /* OtherProfileCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherProfileCore.swift; sourceTree = "<group>"; };
+		09B04E8F285DF1A300AD5598 /* SocketBannerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketBannerService.swift; sourceTree = "<group>"; };
 		09F4ECC22853ACE9005B424D /* SendLightningResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendLightningResponse.swift; sourceTree = "<group>"; };
 		09F630ED284B608900A2250B /* SendChatEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendChatEntity.swift; sourceTree = "<group>"; };
 		6BE9660275CF15262D33E074 /* Pods_TiquiTaca_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TiquiTaca_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -853,6 +855,7 @@
 				F90F8D4F2847925D0011EDAC /* QuestionService.swift */,
 				F22185292851139C005CE6C3 /* NotificationService.swift */,
 				F9BEA1C22853728E00EF35BA /* LetterService.swift */,
+				09B04E8F285DF1A300AD5598 /* SocketBannerService.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1364,6 +1367,7 @@
 				F2F1ED96281E868300AC4FDD /* VerificationNumberCheckView.swift in Sources */,
 				F221853028511DF4005CE6C3 /* NotificationItem.swift in Sources */,
 				F914EE19284B1828000FADC9 /* QuestionInputMessageView.swift in Sources */,
+				09B04E90285DF1A300AD5598 /* SocketBannerService.swift in Sources */,
 				86783243282651A90034EACC /* Color+Extensions.swift in Sources */,
 				F22184EC284B5DD7005CE6C3 /* MainMapBottomSheetType.swift in Sources */,
 				86032A26282C22A50061D3F9 /* RoomService.swift in Sources */,

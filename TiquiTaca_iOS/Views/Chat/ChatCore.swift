@@ -12,15 +12,19 @@ import TTNetworkModule
 import SwiftUI
 
 struct ChatState: Equatable {
-  var currentTab: RoomListType = .like
   var isFirstLoad = true
-  var willEnterRoom: RoomInfoEntity.Response?
+  var currentTab: RoomListType = .like
+  
+  var unReadChatCount: Int = 0
+  var lastChatLog: ChatLogEntity.Response?
   
   var lastLoadTime: String = Date.current(type: .HHmm)
   var enteredRoom: RoomInfoEntity.Response?
   var likeRoomList: [RoomInfoEntity.Response] = []
   var popularRoomList: [RoomInfoEntity.Response] = []
   
+  
+  var willEnterRoom: RoomInfoEntity.Response?
   var chatDetailState: ChatDetailState = .init(roomId: "")
 }
 
@@ -29,6 +33,10 @@ enum ChatAction: Equatable {
   case fetchEnteredRoomInfo
   case fetchLikeRoomList
   case fetchPopularRoomList
+  
+  case socketConnected(String)
+  case socketDisconnected(String)
+  case socketResponse(SocketBannerService.Action)
   
   case responsePopularRoomList(Result<[RoomInfoEntity.Response]?, HTTPError>)
   case responseLikeRoomList(Result<[RoomInfoEntity.Response]?, HTTPError>)
@@ -70,6 +78,7 @@ let chatReducer = Reducer<
 ])
 
 struct TimerId: Hashable { }
+struct ChatBannerId: Hashable { }
 
 let chatCore = Reducer<
   ChatState,
@@ -88,14 +97,9 @@ let chatCore = Reducer<
       Effect(value: .fetchLikeRoomList)
         .eraseToEffect(),
       Effect(value: .fetchPopularRoomList)
-        .eraseToEffect(),
-      Effect.timer(id: TimerId(), every: .seconds(10), on: DispatchQueue.main.eraseToAnyScheduler())
-        .flatMap({ _ in environment.appService.roomService.getEnteredRoom() })
-        .catchToEffect()
-        .map(ChatAction.responseEnteredRoom)
         .eraseToEffect()
     )
-    // MARK: Requeset
+  // MARK: Requeset
   case .fetchEnteredRoomInfo:
 		return environment.appService.roomService
 			.getEnteredRoom()
@@ -120,18 +124,55 @@ let chatCore = Reducer<
       .receive(on: environment.mainQueue)
       .catchToEffect()
       .map(ChatAction.responseRoomFavorite)
-    // MARK: Response
+  // MARK: Response
   case let .responseRoomFavorite(.success(res)):
     return Effect(value: .fetchLikeRoomList)
       .eraseToEffect()
   case let .responseEnteredRoom(.success(res)):
+    let preEnteredRoom = state.enteredRoom
+    state.unReadChatCount = 0
     state.enteredRoom = res
-    return .none
+    state.lastChatLog = res?.lastChat
+    if let roomId = res?.id {
+      state.unReadChatCount = res?.notReadChatCount ?? 0
+      if environment.appService.socketBannerService.alreadyConnected(roomId: roomId) {
+        return .none
+      } else {
+        return .merge(
+          Effect(value: .socketDisconnected(preEnteredRoom?.id ?? ""))
+            .eraseToEffect(),
+          Effect(value: .socketConnected(roomId))
+            .eraseToEffect()
+        )
+      }
+    } else {
+      return environment.appService.socketBannerService
+        .bannerDisconnect(preEnteredRoom?.id ?? "")
+        .eraseToEffect()
+        .fireAndForget()
+    }
   case let .responseLikeRoomList(.success(res)):
     state.likeRoomList = res ?? []
     return .none
   case let .responsePopularRoomList(.success(res)):
     state.popularRoomList = res ?? []
+    return .none
+  // MARK: Socket
+  case let .socketConnected(roomId):
+    return environment.appService.socketBannerService
+      .bannerConnect(roomId)
+      .receive(on: environment.mainQueue)
+      .map(ChatAction.socketResponse)
+      .eraseToEffect()
+      .cancellable(id: ChatBannerId())
+  case let .socketDisconnected(roomId):
+    return environment.appService.socketBannerService
+      .bannerDisconnect(roomId)
+      .eraseToEffect()
+      .fireAndForget()
+  case let .socketResponse(.newMessage(message)):
+    state.lastChatLog = message
+    state.unReadChatCount += 1
     return .none
   case .responseEnteredRoom(.failure),
       .responseLikeRoomList(.failure),
@@ -151,8 +192,6 @@ let chatCore = Reducer<
   case .refresh:
     state.lastLoadTime = Date.current(type: .HHmm)
     return .merge(
-      Effect(value: .fetchEnteredRoomInfo)
-        .eraseToEffect(),
       Effect(value: .fetchLikeRoomList)
         .eraseToEffect(),
       Effect(value: .fetchPopularRoomList)

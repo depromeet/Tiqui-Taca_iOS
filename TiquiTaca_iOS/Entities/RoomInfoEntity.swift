@@ -23,13 +23,13 @@ enum RoomInfoEntity {
     let lat: Double?
     let lng: Double?
     
-    // EnteredRoom
-    let notReadChatCount: Int?
-    let lastChatMessage: String?
-    let lastChatTime: String?
-    
     var distance: Double?
     var radius: Double
+    
+    // EnteredRoom
+    let lastChat: ChatLogEntity.Response?
+    let notReadChatCount: Int?
+    let lastChatTime: String?
     
     var viewTitle: String {
       (name ?? "") + " + \(userCount ?? 0)"
@@ -41,8 +41,7 @@ enum RoomInfoEntity {
       case category
       case userCount
       case notReadChatCount
-      case lastChatMessage
-      case lastChatTime
+      
       case distance
       case iFavorite
       case iAlarm
@@ -50,6 +49,9 @@ enum RoomInfoEntity {
       case lat
       case lng
       case radius
+      
+      case lastChat
+      case lastChatTime
     }
     
     init() {
@@ -59,14 +61,15 @@ enum RoomInfoEntity {
       userCount = nil
       
       notReadChatCount = nil
-      lastChatMessage = nil
-      lastChatTime = nil
       iFavorite = true
       iAlarm = true
       iJoin = true
       lat = 0.0
       lng = 0.0
       radius = 0
+      
+      lastChat = nil
+      lastChatTime = nil
     }
     
     init(from decoder: Decoder) throws {
@@ -76,8 +79,7 @@ enum RoomInfoEntity {
       category = try? container.decode(LocationCategory.self, forKey: .category)
       userCount = (try? container.decode(Int.self, forKey: .userCount)) ?? 1
       notReadChatCount = try? container.decode(Int?.self, forKey: .notReadChatCount)
-      lastChatMessage = try? container.decode(String?.self, forKey: .lastChatMessage)
-      lastChatTime = try? container.decode(String?.self, forKey: .lastChatTime)
+      
       distance = try? container.decode(Double?.self, forKey: .distance)
       iFavorite = try? container.decode(Bool?.self, forKey: .iFavorite)
       iAlarm = try? container.decode(Bool?.self, forKey: .iAlarm)
@@ -85,6 +87,9 @@ enum RoomInfoEntity {
       lat = try? container.decode(Double?.self, forKey: .lat)
       lng = try? container.decode(Double?.self, forKey: .lng)
       radius = (try? container.decode(Double.self, forKey: .radius)) ?? 0
+      
+      lastChat = try? container.decode(ChatLogEntity.Response?.self, forKey: .lastChat)
+      lastChatTime = try? container.decode(String?.self, forKey: .lastChatTime)
     }
   }
 }

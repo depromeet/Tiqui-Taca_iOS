@@ -23,7 +23,7 @@ struct SocketService {
   var connect: (String) -> Effect<Action, Never>
   var disconnect: (String) -> Effect<Never, Never>
   var send: (String, SendChatEntity) -> Effect<NSError?, Never>
-//  var receive: (String) -> Effect<Message, NSError>
+
   static let live = SocketService(
     connect: { roomId in
       Effect.run { subscriber in

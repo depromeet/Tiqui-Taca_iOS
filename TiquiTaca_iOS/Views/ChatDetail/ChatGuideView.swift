@@ -33,10 +33,10 @@ struct ChatGuideView: View {
             Text("다시 보지 않기")
               .font(.body3)
               .foregroundColor(.white600)
-              .frame(width: (UIScreen.main.bounds.width - 48)/2 , height: 46)
+              .frame(width: (UIScreen.main.bounds.width - 48) / 2, height: 46)
           }
           
-          VStack{}
+          VStack { }
             .frame(width: 1, height: 14)
             .background(Color.white600)
           
@@ -46,11 +46,10 @@ struct ChatGuideView: View {
             Text("닫기")
               .font(.body3)
               .foregroundColor(.white600)
-              .frame(width: (UIScreen.main.bounds.width - 48)/2, height: 46)
+              .frame(width: (UIScreen.main.bounds.width - 48) / 2, height: 46)
           }
         }
       }
-      
     }
       .edgesIgnoringSafeArea(.all)
   }
