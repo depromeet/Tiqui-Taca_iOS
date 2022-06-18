@@ -21,9 +21,13 @@ struct QuestionItemView: View {
           .padding(.trailing, 8)
         
         VStack(alignment: .leading) {
-          Text(model.user.nickname)
+          Text(
+            model.user.status == UserStatus.forbidden ? "(이용제한 사용자)" : model.user.nickname
+          )
             .font(.body4)
-            .foregroundColor(.black900)
+            .foregroundColor(
+              model.user.status == UserStatus.normal ? .black900 :.black50
+            )
           Text(model.createdAt.getTimeTodayOrDate())
             .font(.body8)
             .foregroundColor(.white800)
@@ -69,7 +73,7 @@ struct QuestionItemView: View {
 
 //struct QuestionItemView_Previews: PreviewProvider {
 //  static var previews: some View {
-//    QuestionItemView(model: QuestionEntity)
-//    QuestionItemView()
+//    QuestionItemView(model: .init()
+////    QuestionItemView()
 //  }
 //}

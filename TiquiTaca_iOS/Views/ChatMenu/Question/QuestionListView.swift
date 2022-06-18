@@ -20,12 +20,14 @@ struct QuestionListView: View {
   struct ViewState: Equatable {
     let route: State.Route?
     let questionList: [QuestionEntity.Response]
+    let totalQuestionListCount: Int
     let sortType: QuestionSortType
     let bottomSheetPosition: TTBottomSheet.Position
     
     init(state: State) {
       route = state.route
       questionList = state.questionList
+      totalQuestionListCount = state.totalQuestionListCount
       sortType = state.sortType
       bottomSheetPosition = state.bottomSheetPosition
     }
@@ -47,6 +49,8 @@ struct QuestionListView: View {
             .frame(width: 160, height: 160)
             .padding(.spacingM)
           Text("아직 사용자들이 남긴 질문이 없어요!\n처음으로 질문을 남겨보세요!")
+            .multilineTextAlignment(.center)
+            .lineSpacing(14 * 0.32)
             .font(.body2)
             .foregroundColor(.white900)
         }
@@ -180,7 +184,7 @@ struct QuestionListView: View {
             .font(.heading2)
             .foregroundColor(.white)
           
-          Text("총 \(viewStore.questionList.count)개의 질문")
+          Text("총 \(viewStore.totalQuestionListCount)개의 질문")
             .font(.body7)
             .foregroundColor(.white900)
         }

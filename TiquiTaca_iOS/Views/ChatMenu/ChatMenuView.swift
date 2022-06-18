@@ -24,6 +24,7 @@ struct ChatMenuView: View {
     let roomInfo: RoomInfoEntity.Response?
     let roomUserList: [UserEntity.Response]
     let questionList: [QuestionEntity.Response]
+    let totalQuestionCount: Int
     
     let popupPresented: Bool
     let isExistRoom: Bool
@@ -37,6 +38,7 @@ struct ChatMenuView: View {
       roomInfo = state.roomInfo
       roomUserList = state.roomUserList
       questionList = state.questionList
+      totalQuestionCount = state.totalQuestionCount
       popupPresented = state.popupPresented
       isFavorite = state.isFavorite
       
@@ -230,8 +232,10 @@ struct ChatMenuView: View {
         }
         
         Text(viewStore.roomInfo?.name ?? "")
+          .font(.subtitle2)
           .foregroundColor(Color.white)
-        Text("+ \(viewStore.roomInfo?.userCount ?? 0)")
+        Text("+\(viewStore.roomInfo?.userCount ?? 0)")
+          .font(.subtitle2)
           .foregroundColor(Color.white)
         
         Spacer()
@@ -270,6 +274,7 @@ struct ChatMenuView: View {
               .padding(16)
             Text("아직 사용자들이 남긴 질문이 없어요!\n처음으로 질문을 남겨보세요!")
               .multilineTextAlignment(.center)
+              .lineSpacing(14 * 0.32)
               .font(.body2)
               .foregroundColor(.white900)
             Spacer()
@@ -281,7 +286,7 @@ struct ChatMenuView: View {
             .font(.heading3)
             .foregroundColor(.black800)
             .padding(.bottom, .spacingXXS)
-          Text("총 \(viewStore.questionList.count)개의 질문")
+          Text("총 \(viewStore.totalQuestionCount)개의 질문")
             .font(.body7)
             .foregroundColor(.black100)
             .padding(.bottom, 20)

@@ -14,6 +14,7 @@ struct QuestionListState: Equatable {
   }
   var route: Route?
   var questionList: [QuestionEntity.Response] = []
+  var totalQuestionListCount: Int = 0
   var sortType: QuestionSortType = .neworder
   var bottomSheetPresented: Bool = false
   var bottomSheetPosition: TTBottomSheet.Position = .hidden
@@ -34,7 +35,7 @@ enum QuestionSortType: String {
     case .recent: return ""
     case .notanswered: return "미답변"
     case .oldorder: return "오래된 순"
-    case .neworder: return "모든 답변"
+    case .neworder: return "모든 질문"
     }
   }
 }
@@ -45,7 +46,7 @@ enum QuestionListAction: Equatable {
   case setBottomSheetPosition(TTBottomSheet.Position)
   
   case getQuestionListByType
-  case getQuestionListByTypeResponse(Result<[QuestionEntity.Response]?, HTTPError>)
+  case getQuestionListByTypeResponse(Result<QuestionListEntity.Response?, HTTPError>)
   
   case questionDetailView(QuestionDetailAction)
   case setRoute(QuestionListState.Route?)
@@ -91,7 +92,8 @@ let questionListCore = Reducer<
       .catchToEffect()
       .map(QuestionListAction.getQuestionListByTypeResponse)
   case let .getQuestionListByTypeResponse(.success(response)):
-    state.questionList = response ?? []
+    state.questionList = response?.list ?? []
+    state.totalQuestionListCount = response?.totalCount ?? 0
     return .none
   case .getQuestionListByTypeResponse(.failure):
     return .none
