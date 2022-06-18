@@ -120,6 +120,7 @@ struct LetterDetailView: View {
         title: "쪽지를 보냈어요!",
         type: .success
       )
+      .padding(.top, .spacingS)
     }
     .navigationBarHidden(true)
     .ignoresSafeArea(.all, edges: .top)

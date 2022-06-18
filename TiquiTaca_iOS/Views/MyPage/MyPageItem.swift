@@ -56,6 +56,9 @@ struct MypageItem: View {
           .frame(width: 80)
       }
     }
+    .padding([.leading, .trailing], 20)
+    .padding([.top, .bottom], 6)
+    .frame(minHeight: 48)
     .background(Color.white)
     .frame(maxWidth: .infinity)
     .onTapGesture(perform: {

@@ -37,7 +37,6 @@ struct ChangeProfileView: View {
     let isAvailableCompletion: Bool
     let popupPresented: Bool
     let dismissCurrentPage: Bool
-    let toastPresented: Bool
     
     init(state: State) {
       nickname = state.nickname
@@ -48,7 +47,6 @@ struct ChangeProfileView: View {
       isAvailableCompletion = state.isAvailableCompletion
       popupPresented = state.popupPresented
       dismissCurrentPage = state.dismissCurrentPage
-      toastPresented = state.toastPresented
     }
   }
   
@@ -110,77 +108,59 @@ struct ChangeProfileView: View {
         send: ChangeProfileAction.dismissPopup))
       .background(BackgroundTransparentView())
     }
-      .vCenter()
-      .hCenter()
-      .background(Color.black800)
-      .ignoresSafeArea(.keyboard)
-      .navigationBarBackButtonHidden(true)
-      .bottomSheet(
-        bottomSheetPosition: viewStore.binding(
-          get: \.bottomSheetPosition,
-          send: Action.setBottomSheetPosition
-        ),
-        options: TTBottomSheet.Options
-      ) {
-        ProfileImageListView(
-          selectedProfile: viewStore.binding(
-            get: \.profileImage,
-            send: ChangeProfileAction.setProfileImage
-          )
-        ).padding(.top, .spacingXXL)
-      }
-      .toolbar {
-        ToolbarItem(placement: .navigationBarLeading) {
-          Button {
-            presentationMode.wrappedValue.dismiss()
-          } label: {
-            Image("leftArrow")
-          }
-        }
-        ToolbarItem(placement: .principal) {
-          Text("프로필 수정하기")
-            .font(.subtitle2)
-            .foregroundColor(.white200)
-        }
-        ToolbarItem(placement: .navigationBarTrailing) {
-          Button {
-            viewStore.send(.doneButtonTapped)
-            UIView.setAnimationsEnabled(false)
-          } label: {
-            Text("완료")
-              .foregroundColor(.green500)
-              .font(.subtitle1)
-          }
-          .onChange(of: viewStore.dismissCurrentPage) { isDismissCurrentView in
-            if isDismissCurrentView {
-              presentationMode.wrappedValue.dismiss()
-            }
-          }
-          .disabled(!viewStore.isAvailableCompletion)
-        }
-      }
-      .onTapGesture {
-        focusField = false
-        viewStore.send(.setBottomSheetPosition(.hidden))
-      }
-      .popup(
-        isPresented: viewStore.binding(
-          get: \.toastPresented,
-          send: Action.dismissToast
-        ),
-        type: .floater(
-          verticalPadding: 16,
-          useSafeAreaInset: true
-        ),
-        position: .top,
-        animation: .easeIn,
-        autohideIn: 2
-      ) {
-        TTToastView(
-          title: "프로필을 수정했어요!",
-          type: .success
+    .vCenter()
+    .hCenter()
+    .background(Color.black800)
+    .ignoresSafeArea(.keyboard)
+    .navigationBarBackButtonHidden(true)
+    .bottomSheet(
+      bottomSheetPosition: viewStore.binding(
+        get: \.bottomSheetPosition,
+        send: Action.setBottomSheetPosition
+      ),
+      options: TTBottomSheet.Options
+    ) {
+      ProfileImageListView(
+        selectedProfile: viewStore.binding(
+          get: \.profileImage,
+          send: ChangeProfileAction.setProfileImage
         )
+      ).padding(.top, .spacingXXL)
+    }
+    .toolbar {
+      ToolbarItem(placement: .navigationBarLeading) {
+        Button {
+          presentationMode.wrappedValue.dismiss()
+        } label: {
+          Image("leftArrow")
+        }
       }
+      ToolbarItem(placement: .principal) {
+        Text("프로필 수정하기")
+          .font(.subtitle2)
+          .foregroundColor(.white200)
+      }
+      ToolbarItem(placement: .navigationBarTrailing) {
+        Button {
+          viewStore.send(.doneButtonTapped)
+          UIView.setAnimationsEnabled(false)
+        } label: {
+          Text("완료")
+            .foregroundColor(.green500)
+            .font(.subtitle1)
+        }
+        .onChange(of: viewStore.dismissCurrentPage) { isDismissCurrentView in
+          if isDismissCurrentView {
+            presentationMode.wrappedValue.dismiss()
+          }
+        }
+        .disabled(!viewStore.isAvailableCompletion)
+      }
+    }
+    .onTapGesture {
+      focusField = false
+      viewStore.send(.setBottomSheetPosition(.hidden))
+    }
   }
 }
 
