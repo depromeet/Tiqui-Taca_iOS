@@ -14,8 +14,6 @@ struct ChatGuideView: View {
 
   var body: some View {
     ZStack {
-      Color.black800.opacity(0.7)
-      
       VStack(alignment: .center, spacing: 0) {
         VStack(spacing: .spacingS) {
           ChatGuidePageView(currentPage: $currentPage)
@@ -23,6 +21,7 @@ struct ChatGuideView: View {
           PageControl(numberOfPages: 3, currentPage: $currentPage)
             .padding(.bottom, 8)
         }
+          .frame(height: 394)
           .background(Color.black800)
           .cornerRadius(30)
           .padding(.horizontal, 24)
@@ -68,6 +67,7 @@ struct ChatGuidePageView: View {
         Text("꼭 지켜주세요!")
           .font(.heading2)
           .foregroundColor(.white)
+          .padding(.top, 8)
         Text(
           """
           욕설, 음란행위와 같은 사용자에게
@@ -76,26 +76,45 @@ struct ChatGuidePageView: View {
           유의하여 주시길 바랍니다.
           """ )
           .font(.body3)
-          .lineSpacing(8)
+          .foregroundColor(.white800)
+          .lineSpacing(4)
           .multilineTextAlignment(.center)
       }
       .tag(0)
       
-      LazyVStack(spacing: .spacingXS) {
+      LazyVStack(spacing: .spacingS) {
         Image("chatGuide2")
-        Text("장소 카테고리별 특색있는 대화를")
-          .font(.heading1)
-        Text("대학교, 공연장, 한강공원 등 카테고리별 장소에 따라\n일어나는 일들을 실시간으로 공유해요!")
-          .font(.body3)
+        Text("현재 위치에서 채팅을 하면")
+          .font(.heading2)
+          .foregroundColor(.white)
+          .padding(.top, 30)
+        Text(
+          """
+          상대방 프로필이 깃발표시로 나타나
+          지금 장소에 있는지 확인할 수 있어요.
+          """ )
+        .font(.body3)
+        .foregroundColor(.white800)
+        .lineSpacing(4)
+        .multilineTextAlignment(.center)
       }
       .tag(1)
       
       LazyVStack(spacing: .spacingXS) {
         Image("chatGuide3")
-        Text("다양한 방법으로 나눠보세요")
-          .font(.heading1)
-        Text("장소에 대한 궁금증이나, 후기 등 나누고 싶은 이야기를\n질문하기, 채팅 및 쪽지로 공유해보세요!")
-          .font(.body3)
+        Text("내가 현재 위치에 있다면")
+          .font(.heading2)
+          .foregroundColor(.white)
+          .padding(.top, 30)
+        Text(
+          """
+          채팅방 이름 옆의 초록 불빛으로 내가
+          현재 위치에서 참여 중인지 알 수 있어요.
+          """ )
+        .font(.body3)
+        .foregroundColor(.white800)
+        .lineSpacing(4)
+        .multilineTextAlignment(.center)
       }
       .tag(2)
     }

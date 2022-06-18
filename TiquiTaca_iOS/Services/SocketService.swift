@@ -18,7 +18,7 @@ struct SocketService {
   
   static let socketURL = URL(string: "http://chat.tiki-taka.world")!
   static var connectedSockets: [AnyHashable: (SocketIOClient, Effect<SocketService.Action, Never>.Subscriber)] = [:]
-  static var socketManager = SocketManager(socketURL: URL(string: "http://chat.tiki-taka.world")!)
+  static var socketManager = SocketManager(socketURL: socketURL)
   
   var connect: (String) -> Effect<Action, Never>
   var disconnect: (String) -> Effect<Never, Never>

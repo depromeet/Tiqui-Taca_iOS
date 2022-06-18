@@ -214,12 +214,15 @@ struct ChatDetailView: View {
           .opacity(showOtherProfile ? 1 : 0),
         alignment: .center
       )
-      .overlay(
+      .popup(
+        isPresented: $showGuideView,
+        type: .default,
+        dragToDismiss: false,
+        closeOnTap: false,
+        backgroundColor: Color.black800.opacity(0.7)
+      ) {
         ChatGuideView(showGuideView: $showGuideView)
-          .opacity(showGuideView ? 1 : 0)
-        ,
-        alignment: .center
-      )
+      }
       .onAppear {
         if viewStore.isFirstLoad && !UserDefaults.standard.bool(forKey: "hideGuidView") {
           DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
@@ -230,7 +233,6 @@ struct ChatDetailView: View {
         viewStore.send(.onAppear)
       }
       .onDisappear {
-        print("설마???")
         viewStore.send(.onDisAppear)
       }
   }
@@ -239,12 +241,22 @@ struct ChatDetailView: View {
 // MARK: Message Input View
 private struct InputChatView: View {
   private let store: Store<ChatDetailState, ChatDetailAction>
+  @ObservedObject private var viewStore: ViewStore<ViewState, ChatDetailAction>
   @State var typingMessage: String = ""
   @State var isQuestion: Bool = false
   @State var editorHeight: CGFloat = 32
   
+  struct ViewState: Equatable {
+    let isWithinRadius: Bool
+    
+    init(state: ChatDetailState) {
+      isWithinRadius = state.isWithinRadius
+    }
+  }
+  
   init(store: Store<ChatDetailState, ChatDetailAction>) {
     self.store = store
+    self.viewStore = ViewStore(store.scope(state: ViewState.init))
   }
   
   var body: some View {
@@ -291,7 +303,7 @@ private struct InputChatView: View {
           Button {
             if !typingMessage.isEmpty {
               let chat = SendChatEntity(
-                inside: true,
+                inside: viewStore.isWithinRadius,
                 type: isQuestion ? 1 : 0,
                 message: typingMessage
               )

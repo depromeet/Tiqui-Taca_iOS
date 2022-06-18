@@ -18,6 +18,7 @@ enum ChatLogEntity {
     var type: Int?
     var message: String?
     var createdAt: String?
+    let status: UserStatus
     
     enum CodingKeys: String, CodingKey {
       case id = "_id"
@@ -26,6 +27,7 @@ enum ChatLogEntity {
       case type
       case message
       case createdAt
+      case status
     }
     init() {
       id = ""
@@ -33,6 +35,7 @@ enum ChatLogEntity {
       type = 1
       message = "테스트입니다"
       createdAt = nil
+      status = .normal
     }
     init(from decoder: Decoder) throws {
       let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -42,6 +45,7 @@ enum ChatLogEntity {
       type = (try? container.decode(Int.self, forKey: .type)) ?? 1
       message = (try? container.decode(String.self, forKey: .message)) ?? "잘못된 메세지입니다"
       createdAt = (try? container.decode(String.self, forKey: .createdAt)) ?? "00:00"
+      status = (try? container.decode(UserStatus.self, forKey: .status)) ?? .normal
     }
   }
 }
