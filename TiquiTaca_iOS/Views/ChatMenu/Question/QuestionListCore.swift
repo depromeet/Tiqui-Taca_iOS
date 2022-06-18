@@ -16,8 +16,7 @@ struct QuestionListState: Equatable {
   var questionList: [QuestionEntity.Response] = []
   var totalQuestionListCount: Int = 0
   var sortType: QuestionSortType = .neworder
-  var bottomSheetPresented: Bool = false
-  var bottomSheetPosition: TTBottomSheet.Position = .hidden
+  var sheetPresented: Bool = false
   
   var questionDetailViewState: QuestionDetailState = .init(questionId: "")
 }
@@ -43,7 +42,8 @@ enum QuestionSortType: String {
 enum QuestionListAction: Equatable {
   case selectSortType(QuestionSortType)
   case selectQuestionDetail(String)
-  case setBottomSheetPosition(TTBottomSheet.Position)
+  case sheetPresented
+  case sheetDismissed
   
   case getQuestionListByType
   case getQuestionListByTypeResponse(Result<QuestionListEntity.Response?, HTTPError>)
@@ -99,19 +99,21 @@ let questionListCore = Reducer<
     return .none
   case let .selectSortType(type):
     state.sortType = type
-    state.bottomSheetPosition = .hidden
     return Effect(value: .getQuestionListByType)
   case let .selectQuestionDetail(questionId):
     state.route = .questionDetail
     state.questionDetailViewState = .init(questionId: questionId)
     return .none
-  case let .setBottomSheetPosition(position):
-    state.bottomSheetPosition = position
-    return .none
   case .questionDetailView(_):
     return .none
   case let .setRoute(selectedRoute):
     state.route = selectedRoute
+    return .none
+  case .sheetPresented:
+    state.sheetPresented = true
+    return .none
+  case .sheetDismissed:
+    state.sheetPresented = false
     return .none
   }
 }
