@@ -106,6 +106,7 @@ struct LetterSendView: View {
         title: "쪽지를 보낼 수 없는 사용자에요.",
         type: .error
       )
+      .padding(.top, .spacingS)
     }
     .onChange(of: viewStore.sendLetterSuccess) { sendLetterSuccess in
       if sendLetterSuccess {
