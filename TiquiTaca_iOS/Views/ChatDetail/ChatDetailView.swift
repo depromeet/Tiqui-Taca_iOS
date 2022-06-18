@@ -36,6 +36,7 @@ struct ChatDetailView: View {
     let isFirstLoad: Bool
     let isWithinRadius: Bool
     let isAlarmOn: Bool
+    let showLocationToast: Bool
     
     init(state: CDState) {
       route = state.route
@@ -47,6 +48,7 @@ struct ChatDetailView: View {
       isFirstLoad = state.isFirstLoad
       isWithinRadius = state.isWithinRadius
       isAlarmOn = state.isAlarmOn
+      showLocationToast = state.showLocationToast
     }
   }
   
@@ -153,6 +155,25 @@ struct ChatDetailView: View {
             ,
             alignment: .bottomTrailing
           )
+          .popup(
+            isPresented: viewStore.binding(
+              get: \.showLocationToast,
+              send: ChatDetailAction.setLocationToast
+            ),
+            type: .toast,
+            position: .bottom,
+            animation: .easeIn,
+            autohideIn: 3,
+            dragToDismiss: true,
+            closeOnTap: true,
+            closeOnTapOutside: true
+          ) {
+            if viewStore.isWithinRadius {
+              TTToastView(title: "현재 해당 스팟 위치에 들어와있습니다", type: .success)
+            } else {
+              TTToastView(title: "현재 해당 스팟 위치에서 벗어나있습니다", type: .error)
+            }
+          }
       }
       
       NavigationLink(

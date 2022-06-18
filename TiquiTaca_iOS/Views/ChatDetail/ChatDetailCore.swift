@@ -24,9 +24,11 @@ struct ChatDetailState: Equatable {
   var myInfo: UserEntity.Response?
   var blockUserList: [BlockUserEntity.Response]?
   
+  var isFirstLoad = true
+  var isFristGetLocation = true
   var isWithinRadius = false
   var isAlarmOn = false
-  var isFirstLoad = true
+  var showLocationToast = false
   var moveToOtherView = false
   var chatLogList: [ChatLogEntity.Response] = []
   
@@ -43,11 +45,11 @@ enum ChatDetailAction: Equatable {
   
   case onAppear
   case onDisAppear
-  case connectSocket
-  case disconnectSocket
   
   case sendMessage(SendChatEntity)
   case sendResponse(NSError?)
+  case connectSocket
+  case disconnectSocket
   case socket(SocketService.Action)
   
   case checkLocationWithinRadius(CLLocationCoordinate2D)
@@ -63,6 +65,7 @@ enum ChatDetailAction: Equatable {
   case responseAlarm(Result<RoomAlarmResponse?, HTTPError>)
   case responseBlockUserList(Result<[BlockUserEntity.Response]?, HTTPError>)
   
+  case setLocationToast(Bool)
   case moveToOtherView
   case setRoute(ChatDetailState.Route?)
   
@@ -150,9 +153,9 @@ let chatDetailCore = Reducer<
       environment.locationManager
         .delegate()
         .map(ChatDetailAction.locationManager),
-      environment.locationManager
-        .startMonitoringSignificantLocationChanges()
-        .fireAndForget(),
+//      environment.locationManager
+//        .startMonitoringSignificantLocationChanges()
+//        .fireAndForget(),
       environment.locationManager
         .requestLocation()
         .fireAndForget(),
@@ -248,19 +251,23 @@ let chatDetailCore = Reducer<
   case let .responseBlockUserList(.success(res)):
     state.blockUserList = res ?? []
     return .none
-  // MARK: Route
-  case .moveToOtherView:
-    state.moveToOtherView = true
-    return .none
-  case let .setRoute(route):
-    state.moveToOtherView = true
-    state.route = route
-    return .none
   case .responseJoinRoom(.failure),
       .responseQuestionDetail(.failure),
       .responseAlarm(.failure),
       .responseBlockUserList(.failure):
     return .none
+  // MARK: Route
+  case .moveToOtherView:
+    state.moveToOtherView = true
+    return .none
+  case let .setLocationToast(isShow):
+    state.showLocationToast = isShow
+    return .none
+  case let .setRoute(route):
+    state.moveToOtherView = true
+    state.route = route
+    return .none
+  // MARK: Location
   case let .locationManager(.didUpdateLocations(locations)):
     guard let loc = locations.first?.rawValue.coordinate else { return .none }
     state.currentLocation = loc
@@ -269,7 +276,13 @@ let chatDetailCore = Reducer<
       .eraseToEffect()
   case let .checkLocationWithinRadius(loc):
     let isWithinRadius = state.currentRoom.geofenceRegion.contains(loc)
-    state.isWithinRadius = isWithinRadius
+    if state.isFristGetLocation || state.isWithinRadius != isWithinRadius {
+      state.isFristGetLocation = false
+      state.isWithinRadius = isWithinRadius
+      print("무엇이 문제지", isWithinRadius)
+      state.showLocationToast = true
+    }
+    
     return .none
   default:
     return .none
