@@ -20,6 +20,8 @@ struct ChatDetailView: View {
   @Binding var shouldPopToRootView: Bool
   @State var scrollToBottomButtonHidden = false
   @State var showOtherProfile = false
+  @State var showGuideView: Bool = false
+  @State var inRadiusOpacity: Double = 1.0
   
   var store: Store<CDState, Action>
   var scrollMinY: CGFloat = 750
@@ -31,7 +33,10 @@ struct ChatDetailView: View {
     let blockUserList: [BlockUserEntity.Response]?
     let chatMenuState: ChatMenuState
     let myInfo: UserEntity.Response?
+    let isFirstLoad: Bool
+    let isWithinRadius: Bool
     let isAlarmOn: Bool
+    let showLocationToast: Bool
     
     init(state: CDState) {
       route = state.route
@@ -40,7 +45,10 @@ struct ChatDetailView: View {
       blockUserList = state.blockUserList
       chatMenuState = state.chatMenuState
       myInfo = state.myInfo
+      isFirstLoad = state.isFirstLoad
+      isWithinRadius = state.isWithinRadius
       isAlarmOn = state.isAlarmOn
+      showLocationToast = state.showLocationToast
     }
   }
   
@@ -70,17 +78,19 @@ struct ChatDetailView: View {
               )
           }
             .frame(height: 0)
+          
           LazyVStack(alignment: .leading, spacing: 0) {
             Spacer().frame(height: 4).background(.white).id("listBottom")
             ForEach(
               viewStore.chatLogList.reversed().enumerated().map({ $0 }),
               id: \.element.id
-            ) { index, chatLog in
-              if chatLog.type == 3 {
+            ) { _, chatLog in
+              switch chatLog.getChatMessageType(myId: viewStore.myInfo?.id) {
+              case .date:
                 ChatMessageView(chatLog: chatLog)
                   .dateBubble
                   .scaleEffect(x: 1, y: -1, anchor: .center)
-              } else if viewStore.myInfo?.id == chatLog.sender?.id {
+              case .sent:
                 ChatMessageView(chatLog: chatLog)
                   .sentBubble
                   .scaleEffect(x: 1, y: -1, anchor: .center)
@@ -89,32 +99,22 @@ struct ChatDetailView: View {
                       viewStore.send(.selectQuestionDetail(chatLog.id ?? ""))
                     }
                   }
-              } else {
-                ZStack(alignment: .topLeading) {
-                  ChatMessageView(chatLog: chatLog)
-                    .receivedBubble
-                    .scaleEffect(x: 1, y: -1, anchor: .center)
-                    .onTapGesture {
-                      if chatLog.type == 1 {
-                        viewStore.send(.selectQuestionDetail(chatLog.id ?? ""))
-                      }
+              case .receive:
+                ChatMessageView(
+                  chatLog: chatLog,
+                  isBlind: chatLog.isBlind(blockList: viewStore.blockUserList),
+                  profileTapped: { log in
+                    viewStore.send(.selectProfile(log.sender))
+                    showOtherProfile = true
+                  }
+                )
+                  .receivedBubble
+                  .scaleEffect(x: 1, y: -1, anchor: .center)
+                  .onTapGesture {
+                    if chatLog.type == 1 && !chatLog.isBlind(blockList: viewStore.blockUserList) {
+                      viewStore.send(.selectQuestionDetail(chatLog.id ?? ""))
                     }
-                    .overlay(
-                      Button {
-                        viewStore.send(.selectProfile(chatLog.sender))
-                        showOtherProfile = true
-                      } label: {
-                        Text("")
-                          .frame(width: 34, height: 34)
-                          .background(.blue)
-                          .opacity(0)
-                      }
-                        .padding(.bottom, 6)
-                        .padding(.leading, 12)
-                      ,
-                      alignment: .bottomLeading
-                    )
-                }
+                  }
               }
             }
             Spacer().frame(height: 90).background(.white)
@@ -147,6 +147,26 @@ struct ChatDetailView: View {
             ,
             alignment: .bottomTrailing
           )
+          .popup(
+            isPresented: viewStore.binding(
+              get: \.showLocationToast,
+              send: ChatDetailAction.setLocationToast
+            ),
+            type: .toast,
+            position: .bottom,
+            animation: .easeIn,
+            autohideIn: 3,
+            dragToDismiss: true,
+            closeOnTap: true,
+            closeOnTapOutside: true,
+            backgroundColor: .clear
+          ) {
+            if viewStore.isWithinRadius {
+              TTToastView(title: "현재 해당 스팟 위치에 들어와있습니다", type: .success)
+            } else {
+              TTToastView(title: "현재 해당 스팟 위치에서 벗어나있습니다", type: .blur)
+            }
+          }
       }
       
       NavigationLink(
@@ -202,17 +222,31 @@ struct ChatDetailView: View {
             viewStore.send(.selectSendLetter(userInfo))
           },
           actionHandler: { action in
-            
+            viewStore.send(.setOtherProfileAction(action))
           }
         )
           .opacity(showOtherProfile ? 1 : 0),
         alignment: .center
       )
+      .popup(
+        isPresented: $showGuideView,
+        type: .default,
+        dragToDismiss: false,
+        closeOnTap: false,
+        backgroundColor: Color.black800.opacity(0.7)
+      ) {
+        ChatGuideView(showGuideView: $showGuideView)
+      }
       .onAppear {
+        if viewStore.isFirstLoad && !UserDefaults.standard.bool(forKey: "hideGuidView") {
+          DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            showGuideView = true
+          }
+        }
+        
         viewStore.send(.onAppear)
       }
       .onDisappear {
-        print("설마???")
         viewStore.send(.onDisAppear)
       }
   }
@@ -221,12 +255,22 @@ struct ChatDetailView: View {
 // MARK: Message Input View
 private struct InputChatView: View {
   private let store: Store<ChatDetailState, ChatDetailAction>
+  @ObservedObject private var viewStore: ViewStore<ViewState, ChatDetailAction>
   @State var typingMessage: String = ""
   @State var isQuestion: Bool = false
   @State var editorHeight: CGFloat = 32
   
+  struct ViewState: Equatable {
+    let isWithinRadius: Bool
+    
+    init(state: ChatDetailState) {
+      isWithinRadius = state.isWithinRadius
+    }
+  }
+  
   init(store: Store<ChatDetailState, ChatDetailAction>) {
     self.store = store
+    self.viewStore = ViewStore(store.scope(state: ViewState.init))
   }
   
   var body: some View {
@@ -273,7 +317,7 @@ private struct InputChatView: View {
           Button {
             if !typingMessage.isEmpty {
               let chat = SendChatEntity(
-                inside: true,
+                inside: viewStore.isWithinRadius,
                 type: isQuestion ? 1 : 0,
                 message: typingMessage
               )
@@ -336,6 +380,17 @@ extension ChatDetailView {
             Text( viewStore.state.currentRoom.viewTitle )
               .font(.subtitle2)
               .foregroundColor(.white)
+            if viewStore.state.isWithinRadius {
+              Circle()
+                .frame(width: 8, height: 8, alignment: .center)
+                .foregroundColor(.green800)
+                .opacity(inRadiusOpacity)
+                .onAppear {
+                  withAnimation(Animation.easeIn(duration: 0.7).repeatForever()) {
+                    inRadiusOpacity = inRadiusOpacity == 1.0 ? 0 : 1
+                  }
+                }
+            }
           }
         }
         
@@ -366,14 +421,6 @@ extension ChatDetailView {
             }
           )
           .isDetailLink(false)
-          
-//          NavigationLink(
-//            destination: ChatMenuView(store: chatMenuStore, shouldPopToRootView: $shouldPopToRootView)
-//          ) {
-//
-//          }
-//
-//            .simultaneousGesture(TapGesture().onEnded { viewStore.send(.moveToOtherView) })
         }
       }
       .padding([.leading, .trailing], 10)

@@ -9,6 +9,7 @@ import Foundation
 
 enum DateFormatType: String {
   case HHmm = "HH:mm"
+  case yyyyMMdd = "yyyy년 MM월 dd일"
 }
 
 extension Date {
@@ -19,6 +20,13 @@ extension Date {
     let dateFormatter = DateFormatter()
     dateFormatter.dateFormat = type.rawValue
     return dateFormatter.string(for: date ?? Date()) ?? ""
+  }
+  
+  func getDateString(format: DateFormatType) -> String {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = format.rawValue
+    
+    return dateFormatter.string(from: self) ?? ""
   }
   
   func getTimeString() -> String {

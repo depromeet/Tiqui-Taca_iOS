@@ -85,7 +85,7 @@ struct OtherProfileView: View {
         )
           .padding(.horizontal, 24)
           .overlay(
-            Image("bxOnboarding3")
+            Image("profileLightning")
               .resizable()
               .frame(width: 128, height: 128)
               .offset(x: 0, y: -80)
@@ -108,14 +108,6 @@ struct OtherProfileView: View {
           }
         )
         .padding(.horizontal, 24)
-        .overlay(
-          Image("bxOnboarding3")
-            .resizable()
-            .frame(width: 128, height: 128)
-            .offset(x: 0, y: -80)
-            .opacity(viewStore.currentAction == .lightning ? 1 : 0),
-          alignment: .top
-        )
       }
     }
     .onReceive(Just(showView)) { value in

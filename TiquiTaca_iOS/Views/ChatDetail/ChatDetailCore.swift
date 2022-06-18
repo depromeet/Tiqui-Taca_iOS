@@ -19,12 +19,16 @@ struct ChatDetailState: Equatable {
   }
   var roomId: String
   var route: Route?
+  var currentLocation: CLLocationCoordinate2D?
   var currentRoom: RoomInfoEntity.Response = .init()
   var myInfo: UserEntity.Response?
   var blockUserList: [BlockUserEntity.Response]?
   
-  var isAlarmOn = false
   var isFirstLoad = true
+  var isFristGetLocation = true
+  var isWithinRadius = false
+  var isAlarmOn = false
+  var showLocationToast = false
   var moveToOtherView = false
   var chatLogList: [ChatLogEntity.Response] = []
   
@@ -41,14 +45,14 @@ enum ChatDetailAction: Equatable {
   
   case onAppear
   case onDisAppear
-  case connectSocket
-  case disconnectSocket
   
   case sendMessage(SendChatEntity)
   case sendResponse(NSError?)
+  case connectSocket
+  case disconnectSocket
   case socket(SocketService.Action)
   
-  
+  case checkLocationWithinRadius(CLLocationCoordinate2D)
   case selectProfile(UserEntity.Response?)
   case selectQuestionDetail(String)
   case selectMenu
@@ -61,6 +65,8 @@ enum ChatDetailAction: Equatable {
   case responseAlarm(Result<RoomAlarmResponse?, HTTPError>)
   case responseBlockUserList(Result<[BlockUserEntity.Response]?, HTTPError>)
   
+  case setLocationToast(Bool)
+  case setOtherProfileAction(OtherProfileState.Action)
   case moveToOtherView
   case setRoute(ChatDetailState.Route?)
   
@@ -148,6 +154,9 @@ let chatDetailCore = Reducer<
       environment.locationManager
         .delegate()
         .map(ChatDetailAction.locationManager),
+      environment.locationManager
+        .requestLocation()
+        .fireAndForget(),
       Effect(value: .joinRoom)
         .eraseToEffect(),
       Effect(value: .getBlockUserList)
@@ -157,10 +166,7 @@ let chatDetailCore = Reducer<
         .receive(on: environment.mainQueue)
         .map(ChatDetailAction.socket)
         .eraseToEffect()
-        .cancellable(id: ChatDetailId()),
-      environment.locationManager
-        .startMonitoringSignificantLocationChanges()
-        .fireAndForget()
+        .cancellable(id: ChatDetailId())
     )
   case .onDisAppear:
     guard !state.moveToOtherView else { return .none }
@@ -224,6 +230,12 @@ let chatDetailCore = Reducer<
       state.chatMenuState.roomInfo = res
       state.chatMenuState.isFavorite = res.iFavorite ?? false
     }
+    
+    if let loc = state.currentLocation, environment.locationManager.locationServicesEnabled() {
+      return environment.locationManager
+        .requestLocation()
+        .fireAndForget()
+    }
     return .none
   case let .responseQuestionDetail(.success(res)):
     guard let questionId = res?.id else { return .none }
@@ -237,21 +249,49 @@ let chatDetailCore = Reducer<
   case let .responseBlockUserList(.success(res)):
     state.blockUserList = res ?? []
     return .none
-  // MARK: Route
-  case .moveToOtherView:
-    state.moveToOtherView = true
-    return .none
-  case let .setRoute(route):
-    state.moveToOtherView = true
-    state.route = route
-    return .none
   case .responseJoinRoom(.failure),
       .responseQuestionDetail(.failure),
       .responseAlarm(.failure),
       .responseBlockUserList(.failure):
     return .none
+  // MARK: Route
+  case .moveToOtherView:
+    state.moveToOtherView = true
+    return .none
+  case let .setLocationToast(isShow):
+    state.showLocationToast = isShow
+    return .none
+  case let .setRoute(route):
+    state.moveToOtherView = true
+    state.route = route
+    return .none
+  // MARK: Location
   case let .locationManager(.didUpdateLocations(locations)):
-    print("로케이션 받아옴", locations.first?.coordinate.latitude, locations.first?.coordinate.longitude)
+    guard let loc = locations.first?.rawValue.coordinate else { return .none }
+    state.currentLocation = loc
+    
+    return Effect(value: .checkLocationWithinRadius(loc))
+      .eraseToEffect()
+  case let .checkLocationWithinRadius(loc):
+    let isWithinRadius = state.currentRoom.geofenceRegion.contains(loc)
+    if state.isFristGetLocation || state.isWithinRadius != isWithinRadius {
+      state.isFristGetLocation = false
+      state.isWithinRadius = isWithinRadius
+      print("무엇이 문제지", isWithinRadius)
+      state.showLocationToast = true
+    }
+    return .none
+  // MARK: OtherProfile Completion
+  case let .setOtherProfileAction(completionAction):
+    switch completionAction {
+    case .block, .unblock:
+      state.blockUserList = environment.appService
+        .userService
+        .blockUserList
+    default:
+      break
+    }
+    
     return .none
   default:
     return .none

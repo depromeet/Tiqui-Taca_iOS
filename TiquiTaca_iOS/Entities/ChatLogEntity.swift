@@ -45,3 +45,43 @@ enum ChatLogEntity {
     }
   }
 }
+
+extension ChatLogEntity.Response {
+  func isBlind(blockList: [BlockUserEntity.Response]?) -> Bool {
+    blockList?.filter{ $0.id == sender?.id }.isEmpty == false ||
+    sender?.status == .forbidden
+  }
+  
+  func getChatMessageType(myId: String?) -> ChatMessageType {
+    if type == 3 {
+      return .date
+    } else if sender?.id == myId {
+      return .sent
+    } else {
+      return .receive
+    }
+  }
+  
+  func getMessage() -> String {
+    if type == 3 {
+      if Date().getDateString(format: .yyyyMMdd) == message {
+        return "오늘"
+      } else {
+        return message ?? "새 시작"
+      }
+    }
+    
+    if sender?.iBlock == true {
+      return "차단된 사용자의 메세지입니다."
+    }
+    
+    switch sender?.status {
+    case .forbidden:
+      return "이용제한된 사용자의 메세지입니다."
+    case .normal, .signOut:
+      return message ?? "잘못된 메세지 입니다"
+    default:
+      return "잘못된 메세지 입니다"
+    }
+  }
+}

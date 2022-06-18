@@ -18,6 +18,7 @@ struct AppService {
   let questionService: QuestionServiceType
   let roomService: RoomServiceType
   let socketService: SocketService
+  let socketBannerService: SocketBannerService
   let notificationService: NotificationServiceType
   let letterService: LetterService
   
@@ -27,6 +28,7 @@ struct AppService {
     questionService = QuestionService()
     roomService = RoomService()
     socketService = .live
+    socketBannerService = .live
     notificationService = NotificationService()
     letterService = LetterService()
   }
