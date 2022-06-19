@@ -72,8 +72,8 @@ struct MsgAndNotiView: View {
 extension MsgAndNotiView {
   private var letterStore: Store<LetterState, LetterAction> {
     return store.scope(
-      state: \.messageState,
-      action: Action.messageAction
+      state: \.letterState,
+      action: Action.letterAction
     )
   }
   private var notificationStore: Store<NotificationState, NotificationAction> {

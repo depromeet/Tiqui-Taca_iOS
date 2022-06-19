@@ -43,6 +43,7 @@ struct AppEnvironment {
   let appService: AppService
   let mainQueue: AnySchedulerOf<DispatchQueue>
   var locationManager: LocationManager
+  let deeplinkManager: DeeplinkManager
 }
 
 let appReducer = Reducer<
@@ -71,7 +72,8 @@ let appReducer = Reducer<
         MainTabEnvironment(
           appService: $0.appService,
           mainQueue: $0.mainQueue,
-          locationManager: $0.locationManager
+          locationManager: $0.locationManager,
+          deeplinkManager: $0.deeplinkManager
         )
       }
     ),
@@ -187,10 +189,10 @@ let appCore = Reducer<
   case .mainTabAction(.myPageAction(.withdrawal)):
     state.mainTabState = nil
     state.onboardingState = .init()
-  
+    
     state.toastPresented = true
     state.fromMyPageType = .withdrawal
-
+    
     return Effect(value: .setRoute(.onboarding))
     
   case .onboardingAction:

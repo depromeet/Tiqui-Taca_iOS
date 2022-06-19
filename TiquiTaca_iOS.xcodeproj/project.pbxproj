@@ -92,6 +92,7 @@
 		F2C02CAC27F89A86004C4235 /* TTNetworkModule.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2C02CA927F89A86004C4235 /* TTNetworkModule.framework */; };
 		F2C02CAD27F89A86004C4235 /* TTNetworkModule.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F2C02CA927F89A86004C4235 /* TTNetworkModule.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F2D62F182854462A007CC6F9 /* EmptyBox.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D62F172854462A007CC6F9 /* EmptyBox.swift */; };
+		F2D62F1A2858F038007CC6F9 /* DeeplinkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2D62F192858F038007CC6F9 /* DeeplinkManager.swift */; };
 		F2DEC4E0282F34510018F545 /* ChatRoomAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2DEC4DF282F34510018F545 /* ChatRoomAnnotationView.swift */; };
 		F2DEC4E4282F3AF20018F545 /* ChatRoomAnnotationInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2DEC4E3282F3AF20018F545 /* ChatRoomAnnotationInfo.swift */; };
 		F2E38EE5283E825A007C96F7 /* MyPageItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = F2E38EE4283E825A007C96F7 /* MyPageItem.swift */; };
@@ -301,6 +302,7 @@
 		F2C02CA827F89A86004C4235 /* TTDesignSystemModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TTDesignSystemModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2C02CA927F89A86004C4235 /* TTNetworkModule.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = TTNetworkModule.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F2D62F172854462A007CC6F9 /* EmptyBox.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmptyBox.swift; sourceTree = "<group>"; };
+		F2D62F192858F038007CC6F9 /* DeeplinkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeeplinkManager.swift; sourceTree = "<group>"; };
 		F2DEC4DF282F34510018F545 /* ChatRoomAnnotationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomAnnotationView.swift; sourceTree = "<group>"; };
 		F2DEC4E3282F3AF20018F545 /* ChatRoomAnnotationInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatRoomAnnotationInfo.swift; sourceTree = "<group>"; };
 		F2DEC4E8283324E70018F545 /* TiquiTaca_iOSDebug.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; name = TiquiTaca_iOSDebug.entitlements; path = TiquiTaca_iOS/TiquiTaca_iOSDebug.entitlements; sourceTree = SOURCE_ROOT; };
@@ -859,6 +861,7 @@
 				F22185292851139C005CE6C3 /* NotificationService.swift */,
 				F9BEA1C22853728E00EF35BA /* LetterService.swift */,
 				09B04E8F285DF1A300AD5598 /* SocketBannerService.swift */,
+				F2D62F192858F038007CC6F9 /* DeeplinkManager.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -1315,6 +1318,7 @@
 				F2218534285397A2005CE6C3 /* NotificationRequest.swift in Sources */,
 				F25C79B6282C1FC0009C60EE /* ProfileImageListView.swift in Sources */,
 				F9565382285DB4A400540906 /* QuestionListEntity.swift in Sources */,
+				F2D62F1A2858F038007CC6F9 /* DeeplinkManager.swift in Sources */,
 				F9322E70284242CF00EB956E /* ChatMenuView.swift in Sources */,
 				F2218515284F1766005CE6C3 /* ComposableArchitecture+Extensions.swift in Sources */,
 				F25C79BC282D91BC009C60EE /* UserCreationEntity.swift in Sources */,

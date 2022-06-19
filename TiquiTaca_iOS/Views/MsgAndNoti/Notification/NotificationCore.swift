@@ -100,6 +100,9 @@ let notificationCore = Reducer<
   case let .notificationTapped(item):
     state.notifications.indices.filter { state.notifications[$0].id == item.id }
       .forEach { state.notifications[$0].isRead = true }
+    
+    DeeplinkManager.shared.handleDeeplink(with: item.deepLink)
+    
     return .concatenate([
       .init(value: .setIsLoading(true)),
       environment.appService.notificationService

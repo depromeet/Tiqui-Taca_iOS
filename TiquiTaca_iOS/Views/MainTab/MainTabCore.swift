@@ -25,12 +25,17 @@ enum MainTabAction: Equatable {
   case chatAction(ChatAction)
   case msgAndNotiAction(MsgAndNotiAction)
   case myPageAction(MyPageAction)
+  case deeplinkManager(DeeplinkManager.Action)
+  case onAppear
+  case onLoad
+  case showQuestionDetail(String)
 }
 
 struct MainTabEnvironment {
   let appService: AppService
   let mainQueue: AnySchedulerOf<DispatchQueue>
   var locationManager: LocationManager
+  let deeplinkManager: DeeplinkManager
 }
 
 let mainTabReducer = Reducer<
@@ -91,7 +96,7 @@ let mainTabCore = Reducer<
   MainTabState,
   MainTabAction,
   MainTabEnvironment
-> { state, action, _ in
+> { state, action, environment in
   switch action {
   case let .setSelectedTab(selectedTab):
     state.selectedTab = selectedTab
@@ -113,6 +118,47 @@ let mainTabCore = Reducer<
     return .none
     
   case .myPageAction:
+    return .none
+    
+  case .onAppear:
+    return environment.deeplinkManager
+      .handling()
+      .map(MainTabAction.deeplinkManager)
+    
+  case .onLoad:
+    environment.deeplinkManager.isFirstLaunch = false
+    return .none
+    
+    // MARK: - Deeplink
+  case let .deeplinkManager(.moveToQustionDetail(id, chatRoomId)):
+    return .concatenate([
+      .init(value: .deeplinkManager(.moveToChat(chatRoomId, messageId: nil))),
+      .init(value: .showQuestionDetail(id))
+    ])
+    
+  case let .showQuestionDetail(id):
+    // question detail id setting
+    return .init(value: .chatAction(.setRoute(.questionDetail)))
+    
+  case let .deeplinkManager(.moveToLetter(id)):
+    state.selectedTab = .msgAndNoti
+    guard let letter = state.msgAndNotiState.letterState.letterSummaryList
+      .first(where: { $0.id == id }) else {
+      return .none
+    }
+    return .init(value: .msgAndNotiAction(.letterAction(.selectLetterDetail(letter))))
+    
+  case let .deeplinkManager(.moveToChat(id, messageId)):
+    state.selectedTab = .chat
+    guard let chatRoomInfo = state.chatState.popularRoomList
+      .first(where: { $0.id == id }) else {
+      return .none
+    }
+    state.chatState.chatDetailState.focusMessageId = messageId
+    return .init(value: .chatAction(.willEnterRoom(chatRoomInfo)))
+    
+  case let .deeplinkManager(.didChangeNavigation(screenType)):
+    state.selectedTab = screenType
     return .none
   }
 }

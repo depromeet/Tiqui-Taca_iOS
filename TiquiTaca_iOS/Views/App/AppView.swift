@@ -112,7 +112,8 @@ struct AppView_Previews: PreviewProvider {
         environment: .init(
           appService: .init(),
           mainQueue: .main,
-          locationManager: .live
+          locationManager: .live,
+          deeplinkManager: .shared
         )
       )
     )

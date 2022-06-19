@@ -35,7 +35,8 @@ struct ChatDetailState: Equatable {
   var otherProfileState: OtherProfileState = OtherProfileState(userId: "")
   var chatMenuState: ChatMenuState = .init()
   var questionDetailViewState: QuestionDetailState = .init(questionId: "")
-  var letterSendState: LetterSendState = .init( )
+  var letterSendState: LetterSendState = .init()
+  var focusMessageId: String?
 }
 
 enum ChatDetailAction: Equatable {
@@ -68,7 +69,7 @@ enum ChatDetailAction: Equatable {
   case setLocationToast(Bool)
   case setOtherProfileAction(OtherProfileState.Action)
   case moveToOtherView
-  case setRoute(ChatDetailState.Route?)
+  case setRoute(ChatDetailState.Route?) 
   
   case locationManager(LocationManager.Action)
   case chatMenuAction(ChatMenuAction)
