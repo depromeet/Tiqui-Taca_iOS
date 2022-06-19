@@ -413,30 +413,30 @@ extension ChatDetailView {
   var navigationView: some View {
     VStack {
       HStack {
-        Button {
-          self.presentationMode.wrappedValue.dismiss()
-        } label: {
-          HStack(spacing: 10) {
+        HStack(spacing: 10) {
+          Button {
+            self.presentationMode.wrappedValue.dismiss()
+          } label: {
             Image("arrowBack")
               .renderingMode(.template)
               .resizable()
               .scaledToFit()
               .foregroundColor(.white)
               .frame(width: 24, height: 24)
-            Text( viewStore.state.currentRoom.viewTitle )
-              .font(.subtitle2)
-              .foregroundColor(.white)
-            if viewStore.state.isWithinRadius {
-              Circle()
-                .frame(width: 8, height: 8, alignment: .center)
-                .foregroundColor(.green800)
-                .opacity(inRadiusOpacity)
-                .onAppear {
-                  withAnimation(Animation.easeIn(duration: 0.7).repeatForever()) {
-                    inRadiusOpacity = inRadiusOpacity == 1.0 ? 0 : 1
-                  }
+          }
+          Text( viewStore.state.currentRoom.viewTitle )
+            .font(.subtitle2)
+            .foregroundColor(.white)
+          if viewStore.state.isWithinRadius {
+            Circle()
+              .frame(width: 8, height: 8, alignment: .center)
+              .foregroundColor(.green800)
+              .opacity(inRadiusOpacity)
+              .onAppear {
+                withAnimation(Animation.easeIn(duration: 0.7).repeatForever()) {
+                  inRadiusOpacity = inRadiusOpacity == 1.0 ? 0 : 1
                 }
-            }
+              }
           }
         }
         
