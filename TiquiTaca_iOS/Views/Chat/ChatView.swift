@@ -171,7 +171,7 @@ private struct EnteredRoomView: View {
                   .foregroundColor(.black100)
                   .font(.body7)
               }
-              Text(viewStore.lastChatLog?.createdAt?.getTimeStringFromDateString() ?? "00:00")
+              Text(viewStore.lastChatLog?.createdAt?.getTimeTodayOrDate() ?? "00:00")
                 .foregroundColor(.black100)
                 .font(.body8)
                 .hTrailing()
