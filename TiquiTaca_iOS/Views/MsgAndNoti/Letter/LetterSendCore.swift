@@ -14,6 +14,7 @@ struct LetterSendState: Equatable {
   var popupPresented: Bool = false
   var popupType: PopupType = .sendLetter
   var sendLetterSuccess = false
+  var toastPresented = false
   
   enum PopupType {
     case sendLetter
@@ -27,6 +28,7 @@ enum LetterSendAction: Equatable {
   case sendLetterResponse(Result<LetterEntity.Response?, HTTPError>)
   case presentPopup
   case dismissPopup
+  case dismissToast
 }
 
 struct LetterSendEnvironment {
@@ -57,12 +59,18 @@ let letterSendReducer = Reducer<
     state.sendLetterSuccess = true
     return Effect(value: .dismissPopup)
   case .sendLetterResponse(.failure):
+    state.popupPresented = false
+    state.sendLetterSuccess = false
+    state.toastPresented = true
     return .none
   case .presentPopup:
     state.popupPresented = true
     return .none
   case .dismissPopup:
     state.popupPresented = false
+    return .none
+  case .dismissToast:
+    state.toastPresented = false
     return .none
   }
 }

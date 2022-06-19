@@ -42,7 +42,9 @@ struct QuestionInputMessageView: View {
             Spacer()
               .frame(minHeight: 0, maxHeight: .infinity)
             Button {
-              viewStore.send(.sendMessage)
+              if !viewStore.inputMessage.isEmpty {
+                viewStore.send(.sendMessage)
+              }
             } label: {
               Image("sendDisable")
                 .renderingMode(.template)

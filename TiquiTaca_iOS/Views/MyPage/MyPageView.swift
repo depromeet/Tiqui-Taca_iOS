@@ -21,25 +21,31 @@ struct MyPageView: View {
     let route: MyState.Route?
     let myInfoViewState: MyInfoState
     let myPageItemStates: IdentifiedArrayOf<MyPageItemState>
+    let noticeViewState: NoticeState
     let nickname: String
     let phoneNumber: String
     let profileImage: ProfileImage
     let level: Int
+    let lightningScore: Int
     let createdAt: String
     let createDday: Int
     let isAppAlarmOn: Bool
+    let toastPresented: Bool
     
     init(state: MyState) {
       route = state.route
       myInfoViewState = state.myInfoViewState
       myPageItemStates = state.myPageItemStates
+      noticeViewState = state.noticeViewState
       nickname = state.nickname
       phoneNumber = state.phoneNumber
       profileImage = state.profileImage
       level = state.level
+      lightningScore = state.lightningScore
       createdAt = state.createdAt
       createDday = state.createDday
       isAppAlarmOn = state.isAppAlarmOn
+      toastPresented = state.toastPresented
     }
   }
   
@@ -49,11 +55,13 @@ struct MyPageView: View {
   }
   
   var body: some View {
-    VStack {
-      VStack {
+    VStack(spacing: 0) {
+      VStack(spacing: 0) {
         Text("마이페이지")
           .font(.heading1)
           .frame(maxWidth: .infinity, alignment: .leading)
+          .padding(.bottom, .spacingM)
+          .padding(.top, .spacingXS)
         
         ZStack(alignment: .bottomTrailing) {
           Image(viewStore.profileImage.imageName)
@@ -70,13 +78,16 @@ struct MyPageView: View {
             }
           )
         }
+        .padding(.bottom, .spacingM)
         
         Text(viewStore.nickname)
           .font(.heading2)
+          .padding(.bottom, .spacingXS)
         
         Text("최초가입일 \(viewStore.createdAt) / 티키타카와 +\(String(viewStore.createDday))일 째")
           .font(.body7)
           .foregroundColor(.white900)
+          .padding(.bottom, 9)
         
         Button {
           viewStore.send(.setRoute(.levelInfo))
@@ -89,6 +100,9 @@ struct MyPageView: View {
       .foregroundColor(.white)
       .background(Color.black800)
       
+      Rectangle().fill(Color.white)
+        .frame(height: 12)
+      
       ForEachStore(
         store.scope(
           state: \.myPageItemStates,
@@ -97,7 +111,6 @@ struct MyPageView: View {
           MypageItem.init(store: store)
         }
       )
-      .padding([.leading, .trailing], .spacingS)
       
       Spacer()
     }
@@ -123,26 +136,39 @@ struct MyPageView: View {
           ))
         )
       case .noticeView:
-        NoticeView(store: .init(
-          initialState: NoticeState(),
-          reducer: noticeReducer,
-          environment: NoticeEnvironment()))
-        
+        NoticeView(store: store.scope(
+          state: \.noticeViewState,
+          action: MyPageAction.noticeView
+        ))
       case .myTermsOfServiceView:
-        MyTermsOfServiceView(store: .init(
-          initialState: MyTermsOfServiceState(),
-          reducer: myTermsOfServiceReducer,
-          environment: MyTermsOfServiceEnvironment()))
-        
+        MyTermsOfServiceView()
       case .csCenterView:
         CsCenterView()
         
       case .levelInfo:
-        AlertView(level: viewStore.level)
+        AlertView(lightningScore: viewStore.lightningScore)
         .background(BackgroundTransparentView())
       default:
         EmptyView()
       }
+    }
+    .popup(
+      isPresented: viewStore.binding(
+        get: \.toastPresented,
+        send: MyPageAction.dismissToast
+      ),
+      type: .floater(
+        verticalPadding: 16,
+        useSafeAreaInset: true
+      ),
+      position: .top,
+      animation: .easeIn,
+      autohideIn: 2
+    ) {
+      TTToastView(
+        title: "프로필을 수정했어요!",
+        type: .success
+      )
     }
     .navigationTitle("마이페이지")
     .background(Color.white)
@@ -154,7 +180,7 @@ struct MyPageView: View {
 
 private struct AlertView: View {
   @Environment(\.presentationMode) var presentationMode
-  @State var level: Int
+  @State var lightningScore: Int
   
   var body: some View {
     ZStack {
@@ -182,7 +208,7 @@ private struct AlertView: View {
                       Image("lightning")
                         .resizable()
                         .frame(width: 24, height: 24)
-                      Text("\(level)")
+                      Text("\(lightningScore)")
                         .font(.body4)
                         .foregroundColor(.green500)
                     }

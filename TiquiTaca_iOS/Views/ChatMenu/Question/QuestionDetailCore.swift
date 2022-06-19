@@ -12,6 +12,10 @@ import IdentifiedCollections
 import Foundation
 
 struct QuestionDetailState: Equatable {
+  enum Route {
+    case sendLetter
+  }
+  var route: Route?
   var questionId: String
   var question: QuestionEntity.Response?
   var likesCount: Int = 0 // API response
@@ -19,6 +23,7 @@ struct QuestionDetailState: Equatable {
   var selectedCommentId: String = ""
   var selectedCommentUserId: String = ""
   
+  var showOtherProfile = false
   var bottomSheetPresented: Bool = false
   var bottomSheetPosition: TTBottomSheet.ActionSheetPosition = .hidden
   var popupPresented: Bool = false
@@ -29,12 +34,19 @@ struct QuestionDetailState: Equatable {
   var commentMessage: String = ""
   
   var commentItemStates: IdentifiedArrayOf<CommentItemState> = []
+  var otherProfileState: OtherProfileState = OtherProfileState(userId: "")
+  var letterSendState: LetterSendState = .init()
 }
 
 enum QuestionDetailAction: Equatable {
   case moreClickAction
   case likeClickAction
   case writeComment
+  
+  case setShowOtherProfile(Bool)
+  case setRoute(QuestionDetailState.Route?)
+  case profileSelected(UserEntity.Response?)
+  case letterSendSelected(UserEntity.Response?)
   
   case setBottomSheetPosition(TTBottomSheet.ActionSheetPosition)
   case bottomSheetAction(QuestionBottomActionType)
@@ -61,6 +73,9 @@ enum QuestionDetailAction: Equatable {
   
   case reportCommentWriter(String)
   case blockCommentWriter(String)
+  
+  case otherProfileAction(OtherProfileAction)
+  case letterSendAction(LetterSendAction)
 }
 
 struct QuestionDetailEnvironment {
@@ -87,6 +102,28 @@ let questionDetailReducer = Reducer<
       action: /QuestionDetailAction.questionInputMessageView ,
       environment: { _ in
         QuestionInputMessageEnvironment()
+      }
+    ),
+  otherProfileReducer
+    .pullback(
+      state: \.otherProfileState,
+      action: /QuestionDetailAction.otherProfileAction,
+      environment: {
+        OtherProfileEnvironment.init(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
+        )
+      }
+    ),
+  letterSendReducer
+    .pullback(
+      state: \.letterSendState,
+      action: /QuestionDetailAction.letterSendAction,
+      environment: {
+        LetterSendEnvironment.init(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
+        )
       }
     ),
   questionDetailCore
@@ -319,7 +356,28 @@ let questionDetailCore = Reducer<
       state.selectedCommentUserId = commentUserId
       state.bottomSheetPosition = .twoButton
       return .none
+    case let .profileSelected(user):
+      return Effect(value: .profileSelected(user))
+        .eraseToEffect()
     }
+  case let .setShowOtherProfile(isShow):
+    state.showOtherProfile = isShow
+    return .none
+  case let .setRoute(route):
+    state.route = route
+    return .none
+  case let .profileSelected(user):
+    guard let userId = user?.id else { return .none }
+    if userId == environment.appService.userService.myProfile?.id { return .none }
+    state.otherProfileState = OtherProfileState(userId: userId)
+    state.showOtherProfile = true
+    return .none
+  case let .letterSendSelected(user):
+    state.letterSendState = LetterSendState(sendingUser: user)
+    state.route = .sendLetter
+    return .none
+  case .otherProfileAction, .letterSendAction:
+    return .none
   }
 }
 

@@ -200,7 +200,9 @@ struct ChatDetailView: View {
           showView: $showOtherProfile,
           sendLetter: { userInfo in
             viewStore.send(.selectSendLetter(userInfo))
-            print("쪽지보내기 터치")
+          },
+          actionHandler: { action in
+            
           }
         )
           .opacity(showOtherProfile ? 1 : 0),

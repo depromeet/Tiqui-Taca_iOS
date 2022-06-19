@@ -67,14 +67,17 @@ struct LetterView: View {
                       .foregroundColor(.white800)
                   }
                   Text(letter.latestMessage ?? "")
+                    .lineLimit(1)
                     .font(.body4)
                     .foregroundColor(.black400)
                 }
               }
+              .padding([.leading, .trailing], 16)
+              .frame(height: 80)
+              .background(letter.iWatch ?? true ? Color.white : Color.green10)
             }
-            .frame(height: 80)
+            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
             .listRowSeparator(.hidden)
-            .listRowInsets(EdgeInsets(top: 0, leading: 16, bottom: 0, trailing: 16))
             .swipeActions(edge: .trailing) {
               Button(role: .destructive) {
                 viewStore.send(.leaveLetter(letter.id ?? ""))

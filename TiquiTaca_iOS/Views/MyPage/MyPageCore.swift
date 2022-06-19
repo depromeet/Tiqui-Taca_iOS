@@ -14,6 +14,7 @@ struct MyPageState: Equatable {
   var route: Route?
   var myInfoViewState: MyInfoState = .init()
   var changeProfileViewState: ChangeProfileState = .init()
+  var noticeViewState: NoticeState = .init()
   var myPageItemStates: IdentifiedArrayOf<MyPageItemState> = [
     .init(rowInfo: .init(itemType: .myInfoView)),
     .init(rowInfo: .init(itemType: .alarmSet, toggleVisible: true)),
@@ -28,21 +29,26 @@ struct MyPageState: Equatable {
   var phoneNumber = ""
   var profileImage: ProfileImage = .init()
   var level = 1
+  var lightningScore = 0
   var createdAt: String = ""
   var createDday = 0
   var isAppAlarmOn = false
+  var toastPresented = false
 }
 
 enum MyPageAction: Equatable {
   case setRoute(MyPageState.Route?)
   case myInfoView(MyInfoAction)
   case changeProfileView(ChangeProfileAction)
+  case noticeView(NoticeAction)
   case mypageItemView(MyPageItemAction)
   case mypageItem(id: UUID, action: MyPageItemAction)
   case getProfileInfo
   case getProfileInfoResponse(Result<UserEntity.Response?, HTTPError>)
   case getProfileRequestSuccess
   case logout
+  case withdrawal
+  case dismissToast
 }
 
 struct MyPageEnvironment {
@@ -85,6 +91,17 @@ let myPageReducer = Reducer<
         )
       }
     ),
+  noticeReducer
+    .pullback(
+      state: \.noticeViewState,
+      action: /MyPageAction.noticeView,
+      environment: {
+        NoticeEnvironment(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
+        )
+      }
+    ),
   myPageReducerCore
 ])
 
@@ -94,16 +111,6 @@ let myPageReducerCore = Reducer<
   MyPageEnvironment
 > { state, action, environment in
   switch action {
-  case let .myInfoView(myInfoAction):
-    switch myInfoAction {
-    case let .movingAction(dismissType):
-      if dismissType == .logout || dismissType == .withdrawal {
-        return Effect(value: .logout)
-      }
-      return .none
-    default:
-      return .none
-    }
   case .getProfileInfo:
     return environment.appService.userService
       .fetchMyProfile()
@@ -111,13 +118,14 @@ let myPageReducerCore = Reducer<
       .catchToEffect()
       .map(MyPageAction.getProfileInfoResponse)
   case let .getProfileInfoResponse(.success(response)):
-    let myProfile = response//environment.appService.userService.myProfile
+    let myProfile = response //environment.appService.userService.myProfile
     state.profileImage.type = myProfile?.profile.type ?? 0
     state.nickname = myProfile?.nickname ?? ""
     state.isAppAlarmOn = myProfile?.appAlarm ?? false
     state.level = myProfile?.level ?? 0
+    state.lightningScore = myProfile?.lightningScore ?? 0
     state.phoneNumber = myProfile?.phoneNumber ?? ""
-    state.changeProfileViewState = ChangeProfileState(nickname: state.nickname, profileImage: state.profileImage)
+    state.changeProfileViewState = ChangeProfileState(nickname: state.nickname, changedNickname: state.nickname, profileImage: state.profileImage)
     state.myPageItemStates.remove(at: 1)
     state.myPageItemStates.insert(.init(rowInfo: .init(itemType: .alarmSet, toggleVisible: true), isAppAlarmOn: state.isAppAlarmOn), at: 1)
     
@@ -160,8 +168,16 @@ let myPageReducerCore = Reducer<
       state.route = route
       return .none
     }
-  case .changeProfileView:
-    return .none
+    
+  case let .changeProfileView(changeProfileAction):
+    switch changeProfileAction {
+    case .getMyProfileResponse:
+      state.toastPresented = true
+      return .none
+    default:
+      return .none
+    }
+    
   case .mypageItemView:
     return .none
   case let .mypageItem(id: id, action: action):
@@ -171,5 +187,29 @@ let myPageReducerCore = Reducer<
     default:
       return .none
     }
+  case let .myInfoView(myInfoAction):
+    switch myInfoAction {
+    case let .movingAction(dismissType):
+      if dismissType == .logout {
+        return Effect(value: .logout)
+      } else if dismissType == .withdrawal {
+        return Effect(value: .withdrawal)
+      }
+      return .none
+    default:
+      return .none
+    }
+  case .noticeView:
+    return .none
+    
+  case .withdrawal:
+    return environment.appService.userService
+      .deleteUser()
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .fireAndForget()
+  case .dismissToast:
+    state.toastPresented = false
+    return .none
   }
 }

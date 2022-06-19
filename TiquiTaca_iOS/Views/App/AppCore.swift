@@ -15,10 +15,16 @@ struct AppState: Equatable {
     case onboarding
     case mainTab
   }
+  enum FromMyPage {
+    case logout
+    case withdrawal
+  }
   var route: Route = .splash
   var onboardingState: OnboardingState?
   var mainTabState: MainTabState?
   var isLoading: Bool = false
+  var toastPresented: Bool = false
+  var fromMyPageType: FromMyPage?
 }
 
 enum AppAction: Equatable {
@@ -30,7 +36,7 @@ enum AppAction: Equatable {
   case mainTabAction(MainTabAction)
   case setLoading(Bool)
   case getMyProfileResponse(Result<UserEntity.Response?, HTTPError>)
-  
+  case dismissToast
   case deeplinkManager(DeeplinkManager.Action)
 }
 
@@ -187,12 +193,27 @@ let appCore = Reducer<
     return Effect(value: .signIn)
     
   case .mainTabAction(.myPageAction(.logout)):
+    state.toastPresented = true
+    state.fromMyPageType = .logout
     return Effect(value: .signOut)
+    
+  case .mainTabAction(.myPageAction(.withdrawal)):
+    state.mainTabState = nil
+    state.onboardingState = .init()
+    
+    state.toastPresented = true
+    state.fromMyPageType = .withdrawal
+    
+    return Effect(value: .setRoute(.onboarding))
     
   case .onboardingAction:
     return .none
     
   case .mainTabAction:
+    return .none
+    
+  case .dismissToast:
+    state.toastPresented = false
     return .none
     
   case .deeplinkManager:

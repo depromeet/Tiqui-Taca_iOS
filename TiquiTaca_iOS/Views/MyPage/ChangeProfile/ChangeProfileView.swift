@@ -8,6 +8,7 @@
 import SwiftUI
 import ComposableArchitecture
 import TTDesignSystemModule
+import ExytePopupView
 
 struct ChangeProfileView: View {
   typealias State = ChangeProfileState
@@ -29,6 +30,7 @@ struct ChangeProfileView: View {
   
   struct ViewState: Equatable {
     let nickname: String
+    let changedNickname: String
     let profileImage: ProfileImage
     let bottomSheetPosition: TTBottomSheet.MiddlePosition
     let nicknameError: NicknameError
@@ -38,6 +40,7 @@ struct ChangeProfileView: View {
     
     init(state: State) {
       nickname = state.nickname
+      changedNickname = state.changedNickname
       profileImage = state.profileImage
       bottomSheetPosition = state.bottomSheetPosition
       nicknameError = state.nicknameError
@@ -70,7 +73,7 @@ struct ChangeProfileView: View {
             TextField(
               "닉네임을 입력해주세요.",
               text: viewStore.binding(
-                get: \.nickname,
+                get: \.changedNickname,
                 send: ChangeProfileAction.nicknameChanged
               )
             )
@@ -105,59 +108,59 @@ struct ChangeProfileView: View {
         send: ChangeProfileAction.dismissPopup))
       .background(BackgroundTransparentView())
     }
-      .vCenter()
-      .hCenter()
-      .background(Color.black800)
-      .ignoresSafeArea(.keyboard)
-      .navigationBarBackButtonHidden(true)
-      .bottomSheet(
-        bottomSheetPosition: viewStore.binding(
-          get: \.bottomSheetPosition,
-          send: Action.setBottomSheetPosition
-        ),
-        options: TTBottomSheet.Options
-      ) {
-        ProfileImageListView(
-          selectedProfile: viewStore.binding(
-            get: \.profileImage,
-            send: ChangeProfileAction.setProfileImage
-          )
-        ).padding(.top, .spacingXXL)
+    .vCenter()
+    .hCenter()
+    .background(Color.black800)
+    .ignoresSafeArea(.keyboard)
+    .navigationBarBackButtonHidden(true)
+    .bottomSheet(
+      bottomSheetPosition: viewStore.binding(
+        get: \.bottomSheetPosition,
+        send: Action.setBottomSheetPosition
+      ),
+      options: TTBottomSheet.Options
+    ) {
+      ProfileImageListView(
+        selectedProfile: viewStore.binding(
+          get: \.profileImage,
+          send: ChangeProfileAction.setProfileImage
+        )
+      ).padding(.top, .spacingXXL)
+    }
+    .toolbar {
+      ToolbarItem(placement: .navigationBarLeading) {
+        Button {
+          presentationMode.wrappedValue.dismiss()
+        } label: {
+          Image("leftArrow")
+        }
       }
-      .toolbar {
-        ToolbarItem(placement: .navigationBarLeading) {
-          Button {
+      ToolbarItem(placement: .principal) {
+        Text("프로필 수정하기")
+          .font(.subtitle2)
+          .foregroundColor(.white200)
+      }
+      ToolbarItem(placement: .navigationBarTrailing) {
+        Button {
+          viewStore.send(.doneButtonTapped)
+          UIView.setAnimationsEnabled(false)
+        } label: {
+          Text("완료")
+            .foregroundColor(.green500)
+            .font(.subtitle1)
+        }
+        .onChange(of: viewStore.dismissCurrentPage) { isDismissCurrentView in
+          if isDismissCurrentView {
             presentationMode.wrappedValue.dismiss()
-          } label: {
-            Image("leftArrow")
           }
         }
-        ToolbarItem(placement: .principal) {
-          Text("프로필 수정하기")
-            .font(.subtitle2)
-            .foregroundColor(.white200)
-        }
-        ToolbarItem(placement: .navigationBarTrailing) {
-          Button {
-            viewStore.send(.doneButtonTapped)
-            UIView.setAnimationsEnabled(false)
-          } label: {
-            Text("완료")
-              .foregroundColor(.green500)
-              .font(.subtitle1)
-          }
-          .onChange(of: viewStore.dismissCurrentPage) { isDismissCurrentView in
-            if isDismissCurrentView {
-              presentationMode.wrappedValue.dismiss()
-            }
-          }
-          .disabled(!viewStore.isAvailableCompletion)
-        }
+        .disabled(!viewStore.isAvailableCompletion)
       }
-      .onTapGesture {
-        focusField = false
-        viewStore.send(.setBottomSheetPosition(.hidden))
-      }
+    }
+    .onTapGesture {
+      focusField = false
+      viewStore.send(.setBottomSheetPosition(.hidden))
+    }
   }
 }
 

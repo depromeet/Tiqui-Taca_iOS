@@ -12,15 +12,19 @@ struct ChatMenuState: Equatable {
   enum Route {
     case questionDetail
     case questionList
+    case sendLetter
   }
   var route: Route?
   var roomInfo: RoomInfoEntity.Response?
   var roomUserList: [UserEntity.Response] = []
   var questionList: [QuestionEntity.Response] = []
+  var totalQuestionCount: Int = 0
   var selectedQuestionId: String?
   
   var questionDetailViewState: QuestionDetailState = .init(questionId: "")
   var questionListViewState: QuestionListState = .init()
+  var otherProfileState: OtherProfileState = OtherProfileState(userId: "")
+  var letterSendState: LetterSendState = .init()
   
   var showOtherProfile: Bool = false
   var popupPresented: Bool = false
@@ -29,11 +33,15 @@ struct ChatMenuState: Equatable {
 }
 
 enum ChatMenuAction: Equatable {
+  case setShowOtherProfile(Bool)
   case setRoute(ChatMenuState.Route?)
   case roomExit
   
   case roomFavoriteSelect
   case roomFavoriteResponse(Result<RoomLikeEntity.Response?, HTTPError>)
+  
+  case profileSelected(UserEntity.Response?)
+  case letterSendSelected(UserEntity.Response?)
   
   case questionSelected(String)
   case questionListButtonClicked
@@ -48,11 +56,14 @@ enum ChatMenuAction: Equatable {
   case getRoomUserListResponse(Result<RoomUserInfoEntity.Response?, HTTPError>)
   
   case getQuestionList
-  case getQuestionListResponse(Result<[QuestionEntity.Response]?, HTTPError>)
+  case getQuestionListResponse(Result<QuestionListEntity.Response?, HTTPError>)
   case roomExitReponse(Result<DefaultResponse?, HTTPError>)
   
   case presentPopup
   case dismissPopup
+  
+  case otherProfileAction(OtherProfileAction)
+  case letterSendAction(LetterSendAction)
 }
 
 struct ChatMenuEnvironment {
@@ -82,6 +93,28 @@ let chatMenuReducer = Reducer<
       action: /ChatMenuAction.questionListView,
       environment: {
         QuestionListEnvironment(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
+        )
+      }
+    ),
+  otherProfileReducer
+    .pullback(
+      state: \.otherProfileState,
+      action: /ChatMenuAction.otherProfileAction,
+      environment: {
+        OtherProfileEnvironment.init(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
+        )
+      }
+    ),
+  letterSendReducer
+    .pullback(
+      state: \.letterSendState,
+      action: /ChatMenuAction.letterSendAction,
+      environment: {
+        LetterSendEnvironment.init(
           appService: $0.appService,
           mainQueue: $0.mainQueue
         )
@@ -149,7 +182,8 @@ let chatMenuReducerCore = Reducer<
       .catchToEffect()
       .map(ChatMenuAction.getQuestionListResponse)
   case let .getQuestionListResponse(.success(response)):
-    state.questionList = response ?? []
+    state.questionList = response?.list ?? []
+    state.totalQuestionCount = response?.totalCount ?? 0
     return .none
   case .getQuestionListResponse(.failure):
     return .none
@@ -171,7 +205,19 @@ let chatMenuReducerCore = Reducer<
     return .none
   case let .questionListView(questionListAction):
     return .none
-    
+  case let .setShowOtherProfile(isShow):
+    state.showOtherProfile = isShow
+    return .none
+  case let .profileSelected(user):
+    guard let userId = user?.id else { return .none }
+    if userId == environment.appService.userService.myProfile?.id { return .none }
+    state.otherProfileState = OtherProfileState(userId: userId)
+    state.showOtherProfile = true
+    return .none
+  case let .letterSendSelected(user):
+    state.letterSendState = LetterSendState(sendingUser: user)
+    state.route = .sendLetter
+    return .none
   case let .setRoute(selectedRoute):
     if selectedRoute == .questionDetail {
       state.questionDetailViewState = .init(questionId: state.selectedQuestionId ?? "")
@@ -193,6 +239,9 @@ let chatMenuReducerCore = Reducer<
     return .none
   case .dismissPopup:
     state.popupPresented = false
+    return .none
+    
+  case .otherProfileAction, .letterSendAction:
     return .none
   }
 }

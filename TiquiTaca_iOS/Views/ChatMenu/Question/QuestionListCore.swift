@@ -14,9 +14,9 @@ struct QuestionListState: Equatable {
   }
   var route: Route?
   var questionList: [QuestionEntity.Response] = []
+  var totalQuestionListCount: Int = 0
   var sortType: QuestionSortType = .neworder
-  var bottomSheetPresented: Bool = false
-  var bottomSheetPosition: TTBottomSheet.Position = .hidden
+  var sheetPresented: Bool = false
   
   var questionDetailViewState: QuestionDetailState = .init(questionId: "")
 }
@@ -34,7 +34,7 @@ enum QuestionSortType: String {
     case .recent: return ""
     case .notanswered: return "미답변"
     case .oldorder: return "오래된 순"
-    case .neworder: return "모든 답변"
+    case .neworder: return "모든 질문"
     }
   }
 }
@@ -42,10 +42,11 @@ enum QuestionSortType: String {
 enum QuestionListAction: Equatable {
   case selectSortType(QuestionSortType)
   case selectQuestionDetail(String)
-  case setBottomSheetPosition(TTBottomSheet.Position)
+  case sheetPresented
+  case sheetDismissed
   
   case getQuestionListByType
-  case getQuestionListByTypeResponse(Result<[QuestionEntity.Response]?, HTTPError>)
+  case getQuestionListByTypeResponse(Result<QuestionListEntity.Response?, HTTPError>)
   
   case questionDetailView(QuestionDetailAction)
   case setRoute(QuestionListState.Route?)
@@ -91,25 +92,28 @@ let questionListCore = Reducer<
       .catchToEffect()
       .map(QuestionListAction.getQuestionListByTypeResponse)
   case let .getQuestionListByTypeResponse(.success(response)):
-    state.questionList = response ?? []
+    state.questionList = response?.list ?? []
+    state.totalQuestionListCount = response?.totalCount ?? 0
     return .none
   case .getQuestionListByTypeResponse(.failure):
     return .none
   case let .selectSortType(type):
     state.sortType = type
-    state.bottomSheetPosition = .hidden
     return Effect(value: .getQuestionListByType)
   case let .selectQuestionDetail(questionId):
     state.route = .questionDetail
     state.questionDetailViewState = .init(questionId: questionId)
     return .none
-  case let .setBottomSheetPosition(position):
-    state.bottomSheetPosition = position
-    return .none
   case .questionDetailView(_):
     return .none
   case let .setRoute(selectedRoute):
     state.route = selectedRoute
+    return .none
+  case .sheetPresented:
+    state.sheetPresented = true
+    return .none
+  case .sheetDismissed:
+    state.sheetPresented = false
     return .none
   }
 }

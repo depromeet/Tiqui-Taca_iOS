@@ -8,6 +8,7 @@
 import SwiftUI
 import ComposableArchitecture
 import TTDesignSystemModule
+import ExytePopupView
 
 struct AppView: View {
   typealias State = AppState
@@ -19,10 +20,14 @@ struct AppView: View {
   struct ViewState: Equatable {
     let route: State.Route
     let isLoading: Bool
+    let toastPresented: Bool
+    let fromMyPageType: State.FromMyPage?
     
     init(state: State) {
       route = state.route
       isLoading = state.isLoading
+      toastPresented = state.toastPresented
+      fromMyPageType = state.fromMyPageType
     }
   }
   
@@ -56,6 +61,24 @@ struct AppView: View {
           )
         )
       }
+    }
+    .popup(
+      isPresented: viewStore.binding(
+        get: \.toastPresented,
+        send: Action.dismissToast
+      ),
+      type: .floater(
+        verticalPadding: 16,
+        useSafeAreaInset: true
+      ),
+      position: .top,
+      animation: .easeIn,
+      autohideIn: 2
+    ) {
+      TTToastView(
+        title: viewStore.fromMyPageType == .logout ? "로그아웃했어요. 또 봐요!" : "정상적으로 탈퇴했어요. 다음에 또 봐요!",
+        type: .success
+      )
     }
     .onAppear {
       viewStore.send(.onAppear)

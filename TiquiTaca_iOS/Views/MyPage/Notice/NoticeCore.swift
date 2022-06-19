@@ -7,23 +7,20 @@
 
 import ComposableArchitecture
 import Foundation
+import TTNetworkModule
 
 struct NoticeState: Equatable {
-  var noticeList: [Notice] = []
-}
-
-struct Notice: Equatable, Identifiable {
-  let id = UUID()
-  var title: String
-  var writer: String
-  var date: String
+  var noticeList: [OfficialNotiResponse] = []
 }
 
 enum NoticeAction: Equatable {
   case getNoticeList
+  case getNoticeResponse(Result<[OfficialNotiResponse]?, HTTPError>)
 }
 
-struct NoticeEnvironment: Equatable {
+struct NoticeEnvironment {
+  let appService: AppService
+  let mainQueue: AnySchedulerOf<DispatchQueue>
 }
 
 let noticeReducer = Reducer<
@@ -33,6 +30,16 @@ let noticeReducer = Reducer<
 > { state, action, environment in
   switch action {
   case .getNoticeList:
+    return environment.appService.userService
+      .getOfficialNoti()
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(NoticeAction.getNoticeResponse)
+  case let .getNoticeResponse(.success(response)):
+    guard let response = response else { return .none }
+    state.noticeList = response
+    return .none
+  case .getNoticeResponse(.failure):
     return .none
   }
 }

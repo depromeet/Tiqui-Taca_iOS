@@ -24,10 +24,12 @@ struct ChatMenuView: View {
     let roomInfo: RoomInfoEntity.Response?
     let roomUserList: [UserEntity.Response]
     let questionList: [QuestionEntity.Response]
+    let totalQuestionCount: Int
     
     let popupPresented: Bool
     let isExistRoom: Bool
     let isFavorite: Bool
+    let showOtherProfile: Bool
     let questionDetailViewState: QuestionDetailState
     let questionListViewState: QuestionListState
     
@@ -36,10 +38,12 @@ struct ChatMenuView: View {
       roomInfo = state.roomInfo
       roomUserList = state.roomUserList
       questionList = state.questionList
+      totalQuestionCount = state.totalQuestionCount
       popupPresented = state.popupPresented
       isFavorite = state.isFavorite
       
       isExistRoom = state.isExistRoom
+      showOtherProfile = state.showOtherProfile
       questionDetailViewState = state.questionDetailViewState
       questionListViewState = state.questionListViewState
     }
@@ -86,8 +90,8 @@ struct ChatMenuView: View {
                       .foregroundColor(.black100)
                   }
                   .frame(width: 79, height: 88)
-                  .onTapGesture{
-                    print("참여자 확인")
+                  .onTapGesture {
+                    viewStore.send(.profileSelected(participant))
                   }
                 }
               }
@@ -137,6 +141,23 @@ struct ChatMenuView: View {
         },
         label: EmptyView.init
       )
+      
+      NavigationLink(
+        tag: State.Route.sendLetter,
+        selection: viewStore.binding(
+          get: \.route,
+          send: Action.setRoute
+        ),
+        destination: {
+          LetterSendView(
+            store: store.scope(
+              state: \.letterSendState,
+              action: ChatMenuAction.letterSendAction
+            )
+          )
+        },
+        label: EmptyView.init
+      )
     }
     .background(Color.white)
     .navigationBarBackButtonHidden(true)
@@ -156,6 +177,26 @@ struct ChatMenuView: View {
 //      .opacity(showOtherProfile ? 1 : 0),
 //      alignment: .center
 //    )
+    .overlay(
+      OtherProfileView(
+        store: store.scope(
+          state: \.otherProfileState,
+          action: ChatMenuAction.otherProfileAction
+        ),
+        showView: viewStore.binding(
+          get: \.showOtherProfile,
+          send: ChatMenuAction.setShowOtherProfile
+        ),
+        sendLetter: { userInfo in
+          viewStore.send(.letterSendSelected(userInfo))
+        },
+        actionHandler: { action in
+          
+        }
+      )
+      .opacity(viewStore.showOtherProfile ? 1 : 0),
+      alignment: .center
+    )
     .onAppear(perform: {
       viewStore.send(.getRoomUserListInfo)
       viewStore.send(.getQuestionList)
@@ -191,8 +232,10 @@ struct ChatMenuView: View {
         }
         
         Text(viewStore.roomInfo?.name ?? "")
+          .font(.subtitle2)
           .foregroundColor(Color.white)
-        Text("+ \(viewStore.roomInfo?.userCount ?? 0)")
+        Text("+\(viewStore.roomInfo?.userCount ?? 0)")
+          .font(.subtitle2)
           .foregroundColor(Color.white)
         
         Spacer()
@@ -231,6 +274,7 @@ struct ChatMenuView: View {
               .padding(16)
             Text("아직 사용자들이 남긴 질문이 없어요!\n처음으로 질문을 남겨보세요!")
               .multilineTextAlignment(.center)
+              .lineSpacing(14 * 0.32)
               .font(.body2)
               .foregroundColor(.white900)
             Spacer()
@@ -242,7 +286,7 @@ struct ChatMenuView: View {
             .font(.heading3)
             .foregroundColor(.black800)
             .padding(.bottom, .spacingXXS)
-          Text("총 \(viewStore.questionList.count)개의 질문")
+          Text("총 \(viewStore.totalQuestionCount)개의 질문")
             .font(.body7)
             .foregroundColor(.black100)
             .padding(.bottom, 20)
