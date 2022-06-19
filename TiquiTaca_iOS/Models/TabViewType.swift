@@ -7,9 +7,11 @@
 
 import Foundation
 
-enum TabViewType: Hashable, Equatable {
+enum TabViewType: String {
   case map
   case chat
   case msgAndNoti
-  case myPage
+  case mypage
 }
+
+extension TabViewType: Hashable, Equatable { }

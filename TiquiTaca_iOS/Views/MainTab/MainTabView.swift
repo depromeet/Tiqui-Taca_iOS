@@ -68,11 +68,11 @@ struct MainTabView: View {
             }
           }
         MyPageView(store: myPageViewStore)
-          .tag(TabViewType.myPage)
+          .tag(TabViewType.mypage)
           .tabItem {
             VStack {
               Text("마이페이지")
-              Image(viewStore.selectedTab == .myPage ? "mypage_active" : "mypage")
+              Image(viewStore.selectedTab == .mypage ? "mypage_active" : "mypage")
             }
           }
       }

@@ -143,11 +143,22 @@ private let deeplinkReducer = Reducer<
   MainTabState,
   DeeplinkManager.Action,
   MainTabEnvironment
-> { state, action, environment in
+> { state, action, _ in
   switch action {
-  case let .didChangeNavigation(type, queryItems):
+  case let .moveToQustionDetail(id):
     
+    return .none
     
+  case let .moveToLetter(id):
+    
+    return .none
+    
+  case let .moveToChat(id, messageId):
+    
+    return .none
+    
+  case let .didChangeNavigation(screenType):
+    state.selectedTab = screenType
     return .none
   }
 }

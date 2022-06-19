@@ -21,10 +21,14 @@ enum DeeplinkType: String {
 
 final class DeeplinkManager {
   enum Action: Equatable {
-    case didChangeNavigation(DeeplinkType, [URLQueryItem])
+    case moveToQustionDetail(String)
+    case moveToLetter(String)
+    case moveToChat(String, messageId: String)
+    case didChangeNavigation(TabViewType)
   }
   
   static let shared = DeeplinkManager()
+  
   private var handler: DeeplinkHandler?
   var handling: () -> Effect<Action, Never> = { .none }
   var previousDeeplink: URLComponents?
@@ -69,20 +73,32 @@ private class DeeplinkHandler {
   
   func proccessDeeplink(with url: URLComponents) {
     guard let type = DeeplinkType(rawValue: url.path) else { return }
-    let items = url.queryItems ?? []
+    var queryDict: [String: String] = [:]
+    url.queryItems?.forEach { item in
+      queryDict[item.name] = item.value
+    }
     
     switch type {
     case .questionDetail:
-      subscriber.send(.didChangeNavigation(.questionDetail, items))
+      if let id = queryDict["question_id"] {
+        subscriber.send(.moveToQustionDetail(id))
+      }
       
     case .letter:
-      subscriber.send(.didChangeNavigation(.letter, items))
+      if let id = queryDict["letter-room_id"] {
+        subscriber.send(.moveToLetter(id))
+      }
       
     case .chatRoom:
-      subscriber.send(.didChangeNavigation(.chatRoom, items))
+      if let id = queryDict["chat-room_id"],
+         let messageId = queryDict["message_id"] {
+        subscriber.send(.moveToChat(id, messageId: messageId))
+      }
       
     case .screenType:
-      subscriber.send(.didChangeNavigation(.screenType, items))
+      if let screenType = TabViewType(rawValue: url.query ?? "") {
+        subscriber.send(.didChangeNavigation(screenType))
+      }
     }
   }
 }
