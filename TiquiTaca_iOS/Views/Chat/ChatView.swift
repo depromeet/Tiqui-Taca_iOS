@@ -11,7 +11,6 @@ import ComposableArchitecture
 import TTDesignSystemModule
 
 struct ChatView: View {
-  @State private var moveToChatDetail: Bool = false
   @State private var showPopup: Bool = false
   var store: Store<ChatState, ChatAction>
   @StateObject private var viewStore: ViewStore<ViewState, ChatAction>
@@ -24,6 +23,7 @@ struct ChatView: View {
     let enteredRoom: RoomInfoEntity.Response?
     let likeRoomList: [RoomInfoEntity.Response]
     let popularRoomList: [RoomInfoEntity.Response]
+    let moveToChatDetail: Bool
     
     init(state: ChatState) {
       currentTab = state.currentTab
@@ -33,6 +33,7 @@ struct ChatView: View {
       enteredRoom = state.enteredRoom
       likeRoomList = state.likeRoomList
       popularRoomList = state.popularRoomList
+      moveToChatDetail = state.moveToChatDetail
     }
   }
   
@@ -53,43 +54,57 @@ struct ChatView: View {
         
         EnteredRoomView(
           store: store,
-          moveToChatDetail: $moveToChatDetail
+          moveToChatDetail: viewStore.binding(
+            get: \.moveToChatDetail,
+            send: ChatAction.setMoveToChatDetail
+          )
         )
         
         TabKindView(
           currentTab: viewStore.binding(
             get: \.currentTab,
-            send: ChatAction.tabChange),
+            send: ChatAction.tabChange
+          ),
           currentTime: viewStore.lastLoadTime
         )
       }
-        .background(Color.black800)
+      .background(Color.black800)
       
       RoomListView(
         store: store,
         type: viewStore.currentTab,
         showPopup: $showPopup,
-        moveToChatDetail: $moveToChatDetail)
-        .background(.white)
+        moveToChatDetail: viewStore.binding(
+          get: \.moveToChatDetail,
+          send: ChatAction.setMoveToChatDetail
+        )
+      )
+      .background(.white)
       
       NavigationLink(
         destination: ChatDetailView(
-            store: store.scope(
-              state: \.chatDetailState,
-              action: ChatAction.chatDetailAction),
-            shouldPopToRootView: $moveToChatDetail
-          ),
-        isActive: $moveToChatDetail
+          store: store.scope(
+            state: \.chatDetailState,
+            action: ChatAction.chatDetailAction),
+          shouldPopToRootView: viewStore.binding(
+            get: \.moveToChatDetail,
+            send: ChatAction.setMoveToChatDetail
+          )
+        ),
+        isActive: viewStore.binding(
+          get: \.moveToChatDetail,
+          send: ChatAction.setMoveToChatDetail
+        )
       ) { EmptyView() }
         .isDetailLink(false)
         .frame(height: 0)
         .hidden()
     }
-      .listStyle(.plain)
-      .navigationTitle("채팅방")
-      .onAppear {
-        viewStore.send(.onAppear)
-      }
+    .listStyle(.plain)
+    .navigationTitle("채팅방")
+    .onAppear {
+      viewStore.send(.onAppear)
+    }
   }
 }
 

@@ -37,6 +37,7 @@ struct ChatDetailView: View {
     let isWithinRadius: Bool
     let isAlarmOn: Bool
     let showLocationToast: Bool
+    let focusMessageId: String?
     
     init(state: CDState) {
       route = state.route
@@ -49,6 +50,7 @@ struct ChatDetailView: View {
       isWithinRadius = state.isWithinRadius
       isAlarmOn = state.isAlarmOn
       showLocationToast = state.showLocationToast
+      focusMessageId = state.focusMessageId
     }
   }
   
@@ -90,6 +92,7 @@ struct ChatDetailView: View {
                 ChatMessageView(chatLog: chatLog)
                   .dateBubble
                   .scaleEffect(x: 1, y: -1, anchor: .center)
+                  .id(chatLog.id)
               case .sent:
                 ChatMessageView(chatLog: chatLog)
                   .sentBubble
@@ -99,6 +102,7 @@ struct ChatDetailView: View {
                       viewStore.send(.selectQuestionDetail(chatLog.id ?? ""))
                     }
                   }
+                  .id(chatLog.id)
               case .receive:
                 ChatMessageView(
                   chatLog: chatLog,
@@ -115,9 +119,13 @@ struct ChatDetailView: View {
                       viewStore.send(.selectQuestionDetail(chatLog.id ?? ""))
                     }
                   }
+                  .id(chatLog.id)
               }
             }
             Spacer().frame(height: 90).background(.white)
+          }
+          .onLoad {
+            scrollView.scrollTo(viewStore.focusMessageId)
           }
         }
           .simultaneousGesture(

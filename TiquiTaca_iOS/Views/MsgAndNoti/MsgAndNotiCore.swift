@@ -15,13 +15,13 @@ enum MsgAndNotiType: Equatable {
 
 struct MsgAndNotiState: Equatable {
   var selectedType: MsgAndNotiType = .letter
-  var messageState: LetterState = .init()
+  var letterState: LetterState = .init()
   var notificationState: NotificationState = .init()
 }
 
 enum MsgAndNotiAction: Equatable {
   case setSelectedType(MsgAndNotiType)
-  case messageAction(LetterAction)
+  case letterAction(LetterAction)
   case notificationAction(NotificationAction)
 }
 
@@ -37,8 +37,8 @@ let msgAndNotiReducer = Reducer<
 >.combine([
   letterReducer
     .pullback(
-      state: \.messageState,
-      action: /MsgAndNotiAction.messageAction,
+      state: \.letterState,
+      action: /MsgAndNotiAction.letterAction,
       environment: {
         LetterEnvironment(
           appService: $0.appService,
@@ -69,7 +69,7 @@ let msgAndNotiCore = Reducer<
   case let .setSelectedType(type):
     state.selectedType = type
     return .none
-  case .messageAction:
+  case .letterAction:
     return .none
   case .notificationAction:
     return .none

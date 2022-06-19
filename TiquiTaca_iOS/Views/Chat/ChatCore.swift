@@ -22,7 +22,7 @@ struct ChatState: Equatable {
   var enteredRoom: RoomInfoEntity.Response?
   var likeRoomList: [RoomInfoEntity.Response] = []
   var popularRoomList: [RoomInfoEntity.Response] = []
-  
+  var moveToChatDetail: Bool = false
   
   var willEnterRoom: RoomInfoEntity.Response?
   var chatDetailState: ChatDetailState = .init(roomId: "")
@@ -49,6 +49,7 @@ enum ChatAction: Equatable {
   case refresh
   
   case chatDetailAction(ChatDetailAction)
+  case setMoveToChatDetail(Bool)
 }
 
 struct ChatEnvironment {
@@ -198,6 +199,9 @@ let chatCore = Reducer<
         .eraseToEffect()
     )
   case .chatDetailAction:
+    return .none
+  case let .setMoveToChatDetail(isMoveToChatDetail):
+    state.moveToChatDetail = isMoveToChatDetail
     return .none
   }
 }

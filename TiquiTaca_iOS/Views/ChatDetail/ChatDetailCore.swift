@@ -35,7 +35,8 @@ struct ChatDetailState: Equatable {
   var otherProfileState: OtherProfileState = OtherProfileState(userId: "")
   var chatMenuState: ChatMenuState = .init()
   var questionDetailViewState: QuestionDetailState = .init(questionId: "")
-  var letterSendState: LetterSendState = .init( )
+  var letterSendState: LetterSendState = .init()
+  var focusMessageId: String?
 }
 
 enum ChatDetailAction: Equatable {

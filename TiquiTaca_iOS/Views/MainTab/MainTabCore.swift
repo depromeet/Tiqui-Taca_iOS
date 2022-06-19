@@ -42,12 +42,6 @@ let mainTabReducer = Reducer<
   MainTabAction,
   MainTabEnvironment
 >.combine([
-  deeplinkReducer
-    .pullback(
-      state: \.self,
-      action: /MainTabAction.deeplinkManager,
-      environment: { $0 }
-    ),
   mainMapReducer
     .pullback(
       state: \.mainMapState,
@@ -125,9 +119,6 @@ let mainTabCore = Reducer<
   case .myPageAction:
     return .none
     
-  case .deeplinkManager:
-    return .none
-    
   case .onAppear:
     return environment.deeplinkManager
       .handling()
@@ -136,28 +127,31 @@ let mainTabCore = Reducer<
   case .onLoad:
     environment.deeplinkManager.isFirstLaunch = false
     return .none
-  }
-}
-
-private let deeplinkReducer = Reducer<
-  MainTabState,
-  DeeplinkManager.Action,
-  MainTabEnvironment
-> { state, action, _ in
-  switch action {
-  case let .moveToQustionDetail(id):
+    
+    // MARK: - Deeplink
+  case let .deeplinkManager(.moveToQustionDetail(id)):
+    state.selectedTab = .chat
     
     return .none
     
-  case let .moveToLetter(id):
+  case let .deeplinkManager(.moveToLetter(id)):
+    state.selectedTab = .msgAndNoti
+    guard let letter = state.msgAndNotiState.letterState.letterSummaryList
+      .first(where: { $0.id == id }) else {
+      return .none
+    }
+    return .init(value: .msgAndNotiAction(.letterAction(.selectLetterDetail(letter))))
     
-    return .none
+  case let .deeplinkManager(.moveToChat(id, messageId)):
+    state.selectedTab = .chat
+    guard let chatRoomInfo = state.chatState.popularRoomList
+      .first(where: { $0.id == id }) else {
+      return .none
+    }
+    state.chatState.chatDetailState.focusMessageId = messageId
+    return .init(value: .chatAction(.willEnterRoom(chatRoomInfo)))
     
-  case let .moveToChat(id, messageId):
-    
-    return .none
-    
-  case let .didChangeNavigation(screenType):
+  case let .deeplinkManager(.didChangeNavigation(screenType)):
     state.selectedTab = screenType
     return .none
   }
