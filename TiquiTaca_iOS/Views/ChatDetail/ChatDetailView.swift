@@ -86,7 +86,7 @@ struct ChatDetailView: View {
             ForEach(
               viewStore.chatLogList.reversed().enumerated().map({ $0 }),
               id: \.element.id
-            ) { _, chatLog in
+            ) { index, chatLog in
               switch chatLog.getChatMessageType(myId: viewStore.myInfo?.id) {
               case .date:
                 ChatMessageView(chatLog: chatLog)
@@ -94,7 +94,10 @@ struct ChatDetailView: View {
                   .scaleEffect(x: 1, y: -1, anchor: .center)
                   .id(chatLog.id)
               case .sent:
-                ChatMessageView(chatLog: chatLog)
+                ChatMessageView(
+                  chatLog: chatLog,
+                  isTimeShow: messageTimeShow(idx: index)
+                )
                   .sentBubble
                   .scaleEffect(x: 1, y: -1, anchor: .center)
                   .onTapGesture {
@@ -107,6 +110,8 @@ struct ChatDetailView: View {
                 ChatMessageView(
                   chatLog: chatLog,
                   isBlind: chatLog.isBlind(blockList: viewStore.blockUserList),
+                  isProfileShow: messageProfileShow(idx: index),
+                  isTimeShow: messageTimeShow(idx: index),
                   profileTapped: { log in
                     viewStore.send(.selectProfile(log.sender))
                     showOtherProfile = true
@@ -257,6 +262,39 @@ struct ChatDetailView: View {
       .onDisappear {
         viewStore.send(.onDisAppear)
       }
+  }
+  
+  private func messageProfileShow(idx: Int) -> Bool {
+    let chatList: [ChatLogEntity.Response] = viewStore.chatLogList.reversed()
+    let chat = chatList[idx]
+    
+    if idx + 1 == chatList.count {
+      return true
+    }
+    
+    let nextChat = chatList[idx + 1]
+    if nextChat.type == 3 ||
+        chat.sender?.id != nextChat.sender?.id ||
+        chat.createdAt?.getTimeStringFromDateString() != nextChat.createdAt?.getTimeStringFromDateString() {
+      return true
+    } else {
+      return false
+    }
+  }
+  
+  private func messageTimeShow(idx: Int) -> Bool {
+    if idx == 0 { return true }
+    let chatList: [ChatLogEntity.Response] = viewStore.chatLogList.reversed()
+    let chat = chatList[idx]
+    let preChat = chatList[idx - 1]
+    
+    if preChat.type == 3 ||
+        chat.sender?.id != preChat.sender?.id ||
+        chat.createdAt?.getTimeStringFromDateString() != preChat.createdAt?.getTimeStringFromDateString() {
+      return true
+    } else {
+      return false
+    }
   }
 }
 
