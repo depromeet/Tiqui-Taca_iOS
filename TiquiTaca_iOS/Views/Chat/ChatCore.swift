@@ -100,32 +100,32 @@ let chatCore = Reducer<
       Effect(value: .fetchPopularRoomList)
         .eraseToEffect()
     )
-  // MARK: Requeset
+    // MARK: Requeset
   case .fetchEnteredRoomInfo:
-		return environment.appService.roomService
-			.getEnteredRoom()
-			.receive(on: environment.mainQueue)
-			.catchToEffect()
-			.map(ChatAction.responseEnteredRoom)
-	case .fetchLikeRoomList:
-		return environment.appService.roomService
-			.getLikeRoomList()
-			.receive(on: environment.mainQueue)
-			.catchToEffect()
-			.map(ChatAction.responseLikeRoomList)
-	case .fetchPopularRoomList:
-		return environment.appService.roomService
-			.getPopularRoomList()
-			.receive(on: environment.mainQueue)
-			.catchToEffect()
-			.map(ChatAction.responsePopularRoomList)
+    return environment.appService.roomService
+      .getEnteredRoom()
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(ChatAction.responseEnteredRoom)
+  case .fetchLikeRoomList:
+    return environment.appService.roomService
+      .getLikeRoomList()
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(ChatAction.responseLikeRoomList)
+  case .fetchPopularRoomList:
+    return environment.appService.roomService
+      .getPopularRoomList()
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .map(ChatAction.responsePopularRoomList)
   case .removeFavoriteRoom(let room):
     return environment.appService.roomService
       .registLikeRoom(roomId: room.id ?? "")
       .receive(on: environment.mainQueue)
       .catchToEffect()
       .map(ChatAction.responseRoomFavorite)
-  // MARK: Response
+    // MARK: Response
   case let .responseRoomFavorite(.success(res)):
     return Effect(value: .fetchLikeRoomList)
       .eraseToEffect()
@@ -158,7 +158,7 @@ let chatCore = Reducer<
   case let .responsePopularRoomList(.success(res)):
     state.popularRoomList = res ?? []
     return .none
-  // MARK: Socket
+    // MARK: Socket
   case let .socketConnected(roomId):
     return environment.appService.socketBannerService
       .bannerConnect(roomId)

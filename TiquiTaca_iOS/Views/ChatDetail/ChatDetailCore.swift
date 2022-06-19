@@ -69,7 +69,7 @@ enum ChatDetailAction: Equatable {
   case setLocationToast(Bool)
   case setOtherProfileAction(OtherProfileState.Action)
   case moveToOtherView
-  case setRoute(ChatDetailState.Route?)
+  case setRoute(ChatDetailState.Route?) 
   
   case locationManager(LocationManager.Action)
   case chatMenuAction(ChatMenuAction)

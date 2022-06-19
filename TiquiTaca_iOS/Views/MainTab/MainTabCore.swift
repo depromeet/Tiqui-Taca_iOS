@@ -28,6 +28,7 @@ enum MainTabAction: Equatable {
   case deeplinkManager(DeeplinkManager.Action)
   case onAppear
   case onLoad
+  case showQuestionDetail(String)
 }
 
 struct MainTabEnvironment {
@@ -129,10 +130,15 @@ let mainTabCore = Reducer<
     return .none
     
     // MARK: - Deeplink
-  case let .deeplinkManager(.moveToQustionDetail(id)):
-    state.selectedTab = .chat
+  case let .deeplinkManager(.moveToQustionDetail(id, chatRoomId)):
+    return .concatenate([
+      .init(value: .deeplinkManager(.moveToChat(chatRoomId, messageId: nil))),
+      .init(value: .showQuestionDetail(id))
+    ])
     
-    return .none
+  case let .showQuestionDetail(id):
+    // question detail id setting
+    return .init(value: .chatAction(.setRoute(.questionDetail)))
     
   case let .deeplinkManager(.moveToLetter(id)):
     state.selectedTab = .msgAndNoti

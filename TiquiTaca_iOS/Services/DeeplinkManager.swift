@@ -21,9 +21,9 @@ enum DeeplinkType: String {
 
 final class DeeplinkManager {
   enum Action: Equatable {
-    case moveToQustionDetail(String)
+    case moveToQustionDetail(String, chatRoomId: String)
     case moveToLetter(String)
-    case moveToChat(String, messageId: String)
+    case moveToChat(String, messageId: String?)
     case didChangeNavigation(TabViewType)
   }
   
@@ -80,19 +80,20 @@ private class DeeplinkHandler {
     
     switch type {
     case .questionDetail:
-      if let id = queryDict["question_id"] {
-        subscriber.send(.moveToQustionDetail(id))
+      if let questionId = queryDict["question_id"],
+         let chatRoomId = queryDict["chat-room_id"] {
+        subscriber.send(.moveToQustionDetail(questionId, chatRoomId: chatRoomId))
       }
       
     case .letter:
-      if let id = queryDict["letter-room_id"] {
-        subscriber.send(.moveToLetter(id))
+      if let letterRoomId = queryDict["letter-room_id"] {
+        subscriber.send(.moveToLetter(letterRoomId))
       }
       
     case .chatRoom:
-      if let id = queryDict["chat-room_id"],
+      if let chatRoomId = queryDict["chat-room_id"],
          let messageId = queryDict["message_id"] {
-        subscriber.send(.moveToChat(id, messageId: messageId))
+        subscriber.send(.moveToChat(chatRoomId, messageId: messageId))
       }
       
     case .screenType:
