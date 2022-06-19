@@ -37,7 +37,6 @@ enum AppAction: Equatable {
   case setLoading(Bool)
   case getMyProfileResponse(Result<UserEntity.Response?, HTTPError>)
   case dismissToast
-  case deeplinkManager(DeeplinkManager.Action)
 }
 
 struct AppEnvironment {
@@ -52,12 +51,6 @@ let appReducer = Reducer<
   AppAction,
   AppEnvironment
 >.combine([
-  deeplinkReducer
-    .pullback(
-      state: \.self,
-      action: /AppAction.deeplinkManager,
-      environment: { $0 }
-    ),
   onBoardingReducer
     .optional()
     .pullback(
@@ -79,7 +72,8 @@ let appReducer = Reducer<
         MainTabEnvironment(
           appService: $0.appService,
           mainQueue: $0.mainQueue,
-          locationManager: $0.locationManager
+          locationManager: $0.locationManager,
+          deeplinkManager: $0.deeplinkManager
         )
       }
     ),
@@ -102,16 +96,11 @@ let appCore = Reducer<
     
   case .onAppear:
     if environment.appService.authService.isLoggedIn {
-      return .merge([
-        environment.appService.userService
-          .fetchMyProfile()
-          .receive(on: environment.mainQueue)
-          .catchToEffect()
-          .map(AppAction.getMyProfileResponse),
-        environment.deeplinkManager
-          .handling()
-          .map(AppAction.deeplinkManager)
-      ])
+      return environment.appService.userService
+        .fetchMyProfile()
+        .receive(on: environment.mainQueue)
+        .catchToEffect()
+        .map(AppAction.getMyProfileResponse)
     } else {
       state.onboardingState = .init()
       return Effect(value: .setRoute(.onboarding))
@@ -214,23 +203,6 @@ let appCore = Reducer<
     
   case .dismissToast:
     state.toastPresented = false
-    return .none
-    
-  case .deeplinkManager:
-    return .none
-  }
-}
-
-private let deeplinkReducer = Reducer<
-  AppState,
-  DeeplinkManager.Action,
-  AppEnvironment
-> { state, action, environment in
-  switch action {
-  case let .didChangeNavigation(type, queryItems):
-    state.isLoading = true
-    
-    
     return .none
   }
 }

@@ -38,8 +38,11 @@ final class DeeplinkManager {
   
   private init() {
     let handling = Effect<Action, Never>.run { subscriber in
-      self.handler = DeeplinkHandler(subscriber)
-      return AnyCancellable { }
+      let handler = DeeplinkHandler(subscriber)
+      self.handler = handler
+      return AnyCancellable {
+        _ = handler
+      }
     }
     .share()
     .eraseToEffect()

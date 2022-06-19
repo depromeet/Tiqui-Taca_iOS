@@ -80,6 +80,9 @@ struct MainTabView: View {
       .navigationBarHidden(true)
     }
     .navigationViewStyle(.stack)
+    .onAppear {
+      viewStore.send(.onAppear)
+    }
     .onLoad {
       viewStore.send(.onLoad)
     }
@@ -127,7 +130,8 @@ struct MainTabView_Previews: PreviewProvider {
         environment: .init(
           appService: .init(),
           mainQueue: .main,
-          locationManager: .live
+          locationManager: .live,
+          deeplinkManager: .shared
         )
       )
     )

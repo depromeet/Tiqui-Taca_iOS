@@ -25,6 +25,8 @@ enum MainTabAction: Equatable {
   case chatAction(ChatAction)
   case msgAndNotiAction(MsgAndNotiAction)
   case myPageAction(MyPageAction)
+  case deeplinkManager(DeeplinkManager.Action)
+  case onAppear
   case onLoad
 }
 
@@ -32,6 +34,7 @@ struct MainTabEnvironment {
   let appService: AppService
   let mainQueue: AnySchedulerOf<DispatchQueue>
   var locationManager: LocationManager
+  let deeplinkManager: DeeplinkManager
 }
 
 let mainTabReducer = Reducer<
@@ -39,6 +42,12 @@ let mainTabReducer = Reducer<
   MainTabAction,
   MainTabEnvironment
 >.combine([
+  deeplinkReducer
+    .pullback(
+      state: \.self,
+      action: /MainTabAction.deeplinkManager,
+      environment: { $0 }
+    ),
   mainMapReducer
     .pullback(
       state: \.mainMapState,
@@ -92,7 +101,7 @@ let mainTabCore = Reducer<
   MainTabState,
   MainTabAction,
   MainTabEnvironment
-> { state, action, _ in
+> { state, action, environment in
   switch action {
   case let .setSelectedTab(selectedTab):
     state.selectedTab = selectedTab
@@ -116,8 +125,29 @@ let mainTabCore = Reducer<
   case .myPageAction:
     return .none
     
+  case .deeplinkManager:
+    return .none
+    
+  case .onAppear:
+    return environment.deeplinkManager
+      .handling()
+      .map(MainTabAction.deeplinkManager)
+    
   case .onLoad:
-    DeeplinkManager.shared.isFirstLaunch = false
+    environment.deeplinkManager.isFirstLaunch = false
+    return .none
+  }
+}
+
+private let deeplinkReducer = Reducer<
+  MainTabState,
+  DeeplinkManager.Action,
+  MainTabEnvironment
+> { state, action, environment in
+  switch action {
+  case let .didChangeNavigation(type, queryItems):
+    
+    
     return .none
   }
 }
