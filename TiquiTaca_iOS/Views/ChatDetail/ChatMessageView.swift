@@ -9,25 +9,39 @@ import SwiftUI
 import TTDesignSystemModule
 import ComposableArchitecture
 
+
+enum ChatMessageType {
+  case date
+  case sent
+  case receive
+}
+
 struct ChatMessageView: View {
   let chatLog: ChatLogEntity.Response
-  let diff: Bool = true
+  let isBlind: Bool
+  let profileTapped: ((ChatLogEntity.Response) -> Void)?
+  
+  
+  init(chatLog: ChatLogEntity.Response, isBlind: Bool = false, profileTapped: ((ChatLogEntity.Response) -> Void)? = nil) {
+    self.chatLog = chatLog
+    self.profileTapped = profileTapped
+    self.isBlind = isBlind
+  }
   
   var body: some View {
     dateBubble
   }
 }
 
-
 extension ChatMessageView {
   var dateBubble: some View {
     VStack(alignment: .center) {
       Spacer()
-      Text("\(chatLog.message ?? "새 시작")")
+      Text(chatLog.getMessage())
         .font(.body4)
         .padding(.horizontal, 20)
         .padding(.vertical, 4)
-        .background(Color.black100.opacity(0.5))
+        .background(Color.black100.opacity(0.2))
         .foregroundColor(.white)
         .cornerRadius(16)
       Spacer()
@@ -43,20 +57,39 @@ extension ChatMessageView {
         .font(.cap2)
         .foregroundColor(.white900)
       
-      HStack(alignment: .top) {
-        if chatLog.type == 1 {
-          Text("질문")
+      if chatLog.type == 0 {
+        HStack(alignment: .top) {
+          Text(chatLog.message ?? "잘못된 메세지 입니다")
             .font(.body4)
-            .foregroundColor(.blue900)
         }
-        
-        Text(chatLog.message ?? "잘못된 메세지 입니다")
-          .font(.body4)
-      }
         .padding([.top, .bottom], 9)
         .padding([.leading, .trailing], 14)
         .background(Color.green500)
         .cornerRadius(14, corners: [.topLeft, .bottomLeft, .bottomRight])
+      } else {
+        HStack(alignment: .top) {
+          Text("질문")
+            .font(.body4)
+            .foregroundColor(.green500)
+            .padding(.top, 2)
+          
+          Text(chatLog.message ?? "")
+            .font(.body4)
+            .foregroundColor(Color.white)
+            .padding(.top, 2)
+          
+          HStack(alignment: .bottom, spacing: 0) {
+            VStack {
+              Spacer().frame(maxWidth: 0.1)
+            }
+            Image("reply")
+          }
+        }
+          .padding([.top, .bottom], 8)
+          .padding([.leading, .trailing], 14)
+          .background(Color.black)
+          .cornerRadius(14, corners: [.topLeft, .bottomLeft, .bottomRight])
+      }
     }
       .padding(.trailing, 10)
       .padding(.leading, 20)
@@ -84,11 +117,13 @@ extension ChatMessageView {
           .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
           .opacity(chatLog.inside == true ? 1 : 0)
       )
-      .opacity(diff ? 1 : 0)
+      .onTapGesture {
+        profileTapped?(chatLog)
+      }
       
       HStack(alignment: .bottom) {
         VStack(alignment: .leading, spacing: 4) {
-          Text(chatLog.sender?.nickname ?? "익명")
+          Text(getName())
             .font(.body7)
             .foregroundColor(.white900)
           
@@ -101,9 +136,9 @@ extension ChatMessageView {
                   .padding(.top, 2)
               }
               
-              Text(chatLog.message ?? "")
+              Text(getMessage())
                 .font(.body4)
-                .foregroundColor(chatLog.type == 1 ? Color.white : Color.black)
+                .foregroundColor(getMessageColor())
                 .padding(.top, 2)
               
               if chatLog.type == 1 {
@@ -133,6 +168,32 @@ extension ChatMessageView {
     }
       .padding(.horizontal, 12)
       .padding(.vertical, 4)
+  }
+  
+  private func getName() -> String {
+    if isBlind {
+      return chatLog.sender?.status == .forbidden ?
+        "(이용제한 사용자)" :
+        "(차단된 사용자)"
+    } else {
+      return chatLog.sender?.nickname ?? "익명"
+    }
+  }
+  
+  private func getMessage() -> String {
+    if isBlind {
+      return chatLog.sender?.status == .forbidden ?
+        chatLog.getMessage() :
+        "차단된 사용자의 메세지입니다."
+    } else {
+      return chatLog.getMessage()
+    }
+  }
+  
+  private func getMessageColor() -> Color {
+    chatLog.type == 1 ?
+      (isBlind ? Color.black200 : Color.white) :
+      (isBlind ? Color.white700 : Color.black)
   }
 }
 
