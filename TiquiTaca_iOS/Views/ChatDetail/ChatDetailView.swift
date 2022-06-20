@@ -442,7 +442,7 @@ extension ChatDetailView {
         
         Spacer()
         
-        HStack(spacing: 4) {
+        HStack(spacing: 12) {
           Button {
             viewStore.send(.selectAlarm)
           } label: {
