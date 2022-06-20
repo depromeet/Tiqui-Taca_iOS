@@ -189,7 +189,7 @@ let chatCore = Reducer<
     guard let roomId = room.id else { return .none }
     state.chatDetailState = ChatDetailState(roomId: roomId)
     state.willEnterRoom = room
-    return .none
+    return .init(value: .setMoveToChatDetail(true))
   case .refresh:
     state.lastLoadTime = Date.current(type: .HHmm)
     return .merge(
