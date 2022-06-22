@@ -11,12 +11,14 @@ import ComposableArchitecture
 import ComposableCoreLocation
 
 struct MainMapState: Equatable {
+  static let seoulInKoreaLocation: CLLocationCoordinate2D = .init(latitude: 37.541, longitude: 126.986)
+  
   typealias MapUserTrackingModeType = MapUserTrackingMode // Map 네이밍 중복 문제
   
   var bottomSheetPosition: TTBottomSheet.Position = .hidden
   var bottomSheetType: MainMapBottomSheetType = .popularChatRoomList
   var chatRoomAnnotationInfos: [RoomFromCategoryResponse] = []
-  var region: MKCoordinateRegion = .init()
+  var region: MKCoordinateRegion = .init(center: seoulInKoreaLocation, span: .init(latitudeDelta: 0.05, longitudeDelta: 0.05))
   var alert: AlertState<MainMapAction>?
   var isRequestingCurrentLocation: Bool = false
   var selectedAnnotationOverlay: [MKCircle] = []
@@ -53,6 +55,9 @@ enum MainMapAction: Equatable {
   case setIsShowPopup(Bool)
   case setIsMoveToChatDetail(Bool)
   case chatDetailAction(ChatDetailAction)
+  
+  case showLocationAlert
+  case moveToSetting
 }
 
 struct MainMapEnvironment {
@@ -66,12 +71,6 @@ let mainMapReducer = Reducer<
   MainMapAction,
   MainMapEnvironment
 >.combine([
-  locationManagerReducer
-    .pullback(
-      state: \.self,
-      action: /MainMapAction.locationManager,
-      environment: { $0 }
-    ),
   chatRoomDetailReducer
     .pullback(
       state: \.chatRoomDetailState,
@@ -148,14 +147,12 @@ private let mainMapCore = Reducer<
     
   case .currentLocationButtonTapped:
     guard environment.locationManager.locationServicesEnabled() else {
-      state.alert = .init(title: TextState("설정에서 위치 권한 사용을 허용해주세요."))
-      return .none
+      return .init(value: .showLocationAlert)
     }
     
     switch environment.locationManager.authorizationStatus() {
     case .restricted, .denied:
-      state.alert = .init(title: TextState("설정에서 위치 권한 사용을 허용해주세요."))
-      return .none
+      return .init(value: .showLocationAlert)
     case .notDetermined:
       return environment.locationManager
         .requestWhenInUseAuthorization()
@@ -171,32 +168,6 @@ private let mainMapCore = Reducer<
     default:
       return .none
     }
-    
-  case let .locationManager(.didUpdateLocations(locations)):
-    guard let location = locations.first else { return .none }
-    if state.isRequestingCurrentLocation {
-      state.isRequestingCurrentLocation = false
-      state.region = MKCoordinateRegion(
-        center: location.coordinate,
-        span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
-      )
-    }
-    state.chatRoomListState.currentLocation = location.rawValue
-    state.popularChatRoomListState.currentLocation = location.rawValue
-    state.chatRoomDetailState.currentLocation = location.rawValue
-    
-    if state.isFirstLoad {
-      state.isFirstLoad = false
-      return .merge([
-        .init(value: .popularChatRoomListAction(.requestChatRoomList)),
-        .init(value: .chatRoomDetailAction(.checkCurrentLocationWithinRadius))
-      ])
-    }
-    
-    return .init(value: .chatRoomDetailAction(.checkCurrentLocationWithinRadius))
-    
-  case .locationManager:
-    return .none
     
   case let .setBottomSheetPosition(position):
     if state.bottomSheetType != .chatRoomList && position == .top {
@@ -292,21 +263,52 @@ private let mainMapCore = Reducer<
   case let .setIsShowPopup(isShowPopup):
     state.isShowPopup = isShowPopup
     return .none
-  }
-}
-
-private let locationManagerReducer = Reducer<
-  MainMapState,
-  LocationManager.Action,
-  MainMapEnvironment
-> { state, action, _ in
-  switch action {
-  case .didChangeAuthorization(.denied),
-      .didChangeAuthorization(.restricted):
-    state.alert = .init(title: TextState("위치 서비스 설정이 허용되어야 정상적인 사용이 가능합니다."))
+    
+  case .showLocationAlert:
+    state.alert = .init(
+      title: TextState("내 주변 채팅방을 확인하기 위해 위치 접근 권한을 허용해 주세요."),
+      buttons: [
+        .cancel(.init("취소")),
+        .default(.init("설정"), action: .send(.moveToSetting))
+      ]
+    )
     return .none
     
-  default:
+  case .moveToSetting:
+    guard let openSettingsURL = URL(string: UIApplication.openSettingsURLString) else {
+      return .none
+    }
+    UIApplication.shared.open(openSettingsURL, options: [:], completionHandler: nil)
+    return .none
+    
+    // MARK: - LocationManager
+  case let .locationManager(.didUpdateLocations(locations)):
+    guard let location = locations.first else { return .none }
+    if state.isRequestingCurrentLocation {
+      state.isRequestingCurrentLocation = false
+      state.region = MKCoordinateRegion(
+        center: location.coordinate,
+        span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+      )
+    }
+    state.chatRoomListState.currentLocation = location.rawValue
+    state.popularChatRoomListState.currentLocation = location.rawValue
+    state.chatRoomDetailState.currentLocation = location.rawValue
+    
+    if state.isFirstLoad {
+      state.isFirstLoad = false
+      return .merge([
+        .init(value: .popularChatRoomListAction(.requestChatRoomList)),
+        .init(value: .chatRoomDetailAction(.checkCurrentLocationWithinRadius))
+      ])
+    }
+    return .init(value: .chatRoomDetailAction(.checkCurrentLocationWithinRadius))
+    
+  case .locationManager(.didChangeAuthorization(.denied)),
+      .locationManager(.didChangeAuthorization(.restricted)):
+    return .init(value: .showLocationAlert)
+    
+  case .locationManager:
     return .none
   }
 }

@@ -11,11 +11,10 @@ import TTDesignSystemModule
 
 struct MyTermsOfServiceView: View {
   @Environment(\.presentationMode) var presentationMode
-  @State var sheetPresented = false
-  
+
   let termsOfServiceUrl = "https://easy-carpenter-187.notion.site/3373d58a140d4c2580a434d2146d175b"
   let privacyPolicyUrl = "https://easy-carpenter-187.notion.site/6775def4caab4230a0d9b71a352b95c3"
-  @State var selectedUrl = ""
+  @State var termItem: TermsItem?
   
   var body: some View {
     VStack(alignment: .leading, spacing: 0) {
@@ -43,15 +42,13 @@ struct MyTermsOfServiceView: View {
         .padding([.bottom], 22)
       
       Button {
-        selectedUrl = termsOfServiceUrl
-        sheetPresented = true
+        termItem = TermsItem(url: termsOfServiceUrl)
       } label: {
         MyTermsRow(title: "이용약관")
       }
       
       Button {
-        selectedUrl = privacyPolicyUrl
-        sheetPresented = true
+        termItem = TermsItem(url: privacyPolicyUrl)
       } label: {
         MyTermsRow(title: "개인정보 처리방침")
       }
@@ -60,12 +57,17 @@ struct MyTermsOfServiceView: View {
     }
     .background(Color.white)
     .sheet(
-      isPresented: $sheetPresented,
+      item: $termItem,
       content: {
-        WebView(url: URL(string: selectedUrl))
+        WebView(url: URL(string: $0.url))
       }
     )
   }
+}
+
+struct TermsItem: Identifiable {
+    let id = UUID()
+    let url: String
 }
 
 struct MyTermsRow: View {
