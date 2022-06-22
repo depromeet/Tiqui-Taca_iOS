@@ -15,6 +15,7 @@ struct SplashView: View {
     }
     .hCenter()
     .vCenter()
+    .ignoresSafeArea()
     .background(Color.black800)
   }
 }

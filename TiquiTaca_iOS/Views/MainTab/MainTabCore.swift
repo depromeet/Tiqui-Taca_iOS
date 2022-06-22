@@ -137,9 +137,8 @@ let mainTabCore = Reducer<
     ])
     
   case let .showQuestionDetail(id):
-    // question detail id setting
-//    return .init(value: .chatAction(.setRoute(.questionDetail)))
-    return .none
+    state.chatState.chatDetailState.questionDetailViewState = .init(questionId: id)
+    return .init(value: .chatAction(.chatDetailAction(.setRoute(.questionDetail))))
     
   case let .deeplinkManager(.moveToLetter(id)):
     state.selectedTab = .msgAndNoti

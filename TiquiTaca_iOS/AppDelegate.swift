@@ -31,15 +31,6 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
       }
     }
     application.registerForRemoteNotifications()
-    
-    // kill 상태에서 푸시알림 선택
-    if let options = launchOptions,
-       let userInfo = options[UIApplication.LaunchOptionsKey.remoteNotification] as? [String: Any] {
-      if let deeplinkString = userInfo["deepLink"] as? String {
-        DeeplinkManager.shared.handleDeeplink(with: deeplinkString)
-      }
-    }
-    
     return true
   }
   
@@ -48,16 +39,6 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data
   ) {
     Messaging.messaging().apnsToken = deviceToken
-  }
-  
-  func application(
-    _ application: UIApplication,
-    didReceiveRemoteNotification userInfo: [AnyHashable: Any],
-    fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void
-  ) {
-    Messaging.messaging().appDidReceiveMessage(userInfo)
-    
-    completionHandler(.noData)
   }
   
   // MARK: UISceneSession Lifecycle
@@ -80,19 +61,13 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     let userInfo = notification.request.content.userInfo
     Messaging.messaging().appDidReceiveMessage(userInfo)
     
-    // foreground에서 푸시알림 선택
-    if let deeplinkString = userInfo["deepLink"] as? String {
-      DeeplinkManager.shared.handleDeeplink(with: deeplinkString)
-    }
-    
     completionHandler([.sound, .banner, .list])
   }
-  
+
   func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
     let userInfo = response.notification.request.content.userInfo
     Messaging.messaging().appDidReceiveMessage(userInfo)
     
-    // background에서 푸시알림 선택
     if let deeplinkString = userInfo["deepLink"] as? String {
       DeeplinkManager.shared.handleDeeplink(with: deeplinkString)
     }
