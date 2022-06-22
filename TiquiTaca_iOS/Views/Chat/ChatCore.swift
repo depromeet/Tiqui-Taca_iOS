@@ -12,6 +12,11 @@ import TTNetworkModule
 import SwiftUI
 
 struct ChatState: Equatable {
+  enum Route {
+    case chatDetail
+  }
+  var route: Route?
+  
   var isFirstLoad = true
   var currentTab: RoomListType = .like
   
@@ -29,6 +34,7 @@ struct ChatState: Equatable {
 }
 
 enum ChatAction: Equatable {
+  
   case onAppear
   case fetchEnteredRoomInfo
   case fetchLikeRoomList
@@ -48,7 +54,9 @@ enum ChatAction: Equatable {
   case willEnterRoom(RoomInfoEntity.Response)
   case refresh
   
+  
   case chatDetailAction(ChatDetailAction)
+  case setRoute(ChatState.Route?)
   case setMoveToChatDetail(Bool)
 }
 
@@ -190,6 +198,13 @@ let chatCore = Reducer<
     state.chatDetailState = ChatDetailState(roomId: roomId)
     state.willEnterRoom = room
     return .none
+  case let .setRoute(route):
+    state.route = route
+    return .none
+  case let .setMoveToChatDetail(isMoveToChatDetail):
+    state.moveToChatDetail = isMoveToChatDetail
+    state.route = isMoveToChatDetail ? .chatDetail : nil
+    return .none
   case .refresh:
     state.lastLoadTime = Date.current(type: .HHmm)
     return .merge(
@@ -200,8 +215,6 @@ let chatCore = Reducer<
     )
   case .chatDetailAction:
     return .none
-  case let .setMoveToChatDetail(isMoveToChatDetail):
-    state.moveToChatDetail = isMoveToChatDetail
-    return .none
+  
   }
 }
