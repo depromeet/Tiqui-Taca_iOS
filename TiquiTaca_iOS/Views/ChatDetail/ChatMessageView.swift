@@ -19,13 +19,22 @@ enum ChatMessageType {
 struct ChatMessageView: View {
   let chatLog: ChatLogEntity.Response
   let isBlind: Bool
+  let isProfileShow: Bool
+  let isTimeShow: Bool
   let profileTapped: ((ChatLogEntity.Response) -> Void)?
   
-  
-  init(chatLog: ChatLogEntity.Response, isBlind: Bool = false, profileTapped: ((ChatLogEntity.Response) -> Void)? = nil) {
+  init(
+    chatLog: ChatLogEntity.Response,
+    isBlind: Bool = false,
+    isProfileShow: Bool = true,
+    isTimeShow: Bool = true,
+    profileTapped: ((ChatLogEntity.Response) -> Void)? = nil
+  ) {
     self.chatLog = chatLog
     self.profileTapped = profileTapped
     self.isBlind = isBlind
+    self.isProfileShow = isProfileShow
+    self.isTimeShow = isTimeShow
   }
   
   var body: some View {
@@ -56,6 +65,7 @@ extension ChatMessageView {
       Text(chatLog.createdAt?.getTimeStringFromDateString() ?? "00:00")
         .font(.cap2)
         .foregroundColor(.white900)
+        .opacity(isTimeShow ? 1 : 0)
       
       if chatLog.type == 0 {
         HStack(alignment: .top) {
@@ -120,12 +130,15 @@ extension ChatMessageView {
       .onTapGesture {
         profileTapped?(chatLog)
       }
+      .opacity(isProfileShow ? 1 : 0)
       
       HStack(alignment: .bottom) {
         VStack(alignment: .leading, spacing: 4) {
-          Text(getName())
-            .font(.body7)
-            .foregroundColor(.white900)
+          if isProfileShow {
+            Text(getName())
+              .font(.body7)
+              .foregroundColor(.white900)
+          }
           
           HStack(alignment: .bottom) {
             HStack(alignment: .top) {
@@ -160,6 +173,7 @@ extension ChatMessageView {
             Text(chatLog.createdAt?.getTimeStringFromDateString() ?? "00:00")
               .font(.cap2)
               .foregroundColor(.white900)
+              .opacity(isTimeShow ? 1 : 0)
           }
         }
       }
@@ -167,7 +181,8 @@ extension ChatMessageView {
       Spacer()
     }
       .padding(.horizontal, 12)
-      .padding(.vertical, 4)
+      .padding(.top, 4)
+      .padding(.bottom, isTimeShow ? 4 : 0)
   }
   
   private func getName() -> String {
@@ -200,6 +215,6 @@ extension ChatMessageView {
 struct ChatMessageView_Previews: PreviewProvider {
   static var previews: some View {
     ChatMessageView(chatLog: .init())
-      .dateBubble
+      .receivedBubble
   }
 }

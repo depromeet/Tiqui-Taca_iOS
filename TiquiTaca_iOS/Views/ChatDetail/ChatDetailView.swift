@@ -86,7 +86,7 @@ struct ChatDetailView: View {
             ForEach(
               viewStore.chatLogList.reversed().enumerated().map({ $0 }),
               id: \.element.id
-            ) { _, chatLog in
+            ) { index, chatLog in
               switch chatLog.getChatMessageType(myId: viewStore.myInfo?.id) {
               case .date:
                 ChatMessageView(chatLog: chatLog)
@@ -94,7 +94,10 @@ struct ChatDetailView: View {
                   .scaleEffect(x: 1, y: -1, anchor: .center)
                   .id(chatLog.id)
               case .sent:
-                ChatMessageView(chatLog: chatLog)
+                ChatMessageView(
+                  chatLog: chatLog,
+                  isTimeShow: messageTimeShow(idx: index)
+                )
                   .sentBubble
                   .scaleEffect(x: 1, y: -1, anchor: .center)
                   .onTapGesture {
@@ -107,6 +110,8 @@ struct ChatDetailView: View {
                 ChatMessageView(
                   chatLog: chatLog,
                   isBlind: chatLog.isBlind(blockList: viewStore.blockUserList),
+                  isProfileShow: messageProfileShow(idx: index),
+                  isTimeShow: messageTimeShow(idx: index),
                   profileTapped: { log in
                     viewStore.send(.selectProfile(log.sender))
                     showOtherProfile = true
@@ -258,6 +263,39 @@ struct ChatDetailView: View {
         viewStore.send(.onDisAppear)
       }
   }
+  
+  private func messageProfileShow(idx: Int) -> Bool {
+    let chatList: [ChatLogEntity.Response] = viewStore.chatLogList.reversed()
+    let chat = chatList[idx]
+    
+    if idx + 1 == chatList.count {
+      return true
+    }
+    
+    let nextChat = chatList[idx + 1]
+    if nextChat.type == 3 ||
+        chat.sender?.id != nextChat.sender?.id ||
+        chat.createdAt?.getTimeStringFromDateString() != nextChat.createdAt?.getTimeStringFromDateString() {
+      return true
+    } else {
+      return false
+    }
+  }
+  
+  private func messageTimeShow(idx: Int) -> Bool {
+    if idx == 0 { return true }
+    let chatList: [ChatLogEntity.Response] = viewStore.chatLogList.reversed()
+    let chat = chatList[idx]
+    let preChat = chatList[idx - 1]
+    
+    if preChat.type == 3 ||
+        chat.sender?.id != preChat.sender?.id ||
+        chat.createdAt?.getTimeStringFromDateString() != preChat.createdAt?.getTimeStringFromDateString() {
+      return true
+    } else {
+      return false
+    }
+  }
 }
 
 // MARK: Message Input View
@@ -375,36 +413,36 @@ extension ChatDetailView {
   var navigationView: some View {
     VStack {
       HStack {
-        Button {
-          self.presentationMode.wrappedValue.dismiss()
-        } label: {
-          HStack(spacing: 10) {
+        HStack(spacing: 10) {
+          Button {
+            self.presentationMode.wrappedValue.dismiss()
+          } label: {
             Image("arrowBack")
               .renderingMode(.template)
               .resizable()
               .scaledToFit()
               .foregroundColor(.white)
               .frame(width: 24, height: 24)
-            Text( viewStore.state.currentRoom.viewTitle )
-              .font(.subtitle2)
-              .foregroundColor(.white)
-            if viewStore.state.isWithinRadius {
-              Circle()
-                .frame(width: 8, height: 8, alignment: .center)
-                .foregroundColor(.green800)
-                .opacity(inRadiusOpacity)
-                .onAppear {
-                  withAnimation(Animation.easeIn(duration: 0.7).repeatForever()) {
-                    inRadiusOpacity = inRadiusOpacity == 1.0 ? 0 : 1
-                  }
+          }
+          Text( viewStore.state.currentRoom.viewTitle )
+            .font(.subtitle2)
+            .foregroundColor(.white)
+          if viewStore.state.isWithinRadius {
+            Circle()
+              .frame(width: 8, height: 8, alignment: .center)
+              .foregroundColor(.green800)
+              .opacity(inRadiusOpacity)
+              .onAppear {
+                withAnimation(Animation.easeIn(duration: 0.7).repeatForever()) {
+                  inRadiusOpacity = inRadiusOpacity == 1.0 ? 0 : 1
                 }
-            }
+              }
           }
         }
         
         Spacer()
         
-        HStack(spacing: 4) {
+        HStack(spacing: 12) {
           Button {
             viewStore.send(.selectAlarm)
           } label: {
