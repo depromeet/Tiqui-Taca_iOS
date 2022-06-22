@@ -35,19 +35,27 @@ struct TOSFieldListView: View {
             Spacer()
             
             Button {
-              viewStore.send(.selectDetail)
+              viewStore.send(.selectDetail(model))
             } label: {
               Text("보기")
                 .foregroundColor(.white800)
             }
             .sheet(
-              isPresented: viewStore.binding(
-                get: \.isDetailPresented,
-                send: TOSFieldListViewAction.dismissTOSDetail
-              )
-            ) {
-              WebView(url: model.url)
-            }
+              item: viewStore.binding(
+                get: \.selectedTermsOfServiceModels,
+                send: TOSFieldListViewAction.setSelectedTermsOfServiceModels
+              ),
+              content: {
+                WebView(url: $0.url)
+              })
+//            .sheet(
+//              isPresented: viewStore.binding(
+//                get: \.isDetailPresented,
+//                send: TOSFieldListViewAction.dismissTOSDetail
+//              )
+//            ) {
+//              WebView(url: model.url)
+//            }
           }
           .font(.body4)
           .padding(.vertical, .spacingS)
