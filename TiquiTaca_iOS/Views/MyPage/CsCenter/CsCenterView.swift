@@ -17,7 +17,8 @@ struct CsCenterView: View {
   
   let string = """
     안녕하세요, 티키타카 고객센터입니다.\n궁금한 점, 개선점 등 문의사항이 있으신 경우\n아래의 '문의하기' 버튼을 눌러 메일을 보내주세요.\n
-    기준 5일 내로 답변을 드리며, 운영 상 추가 확인이\n필요할 경우 시일이 조금 더 걸릴 수 있습니다.\n최대한 빠른 시일 내 답변 드릴 수 있도록\n노력하겠습니다! :)\n
+    기준 5일 내로 답변을 드리며, 운영 상 추가 확인이\n필요할 경우 시일이 조금 더 걸릴 수 있습니다.\n
+    최대한 빠른 시일 내 답변 드릴 수 있도록\n노력하겠습니다! :)\n
     티키타카 서비스 이용에 불편함이 없으시도록,\n언제나 친절한 고객센터가 되겠습니다. :)
     """
   
@@ -41,7 +42,7 @@ struct CsCenterView: View {
       Text(string)
         .font(.body3)
         .foregroundColor(.black900)
-        .lineSpacing(14 * 0.16)
+        .lineSpacing(14 * 0.33)
         .multilineTextAlignment(.leading)
         .lineLimit(nil)
       
@@ -59,6 +60,7 @@ struct CsCenterView: View {
           .font(.body2)
           .foregroundColor(.white800)
       }
+      .padding(.bottom, .spacingM)
       
       Button {
         print("pressed")

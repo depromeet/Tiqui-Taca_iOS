@@ -35,6 +35,7 @@ struct MyBlockHistoryView: View {
           .padding(EdgeInsets(top: 28, leading: .spacingXL, bottom: 22, trailing: .spacingXL))
           
           Text("상대방을 차단하면 상대방의 활동 뿐만 아니라,\n회원님의 활동도 상대방에게 더 이상 보이지 않게 됩니다.")
+            .lineSpacing(12 * 0.32)
             .font(.body2)
             .foregroundColor(.white800)
             .padding([.leading, .trailing], .spacingXL)

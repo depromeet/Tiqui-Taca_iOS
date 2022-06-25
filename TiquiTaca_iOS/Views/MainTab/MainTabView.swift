@@ -76,6 +76,7 @@ struct MainTabView: View {
             }
           }
       }
+      .accentColor(Color.black900)
       .navigationBarTitleDisplayMode(.inline)
       .navigationBarHidden(true)
     }

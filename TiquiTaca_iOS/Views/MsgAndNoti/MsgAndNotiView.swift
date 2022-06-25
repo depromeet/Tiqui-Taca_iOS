@@ -38,6 +38,8 @@ struct MsgAndNotiView: View {
             .font(.heading1)
             .foregroundColor(viewStore.selectedType == .letter ? .black800 : .white800)
         }
+        .padding(.trailing, 20)
+        
         Button {
           viewStore.send(.setSelectedType(.notification))
         } label: {
