@@ -93,7 +93,7 @@ struct MyPageView: View {
           viewStore.send(.setRoute(.levelInfo))
           UIView.setAnimationsEnabled(false)
         } label: {
-          Image("rating\(viewStore.level + 1)")
+          Image("rating\(viewStore.level)")
         }
       }
       .padding(.spacingL)
