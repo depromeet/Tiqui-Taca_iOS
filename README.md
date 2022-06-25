@@ -69,9 +69,10 @@
 
 <br/>
 
-#### **프로필**  
-
-
+#### **질문**  
+<img width="18%" alt="tikitaka-question1" src="https://user-images.githubusercontent.com/52196792/175785767-d36003fe-62b5-4764-b3d9-7c07230b708d.png">
+<img width="18%" alt="tikitaka-question2" src="https://user-images.githubusercontent.com/52196792/175785771-f2eeab65-ef32-415c-a596-a677924415ee.png">
+<img width="18%" alt="tikitaka-question3" src="https://user-images.githubusercontent.com/52196792/175785773-169b432b-bb9c-4383-bfa2-89adc818b80c.png">
 
 
 <br><br>
@@ -86,27 +87,25 @@
 <br/>
 
 ### **Dependency**
-- **Security & Core**
-  |Library||
-  |:---|:---|
-  |CryptoSwift||
-  |ComposableCoreLocation||
-  |Firebase/Messaging||
-  |Firebase/Analytics||
-  |Socket.IO-Client-Swift||
-  |KeyChainAccess||
-  |Socket.IO-Client-Swift||
-  
-- **UI**
-  |Library||
-  |:---|:---|
-  |BottomSheetSwiftUI||
-  |ExytePopupView||
-- **Util**
-  |Library||
-  |:---|:---|
-  |LicensePlist||
-  |SwiftLint||
+  |Security & Core Library|
+  |:---|
+  |CryptoSwift|
+  |ComposableCoreLocation|
+  |Firebase/Messaging|
+  |Firebase/Analytics|
+  |Socket.IO-Client-Swift|
+  |KeyChainAccess|
+  |Socket.IO-Client-Swift|
+
+  |UI Library|
+  |:---|
+  |BottomSheetSwiftUI|
+  |ExytePopupView|
+
+  |Util Library|
+  |:---|
+  |LicensePlist|
+  |SwiftLint|
 
 <br />
 
