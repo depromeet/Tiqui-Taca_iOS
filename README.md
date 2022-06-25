@@ -1,9 +1,9 @@
 
-
-
-
+![tikitakaFirst](https://user-images.githubusercontent.com/52196792/175785209-092476d0-1786-4979-b37d-0ebccdd827f1.png)
 
 # **티키타카**
+
+
 
 
 
