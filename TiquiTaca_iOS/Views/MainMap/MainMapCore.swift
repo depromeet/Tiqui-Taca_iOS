@@ -266,10 +266,10 @@ private let mainMapCore = Reducer<
     
   case .showLocationAlert:
     state.alert = .init(
-      title: TextState("내 주변 채팅방을 확인하기 위해 위치 접근 권한을 허용해 주세요."),
+      title: TextState("위치서비스를 사용할 수 없습니다.\n기기의 \"설정 > 티키타카 > 위치\"에서 위치 서비스를 켜주세요."),
       buttons: [
         .cancel(.init("취소")),
-        .default(.init("설정"), action: .send(.moveToSetting))
+        .default(.init("설정으로 이동"), action: .send(.moveToSetting))
       ]
     )
     return .none
