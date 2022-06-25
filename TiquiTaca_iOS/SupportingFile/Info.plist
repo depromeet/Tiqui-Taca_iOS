@@ -47,11 +47,11 @@
 		<true/>
 	</dict>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>위치 기반 채팅 기능을 위해 사용자의 현재 위치 권한을 요청합니다.</string>
+	<string>위치 정보를 이용하여 내 주변 채팅방을 표시합니다.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>위치 기반 채팅 기능을 위해 사용자의 현재 위치 권한을 요청합니다.</string>
+	<string>위치 정보를 이용하여 내 주변 채팅방을 표시합니다.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>위치 기반 채팅 기능을 위해 사용자의 현재 위치 권한을 요청합니다.</string>
+	<string>위치 정보를 이용하여 내 주변 채팅방을 표시합니다.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Pretendard-Bold.otf</string>
@@ -79,8 +79,6 @@
 	<true/>
 	<key>UIBackgroundModes</key>
 	<array>
-		<string>fetch</string>
-		<string>location</string>
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchScreen</key>
@@ -90,6 +88,10 @@
 	</dict>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
