@@ -26,10 +26,11 @@ struct QuestionDetailView: View {
     
     let showOtherProfile: Bool
     let bottomSheetPresented: Bool
-    let bottomSheetPosition: TTBottomSheet.ActionSheetPosition
+    //    let bottomSheetPosition: TTBottomSheet.ActionSheetPosition
     let popupPresented: Bool
     let bottomSheetActionType: QuestionBottomActionType?
     let bottomType: QuestionBottomType?
+    let sheetPresented: Bool
     
     let questionInputMessageViewState: QuestionInputMessageState
     let commentMessage: String
@@ -44,10 +45,11 @@ struct QuestionDetailView: View {
       
       showOtherProfile = state.showOtherProfile
       bottomSheetPresented = state.bottomSheetPresented
-      bottomSheetPosition = state.bottomSheetPosition
+      //      bottomSheetPosition = state.bottomSheetPosition
       popupPresented = state.popupPresented
       bottomSheetActionType = state.bottomSheetActionType
       bottomType = state.bottomType
+      sheetPresented = state.sheetPresented
       
       questionInputMessageViewState = state.questionInputMessageViewState
       commentMessage = state.commentMessage
@@ -135,93 +137,68 @@ struct QuestionDetailView: View {
         store: questionInputStore
       )
     }
-    .bottomSheet(
-      bottomSheetPosition: viewStore.binding(
-        get: \.bottomSheetPosition,
-        send: Action.setBottomSheetPosition
-      ),
-      options: TTBottomSheet.Options
+    .actionSheet(
+      isPresented:
+        viewStore.binding(
+          get: \.sheetPresented,
+          send: QuestionDetailAction.dismissSheet
+        )
     ) {
-      VStack(spacing: 0) {
-        Text(viewStore.bottomType?.bottomSheetTitle ?? "")
-          .font(.body2)
-          .foregroundColor(.black100)
-          .hCenter()
-          .frame(height: 10)
-          .padding(12)
-        
-        Rectangle().fill(Color.black600)
-          .frame(height: 1)
-          .hCenter()
-        
-        if viewStore.bottomType == .contentOther ||
-            viewStore.bottomType == .commentOther {
-          Button {
-            viewStore.send(.bottomSheetAction(.like))
-          } label: {
-            Text("좋아요")
-              .hCenter()
-              .font(.subtitle2)
-              .foregroundColor(.white)
-              .frame(height: viewStore.bottomType == .contentOther ? 44 : 0)
-          }
-          
-          Rectangle().fill(Color.black600)
-            .frame(height: viewStore.bottomType == .contentOther ? 1 : 0)
-            .padding(0)
-            .hCenter()
-          
-          Button {
-            if viewStore.bottomType == .contentOther {
+      switch viewStore.bottomType {
+      case .contentOther:
+        return ActionSheet(
+          title: Text(viewStore.state.bottomType?.bottomSheetTitle ?? ""),
+          buttons: [
+            .default(Text("좋아요")) {
+              viewStore.send(.bottomSheetAction(.like))
+            },
+            .default(Text("신고하기")) {
               viewStore.send(.bottomSheetAction(.report))
-            } else if viewStore.bottomType == .commentOther {
-              viewStore.send(.bottomSheetAction(.commentReport))
-            }
-          } label: {
-            Text("신고하기")
-              .hCenter()
-              .font(.subtitle2)
-              .foregroundColor(.white)
-          }
-          .frame(height: 44)
-          
-          Rectangle().fill(Color.black600)
-            .frame(height: 1)
-            .hCenter()
-          
-          Button {
-            if viewStore.bottomType == .contentOther {
+            },
+            .default(Text("차단하기")) {
               viewStore.send(.bottomSheetAction(.block))
-            } else if viewStore.bottomType == .commentOther {
-              viewStore.send(.bottomSheetAction(.commentBlock))
+            },
+            .cancel(Text("취소")) {
+              viewStore.send(.dismissSheet)
             }
-          } label: {
-            Text("차단하기")
-              .hCenter()
-              .font(.subtitle2)
-              .foregroundColor(.white)
-          }
-          .frame(height: 44)
-          Spacer()
-        } else {
-          Button {
-            if viewStore.bottomType == .contentMine {
+          ]
+        )
+      case .contentMine:
+        return ActionSheet(
+          title: Text(viewStore.state.bottomType?.bottomSheetTitle ?? ""),
+          buttons: [
+            .destructive(Text("삭제하기")) {
               viewStore.send(.bottomSheetAction(.delete))
-            } else if viewStore.bottomType == .commentMine {
+            },
+            .cancel(Text("취소"))
+          ]
+        )
+      case .commentOther:
+        return ActionSheet(
+          title: Text(viewStore.state.bottomType?.bottomSheetTitle ?? ""),
+          buttons: [
+            .default(Text("신고하기")) {
+              viewStore.send(.bottomSheetAction(.commentReport))
+            },
+            .default(Text("차단하기")) {
+              viewStore.send(.bottomSheetAction(.commentBlock))
+            },
+            .cancel(Text("취소"))
+          ]
+        )
+      case .commentMine:
+        return ActionSheet(
+          title: Text(viewStore.state.bottomType?.bottomSheetTitle ?? ""),
+          buttons: [
+            .destructive(Text("삭제하기")) {
               viewStore.send(.bottomSheetAction(.commentDelete))
-            }
-          } label: {
-            Text("삭제하기")
-              .hCenter()
-              .font(.subtitle2)
-              .foregroundColor(.errorRed)
-          }
-          .frame(height: 44)
-          Spacer()
-        }
+            },
+            .cancel(Text("취소"))
+          ]
+        )
+      case .none:
+        return ActionSheet(title: Text(""))
       }
-      .vCenter()
-      .hCenter()
     }
     .ttPopup(
       isShowing: viewStore.binding(
@@ -261,7 +238,7 @@ struct QuestionDetailView: View {
           
         }
       )
-      .opacity(viewStore.showOtherProfile ? 1 : 0),
+        .opacity(viewStore.showOtherProfile ? 1 : 0),
       alignment: .center
     )
     .onAppear {
@@ -335,11 +312,13 @@ struct QuestionDetailView: View {
             .font(.body3)
             .foregroundColor(.black900)
             .hLeading()
-          HStack {
+          HStack(spacing: 0) {
             Image(viewStore.likeActivated ? "replyGoodOn" : "replyGoodOff")
             Text("\(viewStore.likesCount)")
               .font(.body7)
               .foregroundColor(.white800)
+              .padding(.leading, 2)
+              .padding(.trailing, 10)
             
             Image("comments")
               .resizable()
@@ -347,6 +326,7 @@ struct QuestionDetailView: View {
             Text("\(viewStore.commentItemStates.count)")
               .font(.body7)
               .foregroundColor(.white800)
+              .padding(.leading, 2)
           }
         }
       }
