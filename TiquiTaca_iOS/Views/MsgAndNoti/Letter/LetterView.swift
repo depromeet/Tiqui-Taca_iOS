@@ -37,12 +37,13 @@ struct LetterView: View {
         VStack(alignment: .center) {
           Image("bxNoLetter")
             .resizable()
-            .frame(width: 160, height: 160)
-            .padding(.spacingM)
+            .frame(width: 196, height: 196)
+            .padding(.spacingXL)
           Text("앗! 아직 다른 사람들과 주고 받은 쪽지가 없어요!")
             .font(.body2)
             .foregroundColor(.white900)
         }
+        .padding(.bottom, 152)
         .frame(maxWidth: .infinity, maxHeight: .infinity)
       } else {
         List {

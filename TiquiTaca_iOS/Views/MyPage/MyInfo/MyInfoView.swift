@@ -39,7 +39,7 @@ struct MyInfoView: View {
             .foregroundColor(.black800)
             .padding(.leading, .spacingXL)
           
-          VStack(alignment: .leading, spacing: .spacingS) {
+          VStack(alignment: .leading, spacing: 0) {
             MyInfoRow(
               title: "닉네임",
               description: viewStore.nickname
@@ -55,6 +55,9 @@ struct MyInfoView: View {
           }
           .background(Color.white50)
           
+          Rectangle().fill(Color.white)
+            .frame(height: 56)
+          
           Text("로그인 관리")
             .font(.subtitle4)
             .foregroundColor(.black800)
@@ -67,9 +70,11 @@ struct MyInfoView: View {
               Text("로그아웃")
                 .font(.body1)
                 .foregroundColor(.black900)
+                .padding([.top, .bottom], .spacingS)
+                .padding([.leading, .trailing], .spacingXL)
               Spacer()
             }
-            .padding(EdgeInsets(top: .spacingS, leading: .spacingXL, bottom: .spacingS, trailing: .spacingXL))
+            .frame(height: 48)
             
             Button {
               viewStore.send(.presentWithdrawalPopup)
@@ -77,9 +82,11 @@ struct MyInfoView: View {
               Text("탈퇴하기")
                 .font(.body1)
                 .foregroundColor(.black900)
+                .padding([.top, .bottom], .spacingS)
+                .padding([.leading, .trailing], .spacingXL)
               Spacer()
             }
-            .padding(EdgeInsets(top: .spacingS, leading: .spacingXL, bottom: .spacingS, trailing: .spacingXL))
+            .frame(height: 48)
           }
           .frame(maxWidth: .infinity)
           .background(Color.white50)
@@ -128,6 +135,7 @@ struct MyInfoRow: View {
   var description: String
   
   var body: some View {
+    VStack {
     HStack {
       Text(title)
         .font(.body1)
@@ -140,6 +148,8 @@ struct MyInfoRow: View {
       Spacer()
     }
     .padding(EdgeInsets(top: 12, leading: 24, bottom: 12, trailing: 24))
+    }
+    .frame(height: 48)
   }
 }
 

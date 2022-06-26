@@ -189,16 +189,17 @@ private struct AlertView: View {
           VStack(spacing: 28) {
             VStack(alignment: .center, spacing: .spacingXS) {
               Text("회원 등급 안내")
-                .font(.heading3)
+                .font(.heading1)
                 .foregroundColor(.white)
               
               Text("적극적인 대화와 소통을 통해 아이템을 받을 수 있어요!\n계속 모으다보면 혜택이 있을지도...?")
                 .multilineTextAlignment(.center)
+                .lineSpacing(12 * 0.32)
                 .font(.body7)
                 .foregroundColor(.white700)
                 .frame(height: 34)
 
-              Image("LinearRectangle")
+              Image("LinerRectangle")
                 .overlay {
                   VStack {
                     Text("내가 받은 번개 갯수")
@@ -215,13 +216,14 @@ private struct AlertView: View {
                   }
                 }
               
-              VStack {
+              VStack(spacing: 8) {
                 HStack {
                   Image("ratingLv1")
                   VStack(alignment: .leading) {
                     Text("미니 부부젤라")
                       .font(.subtitle2)
                       .foregroundColor(.white)
+                      .padding(.bottom, 4)
                     Text("누적 5개 이상의 번개")
                       .font(.body7)
                       .foregroundColor(.white700)
@@ -231,7 +233,7 @@ private struct AlertView: View {
                     .font(.body4)
                     .foregroundColor(.green500)
                 }
-                .padding([.leading, .trailing], 24)
+                .frame(height: 56)
                 
                 HStack {
                   Image("ratingLv2")
@@ -239,6 +241,7 @@ private struct AlertView: View {
                     Text("근본 확성기")
                       .font(.subtitle2)
                       .foregroundColor(.white)
+                      .padding(.bottom, 4)
                     Text("누적 25개 이상의 번개")
                       .font(.body7)
                       .foregroundColor(.white700)
@@ -248,7 +251,7 @@ private struct AlertView: View {
                     .font(.body4)
                     .foregroundColor(.green500)
                 }
-                .padding([.leading, .trailing], 24)
+                .frame(height: 56)
                 
                 HStack {
                   Image("ratingLv3")
@@ -256,6 +259,7 @@ private struct AlertView: View {
                     Text("메가 스피커")
                       .font(.subtitle2)
                       .foregroundColor(.white)
+                      .padding(.bottom, 4)
                     Text("누적 100개 이상의 번개")
                       .font(.body7)
                       .foregroundColor(.white700)
@@ -265,10 +269,10 @@ private struct AlertView: View {
                     .font(.body4)
                     .foregroundColor(.green500)
                 }
-                .padding([.leading, .trailing], 24)
+                .frame(height: 56)
               }
             }
-            .padding(EdgeInsets(top: 48, leading: .spacingL, bottom: 0, trailing: .spacingL))
+            .padding(EdgeInsets(top: 48, leading: 24, bottom: 0, trailing: 24))
             
             Button {
               presentationMode.wrappedValue.dismiss()

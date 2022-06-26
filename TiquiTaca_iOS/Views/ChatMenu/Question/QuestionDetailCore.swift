@@ -25,10 +25,10 @@ struct QuestionDetailState: Equatable {
   
   var showOtherProfile = false
   var bottomSheetPresented: Bool = false
-  var bottomSheetPosition: TTBottomSheet.ActionSheetPosition = .hidden
   var popupPresented: Bool = false
   var bottomSheetActionType: QuestionBottomActionType?
   var bottomType: QuestionBottomType?
+  var sheetPresented: Bool = false
   
   var questionInputMessageViewState: QuestionInputMessageState = .init()
   var commentMessage: String = ""
@@ -48,11 +48,12 @@ enum QuestionDetailAction: Equatable {
   case profileSelected(UserEntity.Response?)
   case letterSendSelected(UserEntity.Response?)
   
-  case setBottomSheetPosition(TTBottomSheet.ActionSheetPosition)
   case bottomSheetAction(QuestionBottomActionType)
   case presentPopup
   case dismissPopup
   case ttpopupConfirm
+  case presentSheet
+  case dismissSheet
   
   case questionInputMessageView(QuestionInputMessageAction)
   case commentItemView(CommentItemAction)
@@ -239,7 +240,7 @@ let questionDetailCore = Reducer<
     
     
   case .moreClickAction:
-    state.bottomSheetPosition = .threeButton
+    state.sheetPresented = true
     if state.question?.user.id ?? "" == environment.appService.userService.myProfile?.id {
       state.bottomType = .contentMine
     } else {
@@ -269,11 +270,8 @@ let questionDetailCore = Reducer<
     default:
       return .none
     }
-  case let .setBottomSheetPosition(position):
-    state.bottomSheetPosition = position
-    return .none
   case let .bottomSheetAction(clickedType):
-    state.bottomSheetPosition = .hidden
+    state.sheetPresented = false
     
     switch clickedType {
     case .like:
@@ -354,7 +352,7 @@ let questionDetailCore = Reducer<
       }
       state.selectedCommentId = commentId
       state.selectedCommentUserId = commentUserId
-      state.bottomSheetPosition = .twoButton
+      state.sheetPresented = true
       return .none
     case let .profileSelected(user):
       return Effect(value: .profileSelected(user))
@@ -378,6 +376,12 @@ let questionDetailCore = Reducer<
     return .none
   case .otherProfileAction, .letterSendAction:
     return .none
+  case .presentSheet:
+    state.sheetPresented = true
+    return .none
+  case .dismissSheet:
+    state.sheetPresented = false
+    return .none
   }
 }
 
@@ -386,17 +390,6 @@ enum QuestionBottomType {
   case contentMine
   case commentOther
   case commentMine
-  
-  var bottomSheetPosition: TTBottomSheet.ActionSheetPosition {
-    switch self {
-    case .contentOther:
-      return .threeButton
-    case .commentOther:
-      return .twoButton
-    case .contentMine, .commentMine:
-      return .oneButton
-    }
-  }
   
   var bottomSheetTitle: String {
     switch self {
