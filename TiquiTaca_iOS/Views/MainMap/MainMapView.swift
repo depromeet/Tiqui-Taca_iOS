@@ -115,13 +115,15 @@ struct MainMapView: View {
       .preferredColorScheme(.light)
       .edgesIgnoringSafeArea([.all])
       
-      VStack(spacing: .spacingM) {
+      VStack(spacing: .spacingXXS) {
         LocationCategoryListView(
           selectedCategory: viewStore.binding(
             get: \.chatRoomListState.listCategoryType,
             send: MainMapAction.categoryTapped
           )
         )
+        .frame(height: 60)
+        
         if showSpreadButton {
           Button {
             viewStore.send(.setBottomSheetPosition(.middle))
