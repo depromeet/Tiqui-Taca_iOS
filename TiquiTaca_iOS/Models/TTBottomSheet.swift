@@ -13,16 +13,8 @@ enum TTBottomSheet {
   enum Position: CGFloat, CaseIterable {
     case top = 0.9
     case middle = 0.5
+    case quarter = 0.4
     case hidden = 0
-  }
-  
-  enum ActionSheetPosition: CGFloat, CaseIterable {
-    case top = 0.9
-    case middle = 0.5
-    case hidden = 0
-    case threeButton = 0.4
-    case twoButton = 0.3
-    case oneButton = 0.1
   }
   
   /// Types: top, hidden

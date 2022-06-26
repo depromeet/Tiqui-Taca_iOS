@@ -79,7 +79,8 @@ struct MainMapView: View {
           get: \.region,
           send: Action.setRegion
         ),
-        informationVisibility: .default.union(.userLocation),
+        informationVisibility: .userLocation,
+        interactionModes: [.pan, .zoom, .rotate],
         userTrackingMode: viewStore.binding(
           get: \.userTrackingMode,
           send: Action.setUserTrackingMode
@@ -110,7 +111,7 @@ struct MainMapView: View {
           }
         }
       )
-      .offset(y: viewStore.bottomSheetPosition != .hidden ? -100 : 0)
+      .offset(y: viewStore.bottomSheetPosition != .hidden ? -120 : 0)
       .animation(.default, value: viewStore.bottomSheetPosition != .hidden)
       .preferredColorScheme(.light)
       .edgesIgnoringSafeArea([.all])
