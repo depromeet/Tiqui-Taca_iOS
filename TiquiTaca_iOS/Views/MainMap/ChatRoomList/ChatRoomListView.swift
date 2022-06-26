@@ -111,7 +111,7 @@ struct ChatRoomListView: View {
               Image("bxInfoArrow")
                 .resizable()
                 .frame(width: 108, height: 108)
-              Text("채팅방이 없어요.")
+              Text("해당 카테고리의 채팅방이 아직 존재하지 않아요")
                 .font(.body2)
                 .foregroundColor(.black100)
                 .multilineTextAlignment(.center)
