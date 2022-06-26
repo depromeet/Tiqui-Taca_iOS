@@ -58,9 +58,9 @@ struct ChatRoomListView: View {
       VStack(spacing: 0) {
         HStack {
           HStack(spacing: .spacingXXS) {
-            Image("starLight")
+            Image(viewStore.listCategoryType.imageName)
               .resizable()
-              .frame(width: 32, height: 32)
+              .frame(width: 40, height: 40)
             Text(viewStore.listCategoryType.locationName)
               .font(.subtitle1)
               .foregroundColor(.green500)
@@ -86,6 +86,7 @@ struct ChatRoomListView: View {
           .font(.body2)
         }
         .padding(.horizontal, .spacingXL)
+        .padding(.top, .spacingXL)
         ZStack {
           List {
             ForEach(viewStore.chatRoomList) { element in
@@ -104,8 +105,15 @@ struct ChatRoomListView: View {
             .onDelete { offsets in
               viewStore.send(.deleteItem(offsets))
             }
+            .listRowSeparator(.hidden)
+            .listRowInsets(.init())
           }
           .listStyle(.plain)
+          .overlay(alignment: .top) {
+            Rectangle()
+              .fill(Color.black600)
+              .frame(height: 1)
+          }
           if viewStore.chatRoomList.isEmpty {
             VStack(spacing: .spacingS) {
               Image("bxInfoArrow")
