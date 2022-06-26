@@ -165,10 +165,9 @@ struct MainMapView: View {
           Button {
             viewStore.send(.currentLocationButtonTapped)
           } label: {
-            Image("locationPolygon")
+            Image("nearme")
+              .resizable()
               .frame(width: 48, height: 48)
-              .background(Color.black800)
-              .cornerRadius(24)
           }
         }
         .padding(.horizontal, .spacingXL)
