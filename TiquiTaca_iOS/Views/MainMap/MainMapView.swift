@@ -194,10 +194,14 @@ struct MainMapView: View {
       dismiss: .dismissAlertButtonTapped
     )
     .onAppear {
-      viewStore.send(.onAppear)
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+        viewStore.send(.onAppear)
+      }
     }
     .onLoad {
-      viewStore.send(.onLoad)
+      DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+        viewStore.send(.onLoad)
+      }
     }
     .navigationTitle("지도")
     .fullScreenCover(

@@ -144,8 +144,8 @@ private let mainMapCore = Reducer<
   case .onLoad:
     state.isFirstLoad = true
     return .init(value: .currentLocationButtonTapped)
-    
   case .currentLocationButtonTapped:
+    // 첫 위치 권한 설정, onLoad, 현위치 버튼
     guard environment.locationManager.locationServicesEnabled() else {
       return .init(value: .showLocationAlert)
     }
@@ -158,9 +158,21 @@ private let mainMapCore = Reducer<
         .requestWhenInUseAuthorization()
         .fireAndForget()
     case .authorizedAlways, .authorizedWhenInUse:
-      state.isRequestingCurrentLocation = true
+      guard let location = environment.locationManager.location() else { return .none }
+      // 내 위치로 이동
+      state.region = MKCoordinateRegion(
+        center: location.coordinate,
+        span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+      )
+      
+      // 첫 위치 권한 설정 및 onLoad 때문에 존재
+      state.chatRoomListState.currentLocation = location.rawValue
+      state.popularChatRoomListState.currentLocation = location.rawValue
+      state.chatRoomDetailState.currentLocation = location.rawValue
+      
       return .merge([
         .init(value: .setUserTrackingMode(.follow)),
+        .init(value: .popularChatRoomListAction(.requestChatRoomList)),
         environment.locationManager
           .requestLocation()
           .fireAndForget()
@@ -284,30 +296,18 @@ private let mainMapCore = Reducer<
     // MARK: - LocationManager
   case let .locationManager(.didUpdateLocations(locations)):
     guard let location = locations.first else { return .none }
-    if state.isRequestingCurrentLocation {
-      state.isRequestingCurrentLocation = false
-      state.region = MKCoordinateRegion(
-        center: location.coordinate,
-        span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
-      )
-    }
+    
     state.chatRoomListState.currentLocation = location.rawValue
     state.popularChatRoomListState.currentLocation = location.rawValue
     state.chatRoomDetailState.currentLocation = location.rawValue
     
-    if state.isFirstLoad {
-      state.isFirstLoad = false
-      return .merge([
-        .init(value: .popularChatRoomListAction(.requestChatRoomList)),
-        .init(value: .chatRoomDetailAction(.checkCurrentLocationWithinRadius))
-      ])
-    }
     return .init(value: .chatRoomDetailAction(.checkCurrentLocationWithinRadius))
-    
+  case .locationManager(.didChangeAuthorization(.authorizedAlways)),
+      .locationManager(.didChangeAuthorization(.authorizedWhenInUse)):
+    return .init(value: .currentLocationButtonTapped)
   case .locationManager(.didChangeAuthorization(.denied)),
       .locationManager(.didChangeAuthorization(.restricted)):
     return .init(value: .showLocationAlert)
-    
   case .locationManager:
     return .none
   }
