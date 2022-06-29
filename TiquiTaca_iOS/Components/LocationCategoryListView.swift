@@ -13,7 +13,7 @@ struct LocationCategoryListView: View {
   
   var body: some View {
     ScrollView(.horizontal, showsIndicators: false) {
-      HStack(spacing: .spacingXS) {
+      LazyHStack(spacing: .spacingXS) {
         ForEach(LocationCategory.allCases) { category in
           Button {
             selectedCategory = category
@@ -33,7 +33,6 @@ struct LocationCategoryListView: View {
         }
       }
       .padding(.horizontal, .spacingXL)
-      .frame(height: 33)
     }
   }
 }

@@ -29,6 +29,11 @@ struct ChatRoomListItem: View {
     }
     .padding(.vertical, .spacingM)
     .padding(.horizontal, .spacingXL)
+    .overlay(alignment: .bottom) {
+      Rectangle()
+        .fill(Color.black600)
+        .frame(height: 1)
+    }
   }
 }
 

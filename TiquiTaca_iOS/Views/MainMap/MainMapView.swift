@@ -79,7 +79,8 @@ struct MainMapView: View {
           get: \.region,
           send: Action.setRegion
         ),
-        informationVisibility: .default.union(.userLocation),
+        informationVisibility: .userLocation,
+        interactionModes: [.pan, .zoom, .rotate],
         userTrackingMode: viewStore.binding(
           get: \.userTrackingMode,
           send: Action.setUserTrackingMode
@@ -110,18 +111,20 @@ struct MainMapView: View {
           }
         }
       )
-      .offset(y: viewStore.bottomSheetPosition != .hidden ? -100 : 0)
+      .offset(y: viewStore.bottomSheetPosition != .hidden ? -120 : 0)
       .animation(.default, value: viewStore.bottomSheetPosition != .hidden)
       .preferredColorScheme(.light)
       .edgesIgnoringSafeArea([.all])
       
-      VStack(spacing: .spacingM) {
+      VStack(spacing: .spacingXXS) {
         LocationCategoryListView(
           selectedCategory: viewStore.binding(
             get: \.chatRoomListState.listCategoryType,
             send: MainMapAction.categoryTapped
           )
         )
+        .frame(height: 60)
+        
         if showSpreadButton {
           Button {
             viewStore.send(.setBottomSheetPosition(.middle))
@@ -163,10 +166,9 @@ struct MainMapView: View {
           Button {
             viewStore.send(.currentLocationButtonTapped)
           } label: {
-            Image("locationPolygon")
+            Image("nearme")
+              .resizable()
               .frame(width: 48, height: 48)
-              .background(Color.black800)
-              .cornerRadius(24)
           }
         }
         .padding(.horizontal, .spacingXL)
