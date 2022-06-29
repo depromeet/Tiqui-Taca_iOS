@@ -11,14 +11,14 @@ import ComposableArchitecture
 import ComposableCoreLocation
 
 struct MainMapState: Equatable {
-  static let seoulInKoreaLocation: CLLocationCoordinate2D = .init(latitude: 37.541, longitude: 126.986)
+  static let koreaLocation: CLLocationCoordinate2D = .init(latitude: 37.541, longitude: 126.986)
   
   typealias MapUserTrackingModeType = MapUserTrackingMode // Map 네이밍 중복 문제
   
   var bottomSheetPosition: TTBottomSheet.Position = .hidden
   var bottomSheetType: MainMapBottomSheetType = .popularChatRoomList
   var chatRoomAnnotationInfos: [RoomFromCategoryResponse] = []
-  var region: MKCoordinateRegion = .init(center: seoulInKoreaLocation, span: .init(latitudeDelta: 0.05, longitudeDelta: 0.05))
+  var region: MKCoordinateRegion = .init(center: koreaLocation, span: .init(latitudeDelta: 0.05, longitudeDelta: 0.05))
   var alert: AlertState<MainMapAction>?
   var isRequestingCurrentLocation: Bool = false
   var selectedAnnotationOverlay: [MKCircle] = []
@@ -181,9 +181,25 @@ private let mainMapCore = Reducer<
       return .none
     }
     
+    /*
+     - chatRoomDetail: hidden, quarter
+     - chatRoomList: hidden, middle, top
+     - popularChatRoomList: hidden, middle
+     */
   case let .setBottomSheetPosition(position):
-    if state.bottomSheetType != .chatRoomList && position == .top {
-      return .none
+    switch state.bottomSheetType {
+    case .chatRoomDetail:
+      if position == .middle || position == .top {
+        return .none
+      }
+    case .chatRoomList:
+      if position == .quarter {
+        return .none
+      }
+    case .popularChatRoomList:
+      if position == .quarter || position == .top {
+        return .none
+      }
     }
     state.bottomSheetPosition = position
     return .none
@@ -206,7 +222,7 @@ private let mainMapCore = Reducer<
       .init(value: .chatRoomDetailAction(.checkCurrentLocationWithinRadius)),
       .init(value: .setRegion(focusRegion)),
       .init(value: .setBottomSheetType(.chatRoomDetail)),
-      .init(value: .setBottomSheetPosition(.middle))
+      .init(value: .setBottomSheetPosition(.quarter))
     ])
     
   case let .setRegion(region):
