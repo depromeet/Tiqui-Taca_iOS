@@ -242,7 +242,7 @@ private let mainMapCore = Reducer<
   case let .categoryTapped(category):
     if category == .all {
       return .merge([
-        .init(value: .popularChatRoomButtonTapped),
+        .init(value: .setBottomSheetPosition(.hidden)),
         .init(value: .popularChatRoomListAction(.requestChatRoomList)),
         .init(value: .chatRoomListAction(.setListCategoryType(category)))
       ])
