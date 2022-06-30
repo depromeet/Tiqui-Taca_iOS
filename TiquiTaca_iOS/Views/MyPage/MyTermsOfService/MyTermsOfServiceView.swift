@@ -14,6 +14,9 @@ struct MyTermsOfServiceView: View {
 
   let termsOfServiceUrl = "https://easy-carpenter-187.notion.site/3373d58a140d4c2580a434d2146d175b"
   let privacyPolicyUrl = "https://easy-carpenter-187.notion.site/6775def4caab4230a0d9b71a352b95c3"
+  let locationPolicyUrl = "https://easy-carpenter-187.notion.site/126cd4ea8de0432aa280b396dd777b0f"
+  let marketingPolicyUrl = "https://easy-carpenter-187.notion.site/3f944748254e4d5e8cb8cff4c8170c4e"
+  
   @State var termItem: TermsItem?
   
   var body: some View {
@@ -51,6 +54,18 @@ struct MyTermsOfServiceView: View {
         termItem = TermsItem(url: privacyPolicyUrl)
       } label: {
         MyTermsRow(title: "개인정보 처리방침")
+      }
+      
+      Button {
+        termItem = TermsItem(url: locationPolicyUrl)
+      } label: {
+        MyTermsRow(title: "위치정보 수집 및 이용약관")
+      }
+      
+      Button {
+        termItem = TermsItem(url: marketingPolicyUrl)
+      } label: {
+        MyTermsRow(title: "마케팅 정보 활용 약관")
       }
       
       Spacer()
