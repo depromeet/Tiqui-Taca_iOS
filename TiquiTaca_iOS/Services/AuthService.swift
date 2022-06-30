@@ -6,6 +6,7 @@
 //
 
 import TTNetworkModule
+import Foundation
 import Combine
 
 protocol AuthServiceType {
@@ -24,7 +25,15 @@ protocol AuthServiceType {
 final class AuthService: AuthServiceType {
   private let network: Network<AuthAPI>
   
+  private static let installFlagKey: String = "hasRunBefore"
+  
   var isLoggedIn: Bool {
+    guard UserDefaults.standard.bool(forKey: Self.installFlagKey) else {
+      TokenManager.shared.resetKeychain()
+      UserDefaults.standard.setValue(true, forKey: Self.installFlagKey)
+      return false
+    }
+    
     guard let refreshToken = TokenManager.shared.loadRefreshToken(),
           let expiration = refreshToken.expiration
     else {
