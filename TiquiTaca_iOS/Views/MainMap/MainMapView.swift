@@ -115,6 +115,12 @@ struct MainMapView: View {
       .animation(.default, value: viewStore.bottomSheetPosition != .hidden)
       .preferredColorScheme(.light)
       .edgesIgnoringSafeArea([.all])
+      .highPriorityGesture(
+        TapGesture()
+          .onEnded { _ in
+            viewStore.send(.setBottomSheetPosition(.hidden))
+          }
+      )
       
       VStack(spacing: .spacingXXS) {
         LocationCategoryListView(
