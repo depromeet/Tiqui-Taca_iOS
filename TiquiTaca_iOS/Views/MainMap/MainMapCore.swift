@@ -242,14 +242,16 @@ private let mainMapCore = Reducer<
     
   case .popularChatRoomButtonTapped:
     return .merge([
+      .init(value: .chatRoomListAction(.setListCategoryType(.all))),
       .init(value: .setBottomSheetType(.popularChatRoomList)),
       .init(value: .setBottomSheetPosition(.middle))
     ])
     
   case let .categoryTapped(category):
+    state.selectedAnnotationOverlay = []
     if category == .all {
       return .merge([
-        .init(value: .popularChatRoomButtonTapped),
+        .init(value: .setBottomSheetPosition(.hidden)),
         .init(value: .popularChatRoomListAction(.requestChatRoomList)),
         .init(value: .chatRoomListAction(.setListCategoryType(category)))
       ])
