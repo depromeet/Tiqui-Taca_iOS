@@ -36,6 +36,7 @@ struct MainMapView: View {
     let chatRoomDetailState: ChatRoomDetailState
     let selectedAnnotationOverlay: [MKCircle]
     let userTrackingMode: State.MapUserTrackingModeType
+    let showLocationPopup: Bool
     
     init(state: State) {
       isShowPopup = state.isShowPopup
@@ -50,6 +51,7 @@ struct MainMapView: View {
       selectedAnnotationOverlay = state.selectedAnnotationOverlay
       userTrackingMode = state.userTrackingMode
       chatRoomDetailState = state.chatRoomDetailState
+      showLocationPopup = state.showLocationPopup
     }
   }
   
@@ -196,14 +198,10 @@ struct MainMapView: View {
       dismiss: .dismissAlertButtonTapped
     )
     .onAppear {
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-        viewStore.send(.onAppear)
-      }
+      viewStore.send(.onAppear)
     }
     .onLoad {
-      DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-        viewStore.send(.onLoad)
-      }
+      viewStore.send(.onLoad)
     }
     .navigationTitle("지도")
     .fullScreenCover(
@@ -224,6 +222,32 @@ struct MainMapView: View {
         roomUserCount: viewStore.chatRoomDetailState.chatRoom.userCount
       )
       .background(BackgroundTransparentView())
+    }
+    .sheet(
+      isPresented: viewStore.binding(
+        get: \.showLocationPopup,
+        send: Action.setLocationPopup
+      )
+    ) {
+      VStack {
+        Image("locagionOnboarding")
+          .resizable()
+          .frame(maxWidth: .infinity)
+          .aspectRatio(contentMode: .fit)
+        Button {
+          viewStore.send(.setLocationPopup(false))
+          viewStore.send(.currentLocationButtonTapped)
+        } label : {
+          Text("다음")
+        }
+        .buttonStyle(TTButtonRegularBlackStyle())
+        .padding(.horizontal, 24)
+        .padding(.top, 16)
+      }
+      .vCenter()
+      .hCenter()
+      .background(Color.black600)
+      .interactiveDismissDisabled()
     }
   }
 }

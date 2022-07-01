@@ -38,6 +38,7 @@ enum MyInfoAction: Equatable {
   case withDrawalAction
   case presentPopup
   case dismissPopup
+  case moveToSetting
   case movingAction(MyInfoDismissType)
 }
 
@@ -75,6 +76,12 @@ let myInfoReducer = Reducer<
     state.dismissType = .withdrawal
     return Effect(value: .dismissPopup)
   case let .movingAction(dismissType):
+    return .none
+  case .moveToSetting:
+    guard let openSettingsURL = URL(string: UIApplication.openSettingsURLString) else {
+      return .none
+    }
+    UIApplication.shared.open(openSettingsURL, options: [:], completionHandler: nil)
     return .none
   }
 }

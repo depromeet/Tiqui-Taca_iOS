@@ -47,11 +47,11 @@
 		<true/>
 	</dict>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>회원님의 위치 정보는 채팅방내에 '채팅시'에만 사람들에게 공유됩니다. 언제든지 공유를 중지할 수 있습니다</string>
+	<string>회원님의 위치정보가 지도에 표시됩니다. 위치 정보는 근처 채팅방 정보를 불러올때 그리고 채팅시 장소 반경 내부에 있는지 표기할 때 활용됩니다. 다른사람들에게 해당 반경 내부에 있는지에 대한 정보가 노출 될 수 있습니다. 언제든지 해당 위치 정보 공유를 중지할 수 있습니다.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>회원님의 위치 정보는 채팅방내에 '채팅시'에만 사람들에게 공유됩니다. 언제든지 공유를 중지할 수 있습니다</string>
+	<string>회원님의 위치정보가 지도에 표시됩니다. 위치 정보는 근처 채팅방 정보를 불러올때 그리고 채팅시 장소 반경 내부에 있는지 표기할 때 활용됩니다. 다른사람들에게 해당 반경 내부에 있는지에 대한 정보가 노출 될 수 있습니다. 언제든지 해당 위치 정보 공유를 중지할 수 있습니다.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>회원님의 위치 정보는 채팅방내에 '채팅시'에만 사람들에게 공유됩니다. 언제든지 공유를 중지할 수 있습니다</string>
+	<string>회원님의 위치정보가 지도에 표시됩니다. 위치 정보는 근처 채팅방 정보를 불러올때 그리고 채팅시 장소 반경 내부에 있는지 표기할 때 활용됩니다. 다른사람들에게 해당 반경 내부에 있는지에 대한 정보가 노출 될 수 있습니다. 언제든지 해당 위치 정보 공유를 중지할 수 있습니다.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Pretendard-Bold.otf</string>
