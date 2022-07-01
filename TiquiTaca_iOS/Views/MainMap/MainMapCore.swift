@@ -241,6 +241,7 @@ private let mainMapCore = Reducer<
     ])
     
   case let .categoryTapped(category):
+    state.selectedAnnotationOverlay = []
     if category == .all {
       return .merge([
         .init(value: .setBottomSheetPosition(.hidden)),
