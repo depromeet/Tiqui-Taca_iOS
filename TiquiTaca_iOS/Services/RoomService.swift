@@ -9,32 +9,63 @@ import TTNetworkModule
 import Combine
 
 protocol RoomServiceType {
-	func getPopularRoomList() -> AnyPublisher<[RoomInfoEntity.Response]?, HTTPError>
-	func getLikeRoomList() -> AnyPublisher<[RoomInfoEntity.Response]?, HTTPError>
-	func getEnteredRoom() -> AnyPublisher<RoomInfoEntity.Response?, HTTPError>
-	func registLikeRoom(roomId: String) -> AnyPublisher<RoomLikeEntity.Response?, HTTPError>
+  func getRoomList(_ request: RoomFromCategoryRequest) -> AnyPublisher<[RoomFromCategoryResponse]?, HTTPError>
+  func getPopularRoomList() -> AnyPublisher<[RoomInfoEntity.Response]?, HTTPError>
+  func getLikeRoomList() -> AnyPublisher<[RoomInfoEntity.Response]?, HTTPError>
+  func getEnteredRoom() -> AnyPublisher<RoomInfoEntity.Response?, HTTPError>
+  func registLikeRoom(roomId: String) -> AnyPublisher<RoomLikeEntity.Response?, HTTPError>
+  func getMyRoomInfo() -> AnyPublisher<RoomInfoEntity.Response?, HTTPError>
+  func exitRoom(roomId: String) -> AnyPublisher<DefaultResponse?, HTTPError>
+  func joinRoom(roomId: String) -> AnyPublisher<RoomInfoEntity.Response?, HTTPError>
+  func getRoomUserList(roomId: String) -> AnyPublisher<RoomUserInfoEntity.Response?, HTTPError>
+  func roomAlarm(roomId: String) -> AnyPublisher<RoomAlarmResponse?, HTTPError>
 }
 
 final class RoomService: RoomServiceType {
-	private let network: Network<RoomAPI>
-	
-	init() {
-		network = .init()
-	}
-	
-	func getPopularRoomList() -> AnyPublisher<[RoomInfoEntity.Response]?, HTTPError> {
-		network.request(.getPopularRoomList, responseType: [RoomInfoEntity.Response].self)
-	}
-	
-	func getLikeRoomList() -> AnyPublisher<[RoomInfoEntity.Response]?, HTTPError> {
-		network.request(.getLikeRoomList, responseType: [RoomInfoEntity.Response].self)
-	}
-	
-	func getEnteredRoom() -> AnyPublisher<RoomInfoEntity.Response?, HTTPError> {
-		network.request(.getMyRoom, responseType: RoomInfoEntity.Response.self)
-	}
-	
-	func registLikeRoom(roomId: String) -> AnyPublisher<RoomLikeEntity.Response?, HTTPError> {
-		network.request(.likeRoom(roomId: roomId), responseType: RoomLikeEntity.Response.self)
-	}
+  private let network: Network<RoomAPI>
+  
+  init() {
+    network = .init()
+  }
+  
+  func getRoomList(_ request: RoomFromCategoryRequest) -> AnyPublisher<[RoomFromCategoryResponse]?, HTTPError> {
+    return network.request(.getRoomList(request), responseType: [RoomFromCategoryResponse].self)
+  }
+  
+  func getPopularRoomList() -> AnyPublisher<[RoomInfoEntity.Response]?, HTTPError> {
+    network.request(.getPopularRoomList, responseType: [RoomInfoEntity.Response].self)
+  }
+  
+  func getLikeRoomList() -> AnyPublisher<[RoomInfoEntity.Response]?, HTTPError> {
+    network.request(.getLikeRoomList, responseType: [RoomInfoEntity.Response].self)
+  }
+  
+  func getEnteredRoom() -> AnyPublisher<RoomInfoEntity.Response?, HTTPError> {
+    network.request(.getMyRoom, responseType: RoomInfoEntity.Response.self)
+  }
+  
+  func registLikeRoom(roomId: String) -> AnyPublisher<RoomLikeEntity.Response?, HTTPError> {
+    network.request(.likeRoom(roomId: roomId), responseType: RoomLikeEntity.Response.self)
+  }
+  
+  func getMyRoomInfo() -> AnyPublisher<RoomInfoEntity.Response?, HTTPError> {
+    network.request(.getMyRoom, responseType: RoomInfoEntity.Response.self)
+  }
+  
+  func exitRoom(roomId: String) -> AnyPublisher<DefaultResponse?, HTTPError> {
+    network.request(.exitRoom(roomId: roomId), responseType: DefaultResponse.self)
+  }
+  
+  func getRoomUserList(roomId: String) -> AnyPublisher<RoomUserInfoEntity.Response?, HTTPError> {
+    network.request(.getUserList(roomId: roomId), responseType: RoomUserInfoEntity.Response.self)
+  }
+  
+  func joinRoom(roomId: String) -> AnyPublisher<RoomInfoEntity.Response?, HTTPError> {
+    network.request(.joinRoom(roomId: roomId), responseType: RoomInfoEntity.Response.self)
+  }
+  func roomAlarm(roomId: String) -> AnyPublisher<RoomAlarmResponse?, HTTPError> {
+    network.request(.alarmRoom(roomId: roomId), responseType: RoomAlarmResponse.self)
+  }
 }
+
+struct DefaultResponse: Codable, Equatable {}

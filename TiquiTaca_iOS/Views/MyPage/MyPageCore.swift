@@ -7,51 +7,48 @@
 
 import ComposableArchitecture
 import TTNetworkModule
-import Foundation
+import IdentifiedCollections
 
 struct MyPageState: Equatable {
+  typealias Route = MyPageItemType
+  var route: Route?
   var myInfoViewState: MyInfoState = .init()
-  var nickname = "닉네임"
+  var changeProfileViewState: ChangeProfileState = .init()
+  var noticeViewState: NoticeState = .init()
+  var myPageItemStates: IdentifiedArrayOf<MyPageItemState> = [
+    .init(rowInfo: .init(itemType: .myInfoView)),
+    .init(rowInfo: .init(itemType: .alarmSet, toggleVisible: true)),
+    .init(rowInfo: .init(itemType: .blockHistoryView)),
+    .init(rowInfo: .init(itemType: .noticeView)),
+    .init(rowInfo: .init(itemType: .myTermsOfServiceView)),
+    .init(rowInfo: .init(itemType: .csCenterView)),
+    .init(rowInfo: .init(itemType: .versionInfo, description: Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String))
+  ]
+  
+  var nickname = ""
+  var phoneNumber = ""
   var profileImage: ProfileImage = .init()
   var level = 1
+  var lightningScore = 0
   var createdAt: String = ""
   var createDday = 0
   var isAppAlarmOn = false
-  var appVersion = Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? ""
-  var popupPresented = false
-  var sheetChoice: MyPageSheetChoice?
-}
-
-enum MyPageSheetChoice: Hashable, Identifiable {
-  case myInfoView
-  case blockHistoryView
-  case noticeView
-  case myTermsOfServiceView
-  case csCenterView
-  case none
-  
-  var id: MyPageSheetChoice { self }
-}
-
-struct MyPageItem {
-  let imageName: String
+  var toastPresented = false
 }
 
 enum MyPageAction: Equatable {
+  case setRoute(MyPageState.Route?)
   case myInfoView(MyInfoAction)
-  
+  case changeProfileView(ChangeProfileAction)
+  case noticeView(NoticeAction)
+  case mypageItemView(MyPageItemAction)
+  case mypageItem(id: UUID, action: MyPageItemAction)
   case getProfileInfo
-  case getProfileInfoResponse(Result<ProfileEntity.Response?, HTTPError>)
+  case getProfileInfoResponse(Result<UserEntity.Response?, HTTPError>)
   case getProfileRequestSuccess
-  
-  case alarmToggle
-  case getAlarmRequestResponse(Result<AppAlarmEntity.Response?, HTTPError>)
-  case getAlarmRequestSuccess
-  
-  case selectDetail
-  case selectSheet(MyPageSheetChoice)
-  case dismissDetail
   case logout
+  case withdrawal
+  case dismissToast
 }
 
 struct MyPageEnvironment {
@@ -64,12 +61,45 @@ let myPageReducer = Reducer<
   MyPageAction,
   MyPageEnvironment
 >.combine([
+  changeProfileReducer
+    .pullback(
+      state: \.changeProfileViewState,
+      action: /MyPageAction.changeProfileView,
+      environment: {
+        ChangeProfileEnvironment(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
+        )
+      }
+    ),
   myInfoReducer
     .pullback(
       state: \.myInfoViewState,
       action: /MyPageAction.myInfoView,
       environment: { _ in
         MyInfoEnvironment()
+      }
+    ),
+  myPageItemReducer
+    .forEach(
+      state: \.myPageItemStates,
+      action: /MyPageAction.mypageItem(id:action:),
+      environment: {
+        MyPageItemEnvironment(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
+        )
+      }
+    ),
+  noticeReducer
+    .pullback(
+      state: \.noticeViewState,
+      action: /MyPageAction.noticeView,
+      environment: {
+        NoticeEnvironment(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
+        )
       }
     ),
   myPageReducerCore
@@ -81,30 +111,32 @@ let myPageReducerCore = Reducer<
   MyPageEnvironment
 > { state, action, environment in
   switch action {
-  case let .myInfoView(myInfoAction):
-    switch myInfoAction {
-    case let .movingAction(dismissType):
-      if dismissType == .logout {
-        return Effect(value: .logout)
-      }
-      return .none
-    default:
-      return .none
-    }
   case .getProfileInfo:
     return environment.appService.userService
-      .getProfile()
+      .fetchMyProfile()
       .receive(on: environment.mainQueue)
       .catchToEffect()
       .map(MyPageAction.getProfileInfoResponse)
-    
   case let .getProfileInfoResponse(.success(response)):
-    state.profileImage.type = response?.profile.type ?? 0
-    state.nickname = response?.nickname ?? ""
-    state.isAppAlarmOn = response?.appAlarm ?? false
-    state.level = response?.level ?? 0
+    let myProfile = response //environment.appService.userService.myProfile
+    state.profileImage.type = myProfile?.profile.type ?? 0
+    state.nickname = myProfile?.nickname ?? ""
+    state.isAppAlarmOn = myProfile?.appAlarm ?? false
+    state.level = myProfile?.level ?? 0
+    state.lightningScore = myProfile?.lightningScore ?? 0
+    state.phoneNumber = myProfile?.phoneNumber ?? ""
+    state.changeProfileViewState = ChangeProfileState(nickname: state.nickname, changedNickname: state.nickname, profileImage: state.profileImage)
+    state.myPageItemStates.remove(at: 1)
+    state.myPageItemStates.insert(.init(rowInfo: .init(itemType: .alarmSet, toggleVisible: true), isAppAlarmOn: state.isAppAlarmOn), at: 1)
     
-    let createdDateString = response?.createdAt ?? ""
+    if var phoneNumber = myProfile?.phoneNumber, phoneNumber.count > 9 {
+      phoneNumber.insert("-", at: phoneNumber.index(phoneNumber.startIndex, offsetBy: 3))
+      phoneNumber.insert("-", at: phoneNumber.index(phoneNumber.endIndex, offsetBy: -4))
+      
+      state.phoneNumber = phoneNumber
+    }
+    
+    let createdDateString = myProfile?.createdAt ?? ""
     let iso8601Formatter = ISO8601DateFormatter()
     let createdDate = iso8601Formatter.date(from: createdDateString)
     
@@ -115,48 +147,69 @@ let myPageReducerCore = Reducer<
     state.createDday = Calendar(identifier: .gregorian)
       .dateComponents([.day], from: createdDate ?? Date(), to: Date()).day ?? 0
     
-    state.myInfoViewState = .init(nickname: state.nickname, phoneNumber: "", createdAt: state.createdAt)
+    state.myInfoViewState = .init(nickname: state.nickname, phoneNumber: state.phoneNumber, createdAt: state.createdAt)
     return Effect(value: .getProfileRequestSuccess)
-    
   case .getProfileInfoResponse(.failure):
     return .none
-    
   case .getProfileRequestSuccess:
     return .none
     
-  case .alarmToggle:
-    return environment.appService.userService
-      .getAppAlarmState()
-      .receive(on: environment.mainQueue)
-      .catchToEffect()
-      .map(MyPageAction.getAlarmRequestResponse)
-    
-  case let .getAlarmRequestResponse(.success(response)):
-    state.isAppAlarmOn = response?.appAlarm ?? false
-    return Effect(value: .getProfileRequestSuccess)
-    
-  case .getAlarmRequestResponse(.failure):
-    return .none
-    
-  case .getAlarmRequestSuccess:
-    return .none
-    
-  case .selectDetail:
-    return .none
-    
-  case let .selectSheet(presentedSheet):
-    state.sheetChoice = presentedSheet
-    state.popupPresented = true
-    return .none
-    
-  case .dismissDetail:
-    state.popupPresented = false
-//    if state.sheetChoice == .myInfoView {
-//      return Effect(value: .logout)
-//    }
-    return .none
   case .logout:
     return .none
-
+    
+  case let .setRoute(route):
+    if route == .alarmSet {
+      state.route = nil
+      return .none
+    } else if route == .versionInfo {
+      state.route = nil
+      return .none
+    } else {
+      state.route = route
+      return .none
+    }
+    
+  case let .changeProfileView(changeProfileAction):
+    switch changeProfileAction {
+    case .getMyProfileResponse:
+      state.toastPresented = true
+      return .none
+    default:
+      return .none
+    }
+    
+  case .mypageItemView:
+    return .none
+  case let .mypageItem(id: id, action: action):
+    switch action {
+    case let .mypageItemTapped(itemType):
+      return Effect(value: .setRoute(itemType))
+    default:
+      return .none
+    }
+  case let .myInfoView(myInfoAction):
+    switch myInfoAction {
+    case let .movingAction(dismissType):
+      if dismissType == .logout {
+        return Effect(value: .logout)
+      } else if dismissType == .withdrawal {
+        return Effect(value: .withdrawal)
+      }
+      return .none
+    default:
+      return .none
+    }
+  case .noticeView:
+    return .none
+    
+  case .withdrawal:
+    return environment.appService.userService
+      .deleteUser()
+      .receive(on: environment.mainQueue)
+      .catchToEffect()
+      .fireAndForget()
+  case .dismissToast:
+    state.toastPresented = false
+    return .none
   }
 }

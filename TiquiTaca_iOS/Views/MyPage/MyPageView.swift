@@ -10,164 +10,293 @@ import ComposableArchitecture
 import TTDesignSystemModule
 
 struct MyPageView: View {
-  let store: Store<MyPageState, MyPageAction>
-  @State var sheetState: MyPageSheetChoice?
+  typealias MyState = MyPageState
+  typealias Action = MyPageAction
+  
+  private let store: Store<MyState, Action>
+  @ObservedObject private var viewStore: ViewStore<ViewState, Action>
+  @State private var togglePressed = false
+  
+  struct ViewState: Equatable {
+    let route: MyState.Route?
+    let myInfoViewState: MyInfoState
+    let myPageItemStates: IdentifiedArrayOf<MyPageItemState>
+    let noticeViewState: NoticeState
+    let nickname: String
+    let phoneNumber: String
+    let profileImage: ProfileImage
+    let level: Int
+    let lightningScore: Int
+    let createdAt: String
+    let createDday: Int
+    let isAppAlarmOn: Bool
+    let toastPresented: Bool
+    
+    init(state: MyState) {
+      route = state.route
+      myInfoViewState = state.myInfoViewState
+      myPageItemStates = state.myPageItemStates
+      noticeViewState = state.noticeViewState
+      nickname = state.nickname
+      phoneNumber = state.phoneNumber
+      profileImage = state.profileImage
+      level = state.level
+      lightningScore = state.lightningScore
+      createdAt = state.createdAt
+      createDday = state.createDday
+      isAppAlarmOn = state.isAppAlarmOn
+      toastPresented = state.toastPresented
+    }
+  }
+  
+  init(store: Store<MyState, Action>) {
+    self.store = store
+    viewStore = ViewStore.init(store.scope(state: ViewState.init))
+  }
   
   var body: some View {
-    WithViewStore(self.store) { viewStore in
-      NavigationView {
-        VStack {
-          VStack {
-            Text("마이페이지")
-              .font(.heading1)
-              .frame(maxWidth: .infinity, alignment: .leading)
-            
-            Image(viewStore.profileImage.imageName)
-              .overlay(
-                NavigationLink(
-                  destination: {
-                    ChangeProfileView(store: .init(
-                      initialState: ChangeProfileState(
-                        nickname: viewStore.nickname,
-                        profileImage: viewStore.profileImage
-                      ),
-                      reducer: changeProfileReducer,
-                      environment: ChangeProfileEnvironment(
-                        appService: AppService(),
-                        mainQueue: .main
-                      ))
-                    )
-                  }
-                ) {
-                  Image("edit")
-                }
-                  .alignmentGuide(.bottom) { $0[.bottom] }
-                  .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottomTrailing)
+    VStack(spacing: 0) {
+      VStack(spacing: 0) {
+        Text("마이페이지")
+          .font(.heading1)
+          .frame(maxWidth: .infinity, alignment: .leading)
+          .padding(.bottom, .spacingM)
+          .padding(.top, .spacingXS)
+        
+        ZStack(alignment: .bottomTrailing) {
+          Image(viewStore.profileImage.imageName)
+          NavigationLink(
+            destination: {
+              ChangeProfileView(
+                store: store.scope(
+                  state: \.changeProfileViewState,
+                  action: MyPageAction.changeProfileView
+                )
               )
-            Text(viewStore.nickname)
-              .font(.heading2)
-            
-            Text("최초가입일 \(viewStore.createdAt) / 티키타카와 +\(String(viewStore.createDday))일 째")
-              .font(.body7)
-              .foregroundColor(.white900)
-            
-            Button {
-              
-            } label: {
-              Image("rating\(viewStore.level)")
+            }, label: {
+              Image("edit")
             }
-          }
-          .padding(.spacingXL)
-          .foregroundColor(.white)
-          .background(Color.black800)
-          
-          
-          List {
-            Button {
-              viewStore.send(.selectSheet(.myInfoView))
-            } label: {
-              MypageRow(imageName: "myInfo", title: "내 정보")
-            }
-            MypageRow(imageName: "alarm", title: "알림설정", toggleVisible: true, togglePressed: viewStore.isAppAlarmOn)
-            Button {
-              viewStore.send(.selectSheet(.blockHistoryView))
-            } label: {
-              MypageRow(imageName: "block", title: "차단 이력")
-            }
-            Button {
-              viewStore.send(.selectSheet(.noticeView))
-            } label: {
-              MypageRow(imageName: "info", title: "공지사항")
-            }
-            Button {
-              viewStore.send(.selectSheet(.myTermsOfServiceView))
-            } label: {
-              MypageRow(imageName: "terms", title: "이용약관")
-            }
-            Button {
-              viewStore.send(.selectSheet(.csCenterView))
-            } label: {
-              MypageRow(imageName: "center", title: "고객센터")
-            }
-            MypageRow(imageName: "version", title: "버전 정보", version: viewStore.appVersion)
-              .fullScreenCover(
-                isPresented: viewStore.binding(
-                  get: \.popupPresented,
-                  send: MyPageAction.dismissDetail
-                ),
-                content: {
-                  switch viewStore.sheetChoice {
-                  case .myInfoView:
-                    MyInfoView(store: store.scope(
-                      state: \.myInfoViewState,
-                      action: MyPageAction.myInfoView
-                    ))
-                  case .blockHistoryView:
-                    MyBlockHistoryView(store: .init(
-                      initialState: MyBlockHistoryState(),
-                      reducer: myBlockHistoryReducer,
-                      environment: MyBlockHistoryEnvironment(
-                        appService: .init(),
-                        mainQueue: .main
-                      ))
-                    )
-                  case .noticeView:
-                    NoticeView(store: .init(
-                      initialState: NoticeState(),
-                      reducer: noticeReducer,
-                      environment: NoticeEnvironment()))
-                    
-                  case .myTermsOfServiceView:
-                    MyTermsOfServiceView(store: .init(
-                      initialState: MyTermsOfServiceState(),
-                      reducer: myTermsOfServiceReducer,
-                      environment: MyTermsOfServiceEnvironment()))
-                    
-                  case .csCenterView:
-                    CsCenterView()
-                  default:
-                    CsCenterView()
-                  }
-                })
-          }
-          .listStyle(.plain)
+          )
         }
-        .onAppear(
-          perform: {
-            viewStore.send(.getProfileInfo)
-          })
-        .navigationBarTitle("", displayMode: .inline)
-        .navigationBarHidden(true)
+        .padding(.bottom, .spacingM)
+        
+        Text(viewStore.nickname)
+          .font(.heading2)
+          .padding(.bottom, .spacingXS)
+        
+        Text("최초가입일 \(viewStore.createdAt) / 티키타카와 +\(String(viewStore.createDday))일 째")
+          .font(.body7)
+          .foregroundColor(.white900)
+          .padding(.bottom, 9)
+        
+        Button {
+          viewStore.send(.setRoute(.levelInfo))
+          UIView.setAnimationsEnabled(false)
+        } label: {
+          Image("rating\(viewStore.level)")
+        }
       }
+      .padding(.spacingL)
+      .foregroundColor(.white)
+      .background(Color.black800)
+      
+      Rectangle().fill(Color.white)
+        .frame(height: 12)
+      
+      ForEachStore(
+        store.scope(
+          state: \.myPageItemStates,
+          action: Action.mypageItem(id: action:)
+        ), content: { store in
+          MypageItem.init(store: store)
+        }
+      )
+      
+      Spacer()
+    }
+    .fullScreenCover(
+      item: viewStore.binding(
+        get: \.route,
+        send: MyPageAction.setRoute
+      )
+    ) { route in
+      switch route {
+      case .myInfoView:
+        MyInfoView(store: store.scope(
+          state: \.myInfoViewState,
+          action: MyPageAction.myInfoView
+        ))
+      case .blockHistoryView:
+        MyBlockHistoryView(store: .init(
+          initialState: MyBlockHistoryState(),
+          reducer: myBlockHistoryReducer,
+          environment: MyBlockHistoryEnvironment(
+            appService: .init(),
+            mainQueue: .main
+          ))
+        )
+      case .noticeView:
+        NoticeView(store: store.scope(
+          state: \.noticeViewState,
+          action: MyPageAction.noticeView
+        ))
+      case .myTermsOfServiceView:
+        MyTermsOfServiceView()
+      case .csCenterView:
+        CsCenterView()
+        
+      case .levelInfo:
+        AlertView(lightningScore: viewStore.lightningScore)
+        .background(BackgroundTransparentView())
+      default:
+        EmptyView()
+      }
+    }
+    .popup(
+      isPresented: viewStore.binding(
+        get: \.toastPresented,
+        send: MyPageAction.dismissToast
+      ),
+      type: .floater(
+        verticalPadding: 16,
+        useSafeAreaInset: true
+      ),
+      position: .top,
+      animation: .easeIn,
+      autohideIn: 2
+    ) {
+      TTToastView(
+        title: "프로필을 수정했어요!",
+        type: .success
+      )
+    }
+    .navigationTitle("마이페이지")
+    .background(Color.white)
+    .onAppear {
+      viewStore.send(.getProfileInfo)
     }
   }
 }
 
-struct MypageRow: View {
-  var imageName: String
-  var title: String
-  var version: String = ""
-  var toggleVisible: Bool = false
-  @State var togglePressed = false
+private struct AlertView: View {
+  @Environment(\.presentationMode) var presentationMode
+  @State var lightningScore: Int
   
   var body: some View {
-    HStack {
-      Image(imageName)
-      
-      Text(title)
-        .font(.subtitle3)
-        .foregroundColor(.black900)
-      
-      Toggle("", isOn: $togglePressed)
-        .toggleStyle(SwitchToggleStyle(tint: .blue900))
-        .opacity(toggleVisible ? 1 : 0)
-      
-      Text("v. \(version)")
-        .font(.subtitle3)
-        .foregroundColor(.blue900)
-        .opacity(version.isEmpty ? 0 : 1)
-        .frame(width: version.isEmpty ? 0 : 80)
+    ZStack {
+      VStack {
+        HStack {
+          VStack(spacing: 28) {
+            VStack(alignment: .center, spacing: .spacingXS) {
+              Text("회원 등급 안내")
+                .font(.heading1)
+                .foregroundColor(.white)
+              
+              Text("적극적인 대화와 소통을 통해 아이템을 받을 수 있어요!\n계속 모으다보면 혜택이 있을지도...?")
+                .multilineTextAlignment(.center)
+                .lineSpacing(12 * 0.32)
+                .font(.body7)
+                .foregroundColor(.white700)
+                .frame(height: 34)
+
+              Image("LinerRectangle")
+                .overlay {
+                  VStack {
+                    Text("내가 받은 번개 갯수")
+                      .font(.body7)
+                      .foregroundColor(.white700)
+                    HStack {
+                      Image("lightning")
+                        .resizable()
+                        .frame(width: 24, height: 24)
+                      Text("\(lightningScore)")
+                        .font(.body4)
+                        .foregroundColor(.green500)
+                    }
+                  }
+                }
+              
+              VStack(spacing: 8) {
+                HStack {
+                  Image("ratingLv1")
+                  VStack(alignment: .leading) {
+                    Text("미니 부부젤라")
+                      .font(.subtitle2)
+                      .foregroundColor(.white)
+                      .padding(.bottom, 4)
+                    Text("누적 5개 이상의 번개")
+                      .font(.body7)
+                      .foregroundColor(.white700)
+                  }
+                  Spacer()
+                  Text("Lv.1")
+                    .font(.body4)
+                    .foregroundColor(.green500)
+                }
+                .frame(height: 56)
+                
+                HStack {
+                  Image("ratingLv2")
+                  VStack(alignment: .leading) {
+                    Text("근본 확성기")
+                      .font(.subtitle2)
+                      .foregroundColor(.white)
+                      .padding(.bottom, 4)
+                    Text("누적 25개 이상의 번개")
+                      .font(.body7)
+                      .foregroundColor(.white700)
+                  }
+                  Spacer()
+                  Text("Lv.2")
+                    .font(.body4)
+                    .foregroundColor(.green500)
+                }
+                .frame(height: 56)
+                
+                HStack {
+                  Image("ratingLv3")
+                  VStack(alignment: .leading) {
+                    Text("메가 스피커")
+                      .font(.subtitle2)
+                      .foregroundColor(.white)
+                      .padding(.bottom, 4)
+                    Text("누적 100개 이상의 번개")
+                      .font(.body7)
+                      .foregroundColor(.white700)
+                  }
+                  Spacer()
+                  Text("Lv.3")
+                    .font(.body4)
+                    .foregroundColor(.green500)
+                }
+                .frame(height: 56)
+              }
+            }
+            .padding(EdgeInsets(top: 48, leading: 24, bottom: 0, trailing: 24))
+            
+            Button {
+              presentationMode.wrappedValue.dismiss()
+              DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+                UIView.setAnimationsEnabled(true)
+              }
+            } label: {
+              Text("닫기")
+                .font(.subtitle1)
+                .padding(17)
+                .frame(maxWidth: .infinity)
+                .background(Color.white100)
+                .cornerRadius(8)
+            }
+            .foregroundColor(.black700)
+            .frame(maxWidth: .infinity)
+            .padding([.leading, .trailing, .bottom], 32)
+          }
+        }
+        .frame(maxWidth: .infinity, minHeight: 500)
+        .background(RoundedRectangle(cornerRadius: 32).fill(Color.black800.opacity(1)))
+      }
     }
+    .padding(EdgeInsets(top: 0, leading: 24, bottom: 0, trailing: 24))
   }
 }
 
@@ -183,5 +312,6 @@ struct MyPageView_Previews: PreviewProvider {
         )
       )
     )
+    .previewInterfaceOrientation(.portrait)
   }
 }

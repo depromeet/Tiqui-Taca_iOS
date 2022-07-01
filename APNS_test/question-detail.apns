@@ -1,0 +1,11 @@
+{
+    "Simulator Target Bundle" : "com.tiquitaca.TiquiTaca-iOS",
+    "aps" : {
+        "alert" : {
+            "body" : "테스트 메시지 입니다.",
+            "title" : "질문상세 딥링크 테스트",
+        },
+        "badge" : 1,
+    },
+    "deepLink" : "tiquitaca-app://navigation/question-detail?question_id=62af3b53415e41663861c5d5&chat-room_id=626d0c3f3cb6e9dce6cb9ad6"
+}

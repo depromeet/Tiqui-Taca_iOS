@@ -6,6 +6,8 @@
 //
 
 import ComposableArchitecture
+import ComposableCoreLocation
+import TTNetworkModule
 
 struct AppState: Equatable {
   enum Route {
@@ -13,9 +15,16 @@ struct AppState: Equatable {
     case onboarding
     case mainTab
   }
+  enum FromMyPage {
+    case logout
+    case withdrawal
+  }
   var route: Route = .splash
   var onboardingState: OnboardingState?
   var mainTabState: MainTabState?
+  var isLoading: Bool = false
+  var toastPresented: Bool = false
+  var fromMyPageType: FromMyPage?
 }
 
 enum AppAction: Equatable {
@@ -25,11 +34,16 @@ enum AppAction: Equatable {
   case signOut
   case onboardingAction(OnboardingAction)
   case mainTabAction(MainTabAction)
+  case setLoading(Bool)
+  case getMyProfileResponse(Result<UserEntity.Response?, HTTPError>)
+  case dismissToast
 }
 
 struct AppEnvironment {
   let appService: AppService
   let mainQueue: AnySchedulerOf<DispatchQueue>
+  var locationManager: LocationManager
+  let deeplinkManager: DeeplinkManager
 }
 
 let appReducer = Reducer<
@@ -57,7 +71,9 @@ let appReducer = Reducer<
       environment: {
         MainTabEnvironment(
           appService: $0.appService,
-          mainQueue: $0.mainQueue
+          mainQueue: $0.mainQueue,
+          locationManager: $0.locationManager,
+          deeplinkManager: $0.deeplinkManager
         )
       }
     ),
@@ -74,26 +90,60 @@ let appCore = Reducer<
     state.route = selectedRoute
     return .none
     
+  case let .setLoading(isLoading):
+    state.isLoading = isLoading
+    return .none
+    
   case .onAppear:
     if environment.appService.authService.isLoggedIn {
-      state.mainTabState = .init()
-      return Effect(value: .setRoute(.mainTab))
+      return environment.appService.userService
+        .fetchMyProfile()
+        .receive(on: environment.mainQueue)
+        .catchToEffect()
+        .map(AppAction.getMyProfileResponse)
     } else {
       state.onboardingState = .init()
       return Effect(value: .setRoute(.onboarding))
     }
     
-  case .signIn: // 로그인 (하위 reducer의 로그인 관련 이벤트)
+  case .getMyProfileResponse:
     environment.appService.authService.deleteTempToken()
     state.mainTabState = .init()
-    state.onboardingState = nil
     return Effect(value: .setRoute(.mainTab))
     
-  case .signOut: // 로그아웃 (하위 reducer의 로그아웃 관련 이벤트)
-    environment.appService.authService.signOut()
+  case .signIn:
+    environment.appService.authService.deleteTempToken()
+    state.onboardingState = nil
+    let request = FCMUpdateRequest(fcmToken: environment.appService.fcmToken)
+    
+    return .concatenate([
+      environment.appService.userService
+        .updateFCMToken(request)
+        .receive(on: environment.mainQueue)
+        .catchToEffect()
+        .fireAndForget(),
+      environment.appService.userService
+        .fetchMyProfile()
+        .receive(on: environment.mainQueue)
+        .catchToEffect()
+        .map(AppAction.getMyProfileResponse)
+    ])
+    
+  case .signOut:
+    environment.appService.userService.deleteMyProfile()
     state.mainTabState = nil
     state.onboardingState = .init()
-    return Effect(value: .setRoute(.onboarding))
+    
+    return .concatenate([
+      Effect(value: .setLoading(true)),
+      environment.appService.authService
+        .signOut()
+        .receive(on: environment.mainQueue)
+        .catchToEffect()
+        .fireAndForget(),
+      Effect(value: .setLoading(false)),
+      Effect(value: .setRoute(.onboarding))
+    ])
     
   case .onboardingAction( // 로그인
     .signInAction(
@@ -131,16 +181,28 @@ let appCore = Reducer<
   ):
     return Effect(value: .signIn)
     
-  case .mainTabAction(.mapFeature(.logout)):
+  case .mainTabAction(.myPageAction(.logout)):
+    state.toastPresented = true
+    state.fromMyPageType = .logout
     return Effect(value: .signOut)
     
-  case .mainTabAction(.myPageFeature(.logout)):
-    return Effect(value: .signOut)
+  case .mainTabAction(.myPageAction(.withdrawal)):
+    state.mainTabState = nil
+    state.onboardingState = .init()
+    
+    state.toastPresented = true
+    state.fromMyPageType = .withdrawal
+    
+    return Effect(value: .setRoute(.onboarding))
     
   case .onboardingAction:
     return .none
     
   case .mainTabAction:
+    return .none
+    
+  case .dismissToast:
+    state.toastPresented = false
     return .none
   }
 }

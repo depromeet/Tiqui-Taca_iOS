@@ -13,7 +13,6 @@ enum IssueCodeEntity {
   }
   
   struct Response: Codable, Equatable {
-    let verficiationCode: String // 인증코드 임시 확인을 위한 파라미터
     let expire: Int
   }
 }

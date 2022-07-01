@@ -9,13 +9,24 @@ import TTNetworkModule
 import Combine
 
 protocol UserServiceType {
-  func getProfile() -> AnyPublisher<ProfileEntity.Response?, HTTPError>
+  var myProfile: UserEntity.Response? { get set }
+  var blockUserList: [BlockUserEntity.Response]? { get set }
+  
+  func fetchMyProfile() -> AnyPublisher<UserEntity.Response?, HTTPError>
+  func deleteMyProfile()
+  func updateFCMToken(_ request: FCMUpdateRequest) -> AnyPublisher<Void, HTTPError>
+  func getOtherUserProfile(userId: String) -> AnyPublisher<UserEntity.Response?, HTTPError>
   func getAppAlarmState() -> AnyPublisher<AppAlarmEntity.Response?, HTTPError>
   func getBlockUserList() -> AnyPublisher<[BlockUserEntity.Response]?, HTTPError>
-  func unBlockUser(userId: String) -> AnyPublisher<BlockUserEntity.Response?, HTTPError>
+  func unBlockUser(userId: String) -> AnyPublisher<[BlockUserEntity.Response]?, HTTPError>
   func checkValidNickname(nickname: String) -> AnyPublisher<ValidNicknameEntity.Response?, HTTPError>
   func changeProfile(_ request: ChangeProfileEntity.Request) -> AnyPublisher<ChangeProfileEntity.Response?, HTTPError>
   func createUser(_ request: UserCreationEntity.Request) -> AnyPublisher<UserCreationEntity.Response?, HTTPError>
+  func reportUser(userId: String) -> AnyPublisher<ReportEntity.Response?, HTTPError>
+  func blockUser(userId: String) -> AnyPublisher<[BlockUserEntity.Response]?, HTTPError>
+  func sendLightning(userId: String) -> AnyPublisher<SendLightningResponse?, HTTPError>
+  func deleteUser() -> AnyPublisher<Void, HTTPError>
+  func getOfficialNoti() -> AnyPublisher<[OfficialNotiResponse]?, HTTPError>
 }
 
 final class UserService: UserServiceType {
@@ -25,8 +36,28 @@ final class UserService: UserServiceType {
     network = .init()
   }
   
-  func getProfile() -> AnyPublisher<ProfileEntity.Response?, HTTPError> {
-    return network.request(.getMyProfile, responseType: ProfileEntity.Response.self)
+  var myProfile: UserEntity.Response?
+  var blockUserList: [BlockUserEntity.Response]?
+  
+  func deleteMyProfile() {
+    myProfile = nil
+  }
+  
+  func fetchMyProfile() -> AnyPublisher<UserEntity.Response?, HTTPError> {
+    return network.request(.getMyProfile, responseType: UserEntity.Response.self)
+      .handleEvents(receiveOutput: { [weak self] response in
+        self?.myProfile = response
+      })
+      .eraseToAnyPublisher()
+  }
+  
+  func updateFCMToken(_ request: FCMUpdateRequest) -> AnyPublisher<Void, HTTPError> {
+    return network
+      .request(.fcmPatch(request))
+  }
+  
+  func getOtherUserProfile(userId: String) -> AnyPublisher<UserEntity.Response?, HTTPError> {
+    return network.request(.getUserProfile(userId: userId), responseType: UserEntity.Response.self)
   }
   
   func getAppAlarmState() -> AnyPublisher<AppAlarmEntity.Response?, HTTPError> {
@@ -35,10 +66,26 @@ final class UserService: UserServiceType {
   
   func getBlockUserList() -> AnyPublisher<[BlockUserEntity.Response]?, HTTPError> {
     return network.request(.getBlockUserList, responseType: [BlockUserEntity.Response].self)
+      .handleEvents(receiveOutput: { [weak self] response in
+        self?.blockUserList = response
+      })
+      .eraseToAnyPublisher()
   }
   
-  func unBlockUser(userId: String) -> AnyPublisher<BlockUserEntity.Response?, HTTPError> {
-    return network.request(.unblockUser(userId: userId), responseType: BlockUserEntity.Response.self)
+  func blockUser(userId: String) -> AnyPublisher<[BlockUserEntity.Response]?, HTTPError> {
+    return network.request(.blockUser(userId: userId), responseType: [BlockUserEntity.Response].self)
+      .handleEvents(receiveOutput: { [weak self] response in
+        self?.blockUserList = response
+      })
+      .eraseToAnyPublisher()
+  }
+  
+  func unBlockUser(userId: String) -> AnyPublisher<[BlockUserEntity.Response]?, HTTPError> {
+    return network.request(.unblockUser(userId: userId), responseType: [BlockUserEntity.Response].self)
+      .handleEvents(receiveOutput: { [weak self] response in
+        self?.blockUserList = response
+      })
+      .eraseToAnyPublisher()
   }
   
   func checkValidNickname(nickname: String) -> AnyPublisher<ValidNicknameEntity.Response?, HTTPError> {
@@ -52,5 +99,22 @@ final class UserService: UserServiceType {
   func createUser(_ request: UserCreationEntity.Request) -> AnyPublisher<UserCreationEntity.Response?, HTTPError> {
     return network
       .request(.userCreate(request), responseType: UserCreationEntity.Response.self)
+  }
+  
+  func reportUser(userId: String) -> AnyPublisher<ReportEntity.Response?, HTTPError> {
+    return network.request(.reportUser(userId: userId), responseType: ReportEntity.Response.self)
+  }
+  
+  func sendLightning(userId: String) -> AnyPublisher<SendLightningResponse?, HTTPError> {
+    return network.request(.sendLightning(userId: userId), responseType: SendLightningResponse.self)
+  }
+  
+  func deleteUser() -> AnyPublisher<Void, HTTPError> {
+    TokenManager.shared.deleteToken()
+    return network.request(.userDelete)
+  }
+  
+  func getOfficialNoti() -> AnyPublisher<[OfficialNotiResponse]?, HTTPError> {
+    return network.request(.getOfficialNoti, responseType: [OfficialNotiResponse].self)
   }
 }

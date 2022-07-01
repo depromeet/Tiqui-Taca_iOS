@@ -7,26 +7,35 @@
 
 import Combine
 import ComposableArchitecture
+import ComposableCoreLocation
 
 struct MainTabState: Equatable {
-  // Feature State
-  var mapFeature: MapState = .init()
-  var chatFeature: ChatState = .init()
-  var msgAndNotiFeature: MsgAndNotiState = .init()
-  var myPageFeature: MyPageState = .init()
+  var selectedTab: TabViewType = .map
+  
+  var mainMapState: MainMapState = .init()
+  var chatState: ChatState = .init()
+  var msgAndNotiState: MsgAndNotiState = .init()
+  var myPageState: MyPageState = .init()
 }
 
 enum MainTabAction: Equatable {
-  // Feature Action
-  case mapFeature(MapAction)
-  case chatFeature(ChatAction)
-  case msgAndNotiFeature(MsgAndNotiAction)
-  case myPageFeature(MyPageAction)
+  case setSelectedTab(TabViewType)
+  
+  case mainMapAction(MainMapAction)
+  case chatAction(ChatAction)
+  case msgAndNotiAction(MsgAndNotiAction)
+  case myPageAction(MyPageAction)
+  case deeplinkManager(DeeplinkManager.Action)
+  case onAppear
+  case onLoad
+  case showQuestionDetail(String)
 }
 
 struct MainTabEnvironment {
   let appService: AppService
   let mainQueue: AnySchedulerOf<DispatchQueue>
+  var locationManager: LocationManager
+  let deeplinkManager: DeeplinkManager
 }
 
 let mainTabReducer = Reducer<
@@ -34,32 +43,34 @@ let mainTabReducer = Reducer<
   MainTabAction,
   MainTabEnvironment
 >.combine([
-  mapReducer
+  mainMapReducer
     .pullback(
-      state: \.mapFeature,
-      action: /MainTabAction.mapFeature,
+      state: \.mainMapState,
+      action: /MainTabAction.mainMapAction,
       environment: {
-        MapEnvironment(
+        MainMapEnvironment(
           appService: $0.appService,
-          mainQueue: $0.mainQueue
+          mainQueue: $0.mainQueue,
+          locationManager: $0.locationManager
         )
       }
     ),
   chatReducer
     .pullback(
-      state: \.chatFeature,
-      action: /MainTabAction.chatFeature,
+      state: \.chatState,
+      action: /MainTabAction.chatAction,
       environment: {
         ChatEnvironment(
           appService: $0.appService,
-          mainQueue: $0.mainQueue
+          mainQueue: $0.mainQueue,
+          locationManager: $0.locationManager
         )
       }
     ),
   msgAndNotiReducer
     .pullback(
-      state: \.msgAndNotiFeature,
-      action: /MainTabAction.msgAndNotiFeature,
+      state: \.msgAndNotiState,
+      action: /MainTabAction.msgAndNotiAction,
       environment: {
         MsgAndNotiEnvironment(
           appService: $0.appService,
@@ -69,8 +80,8 @@ let mainTabReducer = Reducer<
     ),
   myPageReducer
     .pullback(
-      state: \.myPageFeature,
-      action: /MainTabAction.myPageFeature,
+      state: \.myPageState,
+      action: /MainTabAction.myPageAction,
       environment: {
         MyPageEnvironment(
           appService: $0.appService,
@@ -85,15 +96,69 @@ let mainTabCore = Reducer<
   MainTabState,
   MainTabAction,
   MainTabEnvironment
-> { _, action, _ in
+> { state, action, environment in
   switch action {
-  case .mapFeature:
+  case let .setSelectedTab(selectedTab):
+    state.selectedTab = selectedTab
     return .none
-  case .chatFeature:
+    
+  case let .mainMapAction(.setIsMoveToChatDetail(isMoveToChatDetail)):
+    if isMoveToChatDetail {
+      state.selectedTab = .chat
+    }
     return .none
-  case .msgAndNotiFeature:
+    
+  case .mainMapAction:
     return .none
-  case .myPageFeature:
+    
+  case .chatAction:
+    return .none
+    
+  case .msgAndNotiAction:
+    return .none
+    
+  case .myPageAction:
+    return .none
+    
+  case .onAppear:
+    return environment.deeplinkManager
+      .handling()
+      .map(MainTabAction.deeplinkManager)
+    
+  case .onLoad:
+    environment.deeplinkManager.isFirstLaunch = false
+    return .none
+    
+    // MARK: - Deeplink
+  case let .deeplinkManager(.moveToQustionDetail(id, chatRoomId)):
+    return .concatenate([
+      .init(value: .deeplinkManager(.moveToChat(chatRoomId, messageId: nil))),
+      .init(value: .showQuestionDetail(id))
+    ])
+    
+  case let .showQuestionDetail(id):
+    state.chatState.chatDetailState.questionDetailViewState = .init(questionId: id)
+    return .init(value: .chatAction(.chatDetailAction(.setRoute(.questionDetail))))
+    
+  case let .deeplinkManager(.moveToLetter(id)):
+    state.selectedTab = .msgAndNoti
+    guard let letter = state.msgAndNotiState.letterState.letterSummaryList
+      .first(where: { $0.id == id }) else {
+      return .none
+    }
+    return .init(value: .msgAndNotiAction(.letterAction(.selectLetterDetail(letter))))
+    
+  case let .deeplinkManager(.moveToChat(id, messageId)):
+    state.selectedTab = .chat
+    guard let chatRoomInfo = state.chatState.popularRoomList
+      .first(where: { $0.id == id }) else {
+      return .none
+    }
+    state.chatState.chatDetailState.focusMessageId = messageId
+    return .init(value: .chatAction(.willEnterRoom(chatRoomInfo)))
+    
+  case let .deeplinkManager(.didChangeNavigation(screenType)):
+    state.selectedTab = screenType
     return .none
   }
 }

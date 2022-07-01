@@ -9,11 +9,23 @@ import SwiftUI
 import ComposableArchitecture
 
 struct MainTabView: View {
-  private let store: Store<MainTabState, MainTabAction>
-  @State var selection: Int = 0
+  typealias State = MainTabState
+  typealias Action = MainTabAction
   
-  init(store: Store<MainTabState, MainTabAction>) {
+  private let store: Store<State, Action>
+  @ObservedObject private var viewStore: ViewStore<ViewState, Action>
+  
+  struct ViewState: Equatable {
+    let selectedTab: TabViewType
+    
+    init(state: State) {
+      selectedTab = state.selectedTab
+    }
+  }
+  
+  init(store: Store<State, Action>) {
     self.store = store
+    viewStore = ViewStore(store.scope(state: ViewState.init))
     
     let appearance = UITabBarAppearance()
     let tabBar = UITabBar()
@@ -24,100 +36,87 @@ struct MainTabView: View {
   }
   
   var body: some View {
-    TabView(selection: $selection) {
-      MapTab(store: store)
-        .tabItem {
-          TabViewItem(type: .map(selection == 0))
-        }
-        .tag(0)
-      ChatTab(store: store)
-        .tabItem {
-          TabViewItem(type: .chat(selection == 1))
-        }
-        .tag(1)
-      MsgAndNotiTab(store: store)
-        .tabItem {
-          TabViewItem(type: .msgAndNoti(selection == 2))
-        }
-        .tag(2)
-      MyPageTab(store: store)
-        .tabItem {
-          TabViewItem(type: .myPage(selection == 3))
-        }
-        .tag(3)
+    NavigationView {
+      TabView(
+        selection: viewStore.binding(
+          get: \.selectedTab,
+          send: MainTabAction.setSelectedTab
+        )
+      ) {
+        MainMapView(store: mainMapViewStore)
+          .tag(TabViewType.map)
+          .tabItem {
+            VStack {
+              Text("지도")
+              Image(viewStore.selectedTab == .map ? "map_active" : "map")
+            }
+          }
+        ChatView(store: chatViewStore)
+          .tag(TabViewType.chat)
+          .tabItem {
+            VStack {
+              Text("채팅")
+              Image(viewStore.selectedTab == .chat ? "chat_active" : "chat")
+            }
+          }
+        MsgAndNotiView(store: msgAndNotiViewStore)
+          .tag(TabViewType.msgAndNoti)
+          .tabItem {
+            VStack {
+              Text("쪽지·알림")
+              Image(viewStore.selectedTab == .msgAndNoti ? "letter_active" : "letter")
+            }
+          }
+        MyPageView(store: myPageViewStore)
+          .tag(TabViewType.mypage)
+          .tabItem {
+            VStack {
+              Text("마이페이지")
+              Image(viewStore.selectedTab == .mypage ? "mypage_active" : "mypage")
+            }
+          }
+      }
+      .accentColor(Color.black900)
+      .navigationBarTitleDisplayMode(.inline)
+      .navigationBarHidden(true)
     }
-    .tint(.black700)
+    .navigationViewStyle(.stack)
+    .onAppear {
+      viewStore.send(.onAppear)
+    }
+    .onLoad {
+      viewStore.send(.onLoad)
+    }
   }
 }
 
-// MARK: MapTab
-private struct MapTab: View {
-  private let store: Store<MainTabState, MainTabAction>
-  
-  init(store: Store<MainTabState, MainTabAction>) {
-    self.store = store
-  }
-  
-  var body: some View {
-    MapView(
-      store: store.scope(
-        state: \.mapFeature,
-        action: MainTabAction.mapFeature
-      )
+// MARK: - Store init
+extension MainTabView {
+  private var mainMapViewStore: Store<MainMapState, MainMapAction> {
+    return store.scope(
+      state: \.mainMapState,
+      action: Action.mainMapAction
     )
   }
-}
-
-// MARK: ChatTab
-private struct ChatTab: View {
-  private let store: Store<MainTabState, MainTabAction>
   
-  init(store: Store<MainTabState, MainTabAction>) {
-    self.store = store
-  }
-  
-  var body: some View {
-    ChatView(
-      store: store.scope(
-        state: \.chatFeature,
-        action: MainTabAction.chatFeature
-      )
+  private var chatViewStore: Store<ChatState, ChatAction> {
+    return store.scope(
+      state: \.chatState,
+      action: Action.chatAction
     )
   }
-}
-
-// MARK: NotiTab
-private struct MsgAndNotiTab: View {
-  private let store: Store<MainTabState, MainTabAction>
   
-  init(store: Store<MainTabState, MainTabAction>) {
-    self.store = store
-  }
-  
-  var body: some View {
-    MsgAndNotiView(
-      store: store.scope(
-        state: \.msgAndNotiFeature,
-        action: MainTabAction.msgAndNotiFeature
-      )
+  private var msgAndNotiViewStore: Store<MsgAndNotiState, MsgAndNotiAction> {
+    return store.scope(
+      state: \.msgAndNotiState,
+      action: Action.msgAndNotiAction
     )
   }
-}
-
-// MARK: MyPageTab
-private struct MyPageTab: View {
-  private let store: Store<MainTabState, MainTabAction>
   
-  init(store: Store<MainTabState, MainTabAction>) {
-    self.store = store
-  }
-  
-  var body: some View {
-    MyPageView(
-      store: store.scope(
-        state: \.myPageFeature,
-        action: MainTabAction.myPageFeature
-      )
+  private var myPageViewStore: Store<MyPageState, MyPageAction> {
+    return store.scope(
+      state: \.myPageState,
+      action: Action.myPageAction
     )
   }
 }
@@ -131,7 +130,9 @@ struct MainTabView_Previews: PreviewProvider {
         reducer: mainTabReducer,
         environment: .init(
           appService: .init(),
-          mainQueue: .main
+          mainQueue: .main,
+          locationManager: .live,
+          deeplinkManager: .shared
         )
       )
     )

@@ -28,11 +28,14 @@ struct MyBlockHistoryView: View {
               presentationMode.wrappedValue.dismiss()
             } label: {
               Image("idelete")
+                .resizable()
+                .frame(width: 24, height: 24)
             }
           }
           .padding(EdgeInsets(top: 28, leading: .spacingXL, bottom: 22, trailing: .spacingXL))
           
           Text("상대방을 차단하면 상대방의 활동 뿐만 아니라,\n회원님의 활동도 상대방에게 더 이상 보이지 않게 됩니다.")
+            .lineSpacing(12 * 0.32)
             .font(.body2)
             .foregroundColor(.white800)
             .padding([.leading, .trailing], .spacingXL)
@@ -50,6 +53,14 @@ struct MyBlockHistoryView: View {
           
           Spacer()
         }
+        .background(Color.white)
+      }
+      .ttPopup(
+        isShowing: viewStore.binding(
+          get: \.popupPresented,
+          send: MyBlockHistoryAction.dismissPopup
+        )
+      ) {
         TTPopupView.init(
           popUpCase: .twoLineTwoButton,
           title: "'\(viewStore.unBlockUser?.nickname ?? "")' 님을 차단 해제하시겠어요?",
@@ -63,12 +74,30 @@ struct MyBlockHistoryView: View {
             viewStore.send(.dismissPopup)
           }
         )
-        .opacity(viewStore.popupPresented ? 1 : 0)
+      }
+      .popup(
+        isPresented: viewStore.binding(
+          get: \.toastPresented,
+          send: MyBlockHistoryAction.dismissToast
+        ),
+        type: .floater(
+          verticalPadding: 16,
+          useSafeAreaInset: true
+        ),
+        position: .top,
+        animation: .easeIn,
+        autohideIn: 2
+      ) {
+        TTToastView(
+          title: "'\(viewStore.unBlockUser?.nickname ?? "")'님을 차단 해제했어요!",
+          type: .success
+        )
       }
       .onAppear(
         perform: {
           viewStore.send(.getBlockUserList)
-        })
+        }
+      )
     }
   }
 }

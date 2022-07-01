@@ -9,17 +9,27 @@ import Foundation
 import FirebaseMessaging
 
 struct AppService {
-  var fcmToken: String? {
-    return Messaging.messaging().fcmToken
+  var fcmToken: String {
+    return Messaging.messaging().fcmToken ?? ""
   }
   
   let authService: AuthServiceType
   let userService: UserServiceType
-	let roomService: RoomServiceType
+  let questionService: QuestionServiceType
+  let roomService: RoomServiceType
+  let socketService: SocketService
+  let socketBannerService: SocketBannerService
+  let notificationService: NotificationServiceType
+  let letterService: LetterServiceType
   
   init() {
     authService = AuthService()
     userService = UserService()
-		roomService = RoomService()
+    questionService = QuestionService()
+    roomService = RoomService()
+    socketService = .live
+    socketBannerService = .live
+    notificationService = NotificationService()
+    letterService = LetterService()
   }
 }

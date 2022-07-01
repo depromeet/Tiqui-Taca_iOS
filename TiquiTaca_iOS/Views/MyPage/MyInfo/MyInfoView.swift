@@ -28,6 +28,8 @@ struct MyInfoView: View {
               presentationMode.wrappedValue.dismiss()
             } label: {
               Image("idelete")
+                .resizable()
+                .frame(width: 24, height: 24)
             }
           }
           .padding(EdgeInsets(top: 28, leading: .spacingXL, bottom: 22, trailing: .spacingXL))
@@ -37,7 +39,7 @@ struct MyInfoView: View {
             .foregroundColor(.black800)
             .padding(.leading, .spacingXL)
           
-          VStack(alignment: .leading, spacing: .spacingS) {
+          VStack(alignment: .leading, spacing: 0) {
             MyInfoRow(
               title: "닉네임",
               description: viewStore.nickname
@@ -53,6 +55,9 @@ struct MyInfoView: View {
           }
           .background(Color.white50)
           
+          Rectangle().fill(Color.white)
+            .frame(height: 56)
+          
           Text("로그인 관리")
             .font(.subtitle4)
             .foregroundColor(.black800)
@@ -65,9 +70,11 @@ struct MyInfoView: View {
               Text("로그아웃")
                 .font(.body1)
                 .foregroundColor(.black900)
+                .padding([.top, .bottom], .spacingS)
+                .padding([.leading, .trailing], .spacingXL)
               Spacer()
             }
-            .padding(EdgeInsets(top: .spacingS, leading: .spacingXL, bottom: .spacingS, trailing: .spacingXL))
+            .frame(height: 48)
             
             Button {
               viewStore.send(.presentWithdrawalPopup)
@@ -75,41 +82,49 @@ struct MyInfoView: View {
               Text("탈퇴하기")
                 .font(.body1)
                 .foregroundColor(.black900)
+                .padding([.top, .bottom], .spacingS)
+                .padding([.leading, .trailing], .spacingXL)
               Spacer()
             }
-            .padding(EdgeInsets(top: .spacingS, leading: .spacingXL, bottom: .spacingS, trailing: .spacingXL))
+            .frame(height: 48)
           }
           .frame(maxWidth: .infinity)
           .background(Color.white50)
           
           Spacer()
         }
+        .background(Color.white)
         
-        TTPopupView.init(
-          popUpCase: viewStore.popupType == .logout ? .oneLineTwoButton : .twoLineTwoButton,
-          topImageString: viewStore.popupType == .logout ? "logout_g" : "withdrawal_g",
-          title: viewStore.popupType == .logout ? "로그아웃 하시겠어요?" : "정말 티키타카를 탈퇴하시겠어요?",
-          subtitle: viewStore.popupType == .logout ? "" : "탈퇴하면 회원정보와 앱 활동 내역이 모두 삭제돼요.",
-          leftButtonName: "취소",
-          rightButtonName: viewStore.popupType == .logout ? "로그아웃" : "탈퇴하기",
-          confirm: {
-            viewStore.send(viewStore.popupType == .logout ?
-                           MyInfoAction.logoutAction : MyInfoAction.withDrawalAction)
-
-          },
-          cancel: {
-            viewStore.send(.dismissPopup)
+        .ttPopup(
+          isShowing: viewStore.binding(
+            get: \.popupPresented,
+            send: MyInfoAction.dismissPopup
+          ),
+          topImageString: viewStore.popupType == .logout ? "logout_g" : "withdrawal_g") {
+            TTPopupView.init(
+              popUpCase: viewStore.popupType == .logout ? .oneLineTwoButton : .twoLineOneButton,
+              title: viewStore.popupType == .logout ? "로그아웃 하시겠어요?" : "정말 티키타카를 탈퇴하시겠어요?",
+              subtitle: viewStore.popupType == .logout ? "" : "탈퇴하면 회원정보와 앱 활동 내역이 모두 삭제돼요.",
+              leftButtonName: "취소",
+              rightButtonName: viewStore.popupType == .logout ? "로그아웃" : "탈퇴하기",
+              confirm: {
+                viewStore.send(
+                  viewStore.popupType == .logout ?
+                  MyInfoAction.logoutAction : MyInfoAction.withDrawalAction)
+              },
+              cancel: {
+                viewStore.send(.dismissPopup)
+              }
+            )
           }
-        )
-        .opacity(viewStore.popupPresented ? 1 : 0)
-        .onChange(of: viewStore.isDismissCurrentView) { isDismissCurrentView in
-          if isDismissCurrentView {
-            self.presentationMode.wrappedValue.dismiss()
+          .onChange(of: viewStore.isDismissCurrentView) { isDismissCurrentView in
+            if isDismissCurrentView {
+              self.presentationMode.wrappedValue.dismiss()
+            }
           }
-        }
-        .onDisappear {
-          viewStore.send(.movingAction(viewStore.dismissType))
-        }
+          .onDisappear {
+            viewStore.send(.movingAction(viewStore.dismissType))
+          }
       }
     }
   }
@@ -120,6 +135,7 @@ struct MyInfoRow: View {
   var description: String
   
   var body: some View {
+    VStack {
     HStack {
       Text(title)
         .font(.body1)
@@ -132,6 +148,8 @@ struct MyInfoRow: View {
       Spacer()
     }
     .padding(EdgeInsets(top: 12, leading: 24, bottom: 12, trailing: 24))
+    }
+    .frame(height: 48)
   }
 }
 

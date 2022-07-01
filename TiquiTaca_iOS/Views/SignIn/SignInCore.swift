@@ -14,13 +14,13 @@ struct SignInState: Equatable {
   }
   var route: Route?
   var verificationNumberCheckState: VerificationNumberCheckState?
-  var phoneVerficationState: PhoneVerificationState = .init()
+  var phoneVerificationState: PhoneVerificationState = .init()
 }
 
 enum SignInAction: Equatable {
   case setRoute(SignInState.Route?)
   case verificationNumberCheckAction(VerificationNumberCheckAction)
-  case phoneVerficationAction(PhoneVerificationAction)
+  case phoneVerificationAction(PhoneVerificationAction)
 }
 
 struct SignInEnvironment {
@@ -33,22 +33,10 @@ let signInReducer = Reducer<
   SignInAction,
   SignInEnvironment
 >.combine([
-  verificationNumberCheckReducer
-    .optional()
-    .pullback(
-      state: \.verificationNumberCheckState,
-      action: /SignInAction.verificationNumberCheckAction,
-      environment: {
-        VerificationNumberCheckEnvironment(
-          appService: $0.appService,
-          mainQueue: $0.mainQueue
-        )
-      }
-    ),
   phoneVerficationReducer
     .pullback(
-      state: \.phoneVerficationState,
-      action: /SignInAction.phoneVerficationAction,
+      state: \.phoneVerificationState,
+      action: /SignInAction.phoneVerificationAction,
       environment: {
         PhoneVerificationEnvironment(
           appService: $0.appService,
@@ -57,6 +45,18 @@ let signInReducer = Reducer<
       }
     ),
   signInCore
+    .presents(
+      verificationNumberCheckReducer,
+      cancelEffectsOnDismiss: true,
+      state: \.verificationNumberCheckState,
+      action: /SignInAction.verificationNumberCheckAction,
+      environment: {
+        VerificationNumberCheckEnvironment(
+          appService: $0.appService,
+          mainQueue: $0.mainQueue
+        )
+      }
+    )
 ])
 
 let signInCore = Reducer<
@@ -67,18 +67,17 @@ let signInCore = Reducer<
   switch action {
   case .verificationNumberCheckAction:
     return .none
-  case .phoneVerficationAction(.phoneNumberRequestSuccess):
+  case .phoneVerificationAction(.phoneNumberRequestSuccess):
     return Effect(value: .setRoute(.verificationNumberCheck))
-  case .phoneVerficationAction:
+  case .phoneVerificationAction:
     return.none
   case let .setRoute(selectedRoute):
     if selectedRoute == nil {
       state.verificationNumberCheckState = nil
     } else if selectedRoute == .verificationNumberCheck {
       state.verificationNumberCheckState = .init(
-        phoneNumber: state.phoneVerficationState.phoneNumber,
-        expireSeconds: state.phoneVerficationState.expireMinute * 60,
-        verificationCode: state.phoneVerficationState.verificationCode
+        phoneNumber: state.phoneVerificationState.phoneNumber,
+        expireSeconds: state.phoneVerificationState.expireMinute * 60
       )
     }
     state.route = selectedRoute

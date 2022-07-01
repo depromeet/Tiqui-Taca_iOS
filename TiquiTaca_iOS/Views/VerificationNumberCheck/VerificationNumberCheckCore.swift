@@ -19,7 +19,6 @@ struct VerificationNumberCheckState: Equatable {
   var isAvailable: Bool = true
   var otpFieldState: OTPFieldState = .init()
   var termsOfServiceState: TermsOfServiceState?
-  var verificationCode: String = "" // 인증번호 테스트용
 }
 
 enum VerificationNumberCheckAction: Equatable {
@@ -70,19 +69,19 @@ let verificationNumberCheckReducer = Reducer<
   verificationNumberCheckCore
 ])
 
+struct TimerEffectId: Hashable {}
+
 let verificationNumberCheckCore = Reducer<
   VerificationNumberCheckState,
   VerificationNumberCheckAction,
   VerificationNumberCheckEnvironment
 > { state, action, environment in
-  struct TimerId: Hashable {}
-  
   switch action {
   case .loginSuccess:
-    return.none
+    return .init(value: .timerStop)
     
   case .timerStart:
-    return Effect.timer(id: TimerId(), every: 1, on: environment.mainQueue)
+    return Effect.timer(id: TimerEffectId(), every: 1, on: environment.mainQueue)
       .map { _ in .timerTicked }
     
   case .timerTicked:
@@ -95,7 +94,7 @@ let verificationNumberCheckCore = Reducer<
     
   case .timerStop:
     state.isAvailable = false
-    return .cancel(id: TimerId())
+    return .cancel(id: TimerEffectId())
     
   case .requestAgain:
     let request = IssueCodeEntity.Request(phoneNumber: state.phoneNumber)
@@ -126,7 +125,6 @@ let verificationNumberCheckCore = Reducer<
     
   case let .issuePhoneCodeResponse(.success(response)):
     guard let response = response else { return .none }
-    state.verificationCode = response.verficiationCode
     state.expireSeconds = response.expire * 60
     return .merge([
       .cancel(id: TimerId()),
@@ -139,10 +137,10 @@ let verificationNumberCheckCore = Reducer<
   case .issuePhoneCodeResponse(.failure):
     return .none
     
-  case .otpFieldAction(.lastFieldTrigger):
+  case let .otpFieldAction(.lastFieldTrigger(code)):
     let request = VerificationEntity.Request(
       phoneNumber: state.phoneNumber,
-      verificationCode: state.otpFieldState.result
+      verificationCode: code
     )
     return environment.appService.authService
       .verification(request)

@@ -26,12 +26,17 @@ struct NoticeView: View {
             presentationMode.wrappedValue.dismiss()
           } label: {
             Image("idelete")
+              .resizable()
+              .frame(width: 24, height: 24)
           }
         }
         .padding(EdgeInsets(top: 28, leading: .spacingXL, bottom: 22, trailing: .spacingXL))
         
         List(viewStore.noticeList) { notice in
           NoticeRow(notice: notice)
+            .listRowInsets(EdgeInsets())
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.white)
         }
         .padding(.spacingXL)
         .listStyle(.plain)
@@ -45,29 +50,33 @@ struct NoticeView: View {
             .opacity(viewStore.noticeList.isEmpty ? 1 : 0)
         )
       }
+      .background(Color.white)
+      .onAppear {
+        viewStore.send(.getNoticeList)
+      }
     }
   }
 }
 
 struct NoticeRow: View {
-  var notice: Notice
+  var notice: OfficialNotiResponse
   
   var body: some View {
     VStack(alignment: .leading) {
-      Text(notice.title)
+      Text(notice.content)
         .font(.body1)
         .foregroundColor(.black900)
         .padding(.bottom, .spacingXXXS)
       
       HStack {
-        Text(notice.writer)
+        Text(notice.nickname)
           .font(.body7)
           .foregroundColor(.black100)
         
         Spacer()
         
-        Text(notice.date)
-          .font(.body7)
+        Text(notice.createdAt.getYearAndDate().replacingOccurrences(of: "/", with: "."))
+          .font(.body5)
           .foregroundColor(.white800)
       }
     }
@@ -79,7 +88,10 @@ struct NoticeView_Previews: PreviewProvider {
     NoticeView(store: .init(
       initialState: NoticeState(),
       reducer: noticeReducer,
-      environment: NoticeEnvironment())
+      environment: NoticeEnvironment(
+        appService: AppService(),
+        mainQueue: .main)
+      )
     )
   }
 }

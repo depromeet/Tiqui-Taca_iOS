@@ -7,14 +7,38 @@
 
 import Foundation
 
-enum DateFormatType: String{
-	case HHmm = "HH:mm"
+enum DateFormatType: String {
+  case HHmm = "HH:mm"
+  case yyyyMMdd = "yyyy년 MM월 dd일"
 }
 
 extension Date {
-	func convertFormatType(type: DateFormatType) -> Date {
-		let dateFormatter = DateFormatter()
-		dateFormatter.dateFormat = type.rawValue
-		return dateFormatter.date(from: "\(self)") ?? Date()
-	}
+  static func current(type: DateFormatType) -> String {
+    let dateString: String = Date().ISO8601Format()
+    let iso8601DateFormatter = ISO8601DateFormatter()
+    let date = iso8601DateFormatter.date(from: dateString)
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = type.rawValue
+    return dateFormatter.string(for: date ?? Date()) ?? ""
+  }
+  
+  func getDateString(format: DateFormatType) -> String {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = format.rawValue
+    
+    return dateFormatter.string(from: self) ?? ""
+  }
+  
+  func getTimeString() -> String {
+    let dateFormatter = DateFormatter()
+    dateFormatter.dateFormat = "HH:mm"
+    
+    return dateFormatter.string(for: self) ?? ""
+  }
+  
+  var relativeTimeAbbreviated: String {
+    let formatter = RelativeDateTimeFormatter()
+    formatter.unitsStyle = .full
+    return formatter.localizedString(for: self, relativeTo: Date.now)
+  }
 }

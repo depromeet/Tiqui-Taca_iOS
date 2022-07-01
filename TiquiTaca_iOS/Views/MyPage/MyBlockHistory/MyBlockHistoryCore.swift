@@ -14,12 +14,14 @@ struct MyBlockHistoryState: Equatable {
   )
   var popupPresented = false
   var unBlockUser: BlockUserEntity.Response?
+  var toastPresented: Bool = false
 }
 
 enum MyBlockHistoryAction: Equatable {
   case releaseBlock(String)
   case presentPopup
   case dismissPopup
+  case dismissToast
   case blockListView(BlockListAction)
   
   case getBlockUserList
@@ -27,7 +29,7 @@ enum MyBlockHistoryAction: Equatable {
   case getBlockUserRequestSuccess
   
   case unblockUser(String)
-  case unblockUserResponse(Result<BlockUserEntity.Response?, HTTPError>)
+  case unblockUserResponse(Result<[BlockUserEntity.Response]?, HTTPError>)
   case unblockUserRequestSuccess
 }
 
@@ -66,6 +68,9 @@ let myBlockHistoryReducerCore = Reducer<
   case .dismissPopup:
     state.popupPresented = false
     return .none
+  case .dismissToast:
+    state.toastPresented = false
+    return .none
   case let .blockListView(blockListAction):
     switch blockListAction {
     case let .selectUnblockUser(unblockUser):
@@ -96,7 +101,10 @@ let myBlockHistoryReducerCore = Reducer<
       .catchToEffect()
       .map(MyBlockHistoryAction.unblockUserResponse)
   case let .unblockUserResponse(.success(response)):
-    return Effect(value: .unblockUserRequestSuccess)
+    state.popupPresented = false
+    state.toastPresented = true
+    state.blockListView = .init(blockUsers: response ?? [])
+    return .none
   case .unblockUserResponse(.failure):
     return .none
   case .unblockUserRequestSuccess:

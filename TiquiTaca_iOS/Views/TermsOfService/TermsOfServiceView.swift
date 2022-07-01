@@ -57,12 +57,14 @@ struct TermsOfServiceView: View {
               Spacer()
             }
             .padding(.horizontal, .spacingS)
+            .frame(height: 56)
           }
           .buttonStyle(
             TTButtonHighlightStyle(
               isHighlighted: viewStore.tosFieldListState.isAllCheckDone
             )
           )
+          
           
           TOSFieldListView(store: tosFieldListStore)
         }

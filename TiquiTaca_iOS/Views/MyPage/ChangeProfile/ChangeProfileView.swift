@@ -8,6 +8,7 @@
 import SwiftUI
 import ComposableArchitecture
 import TTDesignSystemModule
+import ExytePopupView
 
 struct ChangeProfileView: View {
   typealias State = ChangeProfileState
@@ -29,8 +30,9 @@ struct ChangeProfileView: View {
   
   struct ViewState: Equatable {
     let nickname: String
+    let changedNickname: String
     let profileImage: ProfileImage
-    let isSheetPresented: Bool
+    let bottomSheetPosition: TTBottomSheet.MiddlePosition
     let nicknameError: NicknameError
     let isAvailableCompletion: Bool
     let popupPresented: Bool
@@ -38,8 +40,9 @@ struct ChangeProfileView: View {
     
     init(state: State) {
       nickname = state.nickname
+      changedNickname = state.changedNickname
       profileImage = state.profileImage
-      isSheetPresented = state.isSheetPresented
+      bottomSheetPosition = state.bottomSheetPosition
       nicknameError = state.nicknameError
       isAvailableCompletion = state.isAvailableCompletion
       popupPresented = state.popupPresented
@@ -59,7 +62,7 @@ struct ChangeProfileView: View {
           Image(viewStore.profileImage.imageName)
           Button {
             focusField = false
-            viewStore.send(.setBottomSheet(true))
+            viewStore.send(.setBottomSheetPosition(.middle))
           } label: {
             Image("edit")
           }
@@ -70,7 +73,7 @@ struct ChangeProfileView: View {
             TextField(
               "닉네임을 입력해주세요.",
               text: viewStore.binding(
-                get: \.nickname,
+                get: \.changedNickname,
                 send: ChangeProfileAction.nicknameChanged
               )
             )
@@ -95,41 +98,35 @@ struct ChangeProfileView: View {
       }
       .padding(.horizontal, .spacingXL)
       .padding(.top, 120)
-      
-      TTBottomSheetView(
-        isOpen: viewStore.binding(
-          get: \.isSheetPresented,
-          send: ChangeProfileAction.setBottomSheet
-        ),
-        minHeight: 0,
-        maxHeight: 294,
-        content: {
-          ProfileImageListView(
-            selectedProfile: viewStore.binding(
-              get: \.profileImage,
-              send: ChangeProfileAction.setProfileImage
-            )
-          ).padding(.top, .spacingXXL)
-        }
-      )
-      
-      TTPopupView.init(
-        popUpCase: .twoLineOneButton,
-        title: "앗, 닉네임을 바꿀 수 없어요!",
-        subtitle: "현재 참여중인 채팅방을 나오면 닉네임을 바꿀 수 있어요.",
-        leftButtonName: "닫기",
-        cancel: {
-          viewStore.send(.dismissPopup)
-        }
-      )
-      .opacity(viewStore.popupPresented ? 1 : 0)
+    }
+    .fullScreenCover(isPresented: viewStore.binding(
+      get: \.popupPresented,
+      send: ChangeProfileAction.dismissPopup)
+    ) {
+      AlertView(isPopupPresent: viewStore.binding(
+        get: \.popupPresented,
+        send: ChangeProfileAction.dismissPopup))
+      .background(BackgroundTransparentView())
     }
     .vCenter()
     .hCenter()
     .background(Color.black800)
     .ignoresSafeArea(.keyboard)
     .navigationBarBackButtonHidden(true)
-    .navigationTitle("프로필 수정하기")
+    .bottomSheet(
+      bottomSheetPosition: viewStore.binding(
+        get: \.bottomSheetPosition,
+        send: Action.setBottomSheetPosition
+      ),
+      options: TTBottomSheet.Options
+    ) {
+      ProfileImageListView(
+        selectedProfile: viewStore.binding(
+          get: \.profileImage,
+          send: ChangeProfileAction.setProfileImage
+        )
+      ).padding(.top, .spacingXXL)
+    }
     .toolbar {
       ToolbarItem(placement: .navigationBarLeading) {
         Button {
@@ -138,24 +135,52 @@ struct ChangeProfileView: View {
           Image("leftArrow")
         }
       }
+      ToolbarItem(placement: .principal) {
+        Text("프로필 수정하기")
+          .font(.subtitle2)
+          .foregroundColor(.white200)
+      }
       ToolbarItem(placement: .navigationBarTrailing) {
         Button {
           viewStore.send(.doneButtonTapped)
+          UIView.setAnimationsEnabled(false)
         } label: {
           Text("완료")
             .foregroundColor(.green500)
             .font(.subtitle1)
         }
         .onChange(of: viewStore.dismissCurrentPage) { isDismissCurrentView in
-          if isDismissCurrentView { self.presentationMode.wrappedValue.dismiss() }
+          if isDismissCurrentView {
+            presentationMode.wrappedValue.dismiss()
+          }
         }
         .disabled(!viewStore.isAvailableCompletion)
       }
     }
     .onTapGesture {
       focusField = false
-      viewStore.send(.setBottomSheet(false))
+      viewStore.send(.setBottomSheetPosition(.hidden))
     }
+  }
+}
+
+private struct AlertView: View {
+  @Binding var isPopupPresent: Bool
+  
+  var body: some View {
+    TTPopupView.init(
+      popUpCase: .twoLineOneButton,
+      title: "앗, 닉네임을 바꿀 수 없어요!",
+      subtitle: "현재 참여중인 채팅방을 나오면 닉네임을 바꿀 수 있어요.",
+      leftButtonName: "닫기",
+      cancel: {
+        isPopupPresent = false
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+          UIView.setAnimationsEnabled(true)
+        }
+      }
+    )
+    .padding(EdgeInsets(top: 0, leading: 24, bottom: 0, trailing: 24))
   }
 }
 
@@ -164,7 +189,7 @@ struct ChangeProfileView_Previews: PreviewProvider {
   static var previews: some View {
     CreateProfileView(
       store: Store(
-        initialState: .init(isSheetPresented: true),
+        initialState: .init(),
         reducer: createProfileReducer,
         environment: .init(
           appService: .init(),

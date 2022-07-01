@@ -1,0 +1,11 @@
+{
+    "Simulator Target Bundle" : "com.tiquitaca.TiquiTaca-iOS",
+    "aps" : {
+        "alert" : {
+            "body" : "테스트 메시지 입니다.",
+            "title" : "번개 딥링크 테스트",
+        },
+        "badge" : 1,
+    },
+    "deepLink" : "tiquitaca-app://navigation/screen-type?mypage"
+}
