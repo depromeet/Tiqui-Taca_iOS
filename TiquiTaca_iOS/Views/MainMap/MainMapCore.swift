@@ -31,6 +31,7 @@ struct MainMapState: Equatable {
   
   var isShowPopup: Bool = false
   var isMoveToChatDetail: Bool = false
+  var showLocationPopup: Bool = false
   var chatDetailState: ChatDetailState?
 }
 
@@ -38,6 +39,7 @@ enum MainMapAction: Equatable {
   case locationManager(LocationManager.Action)
   case onAppear
   case onLoad
+  case setLocationPopup(Bool)
   case setBottomSheetPosition(TTBottomSheet.Position)
   case setBottomSheetType(MainMapBottomSheetType)
   case annotationTapped(RoomFromCategoryResponse)
@@ -134,19 +136,21 @@ private let mainMapCore = Reducer<
         .delegate()
         .map(MainMapAction.locationManager),
       environment.locationManager
-        .requestWhenInUseAuthorization()
-        .fireAndForget(),
-      environment.locationManager
         .startMonitoringSignificantLocationChanges()
         .fireAndForget()
     ])
     
   case .onLoad:
     state.isFirstLoad = true
+    
+    if environment.locationManager.authorizationStatus() == .notDetermined {
+      state.showLocationPopup = true
+      return .none
+    }
     return .init(value: .currentLocationButtonTapped)
   case .currentLocationButtonTapped:
     // 첫 위치 권한 설정, onLoad, 현위치 버튼
-    guard environment.locationManager.locationServicesEnabled() else {
+    if environment.locationManager.authorizationStatus() != .notDetermined && !environment.locationManager.locationServicesEnabled() {
       return .init(value: .showLocationAlert)
     }
     
@@ -186,6 +190,9 @@ private let mainMapCore = Reducer<
      - chatRoomList: hidden, middle, top
      - popularChatRoomList: hidden, middle
      */
+  case let .setLocationPopup(isShow):
+    state.showLocationPopup = isShow
+    return .none
   case let .setBottomSheetPosition(position):
     switch state.bottomSheetType {
     case .chatRoomDetail:
