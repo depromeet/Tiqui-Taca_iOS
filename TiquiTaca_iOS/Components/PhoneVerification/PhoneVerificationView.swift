@@ -35,15 +35,20 @@ struct PhoneVerificationView: View {
     VStack(spacing: 46) {
       VStack(spacing: .spacingXS) {
         TextField(
-          "휴대폰 번호를 입력해주세요.",
+          "",
           text: viewStore.binding(
             get: \.phoneNumber,
             send: PhoneVerificationAction.phoneNumberInput
           )
         )
+        .placeholder(when: viewStore.phoneNumber.isEmpty) {
+          Text("휴대폰 번호를 입력해주세요.")
+            .foregroundColor(.white800)
+        }
         .padding(.top, .spacingXXL)
         .keyboardType(.numberPad)
         .foregroundColor(viewStore.isAvailablePhoneNumber ? .green500 : .white)
+        .font(.heading2)
         
         Divider()
           .frame(height: .spacingXXXS)

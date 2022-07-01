@@ -39,7 +39,7 @@ struct PopularChatRoomListView: View {
       VStack(spacing: 0) {
         HStack {
           Text("실시간 인기있는 채팅방들")
-            .font(.subtitle2)
+            .font(.body2)
             .foregroundColor(.green500)
           Spacer()
           Image("bxPopular")

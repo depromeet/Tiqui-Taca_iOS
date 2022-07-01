@@ -37,6 +37,21 @@ struct VerificationNumberCheckView: View {
   
   var body: some View {
     VStack(alignment: .center, spacing: 66) {
+      NavigationLink(
+        tag: State.Route.termsOfService,
+        selection: viewStore.binding(
+          get: \.route,
+          send: Action.setRoute
+        ),
+        destination: {
+          IfLetStore(
+            termsOfServiceStore,
+            then: TermsOfServiceView.init
+          )
+        },
+        label: EmptyView.init
+      )
+      Spacer()
       VStack(spacing: .spacingM) {
         Text("인증번호를 입력해주세요.")
           .foregroundColor(.white)
@@ -50,6 +65,8 @@ struct VerificationNumberCheckView: View {
       .padding(.horizontal, .spacingXL)
       
       OTPFieldView(store: otpFieldStore)
+      
+      Spacer()
       
       HStack {
         Text(viewStore.expireSeconds.timeString)
@@ -65,21 +82,7 @@ struct VerificationNumberCheckView: View {
         }
       }
       .padding(.horizontal, .spacingXL)
-      
-      NavigationLink(
-        tag: State.Route.termsOfService,
-        selection: viewStore.binding(
-          get: \.route,
-          send: Action.setRoute
-        ),
-        destination: {
-          IfLetStore(
-            termsOfServiceStore,
-            then: TermsOfServiceView.init
-          )
-        },
-        label: EmptyView.init
-      )
+      .padding(.vertical, .spacingS)
     }
     .vCenter()
     .background(Color.black800)

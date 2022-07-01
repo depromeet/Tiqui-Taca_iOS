@@ -35,6 +35,7 @@ struct SignInView: View {
         Text("로그인을 위해\n휴대폰 번호를 인증해주세요!")
           .foregroundColor(.white)
           .font(.heading1)
+          .lineSpacing(3.4)
         Text("휴대폰 번호로 간편하게 로그인해보세요.")
           .foregroundColor(.white600)
           .font(.body3)
