@@ -47,11 +47,11 @@
 		<true/>
 	</dict>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>위치정보가 지도 위에 표시됩니다. 사용자의 위치는 다른 사용자들에게 노출되지 않습니다.</string>
+	<string>위치 서비스를 켜면 내 주변 채팅가능 장소를 볼 수 있습니다.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>위치정보가 지도 위에 표시됩니다. 사용자의 위치는 다른 사용자들에게 노출되지 않습니다.</string>
+	<string>위치 서비스를 켜면 내 주변 채팅가능 장소를 볼 수 있습니다.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>위치정보가 지도 위에 표시됩니다. 사용자의 위치는 다른 사용자들에게 노출되지 않습니다.</string>
+	<string>위치 서비스를 켜면 내 주변 채팅가능 장소를 볼 수 있습니다.</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Pretendard-Bold.otf</string>
