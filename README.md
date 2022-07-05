@@ -3,6 +3,12 @@
 
 <div align="center"> 실시간으로 궁금한 장소에 대해 정보를 공유하는 만남의 광장, 티키타카⚡️ </div>
 
+<div align="center">
+    <a href="https://apps.apple.com/kr/app/%ED%8B%B0%ED%82%A4%ED%83%80%EC%B9%B4-tikitaka/id1617831823">
+        <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/ko-kr?size=250x83&amp;releaseDate=1654300800&h=dd4ccd7fb22c609cf9132f37bf23c390" alt="Download on the App Store" style="border-radius: 13px; width: 180px; height: 83px;">
+    </a>
+</div>
+
 ---
 
 ![github_img2](https://user-images.githubusercontent.com/13329304/176240116-90cccb5f-e0b4-4437-94d2-523e6ac2150b.png)

@@ -204,8 +204,8 @@ struct OtherProfileView: View {
             }
             
             HStack(alignment: .center, spacing: 4) {
-              if viewStore.userInfo?.canUseFeature == true {
-                Image("bxLoudspeaker3")
+              if viewStore.userInfo?.canUseFeature == true && viewStore.userInfo?.level != 0 {
+                Image("ratingLv\(viewStore.userInfo?.level ?? 1)")
                   .resizable()
                   .frame(width: 32, height: 32)
               }
