@@ -44,9 +44,6 @@
 <div align="center">
   ⚡️ 같이 티키타카할 준비가 됐다면 망설이지 말고 놀러오세요:)⚡️
   <br/><br/>
-  <a href="https://apps.apple.com/kr/app/%ED%8B%B0%ED%82%A4%ED%83%80%EC%B9%B4-tikitaka/id1617831823">
-    <img src="https://user-images.githubusercontent.com/51021614/177339663-8b3f5d3f-7d64-4dcd-a14d-8ea645d8a827.svg" width="200" height="80"></img>
-  </a>
 </div>
 
 ---
