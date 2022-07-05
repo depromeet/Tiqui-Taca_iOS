@@ -3,6 +3,12 @@
 
 <div align="center"> 실시간으로 궁금한 장소에 대해 정보를 공유하는 만남의 광장, 티키타카⚡️ </div>
 
+<div align="center">
+    <a href="https://apps.apple.com/kr/app/%ED%8B%B0%ED%82%A4%ED%83%80%EC%B9%B4-tikitaka/id1617831823">
+        <img src="https://tools.applemediaservices.com/api/badges/download-on-the-app-store/black/ko-kr?size=250x83&amp;releaseDate=1654300800&h=dd4ccd7fb22c609cf9132f37bf23c390" alt="Download on the App Store" style="border-radius: 13px; width: 180px; height: 83px;">
+    </a>
+</div>
+
 ---
 
 ![github_img2](https://user-images.githubusercontent.com/13329304/176240116-90cccb5f-e0b4-4437-94d2-523e6ac2150b.png)
@@ -35,33 +41,40 @@
 
 ![github_img7](https://user-images.githubusercontent.com/13329304/176240464-0d1abadc-5563-4358-8244-18bb7277491f.png)
 
-<div align="center">⚡️ 같이 티키타카할 준비가 됐다면 망설이지 말고 놀러오세요:)⚡️</div>
-
-<br>
+<div align="center">
+  ⚡️ 같이 티키타카할 준비가 됐다면 망설이지 말고 놀러오세요:)⚡️
+  <br/><br/>
+</div>
 
 ---
 
 ## **🛠 Tech Stack**  
 
 ### Project
-- SwiftUI
-- Combine
-- TCA(The Composable Architecture)
+|Based|
+|:---|
+|SwiftUI|
+|Combine|
+|TCA (The Composable Architecture)|
 
-<br/>
+![github_img2](https://user-images.githubusercontent.com/13329304/176240116-90cccb5f-e0b4-4437-94d2-523e6ac2150b.png)
+
 
 ### Dependency
   |Core|
   |:---|
   |[ComposableArchitecture](https://github.com/pointfreeco/swift-composable-architecture)|
   |[ComposableCoreLocation](https://github.com/pointfreeco/composable-core-location)|
-  |[Firebase/Messaging](https://github.com/firebase/firebase-ios-sdk)|
-  |[Firebase/Analytics](https://github.com/firebase/firebase-ios-sdk)|
+  |[Firebase](https://github.com/firebase/firebase-ios-sdk)|
   |[Socket.IO-Client-Swift](https://github.com/socketio/socket.io-client-swift)|
 
   |Security|
   |:---|
   |[KeyChainAccess](https://github.com/kishikawakatsumi/KeychainAccess)|
+
+  |DB|
+  |:---|
+  |[RealmSwift](https://github.com/realm/realm-swift)|
 
   |UI|
   |:---|

@@ -7,8 +7,12 @@
 //
 
 import UIKit
-import Firebase
 import UserNotifications
+import FirebaseCore
+import FirebaseAnalytics
+import FirebaseMessaging
+import FirebasePerformance
+import FirebaseCrashlytics
 
 @main
 final class AppDelegate: NSObject, UIApplicationDelegate {
@@ -16,9 +20,8 @@ final class AppDelegate: NSObject, UIApplicationDelegate {
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil
   ) -> Bool {
-    UIApplication.shared.applicationIconBadgeNumber = 0
-    
     FirebaseApp.configure()
+    UIApplication.shared.applicationIconBadgeNumber = 0
     Messaging.messaging().delegate = self
     UNUserNotificationCenter.current().delegate = self
     
@@ -65,7 +68,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
     
     completionHandler([.sound, .banner, .list])
   }
-
+  
   func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
     let userInfo = response.notification.request.content.userInfo
     Messaging.messaging().appDidReceiveMessage(userInfo)
