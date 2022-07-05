@@ -13,8 +13,10 @@ target 'TiquiTaca_iOS' do
   pod 'ExytePopupView', '= 1.1.4'
   
   # Firebase
-  pod 'Firebase/Analytics', '= 8.15.0'
-  pod 'Firebase/Messaging', '= 8.15.0'
+  pod 'FirebaseAnalytics', '= 9.1.0'
+  pod 'FirebaseCrashlytics', '= 9.1.0'
+  pod 'FirebaseMessaging', '= 9.1.0'
+  pod 'FirebasePerformance', '= 9.2.0'
 
   # DB
   pod 'RealmSwift', '= 10.25.1'
