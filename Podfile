@@ -19,13 +19,8 @@ target 'TiquiTaca_iOS' do
   # DB
   pod 'RealmSwift', '= 10.25.1'
 
-  # Security
-  pod 'KeychainAccess', '= 4.2.2'
-  pod 'CryptoSwift', '= 1.4.3'
-
   # Util
   pod 'SwiftLint', '= 0.47.0'
-  pod 'R.swift', '= 6.1.0'
   pod 'LicensePlist', '= 3.22.0'
 
   # Socket
