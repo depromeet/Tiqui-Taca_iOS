@@ -64,14 +64,13 @@
   |:---|
   |[ComposableArchitecture](https://github.com/pointfreeco/swift-composable-architecture)|
   |[ComposableCoreLocation](https://github.com/pointfreeco/composable-core-location)|
-  |[Firebase/Messaging](https://github.com/firebase/firebase-ios-sdk)|
-  |[Firebase/Analytics](https://github.com/firebase/firebase-ios-sdk)|
+  |[Firebase](https://github.com/firebase/firebase-ios-sdk)|
   |[Socket.IO-Client-Swift](https://github.com/socketio/socket.io-client-swift)|
 
   |Security|
   |:---|
   |[KeyChainAccess](https://github.com/kishikawakatsumi/KeychainAccess)|
-  
+
   |DB|
   |:---|
   |[RealmSwift](https://github.com/realm/realm-swift)|
