@@ -142,17 +142,17 @@ private let mainMapCore = Reducer<
     
   case .onLoad:
     state.isFirstLoad = true
-    
-    if environment.locationManager.authorizationStatus() == .notDetermined {
-      state.showLocationPopup = true
-      return .none
-    }
+//    if environment.locationManager.authorizationStatus() == .notDetermined {
+//      state.showLocationPopup = true
+//      return .none
+//    }
     return .init(value: .currentLocationButtonTapped)
   case .currentLocationButtonTapped:
     // 첫 위치 권한 설정, onLoad, 현위치 버튼
-    if environment.locationManager.authorizationStatus() != .notDetermined && !environment.locationManager.locationServicesEnabled() {
-      return .init(value: .showLocationAlert)
-    }
+    guard environment.locationManager.locationServicesEnabled() else { return .init(value: .showLocationAlert) }
+//    if environment.locationManager.authorizationStatus() != .notDetermined && !environment.locationManager.locationServicesEnabled() {
+//      return .init(value: .showLocationAlert)
+//    }
     
     switch environment.locationManager.authorizationStatus() {
     case .restricted, .denied:

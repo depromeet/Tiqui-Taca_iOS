@@ -199,7 +199,7 @@ private struct AlertView: View {
                 .foregroundColor(.white700)
                 .frame(height: 34)
 
-              Image("LinerRectangle")
+              Image("LinearRectangle")
                 .overlay {
                   VStack {
                     Text("내가 받은 번개 갯수")

@@ -14,19 +14,21 @@ import SwiftUI
 struct ChatState: Equatable {
   enum Route {
     case chatDetail
+    case none
   }
+  
   var route: Route?
   
-  var isFirstLoad = true
-  var currentTab: RoomListType = .like
-  
-  var unReadChatCount: Int = 0
-  var lastChatLog: ChatLogEntity.Response?
-  
-  var lastLoadTime: String = Date.current(type: .HHmm)
   var enteredRoom: RoomInfoEntity.Response?
+  var lastChatLog: ChatLogEntity.Response?
+  var lastLoadTime: String = Date.current(type: .HHmm)
+  var unReadChatCount: Int = 0
+  
+  var currentTab: RoomListType = .like
   var likeRoomList: [RoomInfoEntity.Response] = []
   var popularRoomList: [RoomInfoEntity.Response] = []
+  
+  var showRoomEnterPopup: Bool = false
   var moveToChatDetail: Bool = false
   
   var willEnterRoom: RoomInfoEntity.Response?
@@ -34,30 +36,31 @@ struct ChatState: Equatable {
 }
 
 enum ChatAction: Equatable {
-  
   case onAppear
+  // MARK: Request Action
   case fetchEnteredRoomInfo
   case fetchLikeRoomList
   case fetchPopularRoomList
-  
+  // MARK: Socket Action
   case socketConnected(String)
   case socketDisconnected(String)
   case socketResponse(SocketBannerService.Action)
-  
+  // MARK: Response Action
   case responsePopularRoomList(Result<[RoomInfoEntity.Response]?, HTTPError>)
   case responseLikeRoomList(Result<[RoomInfoEntity.Response]?, HTTPError>)
   case responseEnteredRoom(Result<RoomInfoEntity.Response?, HTTPError>)
   case responseRoomFavorite(Result<RoomLikeEntity.Response?, HTTPError>)
-  
+  // MARK: User Action
   case tabChange(RoomListType)
   case removeFavoriteRoom(RoomInfoEntity.Response)
   case willEnterRoom(RoomInfoEntity.Response)
   case refresh
-  
-  
-  case chatDetailAction(ChatDetailAction)
+  // MARK: Router Action
   case setRoute(ChatState.Route?)
+  case setShowRoomEnterPopup(Bool)
   case setMoveToChatDetail(Bool)
+  // MARK: Child Action
+  case chatDetailAction(ChatDetailAction)
 }
 
 struct ChatEnvironment {
@@ -96,10 +99,7 @@ let chatCore = Reducer<
 > { state, action, environment in
   switch action {
   case .onAppear:
-    guard state.isFirstLoad else { return .none }
-    
     state.lastLoadTime = Date.current(type: .HHmm)
-    state.isFirstLoad = true
     return .merge(
       Effect(value: .fetchEnteredRoomInfo)
         .eraseToEffect(),
@@ -108,7 +108,7 @@ let chatCore = Reducer<
       Effect(value: .fetchPopularRoomList)
         .eraseToEffect()
     )
-    // MARK: Requeset
+  // MARK: Requeset
   case .fetchEnteredRoomInfo:
     return environment.appService.roomService
       .getEnteredRoom()
@@ -133,7 +133,7 @@ let chatCore = Reducer<
       .receive(on: environment.mainQueue)
       .catchToEffect()
       .map(ChatAction.responseRoomFavorite)
-    // MARK: Response
+  // MARK: Response
   case let .responseRoomFavorite(.success(res)):
     return Effect(value: .fetchLikeRoomList)
       .eraseToEffect()
@@ -188,7 +188,7 @@ let chatCore = Reducer<
       .responsePopularRoomList(.failure),
       .responseRoomFavorite(.failure):
     return .none
-    // MARK: View Action
+  // MARK: View Action
   case .tabChange(let type):
     guard state.currentTab != type else { return .none }
     state.currentTab = type
@@ -200,10 +200,16 @@ let chatCore = Reducer<
     return .none
   case let .setRoute(route):
     state.route = route
+    if route == .chatDetail {
+      state.moveToChatDetail = true
+    }
+    return .none
+  case let .setShowRoomEnterPopup(isPresented):
+    state.showRoomEnterPopup = isPresented
     return .none
   case let .setMoveToChatDetail(isMoveToChatDetail):
+    state.route = isMoveToChatDetail ? .chatDetail : ChatState.Route.none
     state.moveToChatDetail = isMoveToChatDetail
-    state.route = isMoveToChatDetail ? .chatDetail : nil
     return .none
   case .refresh:
     state.lastLoadTime = Date.current(type: .HHmm)
@@ -215,6 +221,5 @@ let chatCore = Reducer<
     )
   case .chatDetailAction:
     return .none
-  
   }
 }
