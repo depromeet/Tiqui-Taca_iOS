@@ -110,7 +110,6 @@ final class UserService: UserServiceType {
   }
   
   func deleteUser() -> AnyPublisher<Void, HTTPError> {
-    TokenManager.shared.deleteToken()
     return network.request(.userDelete)
   }
   

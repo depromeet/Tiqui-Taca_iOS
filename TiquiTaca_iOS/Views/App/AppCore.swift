@@ -32,6 +32,8 @@ enum AppAction: Equatable {
   case onAppear
   case signIn
   case signOut
+  case withdrawal
+  case deleteToken
   case onboardingAction(OnboardingAction)
   case mainTabAction(MainTabAction)
   case setLoading(Bool)
@@ -130,6 +132,8 @@ let appCore = Reducer<
     ])
     
   case .signOut:
+    state.toastPresented = true
+    state.fromMyPageType = .logout
     environment.appService.userService.deleteMyProfile()
     state.mainTabState = nil
     state.onboardingState = .init()
@@ -144,6 +148,28 @@ let appCore = Reducer<
       Effect(value: .setLoading(false)),
       Effect(value: .setRoute(.onboarding))
     ])
+    
+  case .withdrawal:
+    state.toastPresented = true
+    state.fromMyPageType = .withdrawal
+    state.mainTabState = nil
+    state.onboardingState = .init()
+    
+    return .concatenate([
+      Effect(value: .setLoading(true)),
+      environment.appService.userService
+        .deleteUser()
+        .receive(on: environment.mainQueue)
+        .catchToEffect()
+        .fireAndForget(),
+      Effect(value: .setLoading(false)),
+      Effect(value: .setRoute(.onboarding)),
+      Effect(value: .deleteToken)
+    ])
+    
+  case .deleteToken:
+    TokenManager.shared.deleteToken()
+    return .none
     
   case .onboardingAction( // 로그인
     .signInAction(
@@ -182,18 +208,10 @@ let appCore = Reducer<
     return Effect(value: .signIn)
     
   case .mainTabAction(.myPageAction(.logout)):
-    state.toastPresented = true
-    state.fromMyPageType = .logout
     return Effect(value: .signOut)
     
   case .mainTabAction(.myPageAction(.withdrawal)):
-    state.mainTabState = nil
-    state.onboardingState = .init()
-    
-    state.toastPresented = true
-    state.fromMyPageType = .withdrawal
-    
-    return Effect(value: .setRoute(.onboarding))
+    return Effect(value: .withdrawal)
     
   case .onboardingAction:
     return .none
