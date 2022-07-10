@@ -76,6 +76,8 @@ let verificationNumberCheckCore = Reducer<
   VerificationNumberCheckAction,
   VerificationNumberCheckEnvironment
 > { state, action, environment in
+  struct DebounceId: Hashable {}
+  
   switch action {
   case .loginSuccess:
     return .init(value: .timerStop)
@@ -103,6 +105,7 @@ let verificationNumberCheckCore = Reducer<
       .receive(on: environment.mainQueue)
       .catchToEffect()
       .map(VerificationNumberCheckAction.issuePhoneCodeResponse)
+      .debounce(id: DebounceId(), for: .milliseconds(500), scheduler: environment.mainQueue)
     
   case let .verificationResponse(.success(response)):
     guard let response = response else { return .none }
