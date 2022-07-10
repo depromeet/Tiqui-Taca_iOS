@@ -82,15 +82,17 @@ let changeProfileReducer = Reducer<
       .receive(on: environment.mainQueue)
       .catchToEffect()
       .map(ChangeProfileAction.checkNicknameResponse)
-      .debounce(id: DebounceId(), for: .milliseconds(500), scheduler: environment.mainQueue)
+      .debounce(id: DebounceId(), for: .milliseconds(300), scheduler: environment.mainQueue)
     
   case let .validNicknameResponse(.success(response)):
     guard let response = response else { return .none }
     state.validNicknameCheck = response.canChange
     
-    return state.validNicknameCheck ?
-    Effect(value:
-        .changeProfile(state.changedNickname, ProfileType(type: state.profileImage.type))) : Effect(value: .presentPopup)
+    if state.validNicknameCheck {
+      return .init(value: .changeProfile(state.changedNickname, ProfileType(type: state.profileImage.type)))
+    } else {
+      return .init(value: .presentPopup)
+    }
     
   case .validNicknameResponse(.failure):
     return .none

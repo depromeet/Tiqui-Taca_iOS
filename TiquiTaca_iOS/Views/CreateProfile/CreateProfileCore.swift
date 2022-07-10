@@ -80,7 +80,7 @@ let createProfileReducer = Reducer<
       .receive(on: environment.mainQueue)
       .catchToEffect()
       .map(CreateProfileAction.checkNicknameResponse)
-      .debounce(id: DebounceId(), for: .milliseconds(500), scheduler: environment.mainQueue)
+      .debounce(id: DebounceId(), for: .milliseconds(300), scheduler: environment.mainQueue)
     
   case let .checkNicknameResponse(.success(response)):
     guard let response = response,
