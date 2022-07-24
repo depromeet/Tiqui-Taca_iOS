@@ -17,6 +17,8 @@
 		09B04E90285DF1A300AD5598 /* SocketBannerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09B04E8F285DF1A300AD5598 /* SocketBannerService.swift */; };
 		09F4ECC32853ACE9005B424D /* SendLightningResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F4ECC22853ACE9005B424D /* SendLightningResponse.swift */; };
 		09F630EE284B608900A2250B /* SendChatEntity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09F630ED284B608900A2250B /* SendChatEntity.swift */; };
+		3995B5E9288D27E0003FB7E3 /* CategoryService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3995B5E8288D27E0003FB7E3 /* CategoryService.swift */; };
+		3995B5EB288D283C003FB7E3 /* CategoryListResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3995B5EA288D283C003FB7E3 /* CategoryListResponse.swift */; };
 		3F0B780950BED104CA13722B /* Pods_TiquiTaca_iOS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6BE9660275CF15262D33E074 /* Pods_TiquiTaca_iOS.framework */; };
 		732798BD47A40FA84BC24EEF /* Pods_TiquiTaca_iOSTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 90ED3E866555D3D7D6ABC769 /* Pods_TiquiTaca_iOSTests.framework */; };
 		75E01B03285AA52A00BB2B97 /* MailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75E01B02285AA52A00BB2B97 /* MailView.swift */; };
@@ -224,6 +226,8 @@
 		09B04E8F285DF1A300AD5598 /* SocketBannerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketBannerService.swift; sourceTree = "<group>"; };
 		09F4ECC22853ACE9005B424D /* SendLightningResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendLightningResponse.swift; sourceTree = "<group>"; };
 		09F630ED284B608900A2250B /* SendChatEntity.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SendChatEntity.swift; sourceTree = "<group>"; };
+		3995B5E8288D27E0003FB7E3 /* CategoryService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryService.swift; sourceTree = "<group>"; };
+		3995B5EA288D283C003FB7E3 /* CategoryListResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryListResponse.swift; sourceTree = "<group>"; };
 		6BE9660275CF15262D33E074 /* Pods_TiquiTaca_iOS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_TiquiTaca_iOS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		75E01B02285AA52A00BB2B97 /* MailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailView.swift; sourceTree = "<group>"; };
 		8601F658281308CB0085F692 /* View+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View+Extensions.swift"; sourceTree = "<group>"; };
@@ -429,6 +433,14 @@
 				09AFA055284F7972007E56BB /* OtherProfileCore.swift */,
 			);
 			path = OtherProfile;
+			sourceTree = "<group>";
+		};
+		3995B5EC288D2B5A003FB7E3 /* LocationCategoryListView */ = {
+			isa = PBXGroup;
+			children = (
+				F2B268BC283AAF090011EA43 /* LocationCategoryListView.swift */,
+			);
+			path = LocationCategoryListView;
 			sourceTree = "<group>";
 		};
 		8601F65A281309660085F692 /* Splash */ = {
@@ -731,6 +743,7 @@
 				F221853528539955005CE6C3 /* InfiniteList.swift */,
 				F221852B285114F1005CE6C3 /* NotificationResponse.swift */,
 				F921B27A285CB6B00093C6CA /* OfficialNotiResponse.swift */,
+				3995B5EA288D283C003FB7E3 /* CategoryListResponse.swift */,
 			);
 			path = Response;
 			sourceTree = "<group>";
@@ -833,6 +846,7 @@
 		F2FDA211280BAF2200B2ED75 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				3995B5EC288D2B5A003FB7E3 /* LocationCategoryListView */,
 				F2F1EDA92826D51200AC4FDD /* TOSFieldList */,
 				F2F1ED8A281E62A900AC4FDD /* PhoneVerification */,
 				F2F1ED84281C6B3700AC4FDD /* OTPField */,
@@ -841,7 +855,6 @@
 				8601F660281393640085F692 /* PageControl.swift */,
 				F2F1ED9A281EDACE00AC4FDD /* OnboardingPageView.swift */,
 				F25C79B5282C1FC0009C60EE /* ProfileImageListView.swift */,
-				F2B268BC283AAF090011EA43 /* LocationCategoryListView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -857,6 +870,7 @@
 				F90F8D4F2847925D0011EDAC /* QuestionService.swift */,
 				F22185292851139C005CE6C3 /* NotificationService.swift */,
 				F9BEA1C22853728E00EF35BA /* LetterService.swift */,
+				3995B5E8288D27E0003FB7E3 /* CategoryService.swift */,
 				09B04E8F285DF1A300AD5598 /* SocketBannerService.swift */,
 				F2D62F192858F038007CC6F9 /* DeeplinkManager.swift */,
 			);
@@ -1254,6 +1268,7 @@
 				F971D84828421A1F00E2FAE8 /* ChatMessageView.swift in Sources */,
 				F971D84D28421D8800E2FAE8 /* ChatRoom.swift in Sources */,
 				F221853228512EC6005CE6C3 /* NotificationType.swift in Sources */,
+				3995B5EB288D283C003FB7E3 /* CategoryListResponse.swift in Sources */,
 				F2E38EF528423721007C96F7 /* PopularChatRoomListItem.swift in Sources */,
 				F2F1ED98281E869D00AC4FDD /* VerificationNumberCheckCore.swift in Sources */,
 				F221850F284E560B005CE6C3 /* FCMUpdateRequest.swift in Sources */,
@@ -1328,6 +1343,7 @@
 				75E01B03285AA52A00BB2B97 /* MailView.swift in Sources */,
 				0927967E28484D3700BA3F18 /* UINavigationController+Extensions.swift in Sources */,
 				8601F666281404D40085F692 /* OnboardingCore.swift in Sources */,
+				3995B5E9288D27E0003FB7E3 /* CategoryService.swift in Sources */,
 				F9322E6D284231BD00EB956E /* ChatLogCore.swift in Sources */,
 				8601F6642813AD400085F692 /* MainTabView.swift in Sources */,
 				86E494912814FDE100551CCD /* MsgAndNotiView.swift in Sources */,

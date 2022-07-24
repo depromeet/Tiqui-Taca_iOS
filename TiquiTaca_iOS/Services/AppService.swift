@@ -13,23 +13,35 @@ struct AppService {
     return Messaging.messaging().fcmToken ?? ""
   }
   
+  // MARK: - Auth
+  
   let authService: AuthServiceType
+  
+  // MARK: - Content
+  
   let userService: UserServiceType
   let questionService: QuestionServiceType
   let roomService: RoomServiceType
-  let socketService: SocketService
-  let socketBannerService: SocketBannerService
   let notificationService: NotificationServiceType
   let letterService: LetterServiceType
+  let categoryService: CategoryServiceType
+  
+  // MARK: - Socket
+  
+  let socketService: SocketService
+  let socketBannerService: SocketBannerService
   
   init() {
     authService = AuthService()
+    
     userService = UserService()
     questionService = QuestionService()
     roomService = RoomService()
-    socketService = .live
-    socketBannerService = .live
     notificationService = NotificationService()
     letterService = LetterService()
+    categoryService = CategoryService()
+    
+    socketService = .live
+    socketBannerService = .live
   }
 }
