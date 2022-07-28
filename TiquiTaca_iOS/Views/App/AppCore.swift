@@ -111,7 +111,15 @@ let appCore = Reducer<
   case .getMyProfileResponse:
     environment.appService.authService.deleteTempToken()
     state.mainTabState = .init()
-    return Effect(value: .setRoute(.mainTab))
+    
+    // 사용자 정보 패치후에 카테고리 리스트 패치
+    return .concatenate([
+      CategoryManager.shared.fetchCategoryList()
+        .receive(on: environment.mainQueue)
+        .catchToEffect()
+        .fireAndForget(),
+      .init(value: .setRoute(.mainTab))
+    ])
     
   case .signIn:
     environment.appService.authService.deleteTempToken()
