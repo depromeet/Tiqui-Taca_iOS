@@ -12,6 +12,12 @@ struct CategoryEntity: Codable, Equatable, Identifiable {
   var name: String
   var imageUrl: URL?
   
+  init() {
+    id = ""
+    name = ""
+    imageUrl = nil
+  }
+  
   init(from decoder: Decoder) throws {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     id = (try? container.decode(String.self, forKey: .id)) ?? ""

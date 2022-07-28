@@ -9,22 +9,26 @@ import SwiftUI
 import TTDesignSystemModule
 
 struct LocationCategoryListView: View {
-  @Binding var selectedCategory: LocationCategory
+  private let categoryList = CategoryManager.shared.categoryList
+  @Binding var selectedCategory: CategoryEntity
   
   var body: some View {
     ScrollView(.horizontal, showsIndicators: false) {
       LazyHStack(spacing: .spacingXS) {
-        ForEach(LocationCategory.allCases) { category in
+        ForEach(categoryList) { category in
           Button {
             selectedCategory = category
           } label: {
             HStack(spacing: .spacingXXS) {
-              if !category.imageName.isEmpty {
-                Image(category.imageName)
-                  .resizable()
-                  .frame(width: 24, height: 24)
+              if let imageUrl = category.imageUrl {
+                AsyncImage(url: imageUrl) { image in
+                  image.resizable()
+                } placeholder: {
+                  ProgressView()
+                }
+                .frame(width: 24, height: 24)
               }
-              Text(category.locationName)
+              Text(category.name)
             }
             .padding(.horizontal, .spacingM)
           }
@@ -39,7 +43,7 @@ struct LocationCategoryListView: View {
 
 struct LocationCategoryListView_Previews: PreviewProvider {
   static var previews: some View {
-    LocationCategoryListView(selectedCategory: .constant(.all))
+    LocationCategoryListView(selectedCategory: .constant(.init()))
       .previewLayout(.sizeThatFits)
   }
 }
