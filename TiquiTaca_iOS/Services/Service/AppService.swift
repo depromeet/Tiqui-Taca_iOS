@@ -24,7 +24,6 @@ struct AppService {
   let roomService: RoomServiceType
   let notificationService: NotificationServiceType
   let letterService: LetterServiceType
-  let categoryService: CategoryServiceType
   
   // MARK: - Socket
   
@@ -39,7 +38,6 @@ struct AppService {
     roomService = RoomService()
     notificationService = NotificationService()
     letterService = LetterService()
-    categoryService = CategoryService()
     
     socketService = .live
     socketBannerService = .live
