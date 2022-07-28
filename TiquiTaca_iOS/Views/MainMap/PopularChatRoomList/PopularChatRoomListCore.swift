@@ -52,7 +52,7 @@ let popularChatRoomListCore = Reducer<
     let request = RoomFromCategoryRequest(
       latitude: state.currentLocation.coordinate.latitude,
       longitude: state.currentLocation.coordinate.longitude,
-      filter: .all,
+      filter: CategoryEntity.ALL.id,
       radius: 1000000
     )
     return .concatenate([

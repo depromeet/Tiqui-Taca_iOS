@@ -19,7 +19,7 @@ struct ChatRoomListState: Equatable {
 
 enum ChatRoomListAction: Equatable {
   case setListSortType(ChatRoomListSortType)
-  case setListCategoryType(LocationCategory)
+  case setListCategoryType(CategoryEntity)
   case itemSelected(RoomFromCategoryResponse)
   case getRoomListResponse(Result<[RoomFromCategoryResponse]?, HTTPError>)
   case requestChatRoomList
@@ -70,7 +70,7 @@ let chatRoomListCore = Reducer<
     let request = RoomFromCategoryRequest(
       latitude: state.currentLocation.coordinate.latitude,
       longitude: state.currentLocation.coordinate.longitude,
-      filter: state.listCategoryType,
+      filter: state.listCategoryType?.id ?? "",
       radius: 1000000
     )
     return .concatenate([

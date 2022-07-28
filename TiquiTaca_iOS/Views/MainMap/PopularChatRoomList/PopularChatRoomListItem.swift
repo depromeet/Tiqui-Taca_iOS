@@ -18,7 +18,7 @@ struct PopularChatRoomListItem: View {
   }
   
   private var subString: String {
-    let categoryName = roomInfo.category.locationName
+    let categoryName = roomInfo.category?.name ?? "기타"
     let distance = roomInfo.distance(from: currentLocation)
     return "\(categoryName) | \(distance.prettyDistance)"
   }

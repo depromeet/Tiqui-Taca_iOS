@@ -19,7 +19,8 @@ struct MainMapView: View {
   @ObservedObject private var viewStore: ViewStore<ViewState, Action>
   
   var showSpreadButton: Bool {
-    return viewStore.chatRoomListState.listCategoryType != .all && viewStore.bottomSheetPosition == .hidden
+    let category = viewStore.chatRoomListState.listCategoryType
+    return category?.isAllType == true && viewStore.bottomSheetPosition == .hidden
   }
   
   struct ViewState: Equatable {
