@@ -7,10 +7,10 @@
 
 import MapKit
 
-struct ChatRoomAnnotationInfo: Identifiable, Equatable, Hashable {
+struct ChatRoomAnnotationInfo: Identifiable, Equatable {
   let id: String
   let name: String
-  let category: LocationCategory
+  let category: CategoryEntity
   let radius: Int
   let userCount: Int
   let coordinate: CLLocationCoordinate2D
@@ -18,7 +18,7 @@ struct ChatRoomAnnotationInfo: Identifiable, Equatable, Hashable {
   init(
     id: String,
     name: String,
-    category: LocationCategory,
+    category: CategoryEntity,
     radius: Int,
     userCount: Int,
     latitude: Double,
@@ -30,17 +30,5 @@ struct ChatRoomAnnotationInfo: Identifiable, Equatable, Hashable {
     self.radius = radius
     self.userCount = userCount
     coordinate = .init(latitude: latitude, longitude: longitude)
-  }
-}
-
-extension ChatRoomAnnotationInfo {
-  public func hash(into hasher: inout Hasher) {
-    hasher.combine(id)
-    hasher.combine(name)
-    hasher.combine(category)
-    hasher.combine(radius)
-    hasher.combine(userCount)
-    hasher.combine(coordinate.latitude)
-    hasher.combine(coordinate.longitude)
   }
 }

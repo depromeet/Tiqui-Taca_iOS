@@ -11,7 +11,7 @@ import TTNetworkModule
 struct RoomFromCategoryRequest: Codable, JSONConvertible {
   let latitude: Double
   let longitude: Double
-  let filter: LocationCategory
+  let filter: String
   let radius: Int
   
   enum CodingKeys: String, CodingKey {

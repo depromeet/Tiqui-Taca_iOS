@@ -11,7 +11,7 @@ import ComposableArchitecture
 
 struct ChatRoomListState: Equatable {
   var listSortType: ChatRoomListSortType = .distance
-  var listCategoryType: LocationCategory = .all
+  var listCategoryType: CategoryEntity?
   var chatRoomList: [RoomFromCategoryResponse] = []
   var isLoading: Bool = false
   var currentLocation: CLLocation = .init(latitude: 0, longitude: 0)

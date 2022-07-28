@@ -34,7 +34,7 @@ struct ChatRoomListView: View {
   
   struct ViewState: Equatable {
     let listSortType: ChatRoomListSortType
-    let listCategoryType: LocationCategory
+    let listCategoryType: CategoryEntity
     let chatRoomList: [RoomFromCategoryResponse]
     let isLoading: Bool
     let currentLocation: CLLocation

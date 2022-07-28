@@ -47,7 +47,7 @@ enum MainMapAction: Equatable {
   case currentLocationButtonTapped
   case dismissAlertButtonTapped
   case popularChatRoomButtonTapped
-  case categoryTapped(LocationCategory)
+  case categoryTapped(CategoryEntity)
   case setUserTrackingMode(MapUserTrackingMode)
   
   case chatRoomListAction(ChatRoomListAction)
