@@ -47,7 +47,7 @@ enum MainMapAction: Equatable {
   case currentLocationButtonTapped
   case dismissAlertButtonTapped
   case popularChatRoomButtonTapped
-  case categoryTapped(CategoryEntity)
+  case categoryTapped(CategoryEntity?)
   case setUserTrackingMode(MapUserTrackingMode)
   
   case chatRoomListAction(ChatRoomListAction)
@@ -139,20 +139,15 @@ private let mainMapCore = Reducer<
         .startMonitoringSignificantLocationChanges()
         .fireAndForget()
     ])
-    
   case .onLoad:
     state.isFirstLoad = true
-//    if environment.locationManager.authorizationStatus() == .notDetermined {
-//      state.showLocationPopup = true
-//      return .none
-//    }
+    let category = CategoryManager.shared.categoryList.first;
+    
+    
     return .init(value: .currentLocationButtonTapped)
   case .currentLocationButtonTapped:
-    // 첫 위치 권한 설정, onLoad, 현위치 버튼
+    // (첫 위치 권한 설정 이후, onLoad, 현위치 버튼) 시 호출
     guard environment.locationManager.locationServicesEnabled() else { return .init(value: .showLocationAlert) }
-//    if environment.locationManager.authorizationStatus() != .notDetermined && !environment.locationManager.locationServicesEnabled() {
-//      return .init(value: .showLocationAlert)
-//    }
     
     switch environment.locationManager.authorizationStatus() {
     case .restricted, .denied:
@@ -248,6 +243,8 @@ private let mainMapCore = Reducer<
     ])
     
   case let .categoryTapped(category):
+    guard let category = category else { return .none }
+    
     state.selectedAnnotationOverlay = []
     if category.isAllType {
       return .merge([

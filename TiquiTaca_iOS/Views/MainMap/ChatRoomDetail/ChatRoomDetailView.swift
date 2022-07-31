@@ -64,10 +64,15 @@ struct ChatRoomDetailView: View {
           Text("카테고리")
             .font(.body7)
             .foregroundColor(.white800)
-          Image(viewStore.chatRoom.category.imageName)
-            .resizable()
+          if let imageUrl = viewStore.chatRoom.category?.imageUrl {
+            AsyncImage(url: imageUrl) { image in
+              image.resizable()
+            } placeholder: {
+              ProgressView()
+            }
             .frame(width: 48, height: 48)
-          Text(viewStore.chatRoom.category.locationName)
+          }
+          Text(viewStore.chatRoom.category?.name ?? "기타")
             .font(.body2)
             .foregroundColor(.white)
         }

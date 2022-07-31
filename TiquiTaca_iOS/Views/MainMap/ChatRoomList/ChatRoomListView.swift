@@ -34,7 +34,7 @@ struct ChatRoomListView: View {
   
   struct ViewState: Equatable {
     let listSortType: ChatRoomListSortType
-    let listCategoryType: CategoryEntity
+    let listCategoryType: CategoryEntity?
     let chatRoomList: [RoomFromCategoryResponse]
     let isLoading: Bool
     let currentLocation: CLLocation
@@ -58,10 +58,15 @@ struct ChatRoomListView: View {
       VStack(spacing: 0) {
         HStack {
           HStack(spacing: .spacingXXS) {
-            Image(viewStore.listCategoryType.imageName)
-              .resizable()
+            if let imageUrl = viewStore.listCategoryType?.imageUrl {
+              AsyncImage(url: imageUrl) { image in
+                image.resizable()
+              } placeholder: {
+                ProgressView()
+              }
               .frame(width: 40, height: 40)
-            Text(viewStore.listCategoryType.locationName)
+            }
+            Text(viewStore.listCategoryType?.name ?? "")
               .font(.subtitle1)
               .foregroundColor(.green500)
             Text("\(viewStore.chatRoomList.count)")
@@ -100,7 +105,7 @@ struct ChatRoomListView: View {
               }
               .listRowSeparatorTint(.black600)
               .listRowBackground(Color.clear)
-              .deleteDisabled(viewStore.listCategoryType != .favorite)
+              //.deleteDisabled(viewStore.listCategoryType != .favorite)
             }
             .onDelete { offsets in
               viewStore.send(.deleteItem(offsets))

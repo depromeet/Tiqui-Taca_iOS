@@ -10,7 +10,7 @@ import TTDesignSystemModule
 
 struct LocationCategoryListView: View {
   private let categoryList = CategoryManager.shared.categoryList
-  @Binding var selectedCategory: CategoryEntity
+  @Binding var selectedCategory: CategoryEntity?
   
   var body: some View {
     ScrollView(.horizontal, showsIndicators: false) {
@@ -41,9 +41,17 @@ struct LocationCategoryListView: View {
   }
 }
 
-struct LocationCategoryListView_Previews: PreviewProvider {
-  static var previews: some View {
-    LocationCategoryListView(selectedCategory: .constant(.init()))
-      .previewLayout(.sizeThatFits)
-  }
-}
+//struct LocationCategoryListView_Previews: PreviewProvider {
+//  @State var category: CategoryEntity = CategoryEntity(
+//    id: "test",
+//    name: "test",
+//    imageUrl: nil
+//  )
+//
+//  static var previews: some View {
+//    LocationCategoryListView(
+//      selectedCategory: $category
+//    )
+//      .previewLayout(.sizeThatFits)
+//  }
+//}
