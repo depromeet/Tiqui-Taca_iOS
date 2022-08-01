@@ -14,7 +14,7 @@ enum RoomInfoEntity {
   struct Response: Codable, Equatable, Identifiable {
     let id: String?
     let name: String?
-    let category: CategoryEntity?
+    let category: LocationCategory?
     let userCount: Int?
     
     let iFavorite: Bool?
@@ -76,7 +76,7 @@ enum RoomInfoEntity {
       let container = try decoder.container(keyedBy: CodingKeys.self)
       id = (try? container.decode(String.self, forKey: .id)) ?? ""
       name = (try? container.decode(String.self, forKey: .name)) ?? ""
-      category = try? container.decode(CategoryEntity.self, forKey: .category)
+      category = try? container.decode(LocationCategory.self, forKey: .category)
       userCount = (try? container.decode(Int.self, forKey: .userCount)) ?? 1
       notReadChatCount = try? container.decode(Int?.self, forKey: .notReadChatCount)
       

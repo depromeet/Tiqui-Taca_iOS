@@ -21,13 +21,9 @@ struct ChatRoomAnnotationView: View {
         )
         .padding(.top, 30)
       VStack(spacing: 0) {
-        AsyncImage(url: info.category?.imageUrl) { image in
-          image.resizable()
-        } placeholder: {
-          ProgressView()
-        }
-        .frame(width: 48, height: 48)
-        
+        Image(info.category?.imageName ?? "")
+          .resizable()
+          .frame(width: 48, height: 48)
         Text("\(info.userCount)명")
           .foregroundColor(.white)
           .font(.subtitle4)

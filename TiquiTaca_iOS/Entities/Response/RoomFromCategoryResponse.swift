@@ -10,10 +10,10 @@ import TTNetworkModule
 import CoreLocation
 
 /// ResFindRoomDto
-struct RoomFromCategoryResponse: Codable, JSONConvertible, RoomDefaultInfo {
+struct RoomFromCategoryResponse: Codable, JSONConvertible {
   let id: String
   let name: String
-  let category: CategoryEntity?
+  let category: LocationCategory?
   let radius: Double
   let userCount: Int
   let isFavorite: Bool
@@ -49,7 +49,7 @@ struct RoomFromCategoryResponse: Codable, JSONConvertible, RoomDefaultInfo {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     id = (try? container.decode(String.self, forKey: .id)) ?? ""
     name = (try? container.decode(String.self, forKey: .name)) ?? ""
-    category = try? container.decode(CategoryEntity.self, forKey: .category)
+    category = try? container.decode(LocationCategory.self, forKey: .category)
     radius = (try? container.decode(Double.self, forKey: .radius)) ?? 0
     userCount = (try? container.decode(Int.self, forKey: .userCount)) ?? 0
     isFavorite = (try? container.decode(Bool.self, forKey: .isFavorite)) ?? false

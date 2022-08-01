@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		09021DB128974E70008C0555 /* LocationCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09021DB028974E70008C0555 /* LocationCategory.swift */; };
 		0907A207285DB44200A7A029 /* ChatGuideView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0907A206285DB44200A7A029 /* ChatGuideView.swift */; };
 		0911DA5B28451FAA00FCC470 /* SocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0911DA5A28451FAA00FCC470 /* SocketService.swift */; };
 		0927967E28484D3700BA3F18 /* UINavigationController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0927967D28484D3700BA3F18 /* UINavigationController+Extensions.swift */; };
@@ -215,6 +216,7 @@
 
 /* Begin PBXFileReference section */
 		05987FBDD23F2EC17BC9A0EF /* Pods-TiquiTaca_iOSTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-TiquiTaca_iOSTests.debug.xcconfig"; path = "Target Support Files/Pods-TiquiTaca_iOSTests/Pods-TiquiTaca_iOSTests.debug.xcconfig"; sourceTree = "<group>"; };
+		09021DB028974E70008C0555 /* LocationCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocationCategory.swift; sourceTree = "<group>"; };
 		0907A206285DB44200A7A029 /* ChatGuideView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatGuideView.swift; sourceTree = "<group>"; };
 		0911DA5A28451FAA00FCC470 /* SocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketService.swift; sourceTree = "<group>"; };
 		0927967D28484D3700BA3F18 /* UINavigationController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Extensions.swift"; sourceTree = "<group>"; };
@@ -656,6 +658,7 @@
 				F22184FC284C9EED005CE6C3 /* ChatRoomListSortType.swift */,
 				F221853128512EC6005CE6C3 /* NotificationType.swift */,
 				F2D62F172854462A007CC6F9 /* EmptyBox.swift */,
+				09021DB028974E70008C0555 /* LocationCategory.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1268,6 +1271,7 @@
 				86BEED82282F3FD500EA0C5B /* Date+Extensions.swift in Sources */,
 				F2DEC4E0282F34510018F545 /* ChatRoomAnnotationView.swift in Sources */,
 				0911DA5B28451FAA00FCC470 /* SocketService.swift in Sources */,
+				09021DB128974E70008C0555 /* LocationCategory.swift in Sources */,
 				867832462826DE890034EACC /* RoomListCell.swift in Sources */,
 				09AFA054284F7962007E56BB /* OtherProfileView.swift in Sources */,
 				F971D84828421A1F00E2FAE8 /* ChatMessageView.swift in Sources */,

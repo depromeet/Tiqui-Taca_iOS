@@ -35,7 +35,7 @@ struct RoomListCell: View {
             Text(info.name ?? "이름없음")
               .foregroundColor(.black600)
               .font(.subtitle2)
-            Text(info.category?.name ?? "기타")
+            Text(info.category?.locationName ?? "기타")
               .foregroundColor(.black100)
               .font(.body6)
               .padding(EdgeInsets(top: 4, leading: 12, bottom: 4, trailing: 12))
