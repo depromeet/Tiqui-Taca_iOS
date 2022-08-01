@@ -141,10 +141,11 @@ private let mainMapCore = Reducer<
     ])
   case .onLoad:
     state.isFirstLoad = true
-    let category = CategoryManager.shared.categoryList.first;
-    
-    
-    return .init(value: .currentLocationButtonTapped)
+    return .concatenate([
+      .init(value: .currentLocationButtonTapped),
+      .init(value: .categoryTapped(CategoryManager.shared.categoryList.first))
+    ])
+    // return .init(value: .currentLocationButtonTapped)
   case .currentLocationButtonTapped:
     // (첫 위치 권한 설정 이후, onLoad, 현위치 버튼) 시 호출
     guard environment.locationManager.locationServicesEnabled() else { return .init(value: .showLocationAlert) }

@@ -262,7 +262,6 @@ private struct RoomListView: View {
   typealias CAction = ChatAction
   typealias CState = ChatState
   
-  private let maxUserCount = 300
   private let store: Store<CState, CAction>
   @ObservedObject private var viewStore: ViewStore<ViewState, CAction>
     
@@ -338,13 +337,7 @@ private struct RoomListView: View {
           send: ChatAction.setShowRoomEnterPopup
         )
       ) {
-        if viewStore.willEnterRoom?.userCount ?? 0 >= maxUserCount {
-          AlertView(store: store)
-            .overCapacity
-        } else {
-          AlertView(store: store)
-            .existEnteredRoom
-        }
+        AlertView(store: store)
       }
       .refreshable {
         viewStore.send(.refresh)
@@ -373,10 +366,6 @@ private struct AlertView: View {
   }
   
   var body: some View {
-    existEnteredRoom
-  }
-  
-  var existEnteredRoom: some View {
     TTPopupView.init(
       popUpCase: .oneLineTwoButton,
       title: "이미 참여 중인 채팅방이 있어요",
@@ -386,7 +375,7 @@ private struct AlertView: View {
       confirm: {
         viewStore.send(.setShowRoomEnterPopup(false))
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-          UIView.setAnimationsEnabled(true) 
+          UIView.setAnimationsEnabled(true)
           viewStore.send(.setRoute(.chatDetail))
         }
       },
@@ -397,25 +386,8 @@ private struct AlertView: View {
         }
       }
     )
-      .padding(EdgeInsets(top: 0, leading: 24, bottom: 0, trailing: 24))
-      .background(BackgroundTransparentView())
-  }
-  
-  var overCapacity: some View {
-    TTPopupView.init(
-      popUpCase: .oneLineTwoButton,
-      title: "해당 채팅방은 인원이 가득 찼어요",
-      subtitle: "최대 인원수 300명이 차서 입장이 불가능해요",
-      leftButtonName: "닫기",
-      cancel: {
-        viewStore.send(.setShowRoomEnterPopup(false))
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-          UIView.setAnimationsEnabled(true)
-        }
-      }
-    )
-      .padding(EdgeInsets(top: 0, leading: 24, bottom: 0, trailing: 24))
-      .background(BackgroundTransparentView())
+    .padding(EdgeInsets(top: 0, leading: 24, bottom: 0, trailing: 24))
+    .background(BackgroundTransparentView())
   }
 }
 
