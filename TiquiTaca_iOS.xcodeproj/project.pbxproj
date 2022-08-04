@@ -12,6 +12,7 @@
 		0911DA5B28451FAA00FCC470 /* SocketService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0911DA5A28451FAA00FCC470 /* SocketService.swift */; };
 		0927967E28484D3700BA3F18 /* UINavigationController+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0927967D28484D3700BA3F18 /* UINavigationController+Extensions.swift */; };
 		0963D1352846F15A005E7B70 /* ChatDetailCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0963D1342846F15A005E7B70 /* ChatDetailCore.swift */; };
+		0977E62E289BA3D500B6F3F6 /* Marquee.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0977E62D289BA3D500B6F3F6 /* Marquee.swift */; };
 		098D3C3A28543A8600F6C326 /* RoomAlarmResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 098D3C3928543A8600F6C326 /* RoomAlarmResponse.swift */; };
 		09AFA054284F7962007E56BB /* OtherProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AFA053284F7962007E56BB /* OtherProfileView.swift */; };
 		09AFA056284F7972007E56BB /* OtherProfileCore.swift in Sources */ = {isa = PBXBuildFile; fileRef = 09AFA055284F7972007E56BB /* OtherProfileCore.swift */; };
@@ -221,6 +222,7 @@
 		0911DA5A28451FAA00FCC470 /* SocketService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocketService.swift; sourceTree = "<group>"; };
 		0927967D28484D3700BA3F18 /* UINavigationController+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UINavigationController+Extensions.swift"; sourceTree = "<group>"; };
 		0963D1342846F15A005E7B70 /* ChatDetailCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChatDetailCore.swift; sourceTree = "<group>"; };
+		0977E62D289BA3D500B6F3F6 /* Marquee.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Marquee.swift; sourceTree = "<group>"; };
 		098D3C3928543A8600F6C326 /* RoomAlarmResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoomAlarmResponse.swift; sourceTree = "<group>"; };
 		09AFA053284F7962007E56BB /* OtherProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherProfileView.swift; sourceTree = "<group>"; };
 		09AFA055284F7972007E56BB /* OtherProfileCore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OtherProfileCore.swift; sourceTree = "<group>"; };
@@ -426,6 +428,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		0977E62C289BA3B700B6F3F6 /* Marquee */ = {
+			isa = PBXGroup;
+			children = (
+				0977E62D289BA3D500B6F3F6 /* Marquee.swift */,
+			);
+			path = Marquee;
+			sourceTree = "<group>";
+		};
 		09AFA052284F7948007E56BB /* OtherProfile */ = {
 			isa = PBXGroup;
 			children = (
@@ -863,6 +873,7 @@
 		F2FDA211280BAF2200B2ED75 /* Components */ = {
 			isa = PBXGroup;
 			children = (
+				0977E62C289BA3B700B6F3F6 /* Marquee */,
 				F2F1EDA92826D51200AC4FDD /* TOSFieldList */,
 				F2F1ED8A281E62A900AC4FDD /* PhoneVerification */,
 				F2F1ED84281C6B3700AC4FDD /* OTPField */,
@@ -1267,6 +1278,7 @@
 				F9AFCD6A2848E8EA009286DE /* QuestionLikeEntity.swift in Sources */,
 				F2F1ED81281C533000AC4FDD /* IssueCodeEntity.swift in Sources */,
 				F9BEA1C7285372B800EF35BA /* LetterSummaryEntity.swift in Sources */,
+				0977E62E289BA3D500B6F3F6 /* Marquee.swift in Sources */,
 				F2F1ED8E281E632D00AC4FDD /* PhoneVerificationCore.swift in Sources */,
 				86BEED82282F3FD500EA0C5B /* Date+Extensions.swift in Sources */,
 				F2DEC4E0282F34510018F545 /* ChatRoomAnnotationView.swift in Sources */,
@@ -1547,7 +1559,7 @@
 				CODE_SIGN_ENTITLEMENTS = TiquiTaca_iOS/TiquiTaca_iOSDebug.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_ASSET_PATHS = "\"TiquiTaca_iOS/Resource/Preview Content\"";
 				DEVELOPMENT_TEAM = 75FNRKTJ9S;
 				ENABLE_PREVIEWS = YES;
@@ -1563,7 +1575,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tiquitaca.TiquiTaca-iOS";
 				PRODUCT_NAME = TiquiTaca;
 				PROVISIONING_PROFILE_SPECIFIER = dev_tiquiTaca;
@@ -1582,7 +1594,7 @@
 				CODE_SIGN_ENTITLEMENTS = TiquiTaca_iOS/TiquiTaca_iOS.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Distribution: Minseok Kang (75FNRKTJ9S)";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 24;
+				CURRENT_PROJECT_VERSION = 26;
 				DEVELOPMENT_ASSET_PATHS = "\"TiquiTaca_iOS/Resource/Preview Content\"";
 				DEVELOPMENT_TEAM = 75FNRKTJ9S;
 				ENABLE_PREVIEWS = YES;
@@ -1598,7 +1610,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tiquitaca.TiquiTaca-iOS";
 				PRODUCT_NAME = TiquiTaca;
 				PROVISIONING_PROFILE_SPECIFIER = appStore_tiquiTaca;

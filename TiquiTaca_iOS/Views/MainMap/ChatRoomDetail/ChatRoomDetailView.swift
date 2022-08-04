@@ -47,9 +47,17 @@ struct ChatRoomDetailView: View {
     VStack(spacing: .spacingXL) {
       VStack(spacing: .spacingXXS) {
         HStack(spacing: .spacingXS) {
-          Text(viewStore.chatRoom.name)
-            .font(.heading2)
-            .foregroundColor(.white)
+          if !viewStore.chatRoom.name.isEmpty {
+            Marquee(
+              text: viewStore.chatRoom.name +
+              (viewStore.chatRoom.subtitle != nil ? " (\(viewStore.chatRoom.subtitle ?? ""))" : ""),
+              font: UIFont(name: "Pretendard-SemiBold", size: 18) ?? .systemFont(ofSize: 24),
+              textColor: .white
+            )
+          }
+//          Text(viewStore.chatRoom.name)
+//            .font(.heading3)
+//            .foregroundColor(.white)
           Image(viewStore.chatRoom.isFavorite ? "favoriteActive" : "favoriteDisabled")
             .resizable()
             .frame(width: 24, height: 24)

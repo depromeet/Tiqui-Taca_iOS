@@ -13,6 +13,7 @@ import CoreLocation
 struct RoomFromCategoryResponse: Codable, JSONConvertible {
   let id: String
   let name: String
+  let subtitle: String?
   let category: LocationCategory?
   let radius: Double
   let userCount: Int
@@ -24,6 +25,7 @@ struct RoomFromCategoryResponse: Codable, JSONConvertible {
   enum CodingKeys: String, CodingKey {
     case id = "_id"
     case name
+    case subtitle
     case category
     case radius
     case userCount
@@ -36,6 +38,7 @@ struct RoomFromCategoryResponse: Codable, JSONConvertible {
   init() {
     id = ""
     name = ""
+    subtitle = nil
     category = nil
     radius = 0
     userCount = 0
@@ -49,6 +52,7 @@ struct RoomFromCategoryResponse: Codable, JSONConvertible {
     let container = try decoder.container(keyedBy: CodingKeys.self)
     id = (try? container.decode(String.self, forKey: .id)) ?? ""
     name = (try? container.decode(String.self, forKey: .name)) ?? ""
+    subtitle = (try? container.decode(String?.self, forKey: .subtitle))
     category = try? container.decode(LocationCategory.self, forKey: .category)
     radius = (try? container.decode(Double.self, forKey: .radius)) ?? 0
     userCount = (try? container.decode(Int.self, forKey: .userCount)) ?? 0
