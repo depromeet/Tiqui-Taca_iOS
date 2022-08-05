@@ -10,53 +10,60 @@ import Combine
 import TTDesignSystemModule
 
 struct Marquee: View {
-  var text: String
+  var text: String = ""
   var font: UIFont
   var textColor: Color
+
+  @State var originText = ""
   @State var storedSize: CGSize = .zero
   @State var offset: CGFloat = 0
-  var animationSpeed: Double = 0.02
-  var delayTime: Double = 1.0
-  
+  @State var nowWidth: CGFloat = UIScreen.main.bounds.size.width - 80
+
+  let animationSpeed: Double = 0.02
+  let delayTime: Double = 2.0
+  let maxWidth: CGFloat = UIScreen.main.bounds.size.width - 100
+
   var body: some View {
     ScrollView(.horizontal, showsIndicators: false) {
-      Text(text)
+      Text(originText)
         .font(Font(font))
         .offset(x: offset)
         .foregroundColor(textColor)
     }
     .disabled(true)
-    .onReceive(Just(text)) { value in
-//      let baseText = text
-//      text.append((1...15).map{_ in " "}.joined(separator: ""))
-      storedSize = textSize()
-      //text.append(contentsOf: baseText)
-      
+    .onAppear() {
+      excuteTextAnimation(newText: text)
+    }
+    .onChange(of: text) { newText in
+      excuteTextAnimation(newText: newText)
+    }
+    .frame(width: nowWidth)
+  }
+  
+  func excuteTextAnimation(newText: String) {
+    offset = 0
+    let calculateSize = textSize(newText: newText)
+    nowWidth = min(calculateSize.width, maxWidth)
+    
+    if calculateSize.width > maxWidth {
+      let textAndBlank = newText + (1...15).map{ _ in " "}.joined(separator: "")
+      storedSize = textSize(newText: textAndBlank)
+      originText = textAndBlank + newText
       let timing: Double = (animationSpeed * storedSize.width)
       DispatchQueue.main.asyncAfter(deadline: .now() + delayTime) {
         withAnimation(.linear(duration: timing)) {
           offset = -storedSize.width
         }
       }
-    }
-    .onReceive(
-      Timer.publish(
-        every: ((animationSpeed * storedSize.width) + delayTime),
-        on: .main,
-        in: .default
-      )
-      .autoconnect()
-    ) { _ in
-      offset = 0
-      withAnimation(.linear(duration: animationSpeed * storedSize.width)) {
-        offset = -storedSize.width
-      }
+    } else {
+      originText = newText
+      storedSize = calculateSize
     }
   }
-  
-  func textSize() -> CGSize {
+
+  func textSize(newText: String) -> CGSize {
     let attributes = [NSAttributedString.Key.font: font]
-    let size = (text as NSString).size(withAttributes: attributes)
+    let size = (newText as NSString).size(withAttributes: attributes)
     return size
   }
 }
