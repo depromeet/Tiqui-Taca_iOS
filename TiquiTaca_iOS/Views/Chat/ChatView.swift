@@ -25,6 +25,7 @@ struct ChatView: View {
     let popularRoomList: [RoomInfoEntity.Response]
     
     let showRoomEnterPopup: Bool
+    
     let moveToChatDetail: Bool
     let route: ChatState.Route?
     
@@ -61,6 +62,23 @@ struct ChatView: View {
       RoomListView(store: store)
         .background(.white)
       
+//      NavigationLink(
+//        isActive: viewStore.binding(
+//          get: \.moveToChatDetail,
+//          send: ChatAction.setMoveToChatDetail
+//        ),
+//        destination: {
+//          ChatDetailView(
+//            store: chatDetailStore,
+//            shouldPopToRootView: viewStore.binding(
+//              get: \.moveToChatDetail,
+//              send: ChatAction.setMoveToChatDetail
+//            )
+//          )
+//        },
+//        label: EmptyView.init
+//      )
+      
       NavigationLink(
         tag: ChatState.Route.chatDetail,
         selection: viewStore.binding(
@@ -73,7 +91,7 @@ struct ChatView: View {
               state: \.chatDetailState,
               action: ChatAction.chatDetailAction
             ),
-            shouldPopToRootView: viewStore.binding (
+            shouldPopToRootView: viewStore.binding(
               get: \.moveToChatDetail,
               send: ChatAction.setMoveToChatDetail
             )
@@ -108,6 +126,17 @@ struct ChatView: View {
     .onAppear {
       viewStore.send(.onAppear)
     }
+  }
+}
+
+
+// MARK: - Store init
+extension ChatView {
+  private var chatDetailStore: Store<ChatDetailState, ChatDetailAction> {
+    return store.scope(
+      state: \.chatDetailState,
+      action: ChatAction.chatDetailAction
+    )
   }
 }
 
@@ -204,8 +233,12 @@ extension ChatView {
       .frame(height: 116)
       .onTapGesture {
         guard let room = viewStore.enteredRoom else { return }
+        // MARK: 바로 .chatDetail 실행시 안먹혀서 .none 이후 .chatDetail로 처리
+        viewStore.send(.setRoute(ChatState.Route.none))
         viewStore.send(.willEnterRoom(room))
-        viewStore.send(.setRoute(.chatDetail))
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+          viewStore.send(.setRoute(.chatDetail))
+        }
       }
     }
   }

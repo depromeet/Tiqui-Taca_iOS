@@ -45,6 +45,13 @@ target 'TiquiTaca_iOS' do
 end
 
 post_install do |installer|
+  installer.generated_projects.each do |project|
+    project.targets.each do |target|
+      target.build_configurations.each do |config|
+        config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '15.0'
+      end
+    end
+  end
   # Generate LicensePlist
   system("rm -rf Settings.bundle/tiqui-taca.LicensePlist")
   system("rm -f Settings.bundle/tiqui-taca.LicensePlist.plist")

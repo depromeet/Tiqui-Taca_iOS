@@ -16,9 +16,17 @@ struct SocketService {
     case newMessage(ChatLogEntity.Response)
   }
   
-  static let socketURL = URL(string: "http://chat.tiki-taka.world")!
+  static let socketURL = URL(string: "https://chat.jerypto.io")!
   static var connectedSockets: [AnyHashable: (SocketIOClient, Effect<SocketService.Action, Never>.Subscriber)] = [:]
-  static var socketManager = SocketManager(socketURL: socketURL)
+  static var socketManager = SocketManager(
+    socketURL: socketURL,
+    config: [
+      .log(true),
+      .compress,
+      .forceWebsockets(true)
+    ]
+  )
+//  static var activeConnectionEffect: [AnyHashable: Effect<Action, Never>] = [:]
   
   var connect: (String) -> Effect<Action, Never>
   var disconnect: (String) -> Effect<Never, Never>
@@ -26,20 +34,13 @@ struct SocketService {
 
   static let live = SocketService(
     connect: { roomId in
-      Effect.run { subscriber in
-        socketManager = SocketManager(
-          socketURL: socketURL,
-          config: [
-            .log(true),
-            .compress,
-            .forceWebsockets(true),
-            .connectParams(["roomId": roomId]),
-            .extraHeaders([
-              "Authorization": "Bearer \(TokenManager.shared.loadAccessToken()?.token ?? "")"
-            ])
-          ]
-        )
+      let effect = Effect<Action, Never>.run { subscriber in
+        socketManager.config.insert(.connectParams(["roomId": roomId]), replacing: true)
+        socketManager.config.insert(.extraHeaders(["Authorization": "Bearer \(TokenManager.shared.loadAccessToken()?.token ?? "")"]), replacing: true)
+        
+        socketManager.reconnects = false
         let socket = socketManager.socket(forNamespace: "/chat")
+        
         print("socket connect init ", TokenManager.shared.loadAccessToken()?.token ?? "", roomId)
         
         socket.on(clientEvent: .connect) { _, _ in
@@ -48,7 +49,7 @@ struct SocketService {
         }
         
         socket.on(clientEvent: .disconnect) { _, _ in
-          print("disconnect complete")
+          print("-----------disconnect complete------------")
         }
         
         socket.on("init") { data, _ in
@@ -81,21 +82,33 @@ struct SocketService {
         
         connectedSockets[roomId] = (socket, subscriber)
         return AnyCancellable {
-          print("디스컨넥티드")
+          print("-------- 디스컨넥티드1 \(connectedSockets[roomId]?.0) --------")
           connectedSockets[roomId]?.0.emit("disconnected")
           connectedSockets[roomId]?.0.disconnect()
+          if let socket = connectedSockets[roomId]?.0 {
+            socketManager.removeSocket(socket)
+          }
+          
           connectedSockets[roomId]?.1.send(completion: .finished)
           connectedSockets[roomId] = nil
+//          activeConnectionEffect[roomId]?.fireAndForget()
         }
       }
+//      activeConnectionEffect[roomId] = effect
+      return effect
     },
     disconnect: { roomId in
       .fireAndForget {
-        print("디스컨넥티드")
+        print("-------- 디스컨넥티드2 \(connectedSockets[roomId]?.0) --------")
         connectedSockets[roomId]?.0.emit("disconnected")
         connectedSockets[roomId]?.0.disconnect()
+        if let socket = connectedSockets[roomId]?.0 {
+          socketManager.removeSocket(socket)
+        }
+        
         connectedSockets[roomId]?.1.send(completion: .finished)
         connectedSockets[roomId] = nil
+//        activeConnectionEffect[roomId]?.fireAndForget()
       }
     },
     send: { roomId, chatEntity in

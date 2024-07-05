@@ -17,9 +17,11 @@ struct MainTabView: View {
   
   struct ViewState: Equatable {
     let selectedTab: TabViewType
+    let chatState: ChatState
     
     init(state: State) {
       selectedTab = state.selectedTab
+      chatState = state.chatState
     }
   }
   

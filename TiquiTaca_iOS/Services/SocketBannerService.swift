@@ -15,9 +15,11 @@ struct SocketBannerService {
     case newMessage(ChatLogEntity.Response)
   }
   
-  static let socketURL = URL(string: "http://chat.tiki-taka.world")!
-  static var connectedBannerSockets: [AnyHashable: (SocketIOClient, Effect<SocketBannerService.Action, Never>.Subscriber)] = [:]
-  static var socketBannerManager = SocketManager(socketURL: socketURL)
+  static let socketURL = URL(string: "https://chat.jerypto.io")!
+  static var connectedBannerSockets: [
+    AnyHashable: (SocketIOClient, Effect<SocketBannerService.Action, Never>.Subscriber)
+  ] = [:]
+  static var socketBannerManager: SocketManager?
   
   var bannerConnect: (String) -> Effect<Action, Never>
   var bannerDisconnect: (String) -> Effect<Never, Never>
@@ -29,7 +31,7 @@ struct SocketBannerService {
   static let live = SocketBannerService(
     bannerConnect: { roomId in
       Effect.run { subscriber in
-        socketBannerManager = SocketManager (
+        socketBannerManager = SocketManager(
           socketURL: socketURL,
           config: [
             .log(true),
@@ -41,7 +43,9 @@ struct SocketBannerService {
             ])
           ]
         )
-        let socket = socketBannerManager.socket(forNamespace: "/chat")
+        socketBannerManager!.reconnects = false
+        let socket = socketBannerManager!.socket(forNamespace: "/chat")
+        
         
         socket.on(clientEvent: .connect) { _, _ in
           print("banner socket connect complete")
@@ -71,7 +75,7 @@ struct SocketBannerService {
         
         connectedBannerSockets[roomId] = (socket, subscriber)
         return AnyCancellable {
-          print("socketBanner 디스컨넥티드")
+          print("----- socketBanner 디스컨넥티드 -----")
           connectedBannerSockets[roomId]?.0.emit("disconnected_banner")
           connectedBannerSockets[roomId]?.0.disconnect()
           connectedBannerSockets[roomId]?.1.send(completion: .finished)
@@ -81,7 +85,7 @@ struct SocketBannerService {
     },
     bannerDisconnect: { roomId in
       .fireAndForget {
-        print("socketBanner 디스컨넥티드")
+        print("----- socketBanner 디스컨넥티드 -----")
         connectedBannerSockets[roomId]?.0.emit("disconnected_banner")
         connectedBannerSockets[roomId]?.0.disconnect()
         connectedBannerSockets[roomId]?.1.send(completion: .finished)

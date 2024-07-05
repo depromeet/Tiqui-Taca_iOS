@@ -139,6 +139,7 @@ let chatMenuReducerCore = Reducer<
   case let .getRoomInfoResponse(.success(response)):
     state.roomInfo = response
     return Effect(value: .getRoomInfoRequestSuccess)
+      .eraseToEffect()
   case .getRoomInfoRequestSuccess:
     return .none
   case .getRoomInfoResponse(.failure):

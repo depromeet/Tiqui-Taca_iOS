@@ -202,7 +202,10 @@ let chatCore = Reducer<
     state.route = route
     if route == .chatDetail {
       state.moveToChatDetail = true
+    } else {
+      state.moveToChatDetail = false
     }
+    print("------ 어디서 잘못된걸까? \(String(describing: route))")
     return .none
   case let .setShowRoomEnterPopup(isPresented):
     state.showRoomEnterPopup = isPresented

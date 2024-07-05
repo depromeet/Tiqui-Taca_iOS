@@ -278,7 +278,6 @@ let chatDetailCore = Reducer<
     if state.isFristGetLocation || state.isWithinRadius != isWithinRadius {
       state.isFristGetLocation = false
       state.isWithinRadius = isWithinRadius
-      print("무엇이 문제지", isWithinRadius)
       state.showLocationToast = true
     }
     return .none

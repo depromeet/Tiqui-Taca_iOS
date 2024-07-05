@@ -86,7 +86,7 @@ struct QuestionDetailView: View {
           .listRowSeparator(.hidden)
           .listRowInsets(EdgeInsets())
         Section {
-          if let commentList = viewStore.commentItemStates, !commentList.isEmpty {
+          if !viewStore.commentItemStates.isEmpty {
             VStack {
               Text("댓글 \(viewStore.commentItemStates.count)")
                 .hLeading()

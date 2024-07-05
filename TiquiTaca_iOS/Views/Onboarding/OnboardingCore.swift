@@ -76,6 +76,8 @@ let onBoardingCore = Reducer<
     return .none
   case .signUpAction:
     return .none
+  case .signUpAction(.verificationNumberCheckAction(.timerStop)):
+    return .none
   case let .setRoute(selectedRoute):
     if selectedRoute == nil {
       state.signInState = .init()
