@@ -222,5 +222,7 @@ let appCore = Reducer<
   case .dismissToast:
     state.toastPresented = false
     return .none
+  default:
+    return .none
   }
 }
