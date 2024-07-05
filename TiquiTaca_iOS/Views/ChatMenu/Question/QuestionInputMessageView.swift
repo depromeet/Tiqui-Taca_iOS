@@ -22,6 +22,7 @@ struct QuestionInputMessageView: View {
             )
           )
           .foregroundColor(Color.black900)
+          .scrollContentBackground(.hidden)
           .font(.body4)
           .background(
             ZStack {

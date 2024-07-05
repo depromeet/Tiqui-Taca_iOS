@@ -62,23 +62,6 @@ struct ChatView: View {
       RoomListView(store: store)
         .background(.white)
       
-//      NavigationLink(
-//        isActive: viewStore.binding(
-//          get: \.moveToChatDetail,
-//          send: ChatAction.setMoveToChatDetail
-//        ),
-//        destination: {
-//          ChatDetailView(
-//            store: chatDetailStore,
-//            shouldPopToRootView: viewStore.binding(
-//              get: \.moveToChatDetail,
-//              send: ChatAction.setMoveToChatDetail
-//            )
-//          )
-//        },
-//        label: EmptyView.init
-//      )
-      
       NavigationLink(
         tag: ChatState.Route.chatDetail,
         selection: viewStore.binding(
@@ -102,29 +85,13 @@ struct ChatView: View {
         .isDetailLink(false)
         .frame(height: 0)
         .hidden()
-//      NavigationLink(
-//        destination: ChatDetailView(
-//          store: store.scope(
-//            state: \.chatDetailState,
-//            action: ChatAction.chatDetailAction),
-//          shouldPopToRootView: viewStore.binding(
-//            get: \.moveToChatDetail,
-//            send: ChatAction.setMoveToChatDetail
-//          )
-//        ),
-//        isActive: viewStore.binding(
-//          get: \.moveToChatDetail,
-//          send: ChatAction.setMoveToChatDetail
-//        )
-//      ) { EmptyView() }
-//        .isDetailLink(false)
-//        .frame(height: 0)
-//        .hidden()
     }
     .listStyle(.plain)
     .navigationTitle("채팅방")
     .onAppear {
       viewStore.send(.onAppear)
+      // MARK: 잘못 동작할 수도 있음. 항상 체크
+      viewStore.send(.setRoute(ChatState.Route.none))
     }
   }
 }
@@ -234,11 +201,11 @@ extension ChatView {
       .onTapGesture {
         guard let room = viewStore.enteredRoom else { return }
         // MARK: 바로 .chatDetail 실행시 안먹혀서 .none 이후 .chatDetail로 처리
-        viewStore.send(.setRoute(ChatState.Route.none))
         viewStore.send(.willEnterRoom(room))
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-          viewStore.send(.setRoute(.chatDetail))
-        }
+        viewStore.send(.setRoute(.chatDetail))
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+//          viewStore.send(.setRoute(.chatDetail))
+//        }
       }
     }
   }
@@ -352,10 +319,15 @@ private struct RoomListView: View {
             })
             .onTapGesture(perform: {
               if viewStore.enteredRoom == nil || room.id == viewStore.enteredRoom?.id {
-                viewStore.send(.willEnterRoom(room))
+                viewStore.send(.setRoute(ChatState.Route.none))
                 viewStore.send(.setRoute(.chatDetail))
+//                viewStore.send(.willEnterRoom(room))
+//                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+//                  viewStore.send(.setRoute(.chatDetail))
+//                }
               } else {
                 UIView.setAnimationsEnabled(false)
+                viewStore.send(.setRoute(ChatState.Route.none))
                 viewStore.send(.willEnterRoom(room))
                 viewStore.send(.setShowRoomEnterPopup(true))
               }
@@ -417,6 +389,7 @@ private struct AlertView: View {
       leftButtonName: "취소",
       rightButtonName: "참여하기",
       confirm: {
+        viewStore.send(.setRoute(ChatState.Route.none))
         viewStore.send(.setShowRoomEnterPopup(false))
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
           UIView.setAnimationsEnabled(true) 
