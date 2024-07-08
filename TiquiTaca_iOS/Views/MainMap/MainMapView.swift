@@ -23,6 +23,7 @@ struct MainMapView: View {
   }
   
   struct ViewState: Equatable {
+    let isFirstLoad: Bool
     let isShowPopup: Bool
     let isMoveToChatDetail: Bool
     let bottomSheetPosition: TTBottomSheet.Position
@@ -38,6 +39,7 @@ struct MainMapView: View {
     let showLocationPopup: Bool
     
     init(state: State) {
+      isFirstLoad = state.isFirstLoad
       isShowPopup = state.isShowPopup
       isMoveToChatDetail = state.isMoveToChatDetail
       bottomSheetPosition = state.bottomSheetPosition
@@ -197,7 +199,7 @@ struct MainMapView: View {
       dismiss: .dismissAlertButtonTapped
     )
     .onAppear {
-      viewStore.send(.onAppear)
+      viewStore.send(.onAppear) 
     }
     .onLoad {
       viewStore.send(.onLoad)

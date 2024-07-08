@@ -45,6 +45,7 @@ enum MainMapAction: Equatable {
   case annotationTapped(RoomFromCategoryResponse)
   case setRegion(MKCoordinateRegion)
   case currentLocationButtonTapped
+  case moveToMyLocation
   case dismissAlertButtonTapped
   case popularChatRoomButtonTapped
   case categoryTapped(LocationCategory)
@@ -142,15 +143,12 @@ private let mainMapCore = Reducer<
     
   case .onLoad:
     state.isFirstLoad = true
-//    if environment.locationManager.authorizationStatus() == .notDetermined {
-//      state.showLocationPopup = true
-//      return .none
-//    }
     return .init(value: .currentLocationButtonTapped)
   case .currentLocationButtonTapped:
-    // 첫 위치 권한 설정, onLoad, 현위치 버튼
-    guard environment.locationManager.locationServicesEnabled() else { return .init(value: .showLocationAlert) }
-//    if environment.locationManager.authorizationStatus() != .notDetermined && !environment.locationManager.locationServicesEnabled() {
+    
+    // 권한 alert 확인 띄우기
+//    guard state.isFirstLoad && environment.locationManager.locationServicesEnabled() else {
+//      print("이거 찍히나?")
 //      return .init(value: .showLocationAlert)
 //    }
     
@@ -190,6 +188,38 @@ private let mainMapCore = Reducer<
      - chatRoomList: hidden, middle, top
      - popularChatRoomList: hidden, middle
      */
+  case .moveToMyLocation:
+    switch environment.locationManager.authorizationStatus() {
+    case .restricted, .denied:
+      return .init(value: .showLocationAlert)
+    case .notDetermined:
+      return environment.locationManager
+        .requestWhenInUseAuthorization()
+        .fireAndForget()
+    case .authorizedAlways, .authorizedWhenInUse:
+      guard let location = environment.locationManager.location() else { return .none }
+      // 내 위치로 이동
+      state.region = MKCoordinateRegion(
+        center: location.coordinate,
+        span: MKCoordinateSpan(latitudeDelta: 0.05, longitudeDelta: 0.05)
+      )
+      
+      // 첫 위치 권한 설정 및 onLoad 때문에 존재
+      state.chatRoomListState.currentLocation = location.rawValue
+      state.popularChatRoomListState.currentLocation = location.rawValue
+      state.chatRoomDetailState.currentLocation = location.rawValue
+      
+      return .merge([
+        .init(value: .setUserTrackingMode(.follow)),
+        .init(value: .popularChatRoomListAction(.requestChatRoomList)),
+        environment.locationManager
+          .requestLocation()
+          .fireAndForget()
+      ])
+    default:
+      return .none
+    }
+    
   case let .setLocationPopup(isShow):
     state.showLocationPopup = isShow
     return .none

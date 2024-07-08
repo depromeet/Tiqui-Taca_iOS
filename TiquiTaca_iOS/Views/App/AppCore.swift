@@ -115,7 +115,7 @@ let appCore = Reducer<
     
   case .signIn:
     environment.appService.authService.deleteTempToken()
-    state.onboardingState = nil
+//    state.onboardingState = nil
     let request = FCMUpdateRequest(fcmToken: environment.appService.fcmToken)
     
     return .concatenate([
