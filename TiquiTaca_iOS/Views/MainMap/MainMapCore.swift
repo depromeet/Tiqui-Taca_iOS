@@ -132,6 +132,7 @@ private let mainMapCore = Reducer<
 > { state, action, environment in
   switch action {
   case .onAppear:
+    print("---------------Map Appear---------------")
     return .merge([
       environment.locationManager
         .delegate()
@@ -142,10 +143,10 @@ private let mainMapCore = Reducer<
     ])
     
   case .onLoad:
+    print("---------------Map Load---------------")
     state.isFirstLoad = true
     return .init(value: .currentLocationButtonTapped)
   case .currentLocationButtonTapped:
-    
     // 권한 alert 확인 띄우기
 //    guard state.isFirstLoad && environment.locationManager.locationServicesEnabled() else {
 //      print("이거 찍히나?")
