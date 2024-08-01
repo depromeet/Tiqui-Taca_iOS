@@ -38,7 +38,7 @@ struct PopularChatRoomListView: View {
     ZStack {
       VStack(spacing: 0) {
         HStack {
-          Text("실시간 인기있는 채팅방들")
+          Text("현재 베타테스트 중인 채팅방")
             .font(.body2)
             .foregroundColor(.green500)
           Spacer()

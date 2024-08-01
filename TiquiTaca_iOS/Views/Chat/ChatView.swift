@@ -216,12 +216,12 @@ extension ChatView {
   var tabKindView: some View {
     HStack(spacing: 0) {
       Spacer().frame(width: 10)
-      Button(
-        action: { viewStore.send(.tabChange(.like)) },
-        label: { Text("즐겨찾기") }
-      )
-      .buttonStyle(TabButton())
-      .disabled(viewStore.currentTab == .like)
+//      Button(
+//        action: { viewStore.send(.tabChange(.like)) },
+//        label: { Text("즐겨찾기") }
+//      )
+//      .buttonStyle(TabButton())
+//      .disabled(viewStore.currentTab == .like)
       Button(
         action: { viewStore.send(.tabChange(.popular)) },
         label: { Text("인기채팅방") }

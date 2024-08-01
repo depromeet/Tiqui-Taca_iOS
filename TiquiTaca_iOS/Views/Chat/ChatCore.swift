@@ -24,7 +24,7 @@ struct ChatState: Equatable {
   var lastLoadTime: String = Date.current(type: .HHmm)
   var unReadChatCount: Int = 0
   
-  var currentTab: RoomListType = .like
+  var currentTab: RoomListType = .popular
   var likeRoomList: [RoomInfoEntity.Response] = []
   var popularRoomList: [RoomInfoEntity.Response] = []
   

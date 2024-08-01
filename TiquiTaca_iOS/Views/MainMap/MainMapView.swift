@@ -127,6 +127,7 @@ struct MainMapView: View {
           )
         )
         .frame(height: 60)
+        .hidden()
         
         if showSpreadButton {
           Button {
@@ -153,7 +154,7 @@ struct MainMapView: View {
             viewStore.send(.popularChatRoomButtonTapped)
           } label: {
             HStack(spacing: .spacingM) {
-              Text("지금 인기있는 채팅방 알아보기")
+              Text("현재 홍대에서 베타테스트 중!")
                 .font(.body2)
                 .foregroundColor(.white)
               Image("bxPopular")

@@ -21,7 +21,7 @@ struct ChatRoomAnnotationView: View {
         )
         .padding(.top, 30)
       VStack(spacing: 0) {
-        Image(info.category.imageName)
+        Image(info.category.imageName).hidden()
         Text("\(info.userCount)명")
           .foregroundColor(.white)
           .font(.subtitle4)
@@ -30,7 +30,7 @@ struct ChatRoomAnnotationView: View {
           .font(.body8)
       }
       .lineLimit(1)
-      .padding(.bottom, .spacingXS)
+      .padding(.bottom, .spacingM)
       .padding(.horizontal, .spacingS)
     }
     .frame(width: 71, height: 89)
