@@ -171,6 +171,7 @@ let chatDetailCore = Reducer<
     )
   case .onDisAppear:
     guard !state.moveToOtherView else { return .none }
+    
     return environment.appService.socketService
       .disconnect(state.roomId)
       .eraseToEffect()

@@ -1523,7 +1523,7 @@
 				CODE_SIGN_ENTITLEMENTS = TiquiTaca_iOS/TiquiTaca_iOSDebug.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 34;
+				CURRENT_PROJECT_VERSION = 35;
 				DEVELOPMENT_ASSET_PATHS = "\"TiquiTaca_iOS/Resource/Preview Content\"";
 				DEVELOPMENT_TEAM = 35Z5L89946;
 				ENABLE_PREVIEWS = YES;
@@ -1539,7 +1539,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.1;
+				MARKETING_VERSION = 1.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tiquitaca.TiquiTaca-iOS";
 				PRODUCT_NAME = TiquiTaca;
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -1558,7 +1558,7 @@
 				CODE_SIGN_ENTITLEMENTS = TiquiTaca_iOS/TiquiTaca_iOS.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 34;
+				CURRENT_PROJECT_VERSION = 35;
 				DEVELOPMENT_ASSET_PATHS = "\"TiquiTaca_iOS/Resource/Preview Content\"";
 				DEVELOPMENT_TEAM = 35Z5L89946;
 				ENABLE_PREVIEWS = YES;
@@ -1574,7 +1574,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2.1;
+				MARKETING_VERSION = 1.2.2;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.tiquitaca.TiquiTaca-iOS";
 				PRODUCT_NAME = TiquiTaca;
 				PROVISIONING_PROFILE_SPECIFIER = "";

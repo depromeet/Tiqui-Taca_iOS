@@ -14,6 +14,7 @@ import SwiftUI
 struct ChatState: Equatable {
   enum Route {
     case chatDetail
+    case chatDetailSwitch
     case none
   }
   
@@ -199,10 +200,11 @@ let chatCore = Reducer<
     state.willEnterRoom = room
     return .none
   case let .setRoute(route):
-    state.route = route
     if route == .chatDetail {
+      state.route = state.route == .chatDetail ? .chatDetailSwitch : .chatDetail
       state.moveToChatDetail = true
     } else {
+      state.route = route
       state.moveToChatDetail = false
     }
     print("------ 어디서 잘못된걸까? \(String(describing: route))")
@@ -211,7 +213,9 @@ let chatCore = Reducer<
     state.showRoomEnterPopup = isPresented
     return .none
   case let .setMoveToChatDetail(isMoveToChatDetail):
-    state.route = isMoveToChatDetail ? .chatDetail : ChatState.Route.none
+    if !isMoveToChatDetail {
+      state.route = ChatState.Route.none
+    }
     state.moveToChatDetail = isMoveToChatDetail
     return .none
   case .refresh:

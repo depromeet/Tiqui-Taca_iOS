@@ -9,6 +9,7 @@ import ComposableArchitecture
 import TTNetworkModule
 import Combine
 import SocketIO
+import FirebaseCrashlytics
 
 struct SocketService {
   enum Action: Equatable {
@@ -35,6 +36,7 @@ struct SocketService {
   static let live = SocketService(
     connect: { roomId in
       let effect = Effect<Action, Never>.run { subscriber in
+        
         socketManager.config.insert(.connectParams(["roomId": roomId]), replacing: true)
         socketManager.config.insert(.extraHeaders(["Authorization": "Bearer \(TokenManager.shared.loadAccessToken()?.token ?? "")"]), replacing: true)
         
@@ -75,6 +77,7 @@ struct SocketService {
         }
         
         socket.on("exception") { res, _ in
+          Crashlytics.crashlytics().log("소켓통신중 에러 \(res)")
           print("error", res)
         }
         
